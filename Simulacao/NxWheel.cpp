@@ -1,0 +1,943 @@
+#include "NxWheel.h"
+
+#include <cstdio>
+
+#if defined(__APPLE__)
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include "NxVehicle.h"
+#include "Stream.h"
+#include "DrawObjects.h"
+#include "cooking.h"
+
+#define GL_COLOR_TIRE 0.3f,0.3f,0.3f,1.0f
+#define GL_COLOR_TIRE_INNER 0.1f,0.1f,0.1f,1.0f
+
+NxWheel* NxWheel::createWheel(NxActor* actor, NxWheelDesc* wheelDesc) 
+{
+	if(wheelDesc->wheelFlags & NX_WF_USE_WHEELSHAPE)
+	{
+		return new NxWheel2(actor, wheelDesc);
+	}
+	
+	NxWheel1* wheel = new NxWheel1(&actor->getScene());
+
+	if(wheelDesc->wheelApproximation > 0) 
+	{
+		NxArray<NxVec3> points;
+		NxVec3 center = wheelDesc->position;
+
+		NxVec3 frontAxis(1,0,0);// = wheelDesc->downAxis.cross(wheelDesc->wheelAxis);
+		NxVec3 downAxis(0,-1,0);//  = wheelDesc->downAxis;
+		NxVec3 wheelAxis(0,0,-1);// = wheelDesc->wheelAxis;
+		//frontAxis.normalize();
+		frontAxis *= wheelDesc->wheelRadius;
+		//downAxis.normalize();
+		downAxis *= wheelDesc->wheelRadius;
+		//wheelAxis.normalize();
+		wheelAxis *= wheelDesc->wheelWidth;
+		NxReal step;
+		if(wheelDesc->wheelFlags & NX_WF_BUILD_LOWER_HALF) 
+		{
+			if((wheelDesc->wheelApproximation & 0x1) == 0)
+				wheelDesc->wheelApproximation++;
+			step = (NxReal)(NxTwoPi) / (NxReal)(wheelDesc->wheelApproximation*2);
+		}
+		else 
+		{
+			step = (NxReal)(NxTwoPi) / (NxReal)(wheelDesc->wheelApproximation);
+		}
+		for(NxU32 i = 0; i < wheelDesc->wheelApproximation; i++) 
+		{
+			NxReal iReal;
+			if(wheelDesc->wheelFlags & NX_WF_BUILD_LOWER_HALF) 
+			{
+				iReal = (i > (wheelDesc->wheelApproximation >> 1))?(NxReal)(i+wheelDesc->wheelApproximation):(NxReal)i;
+			} 
+			else 
+			{
+				iReal = (NxReal)i;
+			}
+			NxReal Sin, Cos;
+			NxMath::sinCos(step * iReal, Sin, Cos);
+			NxVec3 insPoint = (downAxis * -Cos) + (frontAxis * Sin);
+			points.pushBack(insPoint + wheelAxis);
+			points.pushBack(insPoint - wheelAxis);
+		}
+
+		NxConvexMeshDesc convexDesc;
+		convexDesc.numVertices			= points.size();
+		convexDesc.pointStrideBytes		= sizeof(NxVec3);
+		convexDesc.points				= &points[0].x;
+		convexDesc.flags				= NX_CF_COMPUTE_CONVEX;
+
+		// Cooking from memory
+		MemoryWriteBuffer buf;
+		if(CookConvexMesh(convexDesc, buf)) 
+			{
+			NxConvexShapeDesc convexShapeDesc;
+			convexShapeDesc.meshData = actor->getScene().getPhysicsSDK().createConvexMesh(MemoryReadBuffer(buf.data));
+			convexShapeDesc.localPose.t = center;
+			convexShapeDesc.localPose.M.setColumn(0, NxVec3( 1, 0, 0));
+			convexShapeDesc.localPose.M.setColumn(1, NxVec3( 0,-1, 0));
+			convexShapeDesc.localPose.M.setColumn(2, NxVec3( 0, 0, -1));
+			if(convexShapeDesc.meshData != NULL) 
+			{
+				NxU32 shapeNumber = actor->getNbShapes();
+				wheel->wheelConvex = actor->createShape(convexShapeDesc)->isConvexMesh();
+				wheel->wheelConvex->userData = wheel;
+			}
+		}
+
+		else 
+		{
+			delete wheel;
+			return NULL;
+		}
+	}
+	else 
+	{
+		wheel->wheelConvex = NULL;
+	}
+
+	NxVec3 frontAxis(1,0,0);
+	NxVec3 downAxis(0,-1,0);
+	NxVec3 wheelAxis(0,0,-1);
+	//NxVec3 downAxis  = wheelDesc->downAxis; downAxis.normalize();
+	//NxVec3 wheelAxis  = wheelDesc->wheelAxis; wheelAxis.normalize();
+	//NxVec3 frontAxis  = downAxis.cross(wheelAxis); frontAxis.normalize();
+
+	// This assures a height of 1 for every capsule
+	NxReal heightModifier = (wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
+	//if (wheelDesc->wheelSuspension < 1)
+	//	heightModifier = 1.f / wheelDesc->wheelSuspension;
+
+	NxSpringDesc wheelSpring;
+	wheelSpring.spring					= wheelDesc->springRestitution*heightModifier;
+	wheelSpring.damper					= wheelDesc->springDamping*heightModifier;
+	wheelSpring.targetValue				= wheelDesc->springBias*heightModifier;
+
+	NxMaterialDesc materialDesc;
+	materialDesc.restitution			= 0.0f;
+	materialDesc.dynamicFriction		= wheelDesc->frictionToSide;
+	materialDesc.staticFriction			= 2.0f;
+	materialDesc.staticFrictionV		= wheelDesc->frictionToFront*4;
+	materialDesc.dynamicFrictionV		= wheelDesc->frictionToFront;
+	materialDesc.dirOfAnisotropy		= frontAxis;
+	materialDesc.frictionCombineMode	= NX_CM_MULTIPLY;
+	materialDesc.flags					|=  NX_MF_ANISOTROPIC;
+
+	wheel->_frictionToFront = wheelDesc->frictionToFront;
+	wheel->_frictionToSide = wheelDesc->frictionToSide;
+
+	wheel->material = actor->getScene().createMaterial(materialDesc);
+
+	NxCapsuleShapeDesc capsuleShape;
+	capsuleShape.radius = 0.1f;
+	capsuleShape.height = wheelDesc->wheelSuspension + wheelDesc->wheelRadius;
+	capsuleShape.flags = NX_SWEPT_SHAPE;
+	//capsuleShape.localPose.M.setColumn(0, NxVec3( 1, 0, 0));
+	//capsuleShape.localPose.M.setColumn(1, NxVec3( 0,-1, 0));
+	//capsuleShape.localPose.M.setColumn(2, NxVec3( 0, 0,-1));	//rotate 180 degrees around x axis to cast downward!
+	capsuleShape.localPose.M.setColumn(0, frontAxis);
+	capsuleShape.localPose.M.setColumn(1, downAxis);
+	capsuleShape.localPose.M.setColumn(2, wheelAxis);
+	if(wheelDesc->wheelSuspension >= 1) 
+	{
+		capsuleShape.localPose.t = wheelDesc->position + downAxis*(wheelDesc->wheelRadius);
+	}
+	else 
+	{
+		capsuleShape.localPose.t = wheelDesc->position + downAxis*((wheelDesc->wheelRadius + wheelDesc->wheelSuspension)*0.5f);
+	}
+	capsuleShape.materialIndex = wheel->material->getMaterialIndex();
+	capsuleShape.userData = wheelDesc->userData;
+
+	NxU32 shapeNumber = actor->getNbShapes();
+	wheel->wheelCapsule = actor->createShape(capsuleShape)->isCapsule();
+
+	if(wheel->wheelCapsule == NULL) 
+	{
+		delete wheel;
+		return NULL;
+	}
+	wheel->wheelCapsule->userData = wheel;
+	wheel->userData = wheelDesc->userData;
+	wheel->wheelCapsule->userData = wheel;
+	wheel->wheelFlags = (wheelDesc->wheelFlags & NX_WF_ALL_WHEEL_FLAGS);
+	wheel->_turnAngle = 0;
+	wheel->_turnVelocity = 0;
+	wheel->_radius = wheelDesc->wheelRadius;
+	wheel->_perimeter = wheel->_radius * NxTwoPi;
+	wheel->_maxSuspension = wheelDesc->wheelSuspension;
+	wheel->_wheelWidth = wheelDesc->wheelWidth;
+	wheel->_maxPosition = wheelDesc->position;
+	return wheel;
+}
+
+NxWheel* NxWheel::createWheel2(NxActor* actor, NxWheelDesc* wheelDesc, int indexWheel) 
+{
+	if(wheelDesc->wheelFlags & NX_WF_USE_WHEELSHAPE)
+	{
+		return new NxWheel2(actor, wheelDesc, indexWheel);
+	}
+	
+	NxWheel1* wheel = new NxWheel1(&actor->getScene());
+
+	wheelDesc->wheelApproximation = 10;
+	wheelDesc->wheelWidth = 10;
+
+	if(wheelDesc->wheelApproximation > 0) 
+	{
+		NxArray<NxVec3> points;
+		NxVec3 center = wheelDesc->position;
+
+		NxVec3 frontAxis(0,1,0);
+		NxVec3 downAxis(0,0,-1);
+		NxVec3 wheelAxis(1,0,0);
+
+		//frontAxis.normalize();
+		frontAxis *= wheelDesc->wheelRadius;
+		//downAxis.normalize();
+		downAxis *= wheelDesc->wheelRadius;
+		//wheelAxis.normalize();
+		wheelAxis *= wheelDesc->wheelWidth;
+		NxReal step;
+		if(wheelDesc->wheelFlags & NX_WF_BUILD_LOWER_HALF) 
+		{
+			if((wheelDesc->wheelApproximation & 0x1) == 0)
+				wheelDesc->wheelApproximation++;
+			step = (NxReal)(NxTwoPi) / (NxReal)(wheelDesc->wheelApproximation*2);
+		}
+		else 
+		{
+			step = (NxReal)(NxTwoPi) / (NxReal)(wheelDesc->wheelApproximation);
+		}
+		for(NxU32 i = 0; i < wheelDesc->wheelApproximation; i++) 
+		{
+			NxReal iReal;
+			if(wheelDesc->wheelFlags & NX_WF_BUILD_LOWER_HALF) 
+			{
+				iReal = (i > (wheelDesc->wheelApproximation >> 1))?(NxReal)(i+wheelDesc->wheelApproximation):(NxReal)i;
+			} 
+			else 
+			{
+				iReal = (NxReal)i;
+			}
+			NxReal Sin, Cos;
+			NxMath::sinCos(step * iReal, Sin, Cos);
+			NxVec3 insPoint = (downAxis * -Cos) + (frontAxis * Sin);
+			points.pushBack(insPoint + wheelAxis);
+			points.pushBack(insPoint - wheelAxis);
+		}
+
+		NxConvexMeshDesc convexDesc;
+		convexDesc.numVertices			= points.size();
+		convexDesc.pointStrideBytes		= sizeof(NxVec3);
+		convexDesc.points				= &points[0].x;
+		convexDesc.flags				= NX_CF_COMPUTE_CONVEX;
+
+		// Cooking from memory
+		MemoryWriteBuffer buf;
+		if(CookConvexMesh(convexDesc, buf)) 
+			{
+			NxConvexShapeDesc convexShapeDesc;
+			convexShapeDesc.meshData = actor->getScene().getPhysicsSDK().createConvexMesh(MemoryReadBuffer(buf.data));
+			convexShapeDesc.localPose.t = center;
+			convexShapeDesc.localPose.M.setColumn(0, NxVec3( 1, 0, 0));
+			convexShapeDesc.localPose.M.setColumn(1, NxVec3( 0,-1, 0));
+			convexShapeDesc.localPose.M.setColumn(2, NxVec3( 0, 0, -1));
+			if(convexShapeDesc.meshData != NULL) 
+			{
+				NxU32 shapeNumber = actor->getNbShapes();
+				wheel->wheelConvex = actor->createShape(convexShapeDesc)->isConvexMesh();
+				wheel->wheelConvex->userData = wheel;
+			}
+		}
+
+		else 
+		{
+			delete wheel;
+			return NULL;
+		}
+	}
+	else 
+	{
+		wheel->wheelConvex = NULL;
+	}
+
+	NxVec3 frontAxis(0,1,0);
+	NxVec3 downAxis(0,0,-1);
+	NxVec3 wheelAxis(1,0,0);
+	//NxVec3 downAxis  = wheelDesc->downAxis; downAxis.normalize();
+	//NxVec3 wheelAxis  = wheelDesc->wheelAxis; wheelAxis.normalize();
+	//NxVec3 frontAxis  = downAxis.cross(wheelAxis); frontAxis.normalize();
+
+	// This assures a height of 1 for every capsule
+	NxReal heightModifier = (wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
+	//if (wheelDesc->wheelSuspension < 1)
+	//	heightModifier = 1.f / wheelDesc->wheelSuspension;
+
+	NxSpringDesc wheelSpring;
+	wheelSpring.spring					= wheelDesc->springRestitution*heightModifier;
+	wheelSpring.damper					= wheelDesc->springDamping*heightModifier;
+	wheelSpring.targetValue				= wheelDesc->springBias*heightModifier;
+
+	NxMaterialDesc materialDesc;
+	materialDesc.restitution			= 0.0f;
+	materialDesc.dynamicFriction		= wheelDesc->frictionToSide;
+	materialDesc.staticFriction			= 2.0f;
+	materialDesc.staticFrictionV		= wheelDesc->frictionToFront*4;
+	materialDesc.dynamicFrictionV		= wheelDesc->frictionToFront;
+	materialDesc.dirOfAnisotropy		= frontAxis;
+	materialDesc.frictionCombineMode	= NX_CM_MULTIPLY;
+	materialDesc.flags					|=  NX_MF_ANISOTROPIC;
+	//materialDesc.setToDefault();
+
+	wheel->_frictionToFront = wheelDesc->frictionToFront;
+	wheel->_frictionToSide = wheelDesc->frictionToSide;
+
+	wheel->material = actor->getScene().createMaterial(materialDesc);
+
+	NxCapsuleShapeDesc capsuleShape;
+	capsuleShape.radius = 0.1f;
+	capsuleShape.height = wheelDesc->wheelSuspension + wheelDesc->wheelRadius;
+	capsuleShape.flags = NX_SWEPT_SHAPE;
+	//capsuleShape.localPose.M.setColumn(0, NxVec3( 1, 0, 0));
+	//capsuleShape.localPose.M.setColumn(1, NxVec3( 0,-1, 0));
+	//capsuleShape.localPose.M.setColumn(2, NxVec3( 0, 0,-1));	//rotate 180 degrees around x axis to cast downward!
+	capsuleShape.localPose.M.setColumn(0, frontAxis);
+	capsuleShape.localPose.M.setColumn(1, downAxis);
+	capsuleShape.localPose.M.setColumn(2, wheelAxis);
+	if(wheelDesc->wheelSuspension >= 1) 
+	{
+		capsuleShape.localPose.t = wheelDesc->position + downAxis*(wheelDesc->wheelRadius);
+	}
+	else 
+	{
+		capsuleShape.localPose.t = wheelDesc->position + downAxis*((wheelDesc->wheelRadius + wheelDesc->wheelSuspension)*0.5f);
+	}
+	capsuleShape.materialIndex = wheel->material->getMaterialIndex();
+	capsuleShape.userData = wheelDesc->userData;
+
+	NxU32 shapeNumber = actor->getNbShapes();
+	wheel->wheelCapsule = actor->createShape(capsuleShape)->isCapsule();
+
+	if(wheel->wheelCapsule == NULL) 
+	{
+		delete wheel;
+		return NULL;
+	}
+	wheel->wheelCapsule->userData = wheel;
+	wheel->userData = wheelDesc->userData;
+	wheel->wheelCapsule->userData = wheel;
+	wheel->wheelFlags = (wheelDesc->wheelFlags & NX_WF_ALL_WHEEL_FLAGS);
+	wheel->_turnAngle = 0;
+	wheel->_turnVelocity = 0;
+	wheel->_radius = wheelDesc->wheelRadius;
+	wheel->_perimeter = wheel->_radius * NxTwoPi;
+	wheel->_maxSuspension = wheelDesc->wheelSuspension;
+	wheel->_wheelWidth = wheelDesc->wheelWidth;
+	wheel->_maxPosition = wheelDesc->position;
+	return wheel;
+}
+
+NxWheel* NxWheel::createDribbler(NxActor* actor, NxWheelDesc* dribblerDesc)
+{
+	//if(dribblerDesc->wheelFlags & NX_WF_USE_WHEELSHAPE)
+	//{
+	//	return new NxWheel2(actor, dribblerDesc);
+	//}
+	
+	NxWheel1* wheel = new NxWheel1(&actor->getScene());
+
+	if(dribblerDesc->wheelApproximation > 0) 
+	{
+		NxArray<NxVec3> points;
+		NxVec3 center = dribblerDesc->position;
+
+		NxVec3 frontAxis(0,1,0);
+		NxVec3 downAxis(0,-0,-1);
+		NxVec3 wheelAxis(1,0,0);
+		//frontAxis.normalize();
+		frontAxis *= dribblerDesc->wheelRadius;
+		//downAxis.normalize();
+		downAxis *= dribblerDesc->wheelRadius;
+		//wheelAxis.normalize();
+		wheelAxis *= dribblerDesc->wheelWidth;
+		NxReal step;
+		if(dribblerDesc->wheelFlags & NX_WF_BUILD_LOWER_HALF) 
+		{
+			if((dribblerDesc->wheelApproximation & 0x1) == 0)
+				dribblerDesc->wheelApproximation++;
+			step = (NxReal)(NxTwoPi) / (NxReal)(dribblerDesc->wheelApproximation*2);
+		}
+		else 
+		{
+			step = (NxReal)(NxTwoPi) / (NxReal)(dribblerDesc->wheelApproximation);
+		}
+		for(NxU32 i = 0; i < dribblerDesc->wheelApproximation; i++) 
+		{
+			NxReal iReal;
+			if(dribblerDesc->wheelFlags & NX_WF_BUILD_LOWER_HALF) 
+			{
+				iReal = (i > (dribblerDesc->wheelApproximation >> 1))?(NxReal)(i+dribblerDesc->wheelApproximation):(NxReal)i;
+			} 
+			else 
+			{
+				iReal = (NxReal)i;
+			}
+			NxReal Sin, Cos;
+			NxMath::sinCos(step * iReal, Sin, Cos);
+			NxVec3 insPoint = (downAxis * -Cos) + (frontAxis * Sin);
+			points.pushBack(insPoint + wheelAxis);
+			points.pushBack(insPoint - wheelAxis);
+		}
+
+		NxConvexMeshDesc convexDesc;
+		convexDesc.numVertices			= points.size();
+		convexDesc.pointStrideBytes		= sizeof(NxVec3);
+		convexDesc.points				= &points[0].x;
+		convexDesc.flags				= NX_CF_COMPUTE_CONVEX;
+
+		// Cooking from memory
+		MemoryWriteBuffer buf;
+		if(CookConvexMesh(convexDesc, buf)) 
+			{
+			NxConvexShapeDesc convexShapeDesc;
+			convexShapeDesc.meshData = actor->getScene().getPhysicsSDK().createConvexMesh(MemoryReadBuffer(buf.data));
+			convexShapeDesc.localPose.t = center;
+			convexShapeDesc.localPose.M.setColumn(0, NxVec3( 1, 0, 0));
+			convexShapeDesc.localPose.M.setColumn(1, NxVec3( 0,-1, 0));
+			convexShapeDesc.localPose.M.setColumn(2, NxVec3( 0, 0, -1));
+			if(convexShapeDesc.meshData != NULL) 
+			{
+				NxU32 shapeNumber = actor->getNbShapes();
+				wheel->wheelConvex = actor->createShape(convexShapeDesc)->isConvexMesh();
+				wheel->wheelConvex->userData = wheel;
+			}
+		}
+
+		else 
+		{
+			delete wheel;
+			return NULL;
+		}
+	}
+	else 
+	{
+		wheel->wheelConvex = NULL;
+	}
+
+	NxVec3 frontAxis(0,1,0);
+	NxVec3 downAxis(0,-0,-1);
+	NxVec3 wheelAxis(1,0,0);
+	//NxVec3 downAxis  = dribblerDesc->downAxis; downAxis.normalize();
+	//NxVec3 wheelAxis  = dribblerDesc->wheelAxis; wheelAxis.normalize();
+	//NxVec3 frontAxis  = downAxis.cross(wheelAxis); frontAxis.normalize();
+
+	// This assures a height of 1 for every capsule
+	NxReal heightModifier = (dribblerDesc->wheelSuspension + dribblerDesc->wheelRadius) / dribblerDesc->wheelSuspension;
+	//if (dribblerDesc->wheelSuspension < 1)
+	//	heightModifier = 1.f / dribblerDesc->wheelSuspension;
+
+	NxSpringDesc wheelSpring;
+	wheelSpring.spring					= dribblerDesc->springRestitution*heightModifier;
+	wheelSpring.damper					= dribblerDesc->springDamping*heightModifier;
+	wheelSpring.targetValue				= dribblerDesc->springBias*heightModifier;
+
+	NxMaterialDesc materialDesc;
+	materialDesc.restitution			= 0.0f;
+	materialDesc.dynamicFriction		= dribblerDesc->frictionToSide;
+	materialDesc.staticFriction			= 2.0f;
+	materialDesc.staticFrictionV		= dribblerDesc->frictionToFront*4;
+	materialDesc.dynamicFrictionV		= dribblerDesc->frictionToFront;
+	materialDesc.dirOfAnisotropy		= frontAxis;
+	materialDesc.frictionCombineMode	= NX_CM_MULTIPLY;
+	materialDesc.flags					|=  NX_MF_ANISOTROPIC;
+
+	wheel->_frictionToFront = dribblerDesc->frictionToFront;
+	wheel->_frictionToSide = dribblerDesc->frictionToSide;
+
+	wheel->material = actor->getScene().createMaterial(materialDesc);
+
+	NxCapsuleShapeDesc capsuleShape;
+	capsuleShape.radius = 0.1f;
+	capsuleShape.height = dribblerDesc->wheelSuspension + dribblerDesc->wheelRadius;
+	capsuleShape.flags = NX_SWEPT_SHAPE;
+	//capsuleShape.localPose.M.setColumn(0, NxVec3( 1, 0, 0));
+	//capsuleShape.localPose.M.setColumn(1, NxVec3( 0,-1, 0));
+	//capsuleShape.localPose.M.setColumn(2, NxVec3( 0, 0,-1));	//rotate 180 degrees around x axis to cast downward!
+	capsuleShape.localPose.M.setColumn(0, frontAxis);
+	capsuleShape.localPose.M.setColumn(1, downAxis);
+	capsuleShape.localPose.M.setColumn(2, wheelAxis);
+	if(dribblerDesc->wheelSuspension >= 1) 
+	{
+		capsuleShape.localPose.t = dribblerDesc->position + downAxis*(dribblerDesc->wheelRadius);
+	}
+	else 
+	{
+		capsuleShape.localPose.t = dribblerDesc->position + downAxis*((dribblerDesc->wheelRadius + dribblerDesc->wheelSuspension)*0.5f);
+	}
+	capsuleShape.materialIndex = wheel->material->getMaterialIndex();
+	capsuleShape.userData = dribblerDesc->userData;
+
+	NxU32 shapeNumber = actor->getNbShapes();
+	wheel->wheelCapsule = actor->createShape(capsuleShape)->isCapsule();
+
+	if(wheel->wheelCapsule == NULL) 
+	{
+		delete wheel;
+		return NULL;
+	}
+	wheel->wheelCapsule->userData = wheel;
+	wheel->userData = dribblerDesc->userData;
+	wheel->wheelCapsule->userData = wheel;
+	wheel->wheelFlags = (dribblerDesc->wheelFlags & NX_WF_ALL_WHEEL_FLAGS);
+	wheel->_turnAngle = 0;
+	wheel->_turnVelocity = 0;
+	wheel->_radius = dribblerDesc->wheelRadius;
+	wheel->_perimeter = wheel->_radius * NxTwoPi;
+	wheel->_maxSuspension = dribblerDesc->wheelSuspension;
+	wheel->_wheelWidth = dribblerDesc->wheelWidth;
+	wheel->_maxPosition = dribblerDesc->position;
+	return wheel;
+}
+
+NxWheel1::NxWheel1(NxScene * s)  : scene(s)
+{ 
+}
+
+NxWheel1::~NxWheel1() 
+{
+	scene->releaseMaterial(*material);
+}
+
+
+void NxWheel1::tick(bool handBrake, NxReal motorTorque, NxReal brakeTorque, NxReal dt)
+{
+	if(getWheelFlag(NX_WF_ACCELERATED)) 
+	{
+		if (handBrake && getWheelFlag(NX_WF_AFFECTED_BY_HANDBRAKE)) 
+		{
+			// Handbrake, blocking!
+		}
+		else if (hasGroundContact()) 
+			{
+			// Touching, force applies
+			NxVec3 steeringDirection;
+			getSteeringDirection(steeringDirection);
+			steeringDirection.normalize();
+			NxReal localTorque = motorTorque;
+			NxReal wheelForce = localTorque / _radius;
+			steeringDirection *= wheelForce;
+			wheelCapsule->getActor().addForceAtPos(steeringDirection, contactInfo.contactPosition);
+			if(contactInfo.otherActor->isDynamic())
+				contactInfo.otherActor->addForceAtPos(-steeringDirection, contactInfo.contactPosition);
+			} 
+	}
+
+	NxReal OneMinusBreakPedal = 1-brakeTorque;
+	if(handBrake && getWheelFlag(NX_WF_AFFECTED_BY_HANDBRAKE)) 
+	{
+		material->setDynamicFrictionV(1);
+		material->setStaticFrictionV(4);
+		material->setDynamicFriction(0.4f);
+		material->setStaticFriction(1.0f);
+	} 
+	else 
+	{
+		NxReal newv = OneMinusBreakPedal * _frictionToFront + brakeTorque;
+		NxReal newv4= OneMinusBreakPedal * _frictionToFront + brakeTorque*4;
+		material->setDynamicFrictionV(newv);
+		material->setDynamicFriction(_frictionToSide);
+		material->setStaticFrictionV(newv*4);
+		material->setStaticFriction(2);
+	}
+
+	if(!hasGroundContact())
+		updateContactPosition();
+	updateAngularVelocity(dt, handBrake);
+
+
+	contactInfo.reset();
+}
+
+void NxWheel1::getSteeringDirection(NxVec3& dir) 
+{
+//	if(wheelFlags & (NX_WF_STEERABLE_INPUT | NX_WF_STEERABLE_AUTO)) 
+//	{
+//		wheelCapsule->getGlobalOrientation().getColumn(0, dir);
+	//} 
+	//else 
+	//{
+		wheelCapsule->getActor().getGlobalOrientation().getColumn(0, dir);
+	//}
+}
+
+void NxWheel1::updateAngularVelocity(NxReal lastTimeStepSize, bool handbrake) 
+{
+	if((wheelFlags & NX_WF_AFFECTED_BY_HANDBRAKE) && handbrake) 
+	{
+		_turnVelocity = 0;
+	} 
+	else if (contactInfo.isTouching()) 
+		{
+		NxReal wheelPerimeter = NxTwoPi * _radius;
+		NxReal newTurnVelocity = contactInfo.relativeVelocity / wheelPerimeter;
+//		if (NxMath::abs(_turnVelocity - newTurnVelocity) > 1.f)
+//			printf("pfff\n");
+		_turnVelocity = newTurnVelocity;
+		_turnAngle += _turnVelocity * lastTimeStepSize * NxTwoPi;
+		} 
+	else 
+	{
+		_turnVelocity *= 0.99f;
+		_turnAngle += _turnVelocity;
+	}
+	while(_turnAngle >= NxTwoPi)
+		_turnAngle -= NxTwoPi;
+	while (_turnAngle < 0)
+		_turnAngle += NxTwoPi;
+
+	//printf("Wheel turn angle: %2.3f (%s) (%x)\n", _turnAngle, contactInfo.isTouching()?"true":"false", (void*)&wheelCapsule->getActor());
+	}
+
+void NxWheel1::drawWheel(NxReal approx, bool debug) const
+{
+	if(debug) 
+	{
+		glPointSize(5.0f);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		NxVec3 vec1(getWheelPos());
+		glColor4f(1,0,0,1);
+		
+#ifdef __PPCGEKKO__
+		glBegin(GL_POINTS, 1);
+		glVertex3d(vec1.x, vec1.y, vec1.z);
+		glEnd();
+#else
+		glVertexPointer(3, GL_FLOAT, 0, &vec1);
+		glDrawArrays(GL_POINTS, 0, 1);
+
+#endif
+		NxVec3 vec2(contactInfo.contactPositionLocal);
+		glColor4f(1,0,1,1);
+		
+#ifdef __PPCGEKKO__
+		glBegin(GL_POINTS, 1);
+		glVertex3d(vec2.x, vec2.y, vec2.z);
+		glEnd();
+#else
+		glVertexPointer(3, GL_FLOAT, 0, &vec2);
+		glDrawArrays(GL_POINTS, 0, 1);
+#endif
+
+		NxVec3 wheelpos = contactInfo.contactPositionLocal + NxVec3(0.f, _radius, 0.f);
+		glColor4f(1,1,1,1);
+		
+#ifdef __PPCGEKKO__
+		glBegin(GL_POINTS, 1);
+		glVertex3d(wheelpos.x, wheelpos.y, wheelpos.z);
+		glEnd();
+#else		
+		glVertexPointer(3, GL_FLOAT, 0, &wheelpos);
+		glDrawArrays(GL_POINTS, 0, 1);
+#endif
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+
+#if !defined(__CELLOS_LV2__) && !defined(_XBOX)
+	
+#ifndef __PPCGEKKO__	
+	static GLUquadricObj *quadric = NULL;
+	if(quadric == NULL) 
+	{
+		quadric = gluNewQuadric();
+	}
+	
+	if(debug) 
+	{
+		gluQuadricDrawStyle(quadric, GLU_LINE);
+	} 
+	else 
+	{
+		gluQuadricDrawStyle(quadric, GLU_FILL);
+	}
+#endif
+
+	NxVec3 wheelpos = (contactInfo.contactPositionLocal + NxVec3(0.f, _radius, 0.f));
+	NxReal angle = NxMath::radToDeg(_turnAngle);
+	
+	glPushMatrix();
+	
+	if(debug) 
+	{
+		NxF32 red = getWheelFlag(NX_WF_ACCELERATED)?1.f:0.f;
+		NxF32 green = contactInfo.isTouching()?1:0.5f;
+		NxF32 blue = 0.5f;
+		glColor4f(red, green, blue, 1.0f);
+	} else {
+		glColor4f(GL_COLOR_TIRE);
+	}
+	NxU32 slices = 20;
+	GLfloat mat[16]; mat[3] = mat[7] = mat[11] = mat[12] = mat[13] = mat[14] = 0; mat[15] = 1;
+	wheelCapsule->getLocalOrientation().getColumnMajorStride4(mat);
+
+#ifdef __PPCGEKKO__	
+	glBegin(GL_POINTS,1);
+	glVertex3d(_maxPosition.x, _maxPosition.y, _maxPosition.z);
+	glEnd();
+#else
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, sizeof(NxVec3), &_maxPosition.x);
+	glDrawArrays(GL_POINTS, 0, 1);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
+	glTranslatef(wheelpos.x, wheelpos.y, wheelpos.z);
+	glMultMatrixf(mat);
+	glRotatef(angle, 0,0,1);
+	glTranslatef(0,0, -_wheelWidth);
+#ifdef __PPCGEKKO__	
+	glScalef(_wheelWidth*2, _radius, _radius);
+	glutSolidCylinder(12);
+#else
+	gluCylinder(quadric, _radius, _radius, _wheelWidth*2, slices, 1);
+#endif
+
+	if(!debug) 
+	{
+		glTranslatef(0,0, 2*_wheelWidth);
+#ifdef __PPCGEKKO__		
+		glScalef(_wheelWidth*2,_radius,_radius);
+		glutSolidCylinder(12);
+#else		
+		gluDisk(quadric, _radius/2.f, _radius, slices, 1);
+#endif
+		glColor4f(GL_COLOR_TIRE_INNER);
+		
+#ifdef __PPCGEKKO__		
+		glScalef(_wheelWidth*(-2),_radius,_radius);
+		glutSolidCylinder(12);
+#else	
+		gluDisk(quadric, 0, _radius/2.f, slices, 1);
+		glTranslatef(0,0, -2*_wheelWidth);
+		glRotatef(180,1,0,0);
+		glColor4f(GL_COLOR_TIRE);
+		gluDisk(quadric, _radius/2.f, _radius, slices, 1);
+		glColor4f(GL_COLOR_TIRE_INNER);
+		gluDisk(quadric, 0, _radius/2.f, slices, 1);
+#endif
+	}
+
+	glPopMatrix();
+#endif
+
+}
+
+void NxWheel1::updateContactPosition() 
+{
+	contactInfo.contactPositionLocal = _maxPosition - NxVec3(0, _maxSuspension+_radius, 0);
+}
+
+void NxWheel1::setAngle(NxReal angle) 
+{
+	_angle = angle;
+
+	NxReal Cos, Sin;
+	NxMath::sinCos(_angle, Sin, Cos);
+	NxMat33 wheelOrientation = wheelCapsule->getLocalOrientation();
+	wheelOrientation.setColumn(0,  NxVec3( Cos, 0, Sin ));
+	wheelOrientation.setColumn(2,  NxVec3( Sin, 0,-Cos ));
+	setWheelOrientation(wheelOrientation);
+}
+
+/*---------------------------------------------------------------------------------------*\
+|
+|Wheel 2 - uses NxWheelShape
+|
+\*---------------------------------------------------------------------------------------*/
+NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc) : actor(a)
+{
+
+	NxScene * scene = &actor->getScene();
+	//create a shared car wheel material to be used by all wheels
+	static NxMaterial * wsm = 0;
+	if(!wsm)
+	{
+		NxMaterialDesc m;
+		m.flags |= NX_MF_DISABLE_FRICTION;
+		wsm = scene->createMaterial(m);
+	}
+
+	NxWheelShapeDesc wheelShapeDesc;
+
+	wheelShapeDesc.localPose.t = wheelDesc->position;
+	NxQuat q;
+	//q.fromAngleAxis(90.0f, NxVec3(1,0,0));
+	q.fromAngleAxis(90.0f, NxVec3(1,0,0));//Felix Modif
+	wheelShapeDesc.localPose.M.fromQuat(q);
+	//wheelShapeDesc.localPose.M.setColumn(0, NxVec3(0.707,0.707,0)); //fromQuat(q);
+	//wheelShapeDesc.localPose.M.setColumn(1, NxVec3(-0.707,0.707,0));
+	//wheelShapeDesc.localPose.M.setColumn(2, NxVec3(0,0,1));
+	//NxMat33 mat = wheelShapeDesc.localPose.M;
+	//mat *= NxMat33(NxVec3(1,0,0),NxVec3(0,0,-1),NxVec3(0,1,0));
+	//wheelShapeDesc.localPose.M = mat;
+	//wheelShapeDesc.localPose.M.rotX(45);
+	wheelShapeDesc.materialIndex = wsm->getMaterialIndex();
+	wheelFlags = wheelDesc->wheelFlags;
+
+	NxReal heightModifier = (wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
+
+	wheelShapeDesc.suspension.spring = wheelDesc->springRestitution*heightModifier;
+	wheelShapeDesc.suspension.damper = 0;//wheelDesc->springDamping*heightModifier;
+	wheelShapeDesc.suspension.targetValue = wheelDesc->springBias*heightModifier;
+
+	wheelShapeDesc.radius = wheelDesc->wheelRadius;
+	wheelShapeDesc.suspensionTravel = wheelDesc->wheelSuspension; 
+	wheelShapeDesc.inverseWheelMass = 0.1f;	//not given!? TODO
+
+	wheelShapeDesc.lateralTireForceFunction.stiffnessFactor *= wheelDesc->frictionToSide;	
+	wheelShapeDesc.longitudalTireForceFunction.stiffnessFactor *= wheelDesc->frictionToFront;	
+
+	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));
+}
+
+NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc, int indexWheel) : actor(a)
+{
+
+	NxScene * scene = &actor->getScene();
+
+	//create a shared car wheel material to be used by all wheels
+	static NxMaterial * wsm = 0;
+	if(!wsm)
+	{
+		NxMaterialDesc m;
+		m.flags |= NX_MF_DISABLE_FRICTION;
+		wsm = scene->createMaterial(m);
+	}
+
+	NxWheelShapeDesc wheelShapeDesc;
+
+	//Posicao
+	wheelShapeDesc.localPose.t = wheelDesc->position;
+
+	//Orientacao das rodas (robo de 4 rodas)
+	NxMat33 mat1 = wheelShapeDesc.localPose.M;
+	NxMat33 mat2 = wheelShapeDesc.localPose.M;
+	NxReal angle = 33./180.;
+	if(indexWheel==0)
+	{
+		mat1.rotX(NxPi*0.5);
+		mat2.rotY(NxPi + angle*NxPi);
+	}
+	else if(indexWheel==2)
+	{
+		mat1.rotX(NxPi*0.5);
+		mat2.rotY(NxPi*0.25);
+	}
+	else if(indexWheel==1)
+	{
+		mat1.rotX(NxPi*0.5);
+		mat2.rotY(2*NxPi - angle*NxPi);
+	}
+	else //3
+	{
+		mat1.rotX(NxPi*0.5);
+		mat2.rotY(3*NxPi*0.25);
+	}
+	wheelShapeDesc.localPose.M = mat1*mat2;
+	wheelShapeDesc.materialIndex = wsm->getMaterialIndex();
+	wheelFlags = wheelDesc->wheelFlags;
+
+	NxReal heightModifier = (wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
+
+	wheelShapeDesc.suspension.spring = wheelDesc->springRestitution*heightModifier;
+	wheelShapeDesc.suspension.damper = 0;//wheelDesc->springDamping*heightModifier;
+	wheelShapeDesc.suspension.targetValue = wheelDesc->springBias*heightModifier;
+
+	wheelShapeDesc.radius = wheelDesc->wheelRadius;
+	wheelShapeDesc.suspensionTravel = wheelDesc->wheelSuspension; 
+	wheelShapeDesc.inverseWheelMass = 0.1f;	//not given!? TODO
+
+	wheelShapeDesc.lateralTireForceFunction.stiffnessFactor *= wheelDesc->frictionToSide;	
+	wheelShapeDesc.longitudalTireForceFunction.stiffnessFactor *= wheelDesc->frictionToFront;	
+
+	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));
+}
+
+NxWheel2::~NxWheel2()
+{
+}
+
+void NxWheel2::tick(bool handBrake, NxReal axleSpeed, NxReal brakeTorque, NxReal dt)
+{
+	wheelShape->setWheelFlags(NX_WF_AXLE_SPEED_OVERRIDE);
+
+
+	//motorTorque *= 0.1f;
+	brakeTorque *= 500.0f;
+	if(handBrake && getWheelFlag(NX_WF_AFFECTED_BY_HANDBRAKE))
+		brakeTorque = 1000.0f;
+
+	//if(getWheelFlag(NX_WF_ACCELERATED)) 
+	//{
+		wheelShape->setAxleSpeed(axleSpeed);
+		//wheelShape->setMotorTorque(700);
+	//}
+
+	wheelShape->setBrakeTorque(brakeTorque);
+}
+
+NxActor* NxWheel2::getTouchedActor() const
+{
+	NxWheelContactData wcd;
+	NxShape * s = wheelShape->getContact(wcd);	
+	return s ? &s->getActor() : 0;
+}
+
+NxVec3 NxWheel2::getWheelPos() const
+{
+	return wheelShape->getLocalPosition();
+}
+
+void NxWheel2::setAngle(NxReal angle)
+{
+	wheelShape->setSteerAngle(-angle);
+}
+
+void NxWheel2::drawWheel(NxReal approx, bool debug) const
+{
+	//nothing, taken care of by built in visualization.
+	NxWheelContactData wcd;
+	NxShape* s = wheelShape->getContact(wcd);	
+	if(!s) return;
+
+	//printf(" f = %f %f %f\n",wcd.contactForce, wcd.longitudalSlip, wcd.longitudalImpulse);
+/*
+	glPushMatrix();
+	glLoadIdentity();
+
+	NxVec3 pVecBuffer[4];
+	pVecBuffer[0] = wcd.contactPoint;
+	pVecBuffer[1] = wcd.contactPoint + wcd.longitudalDirection;
+	pVecBuffer[2] = wcd.contactPoint;
+	pVecBuffer[3] = wcd.contactPoint + wcd.lateralDirection;
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, pVecBuffer);
+	glDrawArrays(GL_LINES, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glPopMatrix();
+*/
+}
+
+NxReal NxWheel2::getRpm() const
+{
+	return NxMath::abs(wheelShape->getAxleSpeed())/NxTwoPi * 60.0f;
+}

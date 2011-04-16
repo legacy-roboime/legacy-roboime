@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="Simulacao"
+	ProjectGUID="{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}"
+	RootNamespace="RobotIME"
+	SccProjectName="Svn"
+	SccAuxPath="Svn"
+	SccLocalPath="Svn"
+	SccProvider="SubversionScc"
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="2"
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="PhysXLoader.lib wsock32.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut&quot;"
+				GenerateDebugInformation="true"
+				AssemblyDebug="1"
+				SubSystem="1"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkIncremental="1"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{AB769544-B4C0-4D76-9C2A-9C6237C2F9E3}"
+		/>
+		<AssemblyReference
+			RelativePath="System.dll"
+			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<Filter
+				Name="Simulation"
+				>
+				<File
+					RelativePath=".\main.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAsManaged="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Simulation.cpp"
+					>
+				</File>
+				<Filter
+					Name="PhysX"
+					>
+					<File
+						RelativePath=".\NxScene1.cpp"
+						>
+					</File>
+					<Filter
+						Name="Robot"
+						>
+						<File
+							RelativePath=".\NxAllVehicles.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\NxVehicle.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\NxWheel.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\Robot.cpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Common Source Files"
+						>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\cooking.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\DebugRenderer.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\DrawObjects.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\Stream.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\UserAllocator.cpp"
+							>
+						</File>
+						<Filter
+							Name="win"
+							>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win\MediaPath_WIN.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win\Timing_WIN.cpp"
+								>
+							</File>
+						</Filter>
+						<Filter
+							Name="NxuStream2"
+							>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_Asc2Bin.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_ColladaExport.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_ColladaImport.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_cooking.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_customcopy.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_File.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_Geometry.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_GraphicsMesh.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_helper.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_hull.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_PhysicsExport.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_PhysicsInstantiator.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_ScaledCopy.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_schema.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_SchemaStream.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_Streaming.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_string.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_tinystr.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_tinyxml.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_tinyxmlerror.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_tinyxmlparser.cpp"
+								>
+							</File>
+						</Filter>
+					</Filter>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="UDPServer"
+				>
+				<File
+					RelativePath=".\ou_thread.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PracticalSocket.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPServer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPServerThread.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+			<Filter
+				Name="Simulation"
+				>
+				<File
+					RelativePath=".\Simulation.h"
+					>
+				</File>
+				<Filter
+					Name="PhysX"
+					>
+					<File
+						RelativePath=".\NxScene1.h"
+						>
+					</File>
+					<Filter
+						Name="Robot"
+						>
+						<File
+							RelativePath=".\NxAllVehicles.h"
+							>
+						</File>
+						<File
+							RelativePath=".\NxLinearInterpolate3Values.h"
+							>
+						</File>
+						<File
+							RelativePath=".\NxLinearInterpolationValues.h"
+							>
+						</File>
+						<File
+							RelativePath=".\NxVehicle.h"
+							>
+						</File>
+						<File
+							RelativePath=".\NxVehicleDesc.h"
+							>
+						</File>
+						<File
+							RelativePath=".\NxVehicleMotor.h"
+							>
+						</File>
+						<File
+							RelativePath=".\NxVehicleMotorDesc.h"
+							>
+						</File>
+						<File
+							RelativePath=".\NxWheel.h"
+							>
+						</File>
+						<File
+							RelativePath=".\NxWheelDesc.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Common Header Files"
+						>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\cooking.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\DebugRenderer.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\DrawObjects.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\MediaPath.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\Stream.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\Timing.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\UserAllocator.h"
+							>
+						</File>
+						<Filter
+							Name="NxuStream2"
+							>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_Asc2Bin.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_ColladaExport.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_ColladaImport.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_cooking.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_customcopy.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_File.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_Geometry.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_GraphicsMesh.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_helper.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_hull.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_PhysicsExport.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_PhysicsInstantiator.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_ScaledCopy.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_schema.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_SchemaStream.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_SchemaTypes.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_Streaming.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_string.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_tinystr.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2\NXU_tinyxml.h"
+								>
+							</File>
+						</Filter>
+						<Filter
+							Name="win"
+							>
+							<File
+								RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win\SampleMutex_WIN.h"
+								>
+							</File>
+						</Filter>
+					</Filter>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="UDPServer"
+				>
+				<File
+					RelativePath=".\ou_thread.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PracticalSocket.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPServer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPServerThread.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
