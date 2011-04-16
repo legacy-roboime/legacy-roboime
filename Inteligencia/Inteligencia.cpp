@@ -7,7 +7,7 @@
 
 int main()
 {
-	printf("testeeeeeee");
+	printf("Modulo Inteligencia");
 	getchar();
 	return 0;
 }
