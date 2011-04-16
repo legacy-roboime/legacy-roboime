@@ -1,0 +1,336 @@
+<?xml	version="1.0"	encoding="utf-8"?>
+<COLLADA version="1.4.0" xmlns="http://www.collada.org/2005/11/COLLADASchema">
+	<asset>
+		<contributor>
+			<author>NxuStream2 converter - http://www.ageia.com</author>
+			<authoring_tool>PhysX	Rocket,	PhysX	Viewer,	or CreateDynamics</authoring_tool>
+			<comments>questions	to:	jratcliff@ageia.com</comments>
+			<source_data>C:\Users\Bill\Documents\Visual Studio 2008\Projects\RobotIME\RobotIME\test.dae</source_data>
+		</contributor>
+		<unit	meter="1"	name="meter"/>
+		<up_axis>Y_UP</up_axis>
+	</asset>
+	 <library_materials>
+			<material	id="Material"	name="Material">
+				 <instance_effect	url="#Material-fx"></instance_effect>
+			</material>
+	 </library_materials>
+	 <library_effects>
+			<effect	id="Material-fx" name="Material">
+				 <profile_COMMON>
+						<technique id="Material-fx-COMMON" sid="COMMON">
+							 <phong>
+									<ambient>
+										 <color>0.803922 0.588235	0.92549	1</color>
+									</ambient>
+									<diffuse>
+										 <color>0.803922 0.588235	0.92549	1</color>
+									</diffuse>
+									<specular>
+										 <color>0.631373 0.631373	0.631373 1</color>
+									</specular>
+									<shininess>
+										 <float>1</float>
+									</shininess>
+									<reflective>
+										 <color>0	0	0	1</color>
+									</reflective>
+									<transparent>
+										 <color>1	1	1	1</color>
+									</transparent>
+									<transparency>
+										 <float>0</float>
+									</transparency>
+							 </phong>
+						</technique>
+				 </profile_COMMON>
+			</effect>
+	 </library_effects>
+	<library_geometries>
+		<geometry	id="ConvexMesh_0-Mesh" name="ConvexMesh_0-Mesh">
+			<convex_mesh>
+				<source	id="ConvexMesh_0-Position">
+					<float_array count="96"	id="ConvexMesh_0-Position-array">
+						-20.592443466 7.495037556	2.21049118	3.805318594 -21.581096649	2.21049118	10.957009315 18.978097916	2.21049118	-3.805332661 21.581094742	0	
+						21.914018631 0	0	-10.957016945 -18.978092194	0	10.956998825 -18.978103638	0	20.592435837 -7.49505043	2.21049118	
+						20.592443466 7.495036125	2.21049118	16.78711319 14.086060524	0	-16.787117004 -14.086054802	2.21049118	-20.592445374 -7.49503088	0	
+						-3.805332661 21.581094742	2.21049118	-16.78711319 14.08605957	0	20.592435837 -7.49505043	0	-3.80533886 -21.581094742	0	
+						3.805328131 21.581096649	0	-3.80533886 -21.581094742	2.21049118	10.956998825 -18.978103638	2.21049118	-20.592445374 -7.49503088	2.21049118	
+						-20.592443466 7.495037556	0	-16.78711319 14.08605957	2.21049118	16.787103653 -14.086071014	0	-10.957010269 18.978096008	0	
+						-21.914018631 0.000003309	0	21.914018631 0	2.21049118	20.592443466 7.495036125	0	3.805328131 21.581096649	2.21049118	
+						16.78711319 14.086060524	2.21049118	10.957009315 18.978097916	0	16.787103653 -14.086071014	2.21049118	-10.957010269 18.978096008	2.21049118	
+					</float_array>
+					<technique_common>
+						<accessor	count="32" source="#ConvexMesh_0-Position-array" stride="3">
+							<param name="X"	type="float"/>
+							<param name="Y"	type="float"/>
+							<param name="Z"	type="float"/>
+						</accessor>
+					 </technique_common>
+				 </source>
+				<vertices	id="ConvexMesh_0-Vertex">
+					<input semantic="POSITION" source="#ConvexMesh_0-Position"/>
+				</vertices>
+				<triangles material="Material" count="60">
+					<input offset="0"	semantic="VERTEX"	source="#ConvexMesh_0-Vertex"/>
+				 <p>17 1	18	17 18	30	17 30	7	17 7	25	
+				 17 25	8	17 8	28	17 28	2	17 2	27	
+				 17 27	12	17 12	31	17 31	21	17 21	0	
+				 17 0	19	17 19	10	26 4	14	26 14	22	
+				 26 22	6	26 6	15	26 15	5	26 5	11	
+				 26 11	24	26 24	20	26 20	13	26 13	23	
+				 26 23	3	26 3	16	26 16	29	26 29	9	
+				 11 5	10	14 4	25	14 25	7	15 6	1	
+				 16 3	12	16 12	27	17 5	15	17 15	1	
+				 17 10	5	18 1	6	19 11	10	20 0	21	
+				 20 21	13	30 18	6	30 6	22	22 14	7	
+				 22 7	30	23 13	21	23 21	31	31 12	3	
+				 31 3	23	24 0	20	24 11	19	24 19	0	
+				 25 4	26	25 26	8	26 9	28	26 28	8	
+				 27 2	29	27 29	16	28 9	29	28 29	2	
+				 </p>
+				</triangles>
+			</convex_mesh>
+		</geometry>
+		<geometry	id="ConvexMesh_1-Mesh" name="ConvexMesh_1-Mesh">
+			<convex_mesh>
+				<source	id="ConvexMesh_1-Position">
+					<float_array count="96"	id="ConvexMesh_1-Position-array">
+						-1.784194946 0.649394035	33.222988129	0.32970497 -1.869855404	33.222988129	0.949350297 1.644323111	33.222988129	1.898700714 0	0	
+						-0.949350893 -1.644322753	0	-0.329706132 1.869855285	0	1.898700714 0	33.222988129	-1.898700714 0.000000287	0	
+						0.949349403 -1.644323707	0	-1.45448947 -1.220460892	33.222988129	1.454489112 1.220461488	0	-0.329706132 1.869855285	33.222988129	
+						1.454488158 -1.220462203	33.222988129	-1.454489112 1.220461488	0	1.784194589 -0.649395168	0	1.454489112 1.220461488	33.222988129	
+						-1.454489112 1.220461488	33.222988129	-0.329706699 -1.869855165	0	-0.949350893 -1.644322753	33.222988129	-1.784195185 -0.649393559	0	
+						0.329705775 1.869855285	0	-1.898700714 0.000000287	33.222988129	1.784195065 0.649393916	33.222988129	-0.949350476 1.644322991	0	
+						1.784194589 -0.649395168	33.222988129	0.949349403 -1.644323707	33.222988129	0.329705775 1.869855285	33.222988129	1.784195065 0.649393916	0	
+						-1.784195185 -0.649393559	33.222988129	0.949350297 1.644323111	0	0.32970497 -1.869855404	0	-1.784194946 0.649394035	0	
+					</float_array>
+					<technique_common>
+						<accessor	count="32" source="#ConvexMesh_1-Position-array" stride="3">
+							<param name="X"	type="float"/>
+							<param name="Y"	type="float"/>
+							<param name="Z"	type="float"/>
+						</accessor>
+					 </technique_common>
+				 </source>
+				<vertices	id="ConvexMesh_1-Vertex">
+					<input semantic="POSITION" source="#ConvexMesh_1-Position"/>
+				</vertices>
+				<triangles material="Material" count="60">
+					<input offset="0"	semantic="VERTEX"	source="#ConvexMesh_1-Vertex"/>
+				 <p>18 1	25	18 25	12	18 12	24	18 24	6	
+				 18 6	22	18 22	15	18 15	2	18 2	26	
+				 18 26	11	18 11	16	18 16	0	18 0	21	
+				 18 21	28	18 28	9	17 4	19	17 19	7	
+				 17 7	31	17 31	13	17 13	23	17 23	5	
+				 17 5	20	17 20	29	17 29	10	17 10	27	
+				 17 27	3	17 3	14	17 14	8	17 8	30	
+				 14 12	8	14 3	6	14 6	24	15 10	29	
+				 15 29	2	16 13	31	16 31	0	18 4	17	
+				 18 17	1	18 9	4	19 4	9	20 5	11	
+				 20 11	26	21 7	19	21 19	28	21 0	31	
+				 21 31	7	27 10	15	27 15	22	22 6	3	
+				 22 3	27	23 13	16	23 16	11	23 11	5	
+				 24 12	14	25 1	30	25 30	8	25 8	12	
+				 26 2	29	26 29	20	28 19	9	30 1	17	
+				 </p>
+				</triangles>
+			</convex_mesh>
+		</geometry>
+	</library_geometries>
+	<library_visual_scenes>
+		<visual_scene	id="Scene0-Visual"	name="Scene0-Visual">
+			<node	id="Actor0-Node" name="Actor0" type="NODE">
+        <translate>0	0 0</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor1-Node" name="Actor1" type="NODE">
+        <translate>0	0 0</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			<node	id="Actor2-Node" name="Actor2" type="NODE">
+        <translate>0	0 5.639732361</translate>
+        <rotate>1 0	0	 0</rotate>
+			</node>
+			</visual_scene>
+	</library_visual_scenes>
+	<library_physics_materials>
+		<physics_material	id="pmat0_0-PhysicsMaterial"	name="pmat0_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat1_0-PhysicsMaterial"	name="pmat1_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.5</dynamic_friction>
+				<restitution>0</restitution>
+				<static_friction>0.5</static_friction>
+			</technique_common>
+		</physics_material>
+		<physics_material	id="pmat2_0-PhysicsMaterial"	name="pmat2_0-PhysicsMaterial">
+			<technique_common>
+				<dynamic_friction>0.300000012</dynamic_friction>
+				<restitution>0.5</restitution>
+				<static_friction>0.300000012</static_friction>
+			</technique_common>
+		</physics_material>
+	</library_physics_materials>
+	<library_physics_models>
+		<physics_model id="Scene0-PhysicsModel">
+			<rigid_body	sid="Actor0-RigidBody" name="(null)">
+				<technique_common>
+					<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat1_0-PhysicsMaterial"/>
+					 <density>1</density>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>10</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<plane>
+							<equation>0 0	1 0</equation>
+						</plane>
+					 </shape>
+					<dynamic>false</dynamic>
+					<mass>1</mass>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor1-RigidBody" name="Cylinder01">
+				<technique_common>
+					<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
+					 <mass>0.001633795</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>10</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<instance_geometry url="#ConvexMesh_0-Mesh"/>
+					 </shape>
+					 <dynamic>true</dynamic>
+					 <mass>0.000000001</mass>
+					 <mass_frame>
+            <translate>0.100223966	0.119442739 1.10524559</translate>
+            <rotate>-0.000133185 -0.000365921	-0.99999994	 40.000102997</rotate>
+					</mass_frame>
+					<inertia>0.000000095	0.000000096 0.000000191</inertia>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+						<wakeUpCounter>0.399999976</wakeUpCounter>
+						<linearDamping>0</linearDamping>
+						<angularDamping>0.050000001</angularDamping>
+						<maxAngularVelocity>7</maxAngularVelocity>
+						<sleepLinearVelocity>150</sleepLinearVelocity>
+						<sleepAngularVelocity>0.140000001</sleepAngularVelocity>
+						<solverIterationCount>4</solverIterationCount>
+						<disable_gravity>false</disable_gravity>
+						<kinematic>false</kinematic>
+						<filter_sleep_velocity>false</filter_sleep_velocity>
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+			<rigid_body	sid="Actor2-RigidBody" name="Cylinder02">
+				<technique_common>
+					<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
+					<shape>
+            <translate>0	0 0</translate>
+            <rotate>1 0	0	 0</rotate>
+						<instance_physics_material url="#pmat2_0-PhysicsMaterial"/>
+					 <mass>0.000184339</mass>
+					 <extra>
+						 <technique	profile="PhysX">
+							 <group>0</group>
+							 <skinWidth>10</skinWidth>
+							 <disable_collision>false</disable_collision>
+						 </technique>
+					 </extra>
+						<instance_geometry url="#ConvexMesh_1-Mesh"/>
+					 </shape>
+					 <dynamic>true</dynamic>
+					 <mass>0</mass>
+					 <mass_frame>
+            <translate>0.00279573	0.005828314 16.611494064</translate>
+            <rotate>0.002112963 0.000926998	0.999996006	 12.627335548</rotate>
+					</mass_frame>
+					<inertia>0.000000009	0.000000009 0</inertia>
+					</technique_common>
+			<extra>
+				<technique profile="PhysX">
+						<wakeUpCounter>0.399999976</wakeUpCounter>
+						<linearDamping>0</linearDamping>
+						<angularDamping>0.050000001</angularDamping>
+						<maxAngularVelocity>7</maxAngularVelocity>
+						<sleepLinearVelocity>150</sleepLinearVelocity>
+						<sleepAngularVelocity>0.140000001</sleepAngularVelocity>
+						<solverIterationCount>4</solverIterationCount>
+						<disable_gravity>false</disable_gravity>
+						<kinematic>false</kinematic>
+						<filter_sleep_velocity>false</filter_sleep_velocity>
+					<group>0</group>
+					<disable_collision>false</disable_collision>
+					<disable_response>false</disable_response>
+					<lock_com>false</lock_com>
+				</technique>
+			</extra>
+			 </rigid_body>
+		</physics_model>
+		<physics_model id="Scene0-PhysicsInstance">
+			<instance_physics_model	url="#Scene0-PhysicsModel">
+				<instance_rigid_body target="#Actor0-Node" body="Actor0-RigidBody">
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor1-Node" body="Actor1-RigidBody">
+					<technique_common>
+						<angular_velocity>0 0	0</angular_velocity>
+						<velocity>0 0	0</velocity>
+					</technique_common>
+				</instance_rigid_body>
+				<instance_rigid_body target="#Actor2-Node" body="Actor2-RigidBody">
+					<technique_common>
+						<angular_velocity>0 0	0</angular_velocity>
+						<velocity>0 0	0</velocity>
+					</technique_common>
+				</instance_rigid_body>
+			<extra>
+				<technique profile="PhysX">
+				</technique>
+			</extra>
+			</instance_physics_model>
+		</physics_model>
+	</library_physics_models>
+	<library_physics_scenes>
+		<physics_scene id="SceneInstances-Physics">
+			<instance_physics_model	url="#Scene0-PhysicsInstance"/>
+			<technique_common>
+				<gravity>0	0 -9810</gravity>
+			</technique_common>
+		</physics_scene>
+	</library_physics_scenes>
+	<scene>
+		<instance_physics_scene	url="#SceneInstances-Physics"/>
+	</scene>
+</COLLADA>

@@ -1,0 +1,29 @@
+  <NXUSTREAM2>
+    <NxuPhysicsCollection id="testbin.xml" sdkVersion="284" nxuVersion="103">
+      <NxPhysicsSDKDesc id="SDK"/>
+      <NxSceneDesc id="Scene_0" hasFilter="true">
+        <NxGroupsMask id="groupMask0"/>
+        <NxGroupsMask id="groupMask1"/>
+        <gravity>0 -9.81000042 0</gravity>
+        <maxTimestep>0.016666668</maxTimestep>
+        <maxIter>1</maxIter>
+        <NxSceneLimits id="limits"/>
+        <threadMask>0</threadMask>
+        <backgroundThreadMask>0</backgroundThreadMask>
+        <workerThreadPriority>NX_TP_NORMAL</workerThreadPriority>
+        <NxMaterialDesc id="Material_0">
+          <dynamicFriction>0.5</dynamicFriction>
+          <staticFriction>0.5</staticFriction>
+          <dirOfAnisotropy>0 0 0</dirOfAnisotropy>
+        </NxMaterialDesc>
+        <NxActorDesc id="Actor_0">
+          <NxPlaneShapeDesc>
+            <NxShapeDesc>
+              <skinWidth>0.025</skinWidth>
+              <NxGroupsMask id="groupsMask"/>
+            </NxShapeDesc>
+          </NxPlaneShapeDesc>
+        </NxActorDesc>
+      </NxSceneDesc>
+    </NxuPhysicsCollection>
+  </NXUSTREAM2>
