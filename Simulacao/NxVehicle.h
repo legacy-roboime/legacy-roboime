@@ -82,7 +82,6 @@ public:
 	void					draw(bool debug = false);
 
 	void					applyRandomForce();
-	void					standUp();
 
 	NxReal					getDriveVelocity() { return NxMath::abs(_localVelocity.x); }
 

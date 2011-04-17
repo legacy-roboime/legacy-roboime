@@ -493,7 +493,7 @@ void Simulation::appKey(unsigned char key, bool down)
 	{
 		case 27:	exit(0); break;
 		case 'p':	gPause = !gPause; break;
-		case 'f':	if (NxAllVehicles::getActiveVehicle()) NxAllVehicles::getActiveVehicle()->standUp(); 
+		case 'f':	
 					break;
 		case 'v':	//gDebugVisualization = !gDebugVisualization; break;
 

@@ -74,21 +74,6 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 		robotMaterialDesc.frictionCombineMode = NX_CM_MULTIPLY;
 		vehicle->_carMaterial = scene->createMaterial(robotMaterialDesc);
 	}
-	
-	//Criando actor
-	//NxActorDesc actorDesc;
-	//for(NxU32 i = 0; i < vehicleDesc->robotShapes.size(); i++)
-	//{
-	//	actorDesc.shapes.pushBack(vehicleDesc->robotShapes[i]);
-	//	if (actorDesc.shapes[i]->materialIndex == 0)
-	//		actorDesc.shapes[i]->materialIndex = vehicle->_carMaterial->getMaterialIndex();
-	//}
-
-	//NxBodyDesc bodyDesc;
-	//bodyDesc.mass = vehicleDesc->mass;
-	//bodyDesc.sleepEnergyThreshold = 0.05;
-	//actorDesc.body = &bodyDesc;
-	//actorDesc.globalPose.t = vehicleDesc->position;
 
 	vehicle->_bodyActor = vehicleDesc->bodyActor;//scene->createActor(actorDesc);
 	if(vehicle->_bodyActor == NULL)
@@ -139,7 +124,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 		}
 	}
 
-	//Criando driblador
+	//Criando driblador. Driblador funcionara como uma roda.
 	NxWheel* dribbler = NxWheel::createDribbler(vehicle->_bodyActor, vehicleDesc->robotWheels[4]);
 
 	if(dribbler)
@@ -165,18 +150,6 @@ NxVehicle* NxVehicle::createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	NxAllVehicles::AddVehicle(vehicle);
 	if (NxAllVehicles::getActiveVehicleNumber() != -1 || NxAllVehicles::getNumberOfVehicles() == 1)
 		NxAllVehicles::setActiveVehicle(NxAllVehicles::getNumberOfVehicles()-1);
-
-	//for(NxU32 i = 0; i < vehicleDesc->children.size(); i++)
-	//{
-	//	NxVehicle* child = NxVehicle::_createVehicle(scene, vehicleDesc->children[i]);
-	//	if(child != NULL)
-	//	{
-	//		vehicle->addChild(child);
-	//		NxAllVehicles::AddChildVehicle(child);
-	//	} else {
-	//		fprintf(stderr, "Warning, child %d could not be created\n", i);
-	//	}
-	//}
 
 	return vehicle;
 }
@@ -247,123 +220,6 @@ void NxVehicle::handleContactPair(NxContactPair& pair, NxU32 carIndex)
 
 void NxVehicle::updateVehicle(NxReal lastTimeStepSize)
 {
-	//printf("updating %x\n", this);
-	
-	//NxReal distanceSteeringAxisRobotTurnAxis = _steeringSteerPoint.x  - _steeringTurnPoint.x;
-	//NX_ASSERT(_steeringSteerPoint.z == _steeringTurnPoint.z);
-	//NxReal distance2 = 0;
-	//if (NxMath::abs(_steeringWheelState) > 0.01f)
-	//	distance2 = distanceSteeringAxisCarTurnAxis / NxMath::tan(_steeringWheelState * _steeringMaxAngleRad);
-
-	//printf("d1 = %2.3f, d2 = %2.3f, a1 = %2.3f, a2 = %2.3f\n",
-	//	distanceSteeringAxisCarTurnAxis, distance2,
-	//	_steeringWheelState, _steeringWheelState * _steeringMaxAngleRad);
-
-
-	//montando um buffer com o historico da trajetoria do robo TRAIL
-	//_lastTrailTime += lastTimeStepSize;
-
-	//if(_lastTrailTime > TRAIL_FREQUENCY)
-	//{
-	//	_lastTrailTime = 0.0f;
-	//}
-
-	//NxU32 nbTouching = 0;
-	//NxU32 nbNotTouching = 0;
-	//NxU32 nbHandBrake = 0;
-	//for(NxU32 i = 0; i < _wheels.size(); i++)
-	//{
-	//	NxWheel* wheel = _wheels[i];
-
-		//TRAIL
-		//if (_lastTrailTime  == 0.0f)
-		//{
-		//	if(_wheels[i]->hasGroundContact())
-		//	{
-		//		if (++_nextTrailSlot >= NUM_TRAIL_POINTS)
-		//			_nextTrailSlot = 0;
-		//		_trailBuffer[_nextTrailSlot] = _bodyActor->getGlobalPose() * _wheels[i]->getGroundContactPos();
-		//	}
-		//}
-
-		//Codigo para mudar o angulo da roda em funcao do controle
-		/*if(wheel->getWheelFlag(NX_WF_STEERABLE_INPUT))
-		{
-			if(distance2 != 0)
-			{
-				NxReal xPos = wheel->getWheelPos().x;
-				NxReal zPos = wheel->getWheelPos().z;
-				NxReal dz = -zPos + distance2;
-				NxReal dx = xPos - _steeringTurnPoint.x;
-				wheel->setAngle(NxMath::atan(dx/dz));
-			} else {
-				wheel->setAngle(0.f);
-			}
-			//printf("%2.3f\n", wheel->getAngle());
-
-		} else if(wheel->getWheelFlag(NX_WF_STEERABLE_AUTO))
-			{
-			NxVec3 localVelocity = _bodyActor->getLocalPointVelocity(wheel->getWheelPos());
-			NxQuat local2Global = _bodyActor->getGlobalOrientationQuat();
-			local2Global.inverseRotate(localVelocity);
-//			printf("%2.3f %2.3f %2.3f\n", wheel->getWheelPos().x,wheel->getWheelPos().y,wheel->getWheelPos().z);
-			localVelocity.y = 0;
-			if(localVelocity.magnitudeSquared() < 0.01f)
-			{
-				wheel->setAngle(0.0f);
-			} else {
-				localVelocity.normalize();
-//				printf("localVelocity: %2.3f %2.3f\n", localVelocity.x, localVelocity.z);
-				if(localVelocity.x < 0)
-					localVelocity = -localVelocity;
-				NxReal angle = NxMath::clamp((NxReal)atan(localVelocity.z / localVelocity.x), 0.3f, -0.3f);
-				wheel->setAngle(angle);
-			}
-		}*/
-
-		// now the acceleration part
-		// Se a roda não for aceleravel pula, nem conta para quantidade de rodas tocando o solo e das com handbrake 
-		// todo: tirar essas flags
-		//if(!wheel->getWheelFlag(NX_WF_ACCELERATED)) nbHandBrake++;
-		//	continue;
-
-		// conta quantas rodas estao em cada estado (tocando o chao e handbrake)
-		//if(_handBrake && wheel->getWheelFlag(NX_WF_AFFECTED_BY_HANDBRAKE))
-		//{
-		//	nbHandBrake++;
-		//} 
-		//else {
-			//if (!wheel->hasGroundContact())
-			//{
-			//	nbNotTouching++;
-			//} else {
-			//	nbTouching++;
-			//}
-		//}
-	//}
-	
-	//Soh exerce torque as rodas aceleráveis e que estão encostando no chão.
-	//NxReal axleWheelsSpeed[4] = { 0.0f }; 
-	//NxU32 nbMotors = getNbMotors();
-	//for( NxU32 i=0 ; i<nbMotors; i++)
-	//{
-		//axleWheelsSpeed[i] = _speedAxleWheelControl[i]
-		//NxReal teste = _axleWheelsSpeed[i];
-		//_vehicleMotors[i]->setRpm(_rpmControl[i]);
-		//motorsTorque[i] = _vehicleMotors[i]->getTorque();
-		//if(nbTouching)// && NxMath::abs(_accelerationPedal) > 0.01f) 
-		//{
-			//NxReal axisTorque = _computeAxisTorque(i);
-			//NxReal wheelTorque = axisTorque / (NxReal)(_wheels.size() - nbHandBrake);
-			//NxReal wheelTorqueNotTouching = nbNotTouching>0?wheelTorque*(NxMath::pow(0.5f, (NxReal)nbNotTouching)):0;
-			//NxReal wheelTorqueTouching = wheelTorque - wheelTorqueNotTouching;
-			//motorsTorque[i] = wheelTorqueTouching / (NxReal)nbTouching; 
-		//} else {
-			//_updateRpms();
-		//}
-	//}
-//printf("wt: %f %f\n", motorTorque, _brakePedal);
-	//Numero de rodas eh igual ao numero de motores 4
 	for(NxU32 i = 0; i < _wheels.size(); i++) 
 	{
 		NxWheel* wheel = _wheels[i];
@@ -402,20 +258,6 @@ void NxVehicle::_computeMostTouchedActor()
 	}
 }
 
-/*void NxVehicle::_controlSteering(NxReal steering, bool analogSteering)
-{
-	if(analogSteering)
-	{
-		_steeringWheelState = steering;
-	} else if (NxMath::abs(steering) > 0.0001f) {
-		_steeringWheelState += NxMath::sign(steering) * _digitalSteeringDelta;
-	} else if (NxMath::abs(_steeringWheelState) > 0.0001f) {
-		_steeringWheelState -= NxMath::sign(_steeringWheelState) * _digitalSteeringDelta;
-	}
-	_steeringWheelState = NxMath::clamp(_steeringWheelState, 1.f, -1.f);
-	//printf("SteeringWheelState: %2.3f\n", _steeringWheelState);
-}*/
-
 void NxVehicle::_computeLocalVelocity()
 {
 	_computeMostTouchedActor();
@@ -433,61 +275,15 @@ void NxVehicle::_computeLocalVelocity()
 	//printf("Velocity: %2.3f %2.3f %2.3f\n", _localVelocity.x, _localVelocity.y, _localVelocity.z);
 }
 
-void NxVehicle::_controlAcceleration(NxReal acceleration, bool analogAcceleration)
-{
-	//if(NxMath::abs(acceleration) < 0.001f)
-	//	_releaseBraking = true;
-	//if(!_braking)
-	//{
-	//_accelerationPedal = NxMath::clamp(acceleration, 1.f, -1.f);
-	//	_brakePedalChanged = _brakePedal == 0;
-	//	_brakePedal = 0;
-	//} else {
-	//	_accelerationPedal = 0;
-	//	NxReal newv = NxMath::clamp(NxMath::abs(acceleration), 1.f, 0.f);
-	//	_brakePedalChanged = _brakePedal == newv;
-	//	_brakePedal = newv;
-	//}
-	//printf("Acceleration: %2.3f, Braking %2.3f\n", _accelerationPedal, _brakePedal);
-}
-
 void NxVehicle::control(NxReal speedAxleWheel1, NxReal speedAxleWheel2, NxReal speedAxleWheel3, NxReal speedAxleWheel4, NxReal dribblerSpeed)
 {
-	//if (/*steering != 0 ||*/ acceleration != 0 || handBrake)
-		_bodyActor->wakeUp(0.05);
-
-	////_controlSteering(steering, analogSteering); //Felix Modif
-
-	//_computeLocalVelocity();
+	_bodyActor->wakeUp(0.05);
 
 	_speedAxleWheelControl[0] = speedAxleWheel1;
 	_speedAxleWheelControl[1] = speedAxleWheel2;
 	_speedAxleWheelControl[2] = speedAxleWheel3;
 	_speedAxleWheelControl[3] = speedAxleWheel4;
 	_speedAxleWheelControl[4] = dribblerSpeed;
-	//if (!_braking || _releaseBraking)
-	//{
-	//	_braking = _localVelocity.x * acceleration < (-0.1f /* NxMath::sign(-acceleration)*/);
-	//	_releaseBraking = false;
-	//}
-	////printf("Braking: %s, Handbrake: %s\n", _braking?"true":"false", handBrake?"true":"false");
-	//if(_handBrake != handBrake)
-	//{
-	//	_handBrake = handBrake;
-	//	_brakePedalChanged;
-	//}
-	//_controlAcceleration(acceleration, analogAcceleration);
-}
-
-void NxVehicle::control1()
-{
-	//Acorda o chassi do robo (corpo dele)
-	//Descricao de wakeup em NxActor.h
-	//Se alguma velocidade das rodas eh diferente de zero
-	//if (
-		_bodyActor->wakeUp(0.05);
-
-	
 }
 
 void NxVehicle::draw(bool debug) 
@@ -549,42 +345,6 @@ void NxVehicle::draw(bool debug)
 
 }
 
-/*NxReal NxVehicle::_computeAxisTorque(NxU32 indexMotor)
-{
-	if(_vehicleMotors[indexMotor] != NULL)
-	{
-		NxReal rpm = _computeRpmFromWheel(indexMotor);
-		NxReal motorRpm = _computeMotorRpm(rpm);
-		_vehicleMotor->setRpm(motorRpm);
-		NxReal torque = _accelerationPedal * _vehicleMotor->getTorque();
-		NxReal v = _bodyActor->getLinearVelocity().magnitude();
-		//printf("v: %2.3f m/s (%2.3f km/h)\n", v, v*3.6f);
-		//printf("rpm %2.3f, motorrpm %2.3f, torque %2.3f, realtorque %2.3f\n",
-		//	rpm, motorRpm, torque, torque*_getGearRatio()*_differentialRatio*_transmissionEfficiency);
-		return torque * _getGearRatio() * _differentialRatio * _transmissionEfficiency;
-	} else {
-		_computeRpmFromWheels();
-		return _accelerationPedal * _motorForce;
-	}
-}*/
-
-NxReal NxVehicle::_computeRpmFromWheel(NxU32 indexWheel)
-{
-	//NxReal wheelRpms = 0;
-	//NxI32 nbWheels = 0;
-	//for(NxU32 i = 0; i < _wheels.size(); i++)
-	//{
-	//	NxWheel* wheel = _wheels[i];
-	//	if (wheel->getWheelFlag(NX_WF_ACCELERATED))
-	//	{
-	//		nbWheels++;
-	//		wheelRpms += wheel->getRpm();
-	//	}
-	//}
-	//return wheelRpms / (NxReal)nbWheels;
-	return _wheels[indexWheel]->getRpm();
-}
-
 NxF32 NxVehicle::_getGearRatio()
 {
 	return _gearRatio;
@@ -596,33 +356,3 @@ void NxVehicle::applyRandomForce()
 	NxReal force = NxMath::rand(_bodyActor->getMass()*0.5f, _bodyActor->getMass() * 2.f);
 	_bodyActor->addForceAtLocalPos(NxVec3(0, force*100.f, 0), pos);
 }
-
-void NxVehicle::standUp()
-{
-	NxVec3 pos = getActor()->getGlobalPosition() + NxVec3(0,2,0);
-	NxQuat rot = getActor()->getGlobalOrientationQuat();
-	NxVec3 front(1,0,0);
-	rot.rotate(front);
-	front.y = 0;
-	front.normalize();
-
-	NxReal dotproduct  = front.x;
-
-	NxReal angle = NxMath::sign(-front.z) * NxMath::acos(dotproduct);
-
-	rot.fromAngleAxis(NxMath::radToDeg(angle), NxVec3(0,1,0));
-	getActor()->setGlobalPosition(pos);
-	getActor()->setGlobalOrientationQuat(rot);
-	getActor()->setLinearVelocity(NxVec3(0,0,0));
-	getActor()->setAngularVelocity(NxVec3(0,0,0));
-}
-
-/*void NxVehicle::_updateRpms()
-{
-	NxReal rpm = _computeRpmFromWheels();
-	if(_vehicleMotor != NULL)
-	{
-		NxReal motorRpm = _computeMotorRpm(rpm);
-		_vehicleMotor->setRpm(motorRpm);
-	}
-}*/
