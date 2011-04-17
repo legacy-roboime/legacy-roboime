@@ -347,10 +347,10 @@ NxWheel* NxWheel::createWheel2(NxActor* actor, NxWheelDesc* wheelDesc, int index
 
 NxWheel* NxWheel::createDribbler(NxActor* actor, NxWheelDesc* dribblerDesc)
 {
-	//if(dribblerDesc->wheelFlags & NX_WF_USE_WHEELSHAPE)
-	//{
-	//	return new NxWheel2(actor, dribblerDesc);
-	//}
+	if(dribblerDesc->wheelFlags & NX_WF_USE_WHEELSHAPE)
+	{
+		return new NxWheel2(actor, dribblerDesc);
+	}
 	
 	NxWheel1* wheel = new NxWheel1(&actor->getScene());
 
@@ -803,7 +803,7 @@ NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc) : actor(a)
 	wheelShapeDesc.inverseWheelMass = 0.1f;	//not given!? TODO
 
 	wheelShapeDesc.lateralTireForceFunction.stiffnessFactor *= wheelDesc->frictionToSide;	
-	wheelShapeDesc.longitudalTireForceFunction.stiffnessFactor *= wheelDesc->frictionToFront;	
+	wheelShapeDesc.longitudalTireForceFunction.stiffnessFactor *= wheelDesc->frictionToFront;
 
 	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));
 }
@@ -864,6 +864,10 @@ NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc, int indexWheel) : actor(a
 	wheelShapeDesc.radius = wheelDesc->wheelRadius;
 	wheelShapeDesc.suspensionTravel = wheelDesc->wheelSuspension; 
 	wheelShapeDesc.inverseWheelMass = 0.1f;	//not given!? TODO
+
+		//wheelShapeDesc.skinWidth = 0.0001;
+		//Nx
+		//wheelShapeDesc.
 
 	wheelShapeDesc.lateralTireForceFunction.stiffnessFactor *= wheelDesc->frictionToSide;	
 	wheelShapeDesc.longitudalTireForceFunction.stiffnessFactor *= wheelDesc->frictionToFront;	

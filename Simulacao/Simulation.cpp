@@ -802,7 +802,16 @@ void Simulation::RenderCallback()
 	else if (backward && !forward) acceleration = -1;
 	bool handbrake = keyDown[' '];
 
-	goToThisPose( 2000, 1000, NxPi / 2., 1, 0);
+	
+	for(int i=1; i<6; i++) infinitePath(i);
+
+	//infinitePath(1);
+	//infinitePath(3);
+	//infinitePath(2);
+	//infinitePath(1);
+	
+	//goToThisPose( -130, 10, 3* NxPi / 2., 1, 0);
+	//goToThisPose( -50, -50, 3* NxPi / 2., 1, 0);
 
 	simulate();
 
@@ -827,11 +836,11 @@ void Simulation::RenderCallback()
 		if (gScenes[i])
 		{
 			//Render
-			glPushMatrix();
-			const NxDebugRenderable *dbgRenderable=gScenes[i]->getDebugRenderable();
-			gDebugRenderer.renderData(*dbgRenderable);
-			glEnable(GL_LIGHTING);
-			glPopMatrix();
+			//glPushMatrix();
+			//const NxDebugRenderable *dbgRenderable=gScenes[i]->getDebugRenderable();
+			//gDebugRenderer.renderData(*dbgRenderable);
+			//glEnable(GL_LIGHTING);
+			//glPopMatrix();
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			for(unsigned int j=0;j<gScenes[i]->getNbActors();j++)
@@ -1082,6 +1091,8 @@ void Simulation::function(int argc, char **argv)
 		100.0f, 100.0f, 400.0f, 1.0f
 	};
 
+	glutFullScreen();
+
 	glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientColor);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseColor);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, SpecularColor);
@@ -1112,6 +1123,64 @@ void Simulation::function(int argc, char **argv)
 	// Initialize physics scene and start the application main loop if scene was created
 	if (init) 
 		glutMainLoop(); 
+}
+
+void Simulation::infinitePath(int indexRobot)
+{
+	static int i[10] = {0};//=0;
+	//if( i>7 ) i=0;
+	static bool flags[10][8] = { false };
+
+	if(flags[indexRobot-1][7]==true) 
+	{
+		for(int j=0; j<8; j++)
+		{
+			flags[indexRobot-1][j] = false;
+		}
+	}
+
+	for(int j=0; j<8; j++)
+	{
+		if(flags[indexRobot-1][j]==false)
+		{
+			i[indexRobot-1]=j;
+			break;
+		}
+	}
+
+	NxVec3 pontos[8];
+	pontos[0].x = 1000;
+	pontos[0].y = 1000;
+
+	pontos[1].x = 2000;
+	pontos[1].y = 1000;
+
+	pontos[2].x = 2000;
+	pontos[2].y = -1000;
+
+	pontos[3].x = 1000;
+	pontos[3].y = -1000;
+
+	pontos[4].x = -1000;
+	pontos[4].y = 1000;
+
+	pontos[5].x = -2000;
+	pontos[5].y = 1000;
+
+	pontos[6].x = -2000;
+	pontos[6].y = -1000;
+
+	pontos[7].x = -1000;
+	pontos[7].y = -1000;
+
+	NxVec3 posRobot = getRobotGlobalPos(indexRobot, 0);
+	NxReal distance = calcDistanceVec2D(pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, posRobot.x, posRobot.y);
+	if( distance < 100 ) 
+	{
+		flags[indexRobot-1][i[indexRobot-1]]=true;
+	}
+
+	goToThisPose( pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, 3* NxPi / 2., indexRobot, 0);
 }
 
 void Simulation::refreshDataFromServer()
@@ -1173,9 +1242,9 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene );
 
 	//Velocidades Maximas
-	NxReal maxSpeedAng = 0.4;
-	NxReal maxSpeedX = 10;
-	NxReal maxSpeedY = 10;
+	NxReal maxSpeedAng = 4;
+	NxReal maxSpeedX = 200;
+	NxReal maxSpeedY = 200;
 
 	//Controle proporcional
 	//Controle de angulo
@@ -1196,7 +1265,7 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 	else 
 		speedY = distanceY / distanceThreshold * maxSpeedY;
 
-	controlRobot( indexRobot, speedAng, speedX, speedY, 10, indexScene ); //metros
+	controlRobot( indexRobot, speedAng, speedX, speedY, -100, indexScene ); //metros
 }
 
 NxF32 Simulation::calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 )
@@ -1296,7 +1365,30 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	speeds[2] = speedAxleWheel1.z;
 	speeds[3] = speedAxleWheel2.x;
 
+	//LIMITANTE DE VELOCIDADE
+	NxReal biggestValue = getBiggestAbsoluteValue(speeds, 4);
+	NxReal maxSpeed = 15;
+	for( int i = 0; i < 4; i++ )
+	{
+			speeds[i] = speeds[i] / biggestValue * maxSpeed;
+	}
+
 	return speeds;
+}
+
+NxReal Simulation::getBiggestAbsoluteValue(NxReal* values, int size)
+{
+	NxReal biggest = 0;
+	int indexBiggest;
+	for( int i = 0; i < size; i++ )
+	{
+		if( NxMath::abs( values[i] ) > biggest ) 
+		{
+			biggest = NxMath::abs( values[i] );
+			indexBiggest = i;
+		}
+	}
+	return NxMath::abs( values[indexBiggest] );
 }
 
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////

@@ -119,7 +119,7 @@ void Simulation::createRobotWithDesc(int indexRobot)
 	dribblerDesc.frictionToSide = 0;
 	dribblerDesc.wheelFlags |= NX_WF_USE_WHEELSHAPE;
 	vehicleDesc.robotWheels.pushBack(&dribblerDesc);
-	dribblerDesc.position.set(	0,		robotRadius,		30);
+	dribblerDesc.position.set(	0,		robotRadius+10,		30);
 	dribblerDesc.wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_STEERABLE_INPUT |*/ flags;
 
 	//Criar veiculo

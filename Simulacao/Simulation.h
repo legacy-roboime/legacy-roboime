@@ -183,6 +183,9 @@ public:
 	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
 	static void controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX, NxReal speedY, NxReal dribblerSpeed, int indexScene );
 
+	static void infinitePath(int indexRobot);
+
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
+	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
 };
