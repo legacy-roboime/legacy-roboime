@@ -1239,12 +1239,12 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 	NxVec3 position = getRobotGlobalPos( indexRobot, indexScene );
 	NxReal distanceX = x - position.x;
 	NxReal distanceY = y - position.y;
+	NxReal distance = calcDistanceVec2D( position.x, position.y, x, y);
 	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene );
 
 	//Velocidades Maximas
 	NxReal maxSpeedAng = 4;
-	NxReal maxSpeedX = 200;
-	NxReal maxSpeedY = 200;
+	NxReal maxLinearSpeed = 200;
 
 	//Controle proporcional
 	//Controle de angulo
@@ -1253,17 +1253,16 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 	NxReal distanceThreshold = 2;
 	NxReal speedX;
 	NxReal speedY;
-	if( distanceX > distanceThreshold ) 
-		if( distanceX > 0 ) speedX = maxSpeedX;
-		else speedX = -maxSpeedX;
-	else 
-		speedX = distanceX / distanceThreshold * maxSpeedX;
+	NxReal speed;
 
-	if( distanceY > distanceThreshold ) 
-		if( distanceY > 0 ) speedY = maxSpeedY;
-		else speedY = -maxSpeedY;
+	if( distance > distanceThreshold ) 
+		if( distance > 0 ) speed = maxLinearSpeed;
+		else speed = -maxLinearSpeed;
 	else 
-		speedY = distanceY / distanceThreshold * maxSpeedY;
+		speed = distance / distanceThreshold * maxLinearSpeed;
+
+	speedX = speed * NxMath::cos( NxMath::atan2( distanceY, distanceX ) );
+	speedY = speed * NxMath::sin( NxMath::atan2( distanceY, distanceX ) );
 
 	controlRobot( indexRobot, speedAng, speedX, speedY, -100, indexScene ); //metros
 }
