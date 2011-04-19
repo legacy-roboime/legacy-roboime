@@ -187,6 +187,9 @@ Simulation::~Simulation(void)
 {
 	//~ dos ponteiros do PhsyX em ReleaseNX
 	//delete udpServerThread;
+	//delete gPhysicsSDK;
+	delete gScenes;
+	delete gMyAllocator;
 }
 
 void Simulation::releaseScene(NxScene &scene)
