@@ -16,7 +16,6 @@ class UDPServerThread : public Thread
 private:
 public:
 	UDPServer udpserver;
-	
 	int port;
 	string address;
 
