@@ -158,7 +158,7 @@ public:
 	static void IdleCallback();
 	static void CSL_Scene();
 	static void function(int argc, char **argv);
-	static void refreshDataFromServer();
+	//static void refreshDataFromServer();
 
 	//Robot
 	static void createRobotWithDesc(int indexRobot);

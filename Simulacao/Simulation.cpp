@@ -1298,29 +1298,29 @@ void Simulation::infinitePath(int indexRobot)
 	goToThisPose( pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, 3* NxPi / 2., indexRobot, 0);
 }
 
-void Simulation::refreshDataFromServer()
-{
-	//Bola
-	NxActor* actorBall = getActorBall(0);
-	if(actorBall != NULL) 
-	{
-		actorBall->setGlobalPosition(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballY, UDPServer::ballRadius/*actorBall->getGlobalPosition().z*/));
-		actorBall->setLinearVelocity(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedY, 0));
-	}
-
-	//Robos
-	for(int i=1; i<=UDPServer::numRobots ;i++)
-	{
-		NxActor* actorRobot = getActorRobot(0, i);
-		if(actorRobot != NULL) 
-		{
-			NxMat34 pose = actorRobot->getGlobalPose();
-			pose.M.rotZ(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][3]);
-			pose.t = NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][1], UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][2], 0/*actorRobot->getGlobalPosition().z*/);
-			actorRobot->setGlobalPose(pose);
-		}
-	}
-}
+//void Simulation::refreshDataFromServer()
+//{
+//	//Bola
+//	NxActor* actorBall = getActorBall(0);
+//	if(actorBall != NULL) 
+//	{
+//		actorBall->setGlobalPosition(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballY, UDPServer::ballRadius/*actorBall->getGlobalPosition().z*/));
+//		actorBall->setLinearVelocity(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedY, 0));
+//	}
+//
+//	//Robos
+//	for(int i=1; i<=UDPServer::numRobots ;i++)
+//	{
+//		NxActor* actorRobot = getActorRobot(0, i);
+//		if(actorRobot != NULL) 
+//		{
+//			NxMat34 pose = actorRobot->getGlobalPose();
+//			pose.M.rotZ(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][3]);
+//			pose.t = NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][1], UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][2], 0/*actorRobot->getGlobalPosition().z*/);
+//			actorRobot->setGlobalPose(pose);
+//		}
+//	}
+//}
 
 void Simulation::setBallGlobalPos(NxVec3 pos, int indexScene)
 {
