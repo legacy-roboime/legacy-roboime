@@ -25,6 +25,7 @@ public:
 	//methods:
 	bool can_kick();
 	bool kick();
+	bool can_dribble();
 	bool dribble();
 
 };
