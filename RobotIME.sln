@@ -5,11 +5,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Inteligencia", "Inteligenci
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulacao", "Simulacao\Simulacao.vcproj", "{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Comunicacao", "Comunicacao\Comunicacao.vcproj", "{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}"
+EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
@@ -23,8 +21,16 @@ Global
 		{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}.Debug|Win32.Build.0 = Debug|Win32
 		{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}.Release|Win32.ActiveCfg = Release|Win32
 		{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}.Release|Win32.Build.0 = Release|Win32
+		{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}.Debug|Win32.Build.0 = Debug|Win32
+		{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}.Release|Win32.ActiveCfg = Release|Win32
+		{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
