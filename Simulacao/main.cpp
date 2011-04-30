@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 	//((UDPServerThread*)Simulation::udpServerThread)->startUDPServerThread();
 	char **teste;
 
-	Simulation::function(1,teste);//(argc, argv);//(0,NULL);//(argc, argv);
+	//Simulation::function(1,teste);//(argc, argv);//(0,NULL);//(argc, argv);
 	
 	//delete udpServerThread;
 	//delete sim;

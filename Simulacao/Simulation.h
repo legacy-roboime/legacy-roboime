@@ -157,7 +157,7 @@ public:
 	static void ReshapeCallback(int width, int height);
 	static void IdleCallback();
 	static void CSL_Scene();
-	static void function(int argc, char **argv);
+	void function(int argc, char **argv);
 	//static void refreshDataFromServer();
 
 	//Robot
