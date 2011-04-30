@@ -74,7 +74,7 @@ public:
 
 	void					handleContactPair(NxContactPair& pair, NxU32 carIndex);
 	void					updateVehicle(NxReal lastTimeStepSize);
-	void					control (/*NxReal steering, bool analogSteering, NxReal acceleration, bool analogAcceleration, bool handBrake*/NxReal speedAxleWheel1, NxReal speedAxleWheel2, NxReal speedAxleWheel3, NxReal speedAxleWheel4, NxReal dribblerSpeed);
+	void					control (NxReal speedAxleWheel1, NxReal speedAxleWheel2, NxReal speedAxleWheel3, NxReal speedAxleWheel4, NxReal dribblerSpeed);
 	void					control1 ();
 	//void					gearUp();
 	//void					gearDown();

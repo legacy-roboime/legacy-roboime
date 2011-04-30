@@ -111,7 +111,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	}
 
 	//Criando rodas
-	for(NxU32 i = 0; i < vehicleDesc->robotWheels.size()-1; i++)
+	for(NxU32 i = 0; i < vehicleDesc->robotWheels.size(); i++)
 	{
 		NxWheel* wheel = NxWheel::createWheel2(vehicle->_bodyActor, vehicleDesc->robotWheels[i], i);
 
@@ -124,16 +124,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 		}
 	}
 
-	//Criando driblador. Driblador funcionara como uma roda.
-	NxWheel* dribbler = NxWheel::createDribbler(vehicle->_bodyActor, vehicleDesc->robotWheels[4]);
-
-	if(dribbler)
-	{
-		vehicle->_wheels.pushBack(dribbler);
-	} else {
-		delete vehicle;
-		return NULL;
-	}
+	//Criando driblador.
 
 	//don't go to sleep.
 	//vehicle->_bodyActor->wakeUp(1e10);

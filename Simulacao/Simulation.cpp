@@ -504,35 +504,45 @@ void Simulation::appKey(unsigned char key, bool down)
 		//case '-':	break;
 		case 'e':
 			{
-			NxAllVehicles::selectNext();
-			} break;
+				NxAllVehicles::selectNext();
+			} 
+			break;
+
 		case 'r':
 			{
-			//NxVec3 t;
-			//NxVec3 vel;
-			//getCurrentPosAndDirection(t, vel);
-			//
-			//vel.normalize();
-			//vel*=30.0f;
-			//CreateCube(t, &vel);
+				//NxVec3 t;
+				//NxVec3 vel;
+				//getCurrentPosAndDirection(t, vel);
+				//
+				//vel.normalize();
+				//vel*=30.0f;
+				//CreateCube(t, &vel);
+
+				NxActor* kickerActor = getActorKicker(0, 1);
+				kickerActor->addForce(NxVec3(-10,0,0));
+				//kickerActor->setLinearVelocity(NxVec3(0,10,0));
 			}
 			break;
-		case 'c': {
-			//if (NxAllVehicles::getActiveVehicleNumber() < 0) {
-			//	NxAllVehicles::setActiveVehicle(gLastVehicleNumber);
-			//} else {
-			//	gLastVehicleNumber = NxMath::max(0, NxAllVehicles::getActiveVehicleNumber());
-			//	NxAllVehicles::setActiveVehicle(-1);
-			//}
-			//gClear = true;
-			//break;
 
-			NxVec3 t = gEye;
-			NxVec3 Vel = gDir;
-			Vel.normalize();
-			Vel *= 200.0f;
-			CreateCube(t, 20, &Vel);
-		}
+		case 'c': 
+			{
+				//if (NxAllVehicles::getActiveVehicleNumber() < 0) {
+				//	NxAllVehicles::setActiveVehicle(gLastVehicleNumber);
+				//} else {
+				//	gLastVehicleNumber = NxMath::max(0, NxAllVehicles::getActiveVehicleNumber());
+				//	NxAllVehicles::setActiveVehicle(-1);
+				//}
+				//gClear = true;
+				//break;
+
+				NxVec3 t = gEye;
+				NxVec3 Vel = gDir;
+				Vel.normalize();
+				Vel *= 200.0f;
+				CreateCube(t, 20, &Vel);
+			}
+			break;
+
 		case 'u':
 			{
 				simulate();
@@ -544,7 +554,7 @@ void Simulation::appKey(unsigned char key, bool down)
 				NxActor* actor = getActorBall(0);
 				if(actor != NULL) 
 				{
-					actor->addForce(NxVec3(0.01,0,0));
+					actor->addForce(NxVec3(-0.01,0,0));
 				}
 			}
 			break;
@@ -558,6 +568,8 @@ void Simulation::appKey(unsigned char key, bool down)
 				//}
 
 				//udpServerThread->stop();
+				NxActor* actorDribbler = getActorDribbler(0, 1);
+				actorDribbler->addLocalTorque(NxVec3(-10,0,0));
 			}
 			break;
 
@@ -566,6 +578,8 @@ void Simulation::appKey(unsigned char key, bool down)
 				//udpServerThread = new UDPServerThread("UDPServerThread");
 				//((UDPServerThread*)udpServerThread)->startUDPServerThread();
 				//udpServerThread->start();
+				//NxActor* actorDribbler = getActorDribbler(0, 1);
+				//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
 			}
 			break;
 
@@ -591,6 +605,9 @@ void Simulation::appKey(unsigned char key, bool down)
 		case 's':
 			{
 				//CreateStack(10);
+				NxActor* kickerActor = getActorKicker(0, 1);
+				kickerActor->addForce(NxVec3(10,0,0));
+				//kickerActor->setLinearVelocity(NxVec3(0,10,0));
 			}
 			break;
 
@@ -806,7 +823,7 @@ void Simulation::RenderCallback()
 	bool handbrake = keyDown[' '];
 
 	
-	for(int i=1; i<6; i++) infinitePath(i);
+	//for(int i=1; i<6; i++) infinitePath(i);
 
 	//infinitePath(1);
 	//infinitePath(3);
@@ -815,6 +832,11 @@ void Simulation::RenderCallback()
 	
 	//goToThisPose( -130, 10, 3* NxPi / 2., 1, 0);
 	//goToThisPose( -50, -50, 3* NxPi / 2., 1, 0);
+	//goToThisPose( -200/*110*/, 0, 3 * NxPi / 2., 4, 0);
+
+	NxActor* actorDribbler = getActorDribbler(0, 1);
+	//actorDribbler->addLocalTorque(NxVec3(-0.1,0,0));
+	//actorDribbler->setAngularVelocity(NxVec3(-NxPi/2.,0,0));
 
 	simulate();
 
@@ -839,17 +861,17 @@ void Simulation::RenderCallback()
 		if (gScenes[i])
 		{
 			//Render
-			//glPushMatrix();
-			//const NxDebugRenderable *dbgRenderable=gScenes[i]->getDebugRenderable();
-			//gDebugRenderer.renderData(*dbgRenderable);
-			//glEnable(GL_LIGHTING);
-			//glPopMatrix();
+			glPushMatrix();
+			const NxDebugRenderable *dbgRenderable=gScenes[i]->getDebugRenderable();
+			gDebugRenderer.renderData(*dbgRenderable);
+			glEnable(GL_LIGHTING);
+			glPopMatrix();
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
-			for(unsigned int j=0;j<gScenes[i]->getNbActors();j++)
-			{
-				DrawActorIME(gScenes[i]->getActors()[j]);
-			}
+			//for(unsigned int j=0;j<gScenes[i]->getNbActors();j++)
+			//{
+			//	DrawActorIME(gScenes[i]->getActors()[j]);
+			//}
 		}
 
 		/*#ifdef __PPCGEKKO__	
@@ -932,6 +954,18 @@ void Simulation::controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX,
 	NxAllVehicles::getActiveVehicle()->control( speeds[0], speeds[1], speeds[2], speeds[3], dribblerSpeed );
 }
 
+void Simulation::controlAngVelocityDribbler(NxReal angVelocityZ)
+{
+	NxActor* actorDribbler = getActorDribbler(0, 1);
+	actorDribbler->setAngularVelocity(NxVec3(10,0,0));
+}
+
+void Simulation::controlTorqueDribbler(NxReal angTorqueZ)
+{
+	NxActor* actorDribbler = getActorDribbler(0, 1);
+	actorDribbler->addLocalTorque(NxVec3(10,0,0));
+}
+
 NxActor* Simulation::getActorBall(int indexScene)
 {
 	NxActor* actor = NULL;
@@ -997,43 +1031,121 @@ NxActor* Simulation::getActorRobot(int indexScene, int indexRobot)
 	return actor;
 }
 
-//NxActor* Simulation::getJoint(int indexScene, int indexJoint, int indexRobot)
-//{
-//	NxActor* actor = NULL;
-//	const char* actorName = NULL;
-//	if( gScenes != NULL )
-//	{
-//		if(gScenes[indexScene]!=NULL)
-//		{
-//			for(unsigned int j=0;j<gScenes[indexScene]->getNbJoints();j++)
-//			{
-//				actor = gScenes[indexScene]->getActors()[j];
-//				//gScenes[indexScene]->get
-//				if(actor != NULL)
-//				{
-//					actorName = actor->getName();
-//					if(actorName != NULL)
-//					{
-//						string label;
-//						string plabel = "cTwist-";
-//						stringstream out;
-//						out << indexRobot;
-//						label.append(plabel);
-//						label.append(out.str());
-//						char* arrayLabel = new char[label.size()+1];
-//						arrayLabel[label.size()]=0;
-//						memcpy(arrayLabel, label.c_str(), label.size());
-//
-//						if(strcmp(actorName,arrayLabel)==0) break;
-//						else actor = NULL;
-//					}
-//				}
-//				else continue;
-//			}
-//		}
-//	}
-//	return actor;
-//}
+NxActor* Simulation::getActorDribbler(int indexScene, int indexRobot)
+{
+	NxActor* actor = NULL;
+	const char* actorName = NULL;
+	if( gScenes != NULL )
+	{
+		if(gScenes[indexScene]!=NULL)
+		{
+			for(unsigned int j=0;j<gScenes[indexScene]->getNbActors();j++)
+			{
+				actor = gScenes[indexScene]->getActors()[j];
+				if(actor != NULL)
+				{
+					actorName = actor->getName();
+					if(actorName != NULL)
+					{
+						string label;
+						string plabel = "Driblador";
+						stringstream out;
+						out << indexRobot;
+						label.append(plabel);
+						label.append(out.str());
+						char* arrayLabel = new char[label.size()+1];
+						arrayLabel[label.size()]=0;
+						memcpy(arrayLabel, label.c_str(), label.size());
+
+						if(strcmp(actorName,arrayLabel)==0) break;
+						else actor = NULL;
+					}
+				}
+				else continue;
+			}
+		}
+	}
+	return actor;
+}
+
+NxActor* Simulation::getActorKicker(int indexScene, int indexRobot)
+{
+	NxActor* actor = NULL;
+	const char* actorName = NULL;
+	if( gScenes != NULL )
+	{
+		if(gScenes[indexScene]!=NULL)
+		{
+			for(unsigned int j=0;j<gScenes[indexScene]->getNbActors();j++)
+			{
+				actor = gScenes[indexScene]->getActors()[j];
+				if(actor != NULL)
+				{
+					actorName = actor->getName();
+					if(actorName != NULL)
+					{
+						string label;
+						string plabel = "Chutador";
+						stringstream out;
+						out << indexRobot;
+						label.append(plabel);
+						label.append(out.str());
+						char* arrayLabel = new char[label.size()+1];
+						arrayLabel[label.size()]=0;
+						memcpy(arrayLabel, label.c_str(), label.size());
+
+						if(strcmp(actorName,arrayLabel)==0) break;
+						else actor = NULL;
+					}
+				}
+				else continue;
+			}
+		}
+	}
+	return actor;
+}
+
+NxJoint* Simulation::getJoint(int indexScene, int indexJoint, int indexRobot)
+{
+	NxJoint* joint = NULL;
+	const char* jointName = NULL;
+	if( gScenes != NULL )
+	{
+		if(gScenes[indexScene]!=NULL)
+		{
+			gScenes[indexScene]->resetJointIterator();
+			for(unsigned int j=0;j<gScenes[indexScene]->getNbJoints();j++)
+			{
+				joint = gScenes[indexScene]->getNextJoint();
+				if(joint != NULL)
+				{
+					jointName = joint->getName();
+					if(jointName != NULL)
+					{
+						string label;
+						string plabel = "Joint-";
+						stringstream out;
+						stringstream out1;
+						out << indexRobot;
+						out1 << indexJoint;
+						label.append(plabel);
+						label.append(out.str());
+						label.append("-");
+						label.append(out1.str());
+						char* arrayLabel = new char[label.size()+1];
+						arrayLabel[label.size()]=0;
+						memcpy(arrayLabel, label.c_str(), label.size());
+
+						if(strcmp(jointName,arrayLabel)==0) break;
+						else joint = NULL;
+					}
+				}
+				else continue;
+			}
+		}
+	}
+	return joint;
+}
 
 void Simulation::function(int argc, char **argv)
 {
@@ -1239,33 +1351,42 @@ void Simulation::setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot
 
 void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene )
 {
+	//Controle proporcional
+	//Velocidades Maximas
+	NxReal maxSpeedAng = 1;
+	NxReal maxLinearSpeed = 20;
+
+	//Controle de angulo
+	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene );
+	NxReal speedAng;
+	if(NxMath::abs(distanceAngle) > NxPi / 36.) speedAng = distanceAngle / NxPi * maxSpeedAng;
+	else speedAng = 0;
+
+	//Controle de posicao
 	NxVec3 position = getRobotGlobalPos( indexRobot, indexScene );
 	NxReal distanceX = x - position.x;
 	NxReal distanceY = y - position.y;
 	NxReal distance = calcDistanceVec2D( position.x, position.y, x, y);
-	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene );
-
-	//Velocidades Maximas
-	NxReal maxSpeedAng = 4;
-	NxReal maxLinearSpeed = 200;
-
-	//Controle proporcional
-	//Controle de angulo
-	NxReal speedAng = distanceAngle / NxPi * maxSpeedAng;
-	//Controle de posicao
-	NxReal distanceThreshold = 2;
+	NxReal distanceThreshold = 2000.;
 	NxReal speedX;
 	NxReal speedY;
 	NxReal speed;
-
-	if( distance > distanceThreshold ) 
-		if( distance > 0 ) speed = maxLinearSpeed;
-		else speed = -maxLinearSpeed;
-	else 
-		speed = distance / distanceThreshold * maxLinearSpeed;
-
-	speedX = speed * NxMath::cos( NxMath::atan2( distanceY, distanceX ) );
-	speedY = speed * NxMath::sin( NxMath::atan2( distanceY, distanceX ) );
+	if(NxMath::abs(distance) > 10.)
+	{
+		if( distance > distanceThreshold ) 
+			if( distance > 0 ) speed = maxLinearSpeed;
+			else speed = -maxLinearSpeed;
+		else 
+			speed = distance / distanceThreshold * maxLinearSpeed;
+		
+		speedX = speed * NxMath::cos( NxMath::atan2( distanceY, distanceX ) );
+		speedY = speed * NxMath::sin( NxMath::atan2( distanceY, distanceX ) );
+	}
+	else
+	{
+		speedX = 0;
+		speedY = 0;
+	}
 
 	controlRobot( indexRobot, speedAng, speedX, speedY, -100, indexScene ); //metros
 }
@@ -1330,6 +1451,8 @@ NxReal Simulation::getAngle2DFromRobot( int indexRobot, int indexScene )
 */
 NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene )
 {
+	NxReal* speeds;
+
 	//Matriz de omnidirecionalidade
 	//Leva em consideracao os angulos das rodas
 	//-0.5446    0.8387    1.0000
@@ -1361,7 +1484,7 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	NxVec3 speedAxleWheel1 = omniMatrix1.getColumn(0);
 	NxVec3 speedAxleWheel2 = omniMatrix2.getColumn(0);
 
-	NxReal* speeds = new NxReal[4];
+	speeds = new NxReal[4];
 	speeds[0] = speedAxleWheel1.x;
 	speeds[1] = speedAxleWheel1.y;
 	speeds[2] = speedAxleWheel1.z;
@@ -1369,10 +1492,13 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 
 	//LIMITANTE DE VELOCIDADE
 	NxReal biggestValue = getBiggestAbsoluteValue(speeds, 4);
-	NxReal maxSpeed = 15;
-	for( int i = 0; i < 4; i++ )
+	if(biggestValue > 0.001)
 	{
-			speeds[i] = speeds[i] / biggestValue * maxSpeed;
+		NxReal maxSpeed = 5;
+		for( int i = 0; i < 4; i++ )
+		{
+				speeds[i] = speeds[i] / biggestValue * maxSpeed;
+		}
 	}
 
 	return speeds;
@@ -1381,7 +1507,7 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 NxReal Simulation::getBiggestAbsoluteValue(NxReal* values, int size)
 {
 	NxReal biggest = 0;
-	int indexBiggest;
+	int indexBiggest = 0;
 	for( int i = 0; i < size; i++ )
 	{
 		if( NxMath::abs( values[i] ) > biggest ) 

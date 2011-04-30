@@ -104,23 +104,12 @@ void Simulation::createRobotWithDesc(int indexRobot)
 	wheelDesc[2].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_AFFECTED_BY_HANDBRAKE |*/ flags;
 	wheelDesc[3].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_AFFECTED_BY_HANDBRAKE |*/ flags;
 
-	//Driblador descricao. O driblador funcionará como uma roda.
-	NxWheelDesc dribblerDesc;
-	dribblerDesc.wheelApproximation = 10;
-	dribblerDesc.wheelFlags |= NX_WF_BUILD_LOWER_HALF;
-	dribblerDesc.wheelRadius = 10;
-	dribblerDesc.wheelWidth = 50;
-	dribblerDesc.wheelSuspension = 0;
-	dribblerDesc.springRestitution = 0;
-	dribblerDesc.springDamping = 0;
-	dribblerDesc.springBias = 0.0f;
-	dribblerDesc.maxBrakeForce = 100;
-	dribblerDesc.frictionToFront = 0.1f;
-	dribblerDesc.frictionToSide = 0;
-	dribblerDesc.wheelFlags |= NX_WF_USE_WHEELSHAPE;
-	vehicleDesc.robotWheels.pushBack(&dribblerDesc);
-	dribblerDesc.position.set(	0,		robotRadius+10,		30);
-	dribblerDesc.wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_STEERABLE_INPUT |*/ flags;
+	//Driblador descricao.
+	NxActor* actorDribbler = getActorDribbler(0, 1);
+	actorDribbler->setMaxAngularVelocity(1000);
+
+	//Chutador descricao.
+	//NxActor* kickerActor = getActorKicker(0, 1);
 
 	//Criar veiculo
 	NxVehicle* vehicle = NxVehicle::createVehicle(gScenes[0], &vehicleDesc);

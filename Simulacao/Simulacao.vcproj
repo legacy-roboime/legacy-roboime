@@ -359,26 +359,6 @@
 					</Filter>
 				</Filter>
 			</Filter>
-			<Filter
-				Name="UDPServer"
-				>
-				<File
-					RelativePath=".\ou_thread.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\PracticalSocket.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UDPServer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UDPServerThread.cpp"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -564,26 +544,6 @@
 						</Filter>
 					</Filter>
 				</Filter>
-			</Filter>
-			<Filter
-				Name="UDPServer"
-				>
-				<File
-					RelativePath=".\ou_thread.h"
-					>
-				</File>
-				<File
-					RelativePath=".\PracticalSocket.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UDPServer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UDPServerThread.h"
-					>
-				</File>
 			</Filter>
 		</Filter>
 	</Files>

@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
-#include "UDPServerThread.h"
+//#include "UDPServerThread.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -167,7 +167,9 @@ public:
 	//Metodos para Inteligencia
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
-	//static NxActor* getJoint(int indexScene, int indexJoint, int indexRobot)
+	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
+	static NxActor* getActorDribbler(int indexScene, int indexRobot);
+	static NxActor* getActorKicker(int indexScene, int indexRobot);
 	static void simulate();
 	static void simulate(int indexScene);
 	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);
@@ -182,6 +184,8 @@ public:
 	static NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene );
 	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
 	static void controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX, NxReal speedY, NxReal dribblerSpeed, int indexScene );
+	static void controlTorqueDribbler( NxReal angTorqueZ );
+	static void controlAngVelocityDribbler( NxReal angVelocityZ ); 
 
 	static void infinitePath(int indexRobot);
 

@@ -27,7 +27,6 @@ class NxWheel
 	{
 	public:
 	static NxWheel* createWheel(NxActor* actor, NxWheelDesc* wheelDesc);
-	static NxWheel* createDribbler(NxActor* actor, NxWheelDesc* dribblerDesc);
 	static NxWheel* createWheel2(NxActor* actor, NxWheelDesc* wheelDesc, int i);
 
 
