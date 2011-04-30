@@ -5,7 +5,7 @@
 int main(int argc, char **argv)
 {
 	printf("Modulo Inteligencia");	
-	char **teste;
-	Simulation::function(1,teste);//(argc, argv);//(0,NULL);//(argc, argv);
+	Simulation* simulation = new Simulation();
+	simulation->function(1,argv);//(argc, argv);//(0,NULL);//(argc, argv);
 	return 0;
 }
