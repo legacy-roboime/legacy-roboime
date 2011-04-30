@@ -9,10 +9,10 @@ int main(int argc, char **argv)
 {
 	printf("Modulo Inteligencia");
 
-	Thread* ut = new UDPServerThread("UDPServerThread",9786, "127.0.0.1");		
-	((UDPServerThread*)ut)->start();
+	//Thread* ut = new UDPServerThread("UDPServerThread",9786, "127.0.0.1");		
+	//((UDPServerThread*)ut)->start();
 
-	Simulation* simulation = new Simulation();
-	simulation->function(1,argv);//(argc, argv);//(0,NULL);//(argc, argv);
+	//Simulation* simulation = new Simulation();
+	/*simulation->*/Simulation::function(1,argv);//(argc, argv);//(0,NULL);//(argc, argv);
 	return 0;
 }

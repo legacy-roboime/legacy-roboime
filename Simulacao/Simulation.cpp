@@ -861,17 +861,17 @@ void Simulation::RenderCallback()
 		if (gScenes[i])
 		{
 			//Render
-			glPushMatrix();
-			const NxDebugRenderable *dbgRenderable=gScenes[i]->getDebugRenderable();
-			gDebugRenderer.renderData(*dbgRenderable);
-			glEnable(GL_LIGHTING);
-			glPopMatrix();
+			//glPushMatrix();
+			//const NxDebugRenderable *dbgRenderable=gScenes[i]->getDebugRenderable();
+			//gDebugRenderer.renderData(*dbgRenderable);
+			//glEnable(GL_LIGHTING);
+			//glPopMatrix();
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
-			//for(unsigned int j=0;j<gScenes[i]->getNbActors();j++)
-			//{
-			//	DrawActorIME(gScenes[i]->getActors()[j]);
-			//}
+			for(unsigned int j=0;j<gScenes[i]->getNbActors();j++)
+			{
+				DrawActorIME(gScenes[i]->getActors()[j]);
+			}
 		}
 
 		/*#ifdef __PPCGEKKO__	

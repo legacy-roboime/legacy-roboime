@@ -157,13 +157,12 @@ public:
 	static void ReshapeCallback(int width, int height);
 	static void IdleCallback();
 	static void CSL_Scene();
-	void function(int argc, char **argv);
+	static void function(int argc, char **argv);
 	//static void refreshDataFromServer();
 
 	//Robot
 	static void createRobotWithDesc(int indexRobot);
 
-	//
 	//Metodos para Inteligencia
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
