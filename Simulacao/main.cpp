@@ -4,6 +4,8 @@
 
 int main(int argc, char **argv)
 {
+	printf("Modulo Simulacao");
+
 	Thread *udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
 	((UDPServerThread*)udpServerThread)->start();
 

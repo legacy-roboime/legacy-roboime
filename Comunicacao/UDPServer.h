@@ -27,7 +27,7 @@ private:
     int recvMsgSize;						// Size of received message
     string sourceAddress;					// Address of datagram source
     unsigned short sourcePort;				// Port of datagram source
-	string s;								// received string
+	string s;								// last received string
 public:
 	//static const int numRobots = 10;
 	//static const int numInfo = 4;
