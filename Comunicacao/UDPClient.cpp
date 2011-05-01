@@ -4,7 +4,8 @@
 UDPClient::UDPClient(void)
 {
 	echoString = "";
-	servAddress = "";
+	servAddress = "127.0.0.1";
+	echoServPort = 9876;
 	//echoServPort = 9876;
 	//sourcePort = 0;
 	//sourceAddress = "127.0.0.1";
@@ -15,10 +16,11 @@ UDPClient::UDPClient(void)
 	//for (int i=0; i<sizeDataBaseVision; i++) dataBaseVision[i] = DataBaseVision();
 }
 
-UDPClient::UDPClient(string servAddress, char* echoString)
+UDPClient::UDPClient(string servAddress, char* echoString, unsigned short echoServPort)
 {
 	this->echoString = echoString;
 	this->servAddress = servAddress;
+	this->echoServPort = echoServPort;
 	//for (int i=0; i<ECHOMAX; i++)  echoBuffer[i] = 0;
 	//recvMsgSize = 0;
 	//ballRadius = 21.5;
@@ -41,7 +43,7 @@ void UDPClient::func1()
     cerr << "Echo string too long" << endl;
     exit(1);
   }
-  unsigned short echoServPort = Socket::resolveService("echo", "udp");
+  //unsigned short echoServPort = Socket::resolveService("echo", "udp");
 
   try {
     UDPSocket sock;

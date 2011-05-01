@@ -40,9 +40,9 @@ void UDPServer::func1()
   
 	  if (recvMsgSize>0)
 	  {
-		  string s = echoBuffer;
-		  string temp; 
-		  std::stringstream os(s);
+		  s = echoBuffer;
+		  //string temp; 
+		  //std::stringstream os(s);
 		  //os >> temp;
 		  /*if(temp.compare("1") == 0)//pacote 1
 		  {
@@ -107,4 +107,9 @@ void UDPServer::func1()
     cerr << e.what() << endl;
     exit(1);
   }
+}
+
+string UDPServer::getLastReceivedString()
+{
+	return s;
 }

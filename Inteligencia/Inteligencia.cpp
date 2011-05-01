@@ -1,6 +1,6 @@
-#include "Simulation.h"
+//#include "Simulation.h"
 #include "UDPServerThread.h"
-#include "UDPServer.h"
+#include "UDPClient.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include <iostream>
@@ -9,10 +9,13 @@ int main(int argc, char **argv)
 {
 	printf("Modulo Inteligencia");
 
-	Thread* ut = new UDPServerThread("UDPServerThread",9786, "127.0.0.1");		
+	//Simulation::function(1,argv);
+
+	Thread* ut = new UDPServerThread("UDPServerThread-Inteligencia",9787, "127.0.0.1");		
 	((UDPServerThread*)ut)->start();
 
-	//Simulation* simulation = new Simulation();
-	/*simulation->*/Simulation::function(1,argv);//(argc, argv);//(0,NULL);//(argc, argv);
+	UDPClient* udpClient = new UDPClient("127.0.0.1", "1", 9786);
+	/*for(int i=0; i<1000000; i++)*/ udpClient->func1();
+
 	return 0;
 }

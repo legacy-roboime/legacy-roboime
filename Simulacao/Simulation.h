@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
-//#include "UDPServerThread.h"
+#include "UDPServerThread.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -26,19 +26,127 @@
 //#include "Utilities.h"
 #include "SamplesVRDSettings.h"
 #include "cooking.h"
-
-// include exporter here
 #include "NXU_helper.h"  // NxuStream helper functions.
 
 #include "NxVehicle.h"
 #include "NxAllVehicles.h"
 
 #include "NxScene1.h"
+//#include "MyUserNotify.h"
 
 #ifdef __PPCGEKKO__
 #include "GLFontRenderer.h"
 printf("__PPCGEKKO__");
 #endif
+
+class MyUserNotify;
+
+class Simulation
+{
+private:
+	// static variables
+	static bool gPause;
+	static NxPhysicsSDK *gPhysicsSDK;
+	static const NxU32 gMaxScenes = 1;
+	static NxScene1 *gScenes[gMaxScenes];
+	static NxU32 gCurrentScene;
+	static NxVec3 gDefaultGravity;
+	static UserAllocator *gMyAllocator;
+	static ErrorStream gErrorStream;
+	static DebugRenderer gDebugRenderer;
+	//static PerfRenderer    gPrefRenderer;
+
+	static int gMainHandle;
+	static NxVec3 gEye;
+	static NxVec3 gDir;
+	static NxVec3 gNormal;
+	static int gMouseX;
+	static int gMouseY;
+
+	static MyUserNotify gUserNotify;
+
+	static bool gSave;
+	static int	gLoad;
+	static bool gClear;
+
+	//Socket
+	static Thread *udpServerThread;
+
+	//Robot
+	//extern NxUserContactReport * robotContactReport;
+	static bool keyDown[256];
+
+	friend class MyUserNotify;
+private:
+	Simulation(void);
+	~Simulation(void);
+	static void releaseScene(NxScene &scene);
+	static NX_BOOL LoadScene(const char *pFilename,NXU::NXU_FileType type);
+	static void SaveScene(const char *pFilename);
+	static void CreateCube(const NxVec3 &pos, int size, const NxVec3 *initial_velocity = NULL);
+	static void CreateStack(int size);
+	static void CreateTower(int size);
+	static bool InitNx();
+	static bool InitBlankScene();
+	static void ReleaseNx();
+	static void appKey(unsigned char key, bool down);
+	static void callback_keyUp(unsigned char c, int x, int y);
+	static void callback_key(unsigned char c, int x, int y);
+	static void ArrowKeyCallback(int key, int x, int y);
+	static void MouseCallback(int button, int state, int x, int y);
+	static void MotionCallback(int x, int y);
+	static bool FileExistTestSimple(const char *fname);
+	static void RenderCallback();
+	static void ReshapeCallback(int width, int height);
+	static void IdleCallback();
+	static void CSL_Scene();
+	//static void refreshDataFromServer();
+	//Robot
+	static void createRobotWithDesc(int indexRobot);
+	//Math
+	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
+	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
+	static NxActor* getActorBall(int indexScene);
+	static NxActor* getActorRobot(int indexScene, int indexRobot);
+	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
+	static NxActor* getActorDribbler(int indexScene, int indexRobot);
+	static NxActor* getActorKicker(int indexScene, int indexRobot);
+
+public:
+	//Metodos para Inteligencia
+	static void simulate();
+	static void simulate(int indexScene);
+
+	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);
+	static void setBallGlobalPos(NxVec3 pos, int indexScene);
+	static void setRobotLinearVelocity(NxVec3 linVel, int indexScene, int indexRobot);
+	static void setRobotAngularVelocity(NxVec3 angVel, int indexScene, int indexRobot);
+	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
+	static void setAngVelocityDribbler(NxReal velocityX); 
+
+	static void addLocalTorqueDribbler(NxReal torqueX);
+
+	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
+	static NxVec3 getBallGlobalPos( int indexScene );
+	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
+	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
+
+	static NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene );
+	static void controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX, NxReal speedY, NxReal dribblerSpeed, int indexScene );
+	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
+	static void infinitePath(int indexRobot);
+
+	static void function(int argc, char **argv);
+};
+
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
 
 class MyUserNotify: public NXU_userNotify, public NXU_errorReport
 {
@@ -98,97 +206,7 @@ public:
 	virtual void 	NXU_notifyCCDSkeletonFailed(NxSimpleTriangleMesh &t,const char *userProperties);
 
 	virtual void 	NXU_notifyHeightFieldFailed(NxHeightFieldDesc &t,const char *userProperties);
-};
 
-class Simulation
-{
-public:
-	// static variables
-	static bool gPause;
-	static NxPhysicsSDK *gPhysicsSDK;
-	static const NxU32 gMaxScenes = 1;
-	static NxScene1 *gScenes[gMaxScenes];
-	static NxU32 gCurrentScene;
-	static NxVec3 gDefaultGravity;
-	static UserAllocator *gMyAllocator;
-	static ErrorStream gErrorStream;
-	static DebugRenderer gDebugRenderer;
-	//static PerfRenderer    gPrefRenderer;
-
-	static int gMainHandle;
-	static NxVec3 gEye;
-	static NxVec3 gDir;
-	static NxVec3 gNormal;
-	static int gMouseX;
-	static int gMouseY;
-
-	static MyUserNotify gUserNotify;
-
-	static bool gSave;
-	static int	gLoad;
-	static bool gClear;
-
-	//Socket
-	//static Thread *udpServerThread;
-
-	//Robot
-	//extern NxUserContactReport * robotContactReport;
-	static bool keyDown[256];
-public:
-	Simulation(void);
-	~Simulation(void);
-	static void releaseScene(NxScene &scene);
-	static NX_BOOL LoadScene(const char *pFilename,NXU::NXU_FileType type);
-	static void SaveScene(const char *pFilename);
-	static void CreateCube(const NxVec3 &pos, int size, const NxVec3 *initial_velocity = NULL);
-	static void CreateStack(int size);
-	static void CreateTower(int size);
-	static bool InitNx();
-	static bool InitBlankScene();
-	static void ReleaseNx();
-	static void appKey(unsigned char key, bool down);
-	static void callback_keyUp(unsigned char c, int x, int y);
-	static void callback_key(unsigned char c, int x, int y);
-	static void ArrowKeyCallback(int key, int x, int y);
-	static void MouseCallback(int button, int state, int x, int y);
-	static void MotionCallback(int x, int y);
-	static bool FileExistTestSimple(const char *fname);
-	static void RenderCallback();
-	static void ReshapeCallback(int width, int height);
-	static void IdleCallback();
-	static void CSL_Scene();
-	static void function(int argc, char **argv);
-	//static void refreshDataFromServer();
-
-	//Robot
-	static void createRobotWithDesc(int indexRobot);
-
-	//Metodos para Inteligencia
-	static NxActor* getActorBall(int indexScene);
-	static NxActor* getActorRobot(int indexScene, int indexRobot);
-	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
-	static NxActor* getActorDribbler(int indexScene, int indexRobot);
-	static NxActor* getActorKicker(int indexScene, int indexRobot);
-	static void simulate();
-	static void simulate(int indexScene);
-	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);
-	static void setBallGlobalPos(NxVec3 pos, int indexScene);
-	static void setRobotLinearVelocity(NxVec3 linVel, int indexScene, int indexRobot);
-	static void setRobotAngularVelocity(NxVec3 angVel, int indexScene, int indexRobot);
-	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
-	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
-	static NxVec3 getBallGlobalPos( int indexScene );
-	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
-	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
-	static NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene );
-	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
-	static void controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX, NxReal speedY, NxReal dribblerSpeed, int indexScene );
-	static void controlTorqueDribbler( NxReal angTorqueZ );
-	static void controlAngVelocityDribbler( NxReal angVelocityZ ); 
-
-	static void infinitePath(int indexRobot);
-
-	//Math
-	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
-	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
+	MyUserNotify(void);
+	~MyUserNotify(void);
 };

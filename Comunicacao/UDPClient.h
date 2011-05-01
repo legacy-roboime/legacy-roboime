@@ -17,7 +17,7 @@ private:
 	string servAddress;						// server address
 	char* echoString;						// string to echo
 	int echoStringLen;						// Length of string to echo
-	//unsigned short echoServPort;			// local port
+	unsigned short echoServPort;			// local port
 	//char echoBuffer[ECHOMAX];				// Buffer for echo string
     //int recvMsgSize;						// Size of received message
     //string sourceAddress;					// Address of datagram source
@@ -32,7 +32,7 @@ public:
 
 	UDPClient(void);
 	~UDPClient(void);
-	UDPClient(string servAddress, char* echoString);
+	UDPClient(string servAddress, char* echoString, unsigned short echoServPort);
 	void func1();
 public:
 

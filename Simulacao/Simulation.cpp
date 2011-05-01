@@ -1,6 +1,5 @@
 #include "Simulation.h"
 
-/////////////////////////////////////////////////CLASS Simulation////////////////////////////////////////////////////////////////////
 bool Simulation::gPause = false;
 NxPhysicsSDK *Simulation::gPhysicsSDK = 0;
 NxScene1 *Simulation::gScenes[gMaxScenes] = { 0 };
@@ -19,7 +18,7 @@ ErrorStream Simulation::gErrorStream = ErrorStream();
 DebugRenderer Simulation::gDebugRenderer = DebugRenderer();
 NxVec3 Simulation::gNormal = NxVec3();
 MyUserNotify Simulation::gUserNotify = MyUserNotify();
-//Thread* Simulation::udpServerThread = new UDPServerThread("UDPServerThread");
+Thread* Simulation::udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
 //PerfRenderer    gPerfRenderer = PerfRenderer();
 bool Simulation::keyDown[256];//={false};
 
@@ -181,12 +180,13 @@ void DrawActorIME(NxActor* actor)
 
 Simulation::Simulation(void)
 {
+	((UDPServerThread*)udpServerThread)->start();
 }
 
 Simulation::~Simulation(void)
 {
 	//~ dos ponteiros do PhsyX em ReleaseNX
-	//delete udpServerThread;
+	delete udpServerThread;
 	//delete gPhysicsSDK;
 	delete gScenes;
 	delete gMyAllocator;
@@ -575,9 +575,7 @@ void Simulation::appKey(unsigned char key, bool down)
 
 		case 'k':
 			{
-				//udpServerThread = new UDPServerThread("UDPServerThread");
-				//((UDPServerThread*)udpServerThread)->startUDPServerThread();
-				//udpServerThread->start();
+				((UDPServerThread*)udpServerThread)->start();
 				//NxActor* actorDribbler = getActorDribbler(0, 1);
 				//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
 			}
@@ -801,27 +799,8 @@ void Simulation::RenderCallback()
 	static unsigned int PreviousTime = 0;
 	unsigned int CurrentTime = getTime();
 	unsigned int ElapsedTime = CurrentTime - PreviousTime;
+	if(ElapsedTime < 10.0f) return;
 	PreviousTime = CurrentTime;
-
-#ifdef __PPCGEKKO__
-		bool left = keyDown['a'];
-		bool right = keyDown['d'];
-		bool forward = keyDown['w'];
-		bool backward = keyDown['s'];
-#else
-		bool left = keyDown['a'] ;//|| keyDown[20];
-		bool right = keyDown['d'] ;//|| keyDown[22];
-		bool forward = keyDown['w'] ;//|| keyDown[21];
-		bool backward = keyDown['s'] ;//|| keyDown[23];
-#endif	
-	//NxReal steering = 0;
-	//if (left && !right) steering = -1;
-	//else if (right && !left) steering = 1;
-	NxReal acceleration = 0;
-	if (forward && !backward) acceleration = 1;
-	else if (backward && !forward) acceleration = -1;
-	bool handbrake = keyDown[' '];
-
 	
 	//for(int i=1; i<6; i++) infinitePath(i);
 
@@ -834,7 +813,7 @@ void Simulation::RenderCallback()
 	//goToThisPose( -50, -50, 3* NxPi / 2., 1, 0);
 	//goToThisPose( -200/*110*/, 0, 3 * NxPi / 2., 4, 0);
 
-	NxActor* actorDribbler = getActorDribbler(0, 1);
+	//NxActor* actorDribbler = getActorDribbler(0, 1);
 	//actorDribbler->addLocalTorque(NxVec3(-0.1,0,0));
 	//actorDribbler->setAngularVelocity(NxVec3(-NxPi/2.,0,0));
 
@@ -954,16 +933,16 @@ void Simulation::controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX,
 	NxAllVehicles::getActiveVehicle()->control( speeds[0], speeds[1], speeds[2], speeds[3], dribblerSpeed );
 }
 
-void Simulation::controlAngVelocityDribbler(NxReal angVelocityZ)
+void Simulation::setAngVelocityDribbler(NxReal velocityX)
 {
 	NxActor* actorDribbler = getActorDribbler(0, 1);
-	actorDribbler->setAngularVelocity(NxVec3(10,0,0));
+	actorDribbler->setAngularVelocity(NxVec3(-velocityX,0,0));
 }
 
-void Simulation::controlTorqueDribbler(NxReal angTorqueZ)
+void Simulation::addLocalTorqueDribbler(NxReal torqueX)
 {
 	NxActor* actorDribbler = getActorDribbler(0, 1);
-	actorDribbler->addLocalTorque(NxVec3(10,0,0));
+	actorDribbler->addLocalTorque(NxVec3(-torqueX,0,0));
 }
 
 NxActor* Simulation::getActorBall(int indexScene)
@@ -1523,6 +1502,19 @@ NxReal Simulation::getBiggestAbsoluteValue(NxReal* values, int size)
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
+
+MyUserNotify::MyUserNotify(void)
+{
+}
+
+MyUserNotify::~MyUserNotify(void)
+{
+}
+
 	void	MyUserNotify::NXU_errorMessage(bool isError, const char *str)
 	{
 		if (isError)
