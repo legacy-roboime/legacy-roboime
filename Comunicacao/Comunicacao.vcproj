@@ -195,22 +195,26 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\ou_thread.h"
+			<Filter
+				Name="UDPServer"
 				>
-			</File>
-			<File
-				RelativePath=".\PracticalSocket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UDPServer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UDPServerThread.h"
-				>
-			</File>
+				<File
+					RelativePath=".\ou_thread.h"
+					>
+				</File>
+				<File
+					RelativePath=".\PracticalSocket.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPServer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPServerThread.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
