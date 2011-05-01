@@ -1,5 +1,5 @@
   <NXUSTREAM2>
-    <NxuPhysicsCollection id="C:\Users\Bill\Documents\Visual Studio 2008\Projects\RobotIME\Simulacao\test.xml" userProperties="" sdkVersion="283" nxuVersion="103">
+    <NxuPhysicsCollection id="C:\Users\Bill\Documents\Visual Studio 2008\Projects\RobotIME\Debug\test.xml" userProperties="" sdkVersion="283" nxuVersion="103">
       <NxPhysicsSDKDesc id="SDK">
         <hwPageSize>65536</hwPageSize>
         <hwPageMax>256</hwPageMax>
@@ -18,7 +18,7 @@
       <NxParameterDesc param="NX_VISUALIZE_WORLD_AXES" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_BODY_AXES" value="1"/>
       <NxParameterDesc param="NX_VISUALIZE_BODY_MASS_AXES" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_BODY_LIN_VELOCITY" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_BODY_LIN_VELOCITY" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_BODY_ANG_VELOCITY" value="0"/>
       <NxParameterDesc param="NX_DUMMY15" value="0"/>
       <NxParameterDesc param="NX_DUMMY16" value="0"/>
@@ -33,8 +33,8 @@
       <NxParameterDesc param="NX_DUMMY25" value="0"/>
       <NxParameterDesc param="NX_DUMMY26" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_JOINT_LOCAL_AXES" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_JOINT_WORLD_AXES" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_JOINT_LIMITS" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_JOINT_WORLD_AXES" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_JOINT_LIMITS" value="0"/>
       <NxParameterDesc param="NX_DUMMY30" value="0"/>
       <NxParameterDesc param="NX_DUMMY31" value="0"/>
       <NxParameterDesc param="NX_DUMMY32" value="0"/>
@@ -1989,7 +1989,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_7" userProperties="" hasBody="true" name="Bola">
-          <globalPose>0.000032719 0.999994814 -0.003193253  -0.99999994 0.000032737 -0.000000018  0.000000087 0.003193253 0.999994874  -239.892532349 0 25.288299561</globalPose>
+          <globalPose>0.000032546 0.999994636 -0.003300065  -1.000000119 0.000032563 -0.000000026  0.000000082 0.003300065 0.999994516  -230.912002563 0 25.288299561</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>1 0 0  0 1 0  0 0 1  0 0 0</massLocalPose>
             <massSpaceInertia>0.000009551 0.000009551 0.000009551</massSpaceInertia>
@@ -3423,11 +3423,11 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_23" userProperties="" hasBody="true" name="Dribladooor1">
-          <globalPose>1 0.000000089 0.000000223  -0.000000223 0.00000054 0.99999994  0.000000089 -0.99999994 0.00000054  -269.92401123 -16.349555969 57.128997803</globalPose>
+          <globalPose>1 0.00000016 0.00000017  -0.00000017 0.00000054 0.99999994  0.00000016 -0.99999994 0.00000054  -269.92401123 -16.349555969 57.128997803</globalPose>
           <NxBodyDesc id="body">
-            <massLocalPose>0.9611395 -0.276063204 0.000027062  0.276061773 0.961134732 0.003153834  -0.000896668 -0.003023803 0.999994993  -0.008374902 -0.000086527 16.30006218</massLocalPose>
-            <massSpaceInertia>0.000006984 0.000006983 0.000001521</massSpaceInertia>
-            <mass>0.000000046</mass>
+            <massLocalPose>0.960538745 -0.278146207 0.000026804  0.278144747 0.960533977 0.003153815  -0.000902968 -0.003021906 0.999994993  -0.008371484 0.00008949 16.359489441</massLocalPose>
+            <massSpaceInertia>0.000006946 0.000006946 0.000001512</massSpaceInertia>
+            <mass>0.000000045</mass>
             <linearVelocity>0 0 0</linearVelocity>
             <angularVelocity>0 0 0</angularVelocity>
             <wakeUpCounter>0.399999976</wakeUpCounter>
@@ -3473,7 +3473,7 @@
               <NX_MESH_DOUBLE_SIDED>false</NX_MESH_DOUBLE_SIDED>
             </NxMeshShapeFlag>
             <NxShapeDesc userProperties="" name="Cone01">
-              <localPose>1 0 0  -0 1 -0  -0 -0 1  0 0 0</localPose>
+              <localPose>1 -0 -0  0 1 0  0 -0 1  0 0 0</localPose>
               <NxShapeFlag id="shapeFlags">
                 <NX_TRIGGER_ON_ENTER>false</NX_TRIGGER_ON_ENTER>
                 <NX_TRIGGER_ON_LEAVE>false</NX_TRIGGER_ON_LEAVE>
@@ -3500,7 +3500,7 @@
               <materialIndex>5</materialIndex>
               <CCDSkeleton></CCDSkeleton>
               <shapeDensity>0.000003</shapeDensity>
-              <shapeMass>0.007655118</shapeMass>
+              <shapeMass>0</shapeMass>
               <skinWidth>0.100000001</skinWidth>
               <NxGroupsMask id="groupsMask" bits0="0" bits1="0" bits2="0" bits3="0"/>
               <NxShapeCompartmentType id="nonInteractingCompartmentTypes">
@@ -3521,7 +3521,7 @@
               <NX_MESH_DOUBLE_SIDED>false</NX_MESH_DOUBLE_SIDED>
             </NxMeshShapeFlag>
             <NxShapeDesc userProperties="" name="Cone02">
-              <localPose>1 0 -0  0 -1 -0.000000285  -0 0.000000285 -1  0 -0.000003815 32.699996948</localPose>
+              <localPose>1 0.000000015 -0.00000003  0.000000015 -1 -0.00000027  -0.00000003 0.00000027 -1  0 -0.000003815 32.699993134</localPose>
               <NxShapeFlag id="shapeFlags">
                 <NX_TRIGGER_ON_ENTER>false</NX_TRIGGER_ON_ENTER>
                 <NX_TRIGGER_ON_LEAVE>false</NX_TRIGGER_ON_LEAVE>
@@ -3568,7 +3568,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_24" userProperties="" hasBody="true" name="Cylinder01">
-          <globalPose>1 -0.000000151 -0.000000576  0.000000576 -0.000000303 0.99999994  -0.000000151 -0.99999994 -0.000000303  0.000012691 -1144.999511719 144.999725342</globalPose>
+          <globalPose>1 -0.000000151 -0.000000576  0.000000576 -0.000000303 0.99999994  -0.000000151 -0.99999994 -0.000000303  0.000012691 -1144.999511719 145.000030518</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>0.782936454 -0.622101426 0.000544734  0.622101665 0.782936275 -0.000587406  -0.000061066 0.000798782 0.999999642  0.240760908 0.11921414 14.966194153</massLocalPose>
             <massSpaceInertia>0.058157943 0.059254911 0.115309902</massSpaceInertia>
@@ -3665,11 +3665,11 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_25" userProperties="" hasBody="true" name="Driblador1">
-          <globalPose>1 -0.000004574 0.000005404  -0.000005404 -0.000000134 0.99999994  -0.000004574 -0.99999994 -0.000000134  -0.000610094 -1114.999511719 145.00050354</globalPose>
+          <globalPose>1 0.000058243 0.000006835  -0.000006835 -0.000000135 0.99999994  0.000058243 -0.99999994 -0.000000135  -0.000774604 -1115 145.000030518</globalPose>
           <NxBodyDesc id="body">
-            <massLocalPose>1 0 0  0 1 0  0 0 1  0.000043507 0.000015259 115</massLocalPose>
-            <massSpaceInertia>0.013968318 0.013968318 0.000746323</massSpaceInertia>
-            <mass>0.000003084</mass>
+            <massLocalPose>1 0 0  0 1 0  0 0 1  0.000043507 0.000030518 115</massLocalPose>
+            <massSpaceInertia>0.014256123 0.014256123 0.000761701</massSpaceInertia>
+            <mass>0.000003148</mass>
             <linearVelocity>0 0 0</linearVelocity>
             <angularVelocity>0 0 0</angularVelocity>
             <wakeUpCounter>0.399999976</wakeUpCounter>
@@ -3714,7 +3714,7 @@
               <NX_SWEPT_SHAPE>false</NX_SWEPT_SHAPE>
             </NxCapsuleShapeFlag>
             <NxShapeDesc userProperties="" name="Driblador1">
-              <localPose>-0.99999994 -0.000000787 0.000000044  0.000000044 -0.000000358 0.99999994  -0.000000787 0.99999994 0.000000371  0.000043507 0.000015259 115</localPose>
+              <localPose>-0.99999994 -0.000000787 0.000000044  0.000000044 -0.000000358 0.99999994  -0.000000787 0.99999994 0.000000371  0.000043507 0.000030518 115</localPose>
               <NxShapeFlag id="shapeFlags">
                 <NX_TRIGGER_ON_ENTER>false</NX_TRIGGER_ON_ENTER>
                 <NX_TRIGGER_ON_LEAVE>false</NX_TRIGGER_ON_LEAVE>
@@ -3741,7 +3741,7 @@
               <materialIndex>5</materialIndex>
               <CCDSkeleton></CCDSkeleton>
               <shapeDensity>0.000003</shapeDensity>
-              <shapeMass>1.027989507</shapeMass>
+              <shapeMass>0</shapeMass>
               <skinWidth>0.100000001</skinWidth>
               <NxGroupsMask id="groupsMask" bits0="0" bits1="0" bits2="0" bits3="0"/>
               <NxShapeCompartmentType id="nonInteractingCompartmentTypes">
@@ -3761,7 +3761,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_26" userProperties="" hasBody="true" name="Cylinder02">
-          <globalPose>1 -0.000000151 -0.000000576  0.000000576 -0.000000303 0.99999994  -0.000000151 -0.99999994 -0.000000303  0 -884.999511719 144.999679565</globalPose>
+          <globalPose>1 -0.000000151 -0.000000576  0.000000576 -0.000000303 0.99999994  -0.000000151 -0.99999994 -0.000000303  0 -885 145</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>0.782936454 -0.622101426 0.000544734  0.622101665 0.782936275 -0.000587406  -0.000061066 0.000798782 0.999999642  0.240760908 0.11921414 14.966194153</massLocalPose>
             <massSpaceInertia>0.058157943 0.059254911 0.115309902</massSpaceInertia>
@@ -4032,7 +4032,7 @@
               <materialIndex>3</materialIndex>
               <CCDSkeleton></CCDSkeleton>
               <shapeDensity>0.000009</shapeDensity>
-              <shapeMass>327.239990234</shapeMass>
+              <shapeMass>0</shapeMass>
               <skinWidth>0.100000001</skinWidth>
               <NxGroupsMask id="groupsMask" bits0="0" bits1="0" bits2="0" bits3="0"/>
               <NxShapeCompartmentType id="nonInteractingCompartmentTypes">
@@ -4052,7 +4052,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_29" userProperties="" hasBody="true" name="Chutadorr1">
-          <globalPose>1 0 0  0 1 0  0 0 1  0 -1730.674316406 0</globalPose>
+          <globalPose>1 0 0  0 1 0  0 0 1  0 -1730.670043945 0</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>1 0 0  0 1 0  0 0 1  0 0 12.5</massLocalPose>
             <massSpaceInertia>0.000331277 0.000331277 0.000615094</massSpaceInertia>
@@ -4129,7 +4129,7 @@
               <materialIndex>4</materialIndex>
               <CCDSkeleton></CCDSkeleton>
               <shapeDensity>0.0000015</shapeDensity>
-              <shapeMass>0.303750008</shapeMass>
+              <shapeMass>0</shapeMass>
               <skinWidth>0.100000001</skinWidth>
               <NxGroupsMask id="groupsMask" bits0="0" bits1="0" bits2="0" bits3="0"/>
               <NxShapeCompartmentType id="nonInteractingCompartmentTypes">
@@ -4257,9 +4257,9 @@
             <actor0>Actor_22</actor0>
             <actor1>Actor_23</actor1>
             <localNormal0>0.000000034 0 1</localNormal0>
-            <localNormal1>0.000000034 -1 0.000000447</localNormal1>
+            <localNormal1>0.000000203 -1 0.000000447</localNormal1>
             <localAxis0>1 0 0.000000034</localAxis0>
-            <localAxis1>-0.00000003 -0.000000447 -1</localAxis1>
+            <localAxis1>0.000000015 -0.000000447 -1</localAxis1>
             <localAnchor0>16.349983215 99.885986328 17.625301361</localAnchor0>
             <localAnchor1>0 -0.000003815 -0.000444412</localAnchor1>
             <maxForce>FLT_MAX</maxForce>
@@ -4383,11 +4383,11 @@
             <actor0>Actor_22</actor0>
             <actor1>Actor_23</actor1>
             <localNormal0>0.000000034 0 1</localNormal0>
-            <localNormal1>0.000000034 -1 0.000000447</localNormal1>
+            <localNormal1>0.000000203 -1 0.000000447</localNormal1>
             <localAxis0>1 0 0.000000034</localAxis0>
-            <localAxis1>-0.00000003 -0.000000447 -1</localAxis1>
+            <localAxis1>0.000000015 -0.000000447 -1</localAxis1>
             <localAnchor0>-16.350017548 99.885986328 17.625301361</localAnchor0>
-            <localAnchor1>0 0.000011444 32.699562073</localAnchor1>
+            <localAnchor1>0 0.000011444 32.699554443</localAnchor1>
             <maxForce>FLT_MAX</maxForce>
             <maxTorque>FLT_MAX</maxTorque>
             <solverExtrapolationFactor>1</solverExtrapolationFactor>
@@ -4508,10 +4508,10 @@
           <NxJointDesc id="Joint_2" userProperties="" name="Joint-1-3">
             <actor0>Actor_22</actor0>
             <actor1>Actor_27</actor1>
-            <localNormal0>0.00000006 0 1</localNormal0>
+            <localNormal0>-0.00000006 0 1</localNormal0>
             <localNormal1>0.000000034 0 1</localNormal1>
-            <localAxis0>-0.00000006 1 0.00000006</localAxis0>
-            <localAxis1>1 0.000000119 0.000000034</localAxis1>
+            <localAxis0>-0.000000179 1 -0.00000006</localAxis0>
+            <localAxis1>1 0.000000163 0.000000034</localAxis1>
             <localAnchor0>-0.000014632 89.809997559 0.000301361</localAnchor0>
             <localAnchor1>0 0 3</localAnchor1>
             <maxForce>FLT_MAX</maxForce>
@@ -4635,11 +4635,11 @@
             <actor0>Actor_24</actor0>
             <actor1>Actor_25</actor1>
             <localNormal0>-1 0.000000592 0.000000246</localNormal0>
-            <localNormal1>-1 0.000005015 -0.000005734</localNormal1>
+            <localNormal1>-1 -0.000057802 -0.000007165</localNormal1>
             <localAxis0>0.000000246 -0.00000067 1</localAxis0>
-            <localAxis1>-0.000005734 -0.000000417 1</localAxis1>
-            <localAnchor0>0.0000039 0.000015259 30</localAnchor0>
-            <localAnchor1>0.000609403 0.000808716 0</localAnchor1>
+            <localAxis1>-0.000007165 -0.000000477 1</localAxis1>
+            <localAnchor0>0.000003899 0.000015259 29.999511719</localAnchor0>
+            <localAnchor1>0.000773908 0.000030518 0</localAnchor1>
             <maxForce>FLT_MAX</maxForce>
             <maxTorque>FLT_MAX</maxTorque>
             <solverExtrapolationFactor>1</solverExtrapolationFactor>
@@ -4761,11 +4761,11 @@
             <actor0>Actor_26</actor0>
             <actor1>Actor_25</actor1>
             <localNormal0>-1 0.000000347 0.000000018</localNormal0>
-            <localNormal1>-1 0.00000477 -0.000005962</localNormal1>
+            <localNormal1>-1 -0.000058046 -0.000007393</localNormal1>
             <localAxis0>0.000000018 0.000000282 1</localAxis0>
-            <localAxis1>-0.000005962 0.000000534 1</localAxis1>
-            <localAnchor0>-0 -0.000808716 0</localAnchor0>
-            <localAnchor1>-0.000632863 -0.000015259 230</localAnchor1>
+            <localAxis1>-0.000007393 0.000000474 1</localAxis1>
+            <localAnchor0>0 0 0</localAnchor0>
+            <localAnchor1>-0.000797372 -0.000015259 230</localAnchor1>
             <maxForce>FLT_MAX</maxForce>
             <maxTorque>FLT_MAX</maxTorque>
             <solverExtrapolationFactor>1</solverExtrapolationFactor>
@@ -4890,7 +4890,7 @@
             <localNormal1>0.000000034 0 1</localNormal1>
             <localAxis0>1 0 0.000000034</localAxis0>
             <localAxis1>1 0 0.000000034</localAxis1>
-            <localAnchor0>0 -230.674316406 0</localAnchor0>
+            <localAnchor0>0 -230.670043945 0</localAnchor0>
             <localAnchor1>0 0 0</localAnchor1>
             <maxForce>FLT_MAX</maxForce>
             <maxTorque>FLT_MAX</maxTorque>
