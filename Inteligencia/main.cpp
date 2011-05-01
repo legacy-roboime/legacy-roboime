@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 	((UDPServerThread*)ut)->start();
 
 	UDPClient* udpClient = new UDPClient("127.0.0.1", "1", 9786);
-	/*for(int i=0; i<1000000; i++)*/ udpClient->func1();
+	udpClient->func1();
 
 	return 0;
 }
