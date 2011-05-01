@@ -18,7 +18,7 @@ ErrorStream Simulation::gErrorStream = ErrorStream();
 DebugRenderer Simulation::gDebugRenderer = DebugRenderer();
 NxVec3 Simulation::gNormal = NxVec3();
 MyUserNotify Simulation::gUserNotify = MyUserNotify();
-Thread* Simulation::udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
+//Thread* Simulation::udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
 //PerfRenderer    gPerfRenderer = PerfRenderer();
 bool Simulation::keyDown[256];//={false};
 
@@ -180,13 +180,12 @@ void DrawActorIME(NxActor* actor)
 
 Simulation::Simulation(void)
 {
-	((UDPServerThread*)udpServerThread)->start();
 }
 
 Simulation::~Simulation(void)
 {
 	//~ dos ponteiros do PhsyX em ReleaseNX
-	delete udpServerThread;
+	//delete udpServerThread;
 	//delete gPhysicsSDK;
 	delete gScenes;
 	delete gMyAllocator;
@@ -575,7 +574,7 @@ void Simulation::appKey(unsigned char key, bool down)
 
 		case 'k':
 			{
-				((UDPServerThread*)udpServerThread)->start();
+				//((UDPServerThread*)udpServerThread)->start();
 				//NxActor* actorDribbler = getActorDribbler(0, 1);
 				//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
 			}

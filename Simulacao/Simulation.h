@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
-#include "UDPServerThread.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -68,9 +67,6 @@ private:
 	static bool gSave;
 	static int	gLoad;
 	static bool gClear;
-
-	//Socket
-	static Thread *udpServerThread;
 
 	//Robot
 	//extern NxUserContactReport * robotContactReport;

@@ -68,6 +68,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="PhysXLoader.lib"
 				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut&quot;"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"

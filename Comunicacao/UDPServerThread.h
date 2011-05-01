@@ -24,7 +24,5 @@ public:
 	UDPServerThread(const char* nm);
 	UDPServerThread(const char* nm, int port, string address);
 	void run();
-	//void run(int port, string address);
-	//void startUDPServerThread();
-	//void stopUDPServerThread();
+	string getLastReceivedString();
 };

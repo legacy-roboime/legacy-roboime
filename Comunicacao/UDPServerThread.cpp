@@ -35,30 +35,7 @@ void UDPServerThread::run() {
 }
 	
 
-//void UDPServerThread::startUDPServerThread()
-//{
-//	try {
-//		//Mutex m("UDPServerThread");
-//		this->start();
-//		//m.release();
-//	}catch(ThreadException ex) {
-//		cout << ex.getMessage().c_str()<<endl;
-//		goto del;
-//	}	
-//del:
-//	delete this;
-//}
-//
-//void UDPServerThread::stopUDPServerThread()
-//{
-//	try {
-//		//Mutex m("UDPServerThread");
-//		this->stop();	
-//		//m.release();
-//	}catch(ThreadException ex) {
-//		cout << ex.getMessage().c_str()<<endl;
-//		goto del;
-//	}	
-//del:
-//	delete this;
-//}
+string UDPServerThread::getLastReceivedString()
+{
+	return this->udpserver.getLastReceivedString();
+}
