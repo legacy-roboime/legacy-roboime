@@ -369,6 +369,10 @@
 					RelativePath=".\Simulation.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SimulationTypes.h"
+					>
+				</File>
 				<Filter
 					Name="PhysX"
 					>

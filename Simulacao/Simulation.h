@@ -99,7 +99,9 @@ private:
 	static void ReshapeCallback(int width, int height);
 	static void IdleCallback();
 	static void CSL_Scene();
-	//static void refreshDataFromServer();
+
+	static void refreshDataFromServer();
+	static void parserDataFromServer();
 	//Robot
 	static void createRobotWithDesc(int indexRobot);
 	//Math
@@ -114,18 +116,18 @@ private:
 public:
 	Simulation(void);
 	~Simulation(void);
-	void run();
+	static void function(int argc, char **argv);
 
 	//Metodos para Inteligencia
 	static void simulate();
-	static void simulate(int indexScene);
+	static void simulate( int indexScene );
 
 	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);
 	static void setBallGlobalPos(NxVec3 pos, int indexScene);
 	static void setRobotLinearVelocity(NxVec3 linVel, int indexScene, int indexRobot);
 	static void setRobotAngularVelocity(NxVec3 angVel, int indexScene, int indexRobot);
 	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
-	static void setAngVelocityDribbler(NxReal velocityX); 
+	static void setAngVelocityDribbler(NxReal velocityX);
 
 	static void addLocalTorqueDribbler(NxReal torqueX);
 
@@ -134,12 +136,11 @@ public:
 	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
 	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
 
+	//Metodos que devem estar no modulo inteligencia
 	static NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene );
 	static void controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX, NxReal speedY, NxReal dribblerSpeed, int indexScene );
 	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
-	static void infinitePath(int indexRobot);
-
-	static void function(int argc, char **argv);
+	static void infinitePath( int indexRobot );
 };
 
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////

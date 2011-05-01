@@ -185,10 +185,12 @@ Simulation::Simulation(void)
 Simulation::~Simulation(void)
 {
 	//~ dos ponteiros do PhsyX em ReleaseNX
-	delete udpServerThread;
+	//delete udpServerThread;
 	//delete gPhysicsSDK;
-	delete gScenes;
-	delete gMyAllocator;
+	//delete gScenes;
+	//delete gMyAllocator;
+
+	//ReleaseNx executa a liberacao de memoria
 }
 
 void Simulation::releaseScene(NxScene &scene)
@@ -462,6 +464,8 @@ void Simulation::ReleaseNx()
 		delete gMyAllocator;
 		gMyAllocator = NULL;
 	}
+
+	//((UDPServerThread*)udpServerThread)->stop();
 }
 //==================================================================================
 void Simulation::callback_key(unsigned char c, int x, int y)
@@ -574,7 +578,6 @@ void Simulation::appKey(unsigned char key, bool down)
 
 		case 'k':
 			{
-				((UDPServerThread*)udpServerThread)->start();
 				//NxActor* actorDribbler = getActorDribbler(0, 1);
 				//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
 			}
@@ -792,7 +795,7 @@ void Simulation::CSL_Scene()
 //==================================================================================
 void Simulation::RenderCallback()
 {
-	//refreshDataFromServer();
+	refreshDataFromServer();
 
 	//compute elapsed time
 	static unsigned int PreviousTime = 0;
@@ -810,7 +813,7 @@ void Simulation::RenderCallback()
 	
 	//goToThisPose( -130, 10, 3* NxPi / 2., 1, 0);
 	//goToThisPose( -50, -50, 3* NxPi / 2., 1, 0);
-	//goToThisPose( -200/*110*/, 0, 3 * NxPi / 2., 4, 0);
+	goToThisPose( -200/*110*/, 0, 3 * NxPi / 2., 4, 0);
 
 	//NxActor* actorDribbler = getActorDribbler(0, 1);
 	//actorDribbler->addLocalTorque(NxVec3(-0.1,0,0));
@@ -928,8 +931,9 @@ void Simulation::simulate(int indexScene)
 void Simulation::controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX, NxReal speedY, NxReal dribblerSpeed, int indexScene )
 {
 	NxReal* speeds = calcWheelSpeedFromRobotSpeed( speedAng, speedX, speedY, indexRobot, indexScene );
+	setAngVelocityDribbler( dribblerSpeed );
 	NxAllVehicles::setActiveVehicle( indexRobot - 1 );
-	NxAllVehicles::getActiveVehicle()->control( speeds[0], speeds[1], speeds[2], speeds[3], dribblerSpeed );
+	NxAllVehicles::getActiveVehicle()->control( speeds[0], speeds[1], speeds[2], speeds[3] );
 }
 
 void Simulation::setAngVelocityDribbler(NxReal velocityX)
@@ -1195,6 +1199,8 @@ void Simulation::function(int argc, char **argv)
 	bool init = InitNx();
 	Simulation::CSL_Scene();
 
+	((UDPServerThread*)udpServerThread)->start();
+
 	if(gScenes != NULL)
 	{
 		if(gScenes[0] != NULL)
@@ -1276,29 +1282,42 @@ void Simulation::infinitePath(int indexRobot)
 	goToThisPose( pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, 3* NxPi / 2., indexRobot, 0);
 }
 
-//void Simulation::refreshDataFromServer()
-//{
-//	//Bola
-//	NxActor* actorBall = getActorBall(0);
-//	if(actorBall != NULL) 
-//	{
-//		actorBall->setGlobalPosition(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballY, UDPServer::ballRadius/*actorBall->getGlobalPosition().z*/));
-//		actorBall->setLinearVelocity(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedY, 0));
-//	}
-//
-//	//Robos
-//	for(int i=1; i<=UDPServer::numRobots ;i++)
-//	{
-//		NxActor* actorRobot = getActorRobot(0, i);
-//		if(actorRobot != NULL) 
-//		{
-//			NxMat34 pose = actorRobot->getGlobalPose();
-//			pose.M.rotZ(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][3]);
-//			pose.t = NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][1], UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][2], 0/*actorRobot->getGlobalPosition().z*/);
-//			actorRobot->setGlobalPose(pose);
-//		}
-//	}
-//}
+void Simulation::refreshDataFromServer()
+{
+	Simulation::parserDataFromServer();
+
+	////Bola
+	//NxActor* actorBall = getActorBall(0);
+	//if(actorBall != NULL) 
+	//{
+	//	actorBall->setGlobalPosition(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballY, UDPServer::ballRadius/*actorBall->getGlobalPosition().z*/));
+	//	actorBall->setLinearVelocity(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedY, 0));
+	//}
+
+	////Robos
+	//for(int i=1; i<=UDPServer::numRobots ;i++)
+	//{
+	//	NxActor* actorRobot = getActorRobot(0, i);
+	//	if(actorRobot != NULL) 
+	//	{
+	//		NxMat34 pose = actorRobot->getGlobalPose();
+	//		pose.M.rotZ(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][3]);
+	//		pose.t = NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][1], UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][2], 0/*actorRobot->getGlobalPosition().z*/);
+	//		actorRobot->setGlobalPose(pose);
+	//	}
+	//}
+}
+
+void Simulation::parserDataFromServer()
+{
+	string temp; 
+	std::stringstream os(((UDPServerThread*)Simulation::udpServerThread)->udpserver.getLastReceivedString());
+	os >> temp;
+	if(temp.compare("1") == 0)//pacote 1
+	{
+		
+	}
+}
 
 void Simulation::setBallGlobalPos(NxVec3 pos, int indexScene)
 {
@@ -1366,7 +1385,7 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 		speedY = 0;
 	}
 
-	controlRobot( indexRobot, speedAng, speedX, speedY, -100, indexScene ); //metros
+	controlRobot( indexRobot, speedAng, speedX, speedY, 100, indexScene ); //metros
 }
 
 NxF32 Simulation::calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 )
@@ -1496,18 +1515,6 @@ NxReal Simulation::getBiggestAbsoluteValue(NxReal* values, int size)
 	}
 	return NxMath::abs( values[indexBiggest] );
 }
-
-void Simulation::run() {
-	try {
-		//wait("UDPServerMutex");
-		char** teste;
-		Simulation::function(0, teste);
-		//release("UDPServerMutex");
-	}catch(ThreadException ex) {
-		cout << ex.getMessage().c_str() << endl;
-	}		
-}
-
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////

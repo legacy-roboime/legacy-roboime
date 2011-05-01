@@ -129,7 +129,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	//don't go to sleep.
 	//vehicle->_bodyActor->wakeUp(1e10);
 	
-	vehicle->control(0,0,0,0,0);
+	vehicle->control(0,0,0,0);
 	return vehicle;
 }
 
@@ -266,7 +266,7 @@ void NxVehicle::_computeLocalVelocity()
 	//printf("Velocity: %2.3f %2.3f %2.3f\n", _localVelocity.x, _localVelocity.y, _localVelocity.z);
 }
 
-void NxVehicle::control(NxReal speedAxleWheel1, NxReal speedAxleWheel2, NxReal speedAxleWheel3, NxReal speedAxleWheel4, NxReal dribblerSpeed)
+void NxVehicle::control(NxReal speedAxleWheel1, NxReal speedAxleWheel2, NxReal speedAxleWheel3, NxReal speedAxleWheel4)
 {
 	_bodyActor->wakeUp(0.05);
 
@@ -274,7 +274,6 @@ void NxVehicle::control(NxReal speedAxleWheel1, NxReal speedAxleWheel2, NxReal s
 	_speedAxleWheelControl[1] = speedAxleWheel2;
 	_speedAxleWheelControl[2] = speedAxleWheel3;
 	_speedAxleWheelControl[3] = speedAxleWheel4;
-	_speedAxleWheelControl[4] = dribblerSpeed;
 }
 
 void NxVehicle::draw(bool debug) 
