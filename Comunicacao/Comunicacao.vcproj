@@ -169,17 +169,17 @@
 				RelativePath=".\main.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\ou_thread.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PracticalSocket.cpp"
+				>
+			</File>
 			<Filter
 				Name="UDPServer"
 				>
-				<File
-					RelativePath=".\ou_thread.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\PracticalSocket.cpp"
-					>
-				</File>
 				<File
 					RelativePath=".\UDPServer.cpp"
 					>
@@ -189,29 +189,45 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="UDPClient"
+				>
+				<File
+					RelativePath=".\UDPClient.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\ou_thread.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PracticalSocket.h"
+				>
+			</File>
 			<Filter
 				Name="UDPServer"
 				>
-				<File
-					RelativePath=".\ou_thread.h"
-					>
-				</File>
-				<File
-					RelativePath=".\PracticalSocket.h"
-					>
-				</File>
 				<File
 					RelativePath=".\UDPServer.h"
 					>
 				</File>
 				<File
 					RelativePath=".\UDPServerThread.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="UDPClient"
+				>
+				<File
+					RelativePath=".\UDPClient.h"
 					>
 				</File>
 			</Filter>

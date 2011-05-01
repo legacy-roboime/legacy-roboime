@@ -1,15 +1,6 @@
 
 #include "UDPServer.h"
-/*
-unsigned short UDPServer::echoServPort = 9876;
-unsigned short UDPServer::sourcePort = 0;
-string UDPServer::sourceAddress = "127.0.0.1";
-char UDPServer::echoBuffer[ECHOMAX] = {};
-int UDPServer::recvMsgSize = 0;
-float UDPServer::ballRadius = 21.5;
-int UDPServer::ptrDataBaseVision = -1;
-struct DataBaseVision UDPServer::dataBaseVision[sizeDataBaseVision] = {};
-*/
+
 UDPServer::UDPServer(void)
 {
 	echoServPort = 9876;
@@ -17,18 +8,18 @@ UDPServer::UDPServer(void)
 	sourceAddress = "127.0.0.1";
 	for (int i=0; i<ECHOMAX; i++)  echoBuffer[i] = 0;
 	recvMsgSize = 0;
-	ballRadius = 21.5;
-	ptrDataBaseVision = -1;	
-	for (int i=0; i<sizeDataBaseVision; i++) dataBaseVision[i] = DataBaseVision();
+	//ballRadius = 21.5;
+	//ptrDataBaseVision = -1;	
+	//for (int i=0; i<sizeDataBaseVision; i++) dataBaseVision[i] = DataBaseVision();
 }
 
 UDPServer::UDPServer(unsigned short port, string address)
 {
 	for (int i=0; i<ECHOMAX; i++)  echoBuffer[i] = 0;
 	recvMsgSize = 0;
-	ballRadius = 21.5;
-	ptrDataBaseVision = -1;	
-	for (int i=0; i<sizeDataBaseVision; i++) dataBaseVision[i] = DataBaseVision();
+	//ballRadius = 21.5;
+	//ptrDataBaseVision = -1;	
+	//for (int i=0; i<sizeDataBaseVision; i++) dataBaseVision[i] = DataBaseVision();
 	echoServPort = port;
 	sourcePort = port;
 	sourceAddress = address;
@@ -52,8 +43,8 @@ void UDPServer::func1()
 		  string s = echoBuffer;
 		  string temp; 
 		  std::stringstream os(s);
-		  os >> temp;
-		  if(temp.compare("1") == 0)//pacote 1
+		  //os >> temp;
+		  /*if(temp.compare("1") == 0)//pacote 1
 		  {
 			float robots[numRobots][numInfo];
 			float ballRadius;
@@ -109,7 +100,7 @@ void UDPServer::func1()
 				dataBaseVision[ptrDataBaseVision].robots[i][2] = robots[i][2];
 				dataBaseVision[ptrDataBaseVision].robots[i][3] = robots[i][3];
 			}
-		  }
+		  }*/
 	  }
     }
   } catch (SocketException &e) {

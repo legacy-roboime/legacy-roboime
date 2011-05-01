@@ -10,13 +10,13 @@ VC++).
 #include <sstream> 
 #include <stdio.h>
 
-struct DataBaseVision{
-	float ballX;
-	float ballY;
-	float ballSpeedX;
-	float ballSpeedY;
-	float robots[10][4];
-};
+//struct DataBaseVision{
+//	float ballX;
+//	float ballY;
+//	float ballSpeedX;
+//	float ballSpeedY;
+//	float robots[10][4];
+//};
 
 class UDPServer
 {
@@ -28,12 +28,12 @@ private:
     string sourceAddress;             // Address of datagram source
     unsigned short sourcePort;        // Port of datagram source
 public:
-	static const int numRobots = 10;
-	static const int numInfo = 4;
-	static const int sizeDataBaseVision = 1;
-	int ptrDataBaseVision;
-	float ballRadius;
-	struct DataBaseVision dataBaseVision[sizeDataBaseVision];
+	//static const int numRobots = 10;
+	//static const int numInfo = 4;
+	//static const int sizeDataBaseVision = 1;
+	//int ptrDataBaseVision;
+	//float ballRadius;
+	//struct DataBaseVision dataBaseVision[sizeDataBaseVision];
 
 	UDPServer(void);
 	UDPServer(unsigned short port, string address);
