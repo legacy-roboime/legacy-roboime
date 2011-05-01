@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
+#include <iostream>
+using namespace std;
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -31,6 +33,7 @@
 #include "NxAllVehicles.h"
 
 #include "NxScene1.h"
+#include "UDPServerThread.h";
 //#include "MyUserNotify.h"
 
 #ifdef __PPCGEKKO__
@@ -68,14 +71,14 @@ private:
 	static int	gLoad;
 	static bool gClear;
 
+	static Thread* Simulation::udpServerThread;
+
 	//Robot
 	//extern NxUserContactReport * robotContactReport;
 	static bool keyDown[256];
 
 	friend class MyUserNotify;
 private:
-	Simulation(void);
-	~Simulation(void);
 	static void releaseScene(NxScene &scene);
 	static NX_BOOL LoadScene(const char *pFilename,NXU::NXU_FileType type);
 	static void SaveScene(const char *pFilename);
@@ -109,6 +112,10 @@ private:
 	static NxActor* getActorKicker(int indexScene, int indexRobot);
 
 public:
+	Simulation(void);
+	~Simulation(void);
+	void run();
+
 	//Metodos para Inteligencia
 	static void simulate();
 	static void simulate(int indexScene);

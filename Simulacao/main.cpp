@@ -1,22 +1,20 @@
 #include <stdio.h>
 #include "Simulation.h"
-#include "UDPServerThread.h"
+//#include "UDPServerThread.h"
 
 int main(int argc, char **argv)
 {
 	printf("Modulo Simulacao");
 
-	Thread *udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
-	((UDPServerThread*)udpServerThread)->start();
+	Simulation::function(argc, argv);
 
-	if(((UDPServerThread*)udpServerThread)->getLastReceivedString().compare("1")==0)
-	{
-		Simulation::function(1,argv);//(argc, argv);//(0,NULL);//(argc, argv);
-	}
+	//Thread *udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
+	//((UDPServerThread*)udpServerThread)->start();
+
+	//Thread *simulationThread = new Simulation();
+	//((Simulation*)simulationThread)->start();
 	
 	//delete udpServerThread;
 	//delete sim;
-
-	getchar();
 	return 0;
 }
