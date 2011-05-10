@@ -37,6 +37,7 @@
  * for any damages suffered by the Licensee or any third party resulting
  * from use of the Software.
  */
+#pragma once
 
 namespace openutils {
 	class ThreadException;
