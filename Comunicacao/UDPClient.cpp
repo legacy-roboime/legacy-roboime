@@ -52,20 +52,31 @@ void UDPClient::func1()
     sock.sendTo(echoString, echoStringLen, servAddress, echoServPort);
   
     // Receive a response
-    //char echoBuffer[ECHOMAX + 1];       // Buffer for echoed string + \0
-    //int respStringLen;                  // Length of received response
-    //if ((respStringLen = sock.recv(echoBuffer, ECHOMAX)) != echoStringLen) {
-    //  cerr << "Unable to receive" << endl;
-    //  exit(1);
-    //}
+    respStringLen = sock.recv(echoBuffer, ECHOMAX); // Length of received response
+
+	echoBuffer[respStringLen] = '\0';             // Terminate the string!
+    cout << "Received: " << echoBuffer << endl;   // Print the echoed arg
   
-    //echoBuffer[respStringLen] = '\0';             // Terminate the string!
-    //cout << "Received: " << echoBuffer << endl;   // Print the echoed arg
+	if(respStringLen > 0)
+	{
+		response = echoBuffer;
+		parsing();
+		//string temp; 
+		//std::stringstream os(response);
+		//os >> temp;
+	}
 
     // Destructor closes the socket
+	sock.disconnect();
+	sock.cleanUp();
 
   } catch (SocketException &e) {
     cerr << e.what() << endl;
     exit(1);
   }
+}
+
+void UDPClient::parsing()
+{
+	printf("PARSING SUPER UDPClient");
 }

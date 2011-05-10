@@ -21,6 +21,9 @@ MyUserNotify Simulation::gUserNotify = MyUserNotify();
 Thread* Simulation::udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
 //PerfRenderer    gPerfRenderer = PerfRenderer();
 bool Simulation::keyDown[256];//={false};
+NxReal Simulation::lastWheelSpeeds[10][4] = {};
+NxReal Simulation::lastDesiredWheelSpeeds[10][4] = {};
+NxReal Simulation::lastWheelTorques[10][4] = {};
 
 /**
 * Método do PhysX
@@ -795,7 +798,7 @@ void Simulation::CSL_Scene()
 //==================================================================================
 void Simulation::RenderCallback()
 {
-	refreshDataFromServer();
+	//refreshDataFromServer();
 
 	//compute elapsed time
 	static unsigned int PreviousTime = 0;
@@ -813,11 +816,14 @@ void Simulation::RenderCallback()
 	
 	//goToThisPose( -130, 10, 3* NxPi / 2., 1, 0);
 	//goToThisPose( -50, -50, 3* NxPi / 2., 1, 0);
-	goToThisPose( -200/*110*/, 0, 3 * NxPi / 2., 4, 0);
+	goToThisPose( +2000/*110*/, 0, NxPi / 2., 4, 0);
 
 	//NxActor* actorDribbler = getActorDribbler(0, 1);
 	//actorDribbler->addLocalTorque(NxVec3(-0.1,0,0));
 	//actorDribbler->setAngularVelocity(NxVec3(-NxPi/2.,0,0));
+
+	//calcWheelSpeedFromRobotSpeed
+	//controlRobot
 
 	simulate();
 
@@ -908,6 +914,8 @@ void Simulation::simulate()
 			gScenes[i]->fetchResults(NX_RIGID_BODY_FINISHED, true);
 		}
 	}
+
+
 }
 
 void Simulation::simulate(int indexScene)
@@ -928,12 +936,19 @@ void Simulation::simulate(int indexScene)
 	}
 }
 
-void Simulation::controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX, NxReal speedY, NxReal dribblerSpeed, int indexScene )
+void Simulation::controlRobot( NxReal* wheelsSpeeds, NxReal dribblerSpeed, int indexScene, NxI32 indexRobot )
 {
-	NxReal* speeds = calcWheelSpeedFromRobotSpeed( speedAng, speedX, speedY, indexRobot, indexScene );
-	setAngVelocityDribbler( dribblerSpeed );
 	NxAllVehicles::setActiveVehicle( indexRobot - 1 );
-	NxAllVehicles::getActiveVehicle()->control( speeds[0], speeds[1], speeds[2], speeds[3] );
+	NxReal* torqueWheels = new NxReal[4];
+	for(int indexWheel=0; indexWheel<4; indexWheel++)
+	{
+		NxReal currentWheelSpeed = ((NxWheel2*) NxAllVehicles::getActiveVehicle()->getWheel(indexWheel))->getAxleSpeed();
+		torqueWheels[indexWheel] = calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed, indexScene, indexRobot, indexWheel);
+	}
+
+	setAngVelocityDribbler( dribblerSpeed );
+	
+	NxAllVehicles::getActiveVehicle()->control( torqueWheels[0], torqueWheels[1], torqueWheels[2], torqueWheels[3] );
 }
 
 void Simulation::setAngVelocityDribbler(NxReal velocityX)
@@ -1085,6 +1100,47 @@ NxActor* Simulation::getActorKicker(int indexScene, int indexRobot)
 		}
 	}
 	return actor;
+}
+
+NxVec3 Simulation::getFieldExtents(int indexScene)
+{
+	NxActor* actor = NULL;
+	const char* actorName = NULL;
+	if( gScenes != NULL )
+	{
+		if(gScenes[indexScene]!=NULL)
+		{
+			for(unsigned int j=0;j<gScenes[indexScene]->getNbActors();j++)
+			{
+				actor = gScenes[indexScene]->getActors()[j];
+				if(actor != NULL)
+				{
+					actorName = actor->getName();
+					if(actorName != NULL)
+					{
+						string label;
+						string plabel = "Campo";
+						label.append(plabel);
+						char* arrayLabel = new char[label.size()+1];
+						arrayLabel[label.size()]=0;
+						memcpy(arrayLabel, label.c_str(), label.size());
+
+						if(strcmp(actorName,arrayLabel)==0) break;
+						else actor = NULL;
+					}
+				}
+				else continue;
+			}
+		}
+	}
+	if (actor == NULL)
+		return NULL;
+	else
+	{
+		NxShape*const* shapes = actor->getShapes();
+		NxBox* box = ((NxBox*) shapes[0]);
+		return box->GetExtents();
+	}
 }
 
 NxJoint* Simulation::getJoint(int indexScene, int indexJoint, int indexRobot)
@@ -1282,42 +1338,42 @@ void Simulation::infinitePath(int indexRobot)
 	goToThisPose( pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, 3* NxPi / 2., indexRobot, 0);
 }
 
-void Simulation::refreshDataFromServer()
-{
-	Simulation::parserDataFromServer();
-
-	////Bola
-	//NxActor* actorBall = getActorBall(0);
-	//if(actorBall != NULL) 
-	//{
-	//	actorBall->setGlobalPosition(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballY, UDPServer::ballRadius/*actorBall->getGlobalPosition().z*/));
-	//	actorBall->setLinearVelocity(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedY, 0));
-	//}
-
-	////Robos
-	//for(int i=1; i<=UDPServer::numRobots ;i++)
-	//{
-	//	NxActor* actorRobot = getActorRobot(0, i);
-	//	if(actorRobot != NULL) 
-	//	{
-	//		NxMat34 pose = actorRobot->getGlobalPose();
-	//		pose.M.rotZ(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][3]);
-	//		pose.t = NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][1], UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][2], 0/*actorRobot->getGlobalPosition().z*/);
-	//		actorRobot->setGlobalPose(pose);
-	//	}
-	//}
-}
-
-void Simulation::parserDataFromServer()
-{
-	string temp; 
-	std::stringstream os(((UDPServerThread*)Simulation::udpServerThread)->udpserver.getLastReceivedString());
-	os >> temp;
-	if(temp.compare("1") == 0)//pacote 1
-	{
-		
-	}
-}
+//void Simulation::refreshDataFromServer()
+//{
+//	Simulation::parserDataFromServer();
+//
+//	////Bola
+//	//NxActor* actorBall = getActorBall(0);
+//	//if(actorBall != NULL) 
+//	//{
+//	//	actorBall->setGlobalPosition(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballY, UDPServer::ballRadius/*actorBall->getGlobalPosition().z*/));
+//	//	actorBall->setLinearVelocity(NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedX, UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].ballSpeedY, 0));
+//	//}
+//
+//	////Robos
+//	//for(int i=1; i<=UDPServer::numRobots ;i++)
+//	//{
+//	//	NxActor* actorRobot = getActorRobot(0, i);
+//	//	if(actorRobot != NULL) 
+//	//	{
+//	//		NxMat34 pose = actorRobot->getGlobalPose();
+//	//		pose.M.rotZ(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][3]);
+//	//		pose.t = NxVec3(UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][1], UDPServer::dataBaseVision[UDPServer::ptrDataBaseVision].robots[i-1][2], 0/*actorRobot->getGlobalPosition().z*/);
+//	//		actorRobot->setGlobalPose(pose);
+//	//	}
+//	//}
+//}
+//
+//void Simulation::parserDataFromServer()
+//{
+//	string temp; 
+//	std::stringstream os(((UDPServerThread*)Simulation::udpServerThread)->udpserver.getLastReceivedString());
+//	os >> temp;
+//	if(temp.compare("1") == 0)//pacote 1
+//	{
+//		
+//	}
+//}
 
 void Simulation::setBallGlobalPos(NxVec3 pos, int indexScene)
 {
@@ -1350,11 +1406,11 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 {
 	//Controle proporcional
 	//Velocidades Maximas
-	NxReal maxSpeedAng = 1;
+	NxReal maxSpeedAng = 4;
 	NxReal maxLinearSpeed = 20;
 
 	//Controle de angulo
-	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene );
+	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene ); //TODO: remover redundância de getAngle2DFromRobot tanto em goToThisPose quanto em calcWheelSpeedFromRobotSpeed
 	NxReal speedAng;
 	if(NxMath::abs(distanceAngle) > NxPi / 36.) speedAng = distanceAngle / NxPi * maxSpeedAng;
 	else speedAng = 0;
@@ -1385,7 +1441,8 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 		speedY = 0;
 	}
 
-	controlRobot( indexRobot, speedAng, speedX, speedY, 100, indexScene ); //metros
+	NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY, indexRobot, indexScene);
+	controlRobot( wheelsSpeeds, 100, indexScene, indexRobot); //metros
 }
 
 NxF32 Simulation::calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 )
@@ -1413,7 +1470,7 @@ NxMat33 Simulation::getRobotGlobalOrientation( int indexRobot, int indexScene )
 }
 
 /**
-* Retorna o angulo em radianos no plano x-y de um determinado robo. Anti-horario positivo. Zero no eixo x. Angulo entre 0 e 2*PI.
+* Retorna o angulo em radianos no plano x-y de um determinado robo. Anti-horario positivo. Zero no eixo x+. Angulo entre 0 e 2*PI.
 */
 NxReal Simulation::getAngle2DFromRobot( int indexRobot, int indexScene )
 {
@@ -1444,7 +1501,7 @@ NxReal Simulation::getAngle2DFromRobot( int indexRobot, int indexScene )
 }
 
 /**
-* Calcula a velocidade das 4 rodas de um determinado robo tendo como entrada as velocidades angular e linear do robo.
+* Calcula a velocidade das 4 rodas de um determinado robo tendo como entrada as velocidades angular e linear desejadas para o robo.
 */
 NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene )
 {
@@ -1491,7 +1548,7 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	NxReal biggestValue = getBiggestAbsoluteValue(speeds, 4);
 	if(biggestValue > 0.001)
 	{
-		NxReal maxSpeed = 5;
+		NxReal maxSpeed = 30;
 		for( int i = 0; i < 4; i++ )
 		{
 				speeds[i] = speeds[i] / biggestValue * maxSpeed;
@@ -1499,6 +1556,24 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	}
 
 	return speeds;
+}
+
+/*
+* Calcula o torque que deve ser empregado em uma determinada roda para que ela alcance um determinado valor de velocidade.
+*/
+NxReal Simulation::calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed, int indexScene, int indexRobot, int indexWheel)
+{
+	//0.0000221
+	NxReal currentWheelTorque;
+	NxReal inertiaMoment = 12.57673;
+	currentWheelTorque = Simulation::lastWheelTorques[indexRobot][indexWheel] + inertiaMoment * 20. * (currentDesiredWheelSpeed - currentWheelSpeed) - inertiaMoment * 19.35 * (Simulation::lastDesiredWheelSpeeds[indexRobot][indexWheel] - Simulation::lastWheelSpeeds[indexRobot][indexWheel]);
+	
+	//Avançando iteração
+	Simulation::lastDesiredWheelSpeeds[indexRobot][indexWheel] = currentDesiredWheelSpeed;
+	Simulation::lastWheelTorques[indexRobot][indexWheel] = currentWheelTorque;
+	Simulation::lastWheelSpeeds[indexRobot][indexWheel] = currentWheelSpeed;
+	
+	return currentWheelTorque;
 }
 
 NxReal Simulation::getBiggestAbsoluteValue(NxReal* values, int size)

@@ -701,7 +701,7 @@ NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc, int indexWheel) : actor(a
 
 	wheelShapeDesc.radius = wheelDesc->wheelRadius;
 	wheelShapeDesc.suspensionTravel = wheelDesc->wheelSuspension; 
-	wheelShapeDesc.inverseWheelMass = 0.1f;	//not given!? TODO
+	wheelShapeDesc.inverseWheelMass = wheelDesc->inverseWheelMass;;	//not given!? TODO
 
 		//wheelShapeDesc.skinWidth = 0.0001;
 		//Nx
@@ -713,27 +713,38 @@ NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc, int indexWheel) : actor(a
 	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));
 }
 
+NxReal NxWheel2::getMotorTorque()
+{
+	return wheelShape->getMotorTorque();
+}
+
+NxReal NxWheel2::getAxleSpeed()
+{
+	return wheelShape->getAxleSpeed();
+}
+
 NxWheel2::~NxWheel2()
 {
 }
 
-void NxWheel2::tick(bool handBrake, NxReal axleSpeed, NxReal brakeTorque, NxReal dt)
+void NxWheel2::tick(bool handBrake, NxReal axleTorque, NxReal brakeTorque, NxReal dt)
 {
-	wheelShape->setWheelFlags(NX_WF_AXLE_SPEED_OVERRIDE);
+	//wheelShape->setWheelFlags(NX_WF_AXLE_SPEED_OVERRIDE);
+	wheelShape->setWheelFlags(NX_WF_ACCELERATED);
 
 
 	//motorTorque *= 0.1f;
-	brakeTorque *= 500.0f;
-	if(handBrake && getWheelFlag(NX_WF_AFFECTED_BY_HANDBRAKE))
-		brakeTorque = 1000.0f;
+	//brakeTorque *= 500.0f;
+	//if(handBrake && getWheelFlag(NX_WF_AFFECTED_BY_HANDBRAKE))
+	//	brakeTorque = 1000.0f;
 
 	//if(getWheelFlag(NX_WF_ACCELERATED)) 
 	//{
-		wheelShape->setAxleSpeed(axleSpeed);
-		//wheelShape->setMotorTorque(700);
+		//wheelShape->setAxleSpeed(axleSpeed);
+		wheelShape->setMotorTorque(axleTorque);
 	//}
 
-	wheelShape->setBrakeTorque(brakeTorque);
+	//wheelShape->setBrakeTorque(brakeTorque);
 }
 
 NxActor* NxWheel2::getTouchedActor() const

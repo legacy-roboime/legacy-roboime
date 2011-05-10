@@ -35,12 +35,12 @@ void UDPServer::func1()
     UDPSocket sock(echoServPort);                
     for (;;) {  // Run forever
       // Block until receive message from a client
-      recvMsgSize = sock.recvFrom(echoBuffer, ECHOMAX, sourceAddress, 
-                                      sourcePort);
+      recvMsgSize = sock.recvFrom(echoBuffer, ECHOMAX, sourceAddress, sourcePort);
   
 	  if (recvMsgSize>0)
 	  {
-		  s = echoBuffer;
+		  receiveString = echoBuffer;
+		  parsing();
 		  //string temp; 
 		  //std::stringstream os(s);
 		  //os >> temp;
@@ -101,6 +101,10 @@ void UDPServer::func1()
 				dataBaseVision[ptrDataBaseVision].robots[i][3] = robots[i][3];
 			}
 		  }*/
+
+		  cout << "Received packet from " << sourceAddress << ":" << sourcePort << endl;
+		  this->sendString.copy(echoBuffer, sendString.length(), 0);
+		  sock.sendTo(echoBuffer, recvMsgSize, sourceAddress, sourcePort);
 	  }
     }
   } catch (SocketException &e) {
@@ -109,7 +113,13 @@ void UDPServer::func1()
   }
 }
 
+void UDPServer::parsing()
+{
+	printf("PARSING SUPER UDPServer");
+}
+
 string UDPServer::getLastReceivedString()
 {
-	return s;
+	return receiveString;
 }
+

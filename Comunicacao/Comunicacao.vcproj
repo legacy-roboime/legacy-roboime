@@ -197,6 +197,10 @@
 					RelativePath=".\UDPClient.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\UDPClientThread.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -229,6 +233,10 @@
 				>
 				<File
 					RelativePath=".\UDPClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPClientThread.h"
 					>
 				</File>
 			</Filter>

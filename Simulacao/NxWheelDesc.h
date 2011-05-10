@@ -38,6 +38,7 @@ public:
 	NxReal					maxBrakeForce;
 	NxReal					frictionToSide;
 	NxReal					frictionToFront;
+	NxReal					inverseWheelMass;
 
 	NxU32					wheelApproximation;
 
@@ -76,6 +77,7 @@ NX_INLINE void NxWheelDesc::setToDefault()
 	maxBrakeForce = 0.f;
 	frictionToSide = 1.0f;
 	frictionToFront = 1.0f;
+	inverseWheelMass = 0.1f;
 }
 
 NX_INLINE bool NxWheelDesc::isValid() const

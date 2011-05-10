@@ -103,7 +103,11 @@ class NxWheel2 : public NxWheel
 	{
 	public:
 	NxWheel2(NxActor* actor, NxWheelDesc* wheelDesc);
-	NxWheel2(NxActor* actor, NxWheelDesc* wheelDesc, int i); //Felix Insert
+
+	NxWheel2(NxActor* actor, NxWheelDesc* wheelDesc, int i);
+	NxReal					getMotorTorque();
+	NxReal					getAxleSpeed(); 
+
 	virtual					~NxWheel2();
 
 	virtual void			tick(bool handbrake, NxReal axleSpeed, NxReal brakeTorque, NxReal dt);
@@ -113,7 +117,7 @@ class NxWheel2 : public NxWheel
 	virtual void			drawWheel(NxReal approx, bool debug = false) const;
 	virtual NxReal			getRpm() const;
 	virtual NxVec3			getGroundContactPos() const { return getWheelPos()+NxVec3(0, -wheelShape->getRadius(), 0); }
-	virtual float			getRadius() const { return wheelShape->getRadius(); }
+	virtual float			getRadius() const { return wheelShape->getRadius(); } 
 
 	private:
 	NxActor* actor;

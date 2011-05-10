@@ -67,14 +67,14 @@ private:
 public:
 	void*					userData;
 
-	NxReal					_speedAxleWheelControl[4];
+	NxReal					_torqueAxleWheelControl[4];
 
 	NxVehicle();
 	~NxVehicle();
 
 	void					handleContactPair(NxContactPair& pair, NxU32 carIndex);
 	void					updateVehicle(NxReal lastTimeStepSize);
-	void					control (NxReal speedAxleWheel1, NxReal speedAxleWheel2, NxReal speedAxleWheel3, NxReal speedAxleWheel4);
+	void					control (NxReal torqueAxleWheel1, NxReal torqueAxleWheel2, NxReal torqueAxleWheel3, NxReal torqueAxleWheel4);
 	void					control1 ();
 	//void					gearUp();
 	//void					gearDown();

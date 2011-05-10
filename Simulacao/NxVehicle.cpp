@@ -214,7 +214,7 @@ void NxVehicle::updateVehicle(NxReal lastTimeStepSize)
 	for(NxU32 i = 0; i < _wheels.size(); i++) 
 	{
 		NxWheel* wheel = _wheels[i];
-		wheel->tick(false, _speedAxleWheelControl[i], 0, lastTimeStepSize);
+		wheel->tick(false, _torqueAxleWheelControl[i], 0, lastTimeStepSize);
 	}
 
 	//printf("---\n");
@@ -266,14 +266,14 @@ void NxVehicle::_computeLocalVelocity()
 	//printf("Velocity: %2.3f %2.3f %2.3f\n", _localVelocity.x, _localVelocity.y, _localVelocity.z);
 }
 
-void NxVehicle::control(NxReal speedAxleWheel1, NxReal speedAxleWheel2, NxReal speedAxleWheel3, NxReal speedAxleWheel4)
+void NxVehicle::control(NxReal torqueAxleWheel1, NxReal torqueAxleWheel2, NxReal torqueAxleWheel3, NxReal torqueAxleWheel4)
 {
 	_bodyActor->wakeUp(0.05);
 
-	_speedAxleWheelControl[0] = speedAxleWheel1;
-	_speedAxleWheelControl[1] = speedAxleWheel2;
-	_speedAxleWheelControl[2] = speedAxleWheel3;
-	_speedAxleWheelControl[3] = speedAxleWheel4;
+	_torqueAxleWheelControl[0] = torqueAxleWheel1;
+	_torqueAxleWheelControl[1] = torqueAxleWheel2;
+	_torqueAxleWheelControl[2] = torqueAxleWheel3;
+	_torqueAxleWheelControl[3] = torqueAxleWheel4;
 }
 
 void NxVehicle::draw(bool debug) 

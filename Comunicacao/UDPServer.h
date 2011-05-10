@@ -20,14 +20,20 @@ VC++).
 
 class UDPServer
 {
-private:
+protected:
 	static const int ECHOMAX = 512;//255;   // Longest string to echo
-	unsigned short echoServPort;			// local port
-	char echoBuffer[ECHOMAX];				// Buffer for echo string
-    int recvMsgSize;						// Size of received message
-    string sourceAddress;					// Address of datagram source
-    unsigned short sourcePort;				// Port of datagram source
-	string s;								// last received string
+
+	unsigned short echoServPort;			// local port (received)
+	string receiveString;					// last received string (received)
+    int recvMsgSize;						// Size of received message (received)
+
+	string sourceAddress;					// Address of datagram source (send)
+	unsigned short sourcePort;				// Port of datagram source (send)
+	string sendString;						// String to send (send)
+private:
+	char echoBuffer[ECHOMAX];				// Buffer for echo string (received)
+
+	char sendBuffer[ECHOMAX];				// Buffer for send string (send)
 public:
 	//static const int numRobots = 10;
 	//static const int numInfo = 4;
@@ -41,4 +47,5 @@ public:
 	~UDPServer(void);
 	void func1();
 	string getLastReceivedString();
+	virtual void parsing();					//Parse the received string and define the string to send
 };

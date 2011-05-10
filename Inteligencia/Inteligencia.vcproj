@@ -189,6 +189,14 @@
 				RelativePath=".\main.cpp"
 				>
 			</File>
+			<Filter
+				Name="Interface"
+				>
+				<File
+					RelativePath=".\UDPClientIntSim.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -268,6 +276,14 @@
 				>
 				<File
 					RelativePath=".\Strategy.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Interface"
+				>
+				<File
+					RelativePath=".\UDPClientIntSim.h"
 					>
 				</File>
 			</Filter>

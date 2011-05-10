@@ -12,14 +12,18 @@ VC++).
 
 class UDPClient
 {
-private:
+protected:
 	static const int ECHOMAX = 512;//255;   // Longest string to echo
+
+	unsigned short echoServPort;			// Server port
 	string servAddress;						// server address
-	char* echoString;						// string to echo
+	char* echoString;						// string to echo (send)
 	int echoStringLen;						// Length of string to echo
-	unsigned short echoServPort;			// local port
-	//char echoBuffer[ECHOMAX];				// Buffer for echo string
-    //int recvMsgSize;						// Size of received message
+
+	char echoBuffer[ECHOMAX + 1];			// Buffer for echo string (received), Buffer for echoed string + \0
+	int respStringLen;						// Size of received message
+	string response;
+
     //string sourceAddress;					// Address of datagram source
     //unsigned short sourcePort;			// Port of datagram source
 public:
@@ -34,6 +38,5 @@ public:
 	~UDPClient(void);
 	UDPClient(string servAddress, char* echoString, unsigned short echoServPort);
 	void func1();
-public:
-
+	virtual void parsing();					//Parse the received string
 };

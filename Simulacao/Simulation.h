@@ -73,6 +73,11 @@ private:
 
 	static Thread* Simulation::udpServerThread;
 
+	//Velocidades para controle das rodas
+	static NxReal lastWheelSpeeds[10][4];
+	static NxReal lastDesiredWheelSpeeds[10][4];
+	static NxReal lastWheelTorques[10][4];
+
 	//Robot
 	//extern NxUserContactReport * robotContactReport;
 	static bool keyDown[256];
@@ -100,20 +105,23 @@ private:
 	static void IdleCallback();
 	static void CSL_Scene();
 
-	static void refreshDataFromServer();
-	static void parserDataFromServer();
+	//static void refreshDataFromServer();
+	//static void parserDataFromServer();
+
 	//Robot
 	static void createRobotWithDesc(int indexRobot);
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
+
+public:
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
 	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
 	static NxActor* getActorDribbler(int indexScene, int indexRobot);
 	static NxActor* getActorKicker(int indexScene, int indexRobot);
+	static NxVec3 getFieldExtents(int indexScene);
 
-public:
 	Simulation(void);
 	~Simulation(void);
 	static void function(int argc, char **argv);
@@ -129,16 +137,18 @@ public:
 	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
 	static void setAngVelocityDribbler(NxReal velocityX);
 
-	static void addLocalTorqueDribbler(NxReal torqueX);
-
 	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
 	static NxVec3 getBallGlobalPos( int indexScene );
 	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
 	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
 
+	static void controlRobot( NxReal* wheelsSpeeds, NxReal dribblerSpeed, int indexScene, NxI32 indexRobot );
+
+	static void addLocalTorqueDribbler(NxReal torqueX);
+
 	//Metodos que devem estar no modulo inteligencia
+	static NxReal calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed, int indexScene, int indexRobot, int indexWheel);
 	static NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene );
-	static void controlRobot( NxI32 indexRobot, NxReal speedAng, NxReal speedX, NxReal speedY, NxReal dribblerSpeed, int indexScene );
 	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
 	static void infinitePath( int indexRobot );
 };
