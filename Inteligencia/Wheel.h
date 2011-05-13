@@ -1,9 +1,15 @@
-#include "Kicker.h"
+#include "Component.h"
 
-public class Wheel : Component{
+class Wheel : Component {
+	friend class Robot;
+
+private:
+	//fields:
+	double _angular_speed, _radius;
 
 public:
-	//fields:
-	double angular_speed, radius;
+	Wheel(void);
+	Wheel(double radius);//Constructor
+	~Wheel(void);//Destructor
 
 };

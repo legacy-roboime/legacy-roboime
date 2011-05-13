@@ -1,8 +1,16 @@
+#pragma once
 #include "Component.h"
 
-public class Motor : Component {
+class Motor : Component {
+	friend class Robot;
 
+private:
 	//fields:
-	double torque;
+	double _torque;
+
+public:
+	Motor(void);
+	Motor(double torque);
+	~Motor(void);
 
 };

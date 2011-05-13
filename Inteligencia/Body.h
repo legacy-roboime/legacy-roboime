@@ -1,7 +1,16 @@
-public class Body {
+#pragma once
+#include "Component.h"
+
+class Body : Component {
+	friend class Robot;
+
+private:
+	//fields:
+	double _height, _radius;
 
 public:
-	//fields:
-	double height, radius;
+	Body(void);
+	Body(double height, double radius);
+	~Body(void);
 
-}
+};

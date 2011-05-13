@@ -44,15 +44,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zi"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\Comunicacao&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;"
+				AdditionalIncludeDirectories="&quot;..\Comunicacao&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -65,9 +66,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="PhysXLoader.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -170,14 +170,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}"
-			RelativePathToProject=".\Simulacao\Simulacao.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}"
-			RelativePathToProject=".\Comunicacao\Comunicacao.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter
@@ -197,6 +189,90 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Control"
+				>
+			</Filter>
+			<Filter
+				Name="Base"
+				>
+				<Filter
+					Name="Robot"
+					>
+					<File
+						RelativePath=".\Body.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Command.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Component.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Dribbler.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Kicker.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Motor.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Pose.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Robot.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Wheel.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Stage"
+					>
+					<File
+						RelativePath=".\Ball.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Goal.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Stage.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Team.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\TeamCommand.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="Core"
+				>
+				<File
+					RelativePath=".\Strategy.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\StrategyX.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -207,10 +283,38 @@
 				Name="Base"
 				>
 				<Filter
+					Name="Stage"
+					>
+					<File
+						RelativePath=".\Ball.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Goal.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Stage.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Team.h"
+						>
+					</File>
+					<File
+						RelativePath=".\TeamCommand.h"
+						>
+					</File>
+				</Filter>
+				<Filter
 					Name="Robot"
 					>
 					<File
 						RelativePath=".\Body.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Command.h"
 						>
 					</File>
 					<File
@@ -242,30 +346,6 @@
 						>
 					</File>
 				</Filter>
-				<Filter
-					Name="Stage"
-					>
-					<File
-						RelativePath=".\Ball.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Goal.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Stage.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Team.h"
-						>
-					</File>
-					<File
-						RelativePath=".\TeamPose.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="Control"
@@ -276,6 +356,10 @@
 				>
 				<File
 					RelativePath=".\Strategy.h"
+					>
+				</File>
+				<File
+					RelativePath=".\StrategyX.h"
 					>
 				</File>
 			</Filter>

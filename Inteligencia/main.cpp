@@ -1,11 +1,13 @@
+#pragma once
 #include "stdio.h"
 #include "stdlib.h"
 #include <iostream>
 
-#include "UDPServerThread.h"
+/*#include "UDPServerThread.h"
 #include "UDPClient.h"
-#include "NxMat33.h"
-
+#include "NxMat33.h"*/
+#include "StrategyX.h"
+/*
 void refreshDataFromSimulation()
 {
 	
@@ -44,7 +46,7 @@ NxReal getAngle2DFromRobot(int indexRobot, int indexScene )
 /**
 * Calcula a velocidade das 4 rodas de um determinado robo tendo como entrada as velocidades angular e linear do robo.
 */
-NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene )
+/*NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene )
 {
 	NxReal* speeds;
 
@@ -198,11 +200,18 @@ void infinitePath(int indexRobot, int indexScene)
 	}
 
 	goToThisPose( pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, 3* NxPi / 2., indexRobot, 0);
-}
+}*/
 
 int main(int argc, char **argv)
 {
-	printf("Modulo Inteligencia");
+	puts("Modulo Inteligencia");
+
+	{
+		Robot myteam[5];
+		StrategyX my_strategy;
+	}
+
+	system("pause");
 
 	//Simulation::function(1,argv);
 

@@ -1,6 +1,15 @@
+#pragma once
 #include "Robot.h"
 
-public class Team {
+class Team {
+
+private:
+	//fields:
+	Robot _robot[5];
+
 public:
-	Robot robot[5];
+	Team(void);
+	Team(Robot robot[5]);
+	~Team(void);
+	
 };

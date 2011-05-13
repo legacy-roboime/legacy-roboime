@@ -1,9 +1,16 @@
+#pragma once
 #include "Component.h"
 
-public class Kicker : Component {
+class Kicker : Component {
+	friend class Robot;
+
+private:
+	//fields:
+	double _force;
 
 public:
-	//fields:
-	double kick_force;
+	Kicker(void);
+	Kicker(double force);
+	~Kicker(void);
 
 };

@@ -1,9 +1,16 @@
+#pragma once
 #include "Component.h"
 
-public class Dribbler : Component {
+class Dribbler : Component {
+	friend class Robot;
+
+private:
+	//fields:
+	double _force;
 
 public:
-	//fields:
-	bool working, active;
+	Dribbler(void);
+	Dribbler(double force);
+	~Dribbler(void);
 
 };
