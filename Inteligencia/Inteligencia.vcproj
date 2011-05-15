@@ -44,7 +44,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/Zi"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;..\Comunicacao&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
@@ -170,6 +169,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}"
+			RelativePathToProject=".\Comunicacao\Comunicacao.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter

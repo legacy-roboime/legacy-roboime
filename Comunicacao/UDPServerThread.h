@@ -15,11 +15,12 @@ class UDPServerThread : public Thread
 {
 private:
 public:
-	UDPServer udpserver;
+	UDPServer* udpServer;
 	int port;
 	string address;
 
 	UDPServerThread(void);
+	UDPServerThread(UDPServer* udpServer);
 	~UDPServerThread(void);
 	UDPServerThread(const char* nm);
 	UDPServerThread(const char* nm, int port, string address);

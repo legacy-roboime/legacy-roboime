@@ -25,7 +25,7 @@ using namespace std;
 #include "DebugRenderer.h"
 #include "MediaPath.h"
 //#include "Utilities.h"
-#include "SamplesVRDSettings.h"
+//#include "SamplesVRDSettings.h"
 #include "cooking.h"
 #include "NXU_helper.h"  // NxuStream helper functions.
 
@@ -33,7 +33,8 @@ using namespace std;
 #include "NxAllVehicles.h"
 
 #include "NxScene1.h"
-#include "UDPServerThread.h";
+//#include "UDPServerThread.h";
+#include "UDPServerSimInt.h"
 //#include "MyUserNotify.h"
 
 #ifdef __PPCGEKKO__
@@ -71,7 +72,7 @@ private:
 	static int	gLoad;
 	static bool gClear;
 
-	static Thread* Simulation::udpServerThread;
+	//static Thread* Simulation::udpServerThread;
 
 	//Velocidades para controle das rodas
 	static NxReal lastWheelSpeeds[10][4];
@@ -82,7 +83,10 @@ private:
 	//extern NxUserContactReport * robotContactReport;
 	static bool keyDown[256];
 
+	static float timeStep;
+
 	friend class MyUserNotify;
+	friend class UDPServerSimInt;
 private:
 	static void releaseScene(NxScene &scene);
 	static NX_BOOL LoadScene(const char *pFilename,NXU::NXU_FileType type);
@@ -101,6 +105,7 @@ private:
 	static void MotionCallback(int x, int y);
 	static bool FileExistTestSimple(const char *fname);
 	static void RenderCallback();
+	static void setupCamera();
 	static void ReshapeCallback(int width, int height);
 	static void IdleCallback();
 	static void CSL_Scene();
@@ -115,6 +120,8 @@ private:
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
 
 public:
+	static bool flagRender;
+
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
 	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);

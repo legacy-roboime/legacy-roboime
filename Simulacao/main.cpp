@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include "Simulation.h"
-//#include "UDPServerThread.h"
+#include "UDPServerThread.h"
 
 int main(int argc, char **argv)
 {
 	printf("Modulo Simulacao");
 
-	Simulation::function(argc, argv);
+	UDPServerSimInt* udpServerSimInt = new UDPServerSimInt(); 
 
-	//Thread *udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
-	//((UDPServerThread*)udpServerThread)->start();
+	Thread *udpServerThread = new UDPServerThread((UDPServer*)udpServerSimInt);
+	((UDPServerThread*)udpServerThread)->start();
+
+	Simulation::function(argc, argv);
 
 	//Thread *simulationThread = new Simulation();
 	//((Simulation*)simulationThread)->start();

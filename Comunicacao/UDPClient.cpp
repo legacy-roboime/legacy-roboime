@@ -3,9 +3,10 @@
 
 UDPClient::UDPClient(void)
 {
-	echoString = "";
+	//echoString = "";
 	servAddress = "127.0.0.1";
 	echoServPort = 9876;
+	sendString = "";
 	//echoServPort = 9876;
 	//sourcePort = 0;
 	//sourceAddress = "127.0.0.1";
@@ -18,9 +19,10 @@ UDPClient::UDPClient(void)
 
 UDPClient::UDPClient(string servAddress, char* echoString, unsigned short echoServPort)
 {
-	this->echoString = echoString;
+	//this->echoString = echoString;
 	this->servAddress = servAddress;
 	this->echoServPort = echoServPort;
+	sendString = "";
 	//for (int i=0; i<ECHOMAX; i++)  echoBuffer[i] = 0;
 	//recvMsgSize = 0;
 	//ballRadius = 21.5;
@@ -37,7 +39,7 @@ UDPClient::~UDPClient(void)
 
 void UDPClient::func1()
 {
-  echoStringLen = strlen(echoString);
+  echoStringLen = strlen(sendBuffer);
 
   if (echoStringLen > ECHOMAX) {    // Check input length
     cerr << "Echo string too long" << endl;
@@ -48,14 +50,15 @@ void UDPClient::func1()
   try {
     UDPSocket sock;
   
+	this->sendString.copy(sendBuffer, sendString.length(), 0);
     // Send the string to the server
-    sock.sendTo(echoString, echoStringLen, servAddress, echoServPort);
+    sock.sendTo(sendBuffer, echoStringLen, servAddress, echoServPort);
   
     // Receive a response
     respStringLen = sock.recv(echoBuffer, ECHOMAX); // Length of received response
 
 	echoBuffer[respStringLen] = '\0';             // Terminate the string!
-    cout << "Received: " << echoBuffer << endl;   // Print the echoed arg
+    //cout << "Received: " << echoBuffer << endl;   // Print the echoed arg
   
 	if(respStringLen > 0)
 	{
@@ -67,8 +70,8 @@ void UDPClient::func1()
 	}
 
     // Destructor closes the socket
-	sock.disconnect();
-	sock.cleanUp();
+	//sock.disconnect();
+	//sock.cleanUp();
 
   } catch (SocketException &e) {
     cerr << e.what() << endl;
@@ -78,5 +81,15 @@ void UDPClient::func1()
 
 void UDPClient::parsing()
 {
-	printf("PARSING SUPER UDPClient");
+	//printf("PARSING SUPER UDPClient");
+}
+
+string UDPClient::getLastReceivedString()
+{
+	return response;
+}
+
+void UDPClient::setSendString(string sendString)
+{
+	this->sendString = sendString;
 }

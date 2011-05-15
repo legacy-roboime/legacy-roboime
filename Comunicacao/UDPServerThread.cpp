@@ -6,8 +6,15 @@ UDPServerThread::UDPServerThread(void):Thread()
 	Thread::setName("UDPServerThread");
 }
 
+UDPServerThread::UDPServerThread(UDPServer* udpServer):Thread()
+{
+	Thread::setName("UDPServerThread");
+	this->udpServer = udpServer;
+}
+
 UDPServerThread::~UDPServerThread(void)
 {
+	delete udpServer;
 }
 
 UDPServerThread::UDPServerThread(const char* nm)
@@ -25,17 +32,17 @@ UDPServerThread::UDPServerThread(const char* nm, int _port, string _address)
 }
 void UDPServerThread::run() {
 	try {
-		udpserver = UDPServer(port, address);
+		//udpServer = new UDPServer(port, address);
 		//wait("UDPServerMutex");
-		udpserver.func1();
+		udpServer->func1();
 		//release("UDPServerMutex");
 	}catch(ThreadException ex) {
 		cout << ex.getMessage().c_str() << endl;
-	}		
+	}
 }
 	
 
 string UDPServerThread::getLastReceivedString()
 {
-	return this->udpserver.getLastReceivedString();
+	return this->udpServer->getLastReceivedString();
 }

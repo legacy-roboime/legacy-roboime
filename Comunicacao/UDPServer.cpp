@@ -8,6 +8,8 @@ UDPServer::UDPServer(void)
 	sourceAddress = "127.0.0.1";
 	for (int i=0; i<ECHOMAX; i++)  echoBuffer[i] = 0;
 	recvMsgSize = 0;
+	this->receiveString = "";
+	this->sendString = "";
 	//ballRadius = 21.5;
 	//ptrDataBaseVision = -1;	
 	//for (int i=0; i<sizeDataBaseVision; i++) dataBaseVision[i] = DataBaseVision();
@@ -17,6 +19,8 @@ UDPServer::UDPServer(unsigned short port, string address)
 {
 	for (int i=0; i<ECHOMAX; i++)  echoBuffer[i] = 0;
 	recvMsgSize = 0;
+	this->receiveString = "";
+	this->sendString = "";
 	//ballRadius = 21.5;
 	//ptrDataBaseVision = -1;	
 	//for (int i=0; i<sizeDataBaseVision; i++) dataBaseVision[i] = DataBaseVision();
@@ -102,7 +106,7 @@ void UDPServer::func1()
 			}
 		  }*/
 
-		  cout << "Received packet from " << sourceAddress << ":" << sourcePort << endl;
+		  //cout << "Received packet from " << sourceAddress << ":" << sourcePort << endl;
 		  this->sendString.copy(echoBuffer, sendString.length(), 0);
 		  sock.sendTo(echoBuffer, recvMsgSize, sourceAddress, sourcePort);
 	  }

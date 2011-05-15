@@ -18,12 +18,14 @@ ErrorStream Simulation::gErrorStream = ErrorStream();
 DebugRenderer Simulation::gDebugRenderer = DebugRenderer();
 NxVec3 Simulation::gNormal = NxVec3();
 MyUserNotify Simulation::gUserNotify = MyUserNotify();
-Thread* Simulation::udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
+//Thread* Simulation::udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
 //PerfRenderer    gPerfRenderer = PerfRenderer();
 bool Simulation::keyDown[256];//={false};
 NxReal Simulation::lastWheelSpeeds[10][4] = {};
 NxReal Simulation::lastDesiredWheelSpeeds[10][4] = {};
 NxReal Simulation::lastWheelTorques[10][4] = {};
+float Simulation::timeStep = 1./60.;
+bool Simulation::flagRender = false;
 
 /**
 * Método do PhysX
@@ -589,13 +591,13 @@ void Simulation::appKey(unsigned char key, bool down)
 		case '0':
 			{
 				//gPerfRenderer.toggleEnable();
-				NxActor* actor = getActorRobot(0, 2);
+				/*NxActor* actor = getActorRobot(0, 2);
 				if(actor != NULL) 
 				{
 					NxMat33 orientation =  actor->getGlobalOrientation();
 					orientation.rotZ(-3.1416/4);
 					actor->setGlobalOrientation(orientation);
-				}
+				}*/
 			}
 			break;
 
@@ -723,6 +725,8 @@ void Simulation::MotionCallback(int x, int y)
 
 	gMouseX = x;
 	gMouseY = y;
+
+	//setupCamera();
 }
 
 //==================================================================================
@@ -798,51 +802,39 @@ void Simulation::CSL_Scene()
 //==================================================================================
 void Simulation::RenderCallback()
 {
-	//refreshDataFromServer();
+	if(gScenes == NULL) return;
+	if(gScenes[0] == NULL) return;
 
 	//compute elapsed time
-	static unsigned int PreviousTime = 0;
-	unsigned int CurrentTime = getTime();
-	unsigned int ElapsedTime = CurrentTime - PreviousTime;
-	if(ElapsedTime < 10.0f) return;
-	PreviousTime = CurrentTime;
-	
-	//for(int i=1; i<6; i++) infinitePath(i);
+	//static unsigned int PreviousTime = 0;
+	//unsigned int CurrentTime = getTime();
+	//unsigned int ElapsedTime = CurrentTime - PreviousTime;
+	//if(ElapsedTime < 10.0f) return;
+	//PreviousTime = CurrentTime;
 
+	//for(int i=1; i<6; i++) infinitePath(i);
 	//infinitePath(1);
 	//infinitePath(3);
-	//infinitePath(2);
 	//infinitePath(1);
-	
 	//goToThisPose( -130, 10, 3* NxPi / 2., 1, 0);
 	//goToThisPose( -50, -50, 3* NxPi / 2., 1, 0);
-	goToThisPose( +2000/*110*/, 0, NxPi / 2., 4, 0);
+	//goToThisPose( +2000/*110*/, 0, NxPi / 2., 4, 0);
 
-	//NxActor* actorDribbler = getActorDribbler(0, 1);
-	//actorDribbler->addLocalTorque(NxVec3(-0.1,0,0));
-	//actorDribbler->setAngularVelocity(NxVec3(-NxPi/2.,0,0));
-
-	//calcWheelSpeedFromRobotSpeed
-	//controlRobot
-
-	simulate();
-
-	//Simulation::CSL_Scene();
-
-	// ~Physics code
+	//simulate();
 
 	// Clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Setup camera
+	//Setup camera
+	//setupCamera();
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), 1.0f, 10000.0f);
-	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + gDir.x, gEye.y + gDir.y, gEye.z + gDir.z, 0.0f, 1.0f, 0.0f);
-
+	gluLookAt(0, 0, 4100.0f, 0, 0, 4100.0f - 0.7f, 0.0f, 1.0f, 0.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	//Draw
 	for (NxU32 i = 0; i < gMaxScenes; ++i)
 	{
 		if (gScenes[i])
@@ -857,26 +849,44 @@ void Simulation::RenderCallback()
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			for(unsigned int j=0;j<gScenes[i]->getNbActors();j++)
 			{
-				DrawActorIME(gScenes[i]->getActors()[j]);
+				//Render
+				//if(true)//flagRender)
+				//{
+					DrawActorIME(gScenes[i]->getActors()[j]);
+				//}
+				//flagRender = false;
 			}
 		}
 
+		//Show Render Performance
 		/*#ifdef __PPCGEKKO__	
-			char buf[256];
-			sprintf(buf,
-			"Use the arrow keys to move the camera.\n"
-			"Press the keys b, +, -, 1 and 2 to create various things.\n");
+		char buf[256];
+		sprintf(buf,
+		"Use the arrow keys to move the camera.\n"
+		"Press the keys b, +, -, 1 and 2 to create various things.\n");
 
-			GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-			GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
-			GLFontRenderer::print(0.01, 0.9, 0.036, buf, false, 11, true);   
-		#else*/
-		// Print profile results (if enabled)
-		//gPerfRenderer.render(gScenes[i]->readProfileData(true), glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-		//#endif
+		GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
+		GLFontRenderer::print(0.01, 0.9, 0.036, buf, false, 11, true);   
+		#else
+		//Print profile results (if enabled)
+		gPerfRenderer.render(gScenes[i]->readProfileData(true), glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		#endif*/
 	}
+
 	//glFlush();
 	glutSwapBuffers();
+}
+
+void Simulation::setupCamera()
+{
+	// Setup camera
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), 1.0f, 10000.0f);
+	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + gDir.x, gEye.y + gDir.y, gEye.z + gDir.z, 0.0f, 1.0f, 0.0f);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 //==================================================================================
@@ -894,15 +904,16 @@ void Simulation::IdleCallback()
 //==================================================================================
 void Simulation::simulate()
 {
-	NxAllVehicles::updateAllVehicles(1.0f/60.f);
+	NxAllVehicles::updateAllVehicles(timeStep);
 
+	// Start simulation (non blocking)
 	// Physics code
 	for (NxU32 i = 0; i < gMaxScenes; ++i)
 	{
 		if (gScenes[i] && !gPause)
 		{
-			gScenes[i]->setTiming(1.0f / 60.0f, 1, NX_TIMESTEP_FIXED);
-			gScenes[i]->simulate(1.0f / 60.0f);
+			gScenes[i]->setTiming(timeStep, 1, NX_TIMESTEP_FIXED);
+			gScenes[i]->simulate(timeStep);
 		}
 	}
 
@@ -914,19 +925,19 @@ void Simulation::simulate()
 			gScenes[i]->fetchResults(NX_RIGID_BODY_FINISHED, true);
 		}
 	}
-
-
+	// ~Physics code
 }
 
 void Simulation::simulate(int indexScene)
 {
-	NxAllVehicles::updateAllVehicles(1.0f/60.f);
+	NxAllVehicles::updateAllVehicles(timeStep);
 
+	// Start simulation (non blocking)
 	// Physics code
 	if (gScenes[indexScene] && !gPause)
 	{
-		gScenes[indexScene]->setTiming(1.0f / 60.0f, 1, NX_TIMESTEP_FIXED);
-		gScenes[indexScene]->simulate(1.0f / 60.0f);
+		gScenes[indexScene]->setTiming(timeStep, 1, NX_TIMESTEP_FIXED);
+		gScenes[indexScene]->simulate(timeStep);
 	}
 
 	if (gScenes[indexScene] && !gPause)
@@ -934,6 +945,7 @@ void Simulation::simulate(int indexScene)
 		gScenes[indexScene]->flushStream();
 		gScenes[indexScene]->fetchResults(NX_RIGID_BODY_FINISHED, true);
 	}
+	// ~Physics code
 }
 
 void Simulation::controlRobot( NxReal* wheelsSpeeds, NxReal dribblerSpeed, int indexScene, NxI32 indexRobot )
@@ -1188,14 +1200,14 @@ NxJoint* Simulation::getJoint(int indexScene, int indexJoint, int indexRobot)
 void Simulation::function(int argc, char **argv)
 {
 	printf("Pressione a teclas w, space, s, b, e t para criar varios objetos.\n");
-	printf("Pressione 1 para salvar a cena atual 3 para carregar do arquivo para a cena atual.\n");
-	printf("Pressione c para limpar a cena atual.\n");
-	printf("Pressione TAB para seleionar a proxima cena.\n");
-	printf("Use as teclas direcionais ou 2, 4, 6 e 8 ou d, f, e e g para se mover.\nUse o mouse para girar a camera.\n");
-	printf("Pressione p para pausar a simulacao.\n");
-	printf("Pressione X para carregar 'test.xml'\n");
-	printf("Pressione Y para carregar 'test.dae'\n");
-	printf("Pressione Z para carregar 'testbin.nxb'\n");
+	//printf("Pressione 1 para salvar a cena atual 3 para carregar do arquivo para a cena atual.\n");
+	//printf("Pressione c para limpar a cena atual.\n");
+	//printf("Pressione TAB para seleionar a proxima cena.\n");
+	//printf("Use as teclas direcionais ou 2, 4, 6 e 8 ou d, f, e e g para se mover.\nUse o mouse para girar a camera.\n");
+	//printf("Pressione p para pausar a simulacao.\n");
+	//printf("Pressione X para carregar 'test.xml'\n");
+	//printf("Pressione Y para carregar 'test.dae'\n");
+	//printf("Pressione Z para carregar 'testbin.nxb'\n");
 
 #if defined(_XBOX) || defined(__CELLOS_LV2__)
 	glutRemapButtonExt(8, '1', false); // Left shoulder to save
@@ -1204,7 +1216,7 @@ void Simulation::function(int argc, char **argv)
 #endif
 	// Initialize Glut
 	glutInit(&argc, argv);
-	glutInitWindowSize(512, 512);
+	//glutInitWindowSize(512, 512);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	gMainHandle = glutCreateWindow("Simulação - RobotIME");
 	glutSetWindow(gMainHandle);
@@ -1255,7 +1267,7 @@ void Simulation::function(int argc, char **argv)
 	bool init = InitNx();
 	Simulation::CSL_Scene();
 
-	((UDPServerThread*)udpServerThread)->start();
+	//((UDPServerThread*)udpServerThread)->start();
 
 	if(gScenes != NULL)
 	{
@@ -1276,7 +1288,7 @@ void Simulation::function(int argc, char **argv)
 	}
 
 	// Initialize physics scene and start the application main loop if scene was created
-	if (init) 
+	if (init)
 		glutMainLoop(); 
 }
 
