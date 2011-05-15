@@ -221,18 +221,5 @@ int main(int argc, char **argv)
 		//udpClientIntSim->func1();
 	}
 
-	//Thread *udpClientThread = new UDPClientThread((UDPClient*)udpClientIntSim);
-	//((UDPClientThread*)udpClientThread)->start();
-
-	//Simulation::function(1,argv);
-
-	//Thread* ut = new UDPServerThread("UDPServerThread-Inteligencia",9787, "127.0.0.1");		
-	//((UDPServerThread*)ut)->start();
-
-	//UDPClient* udpClient = new UDPClient("127.0.0.1", "1", 9786);
-	//udpClient->func1();
-
-	//infinitePath(1, 0);
-
 	return 0;
 }
