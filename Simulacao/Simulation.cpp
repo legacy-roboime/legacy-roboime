@@ -344,7 +344,7 @@ bool Simulation::InitNx()
 {
 	if (!gMyAllocator)
 	{
-		gMyAllocator = new UserAllocator;
+		gMyAllocator = new UserAllocator();
 	}
 
 	NXU::setErrorReport(&gUserNotify);
@@ -449,6 +449,7 @@ bool Simulation::InitBlankScene()
 //==================================================================================
 void Simulation::ReleaseNx()
 {
+	CloseCooking();
 	NXU::releasePersistentMemory();
 	if (gPhysicsSDK)
 	{
@@ -469,8 +470,6 @@ void Simulation::ReleaseNx()
 		delete gMyAllocator;
 		gMyAllocator = NULL;
 	}
-
-	//((UDPServerThread*)udpServerThread)->stop();
 }
 //==================================================================================
 void Simulation::callback_key(unsigned char c, int x, int y)
@@ -725,8 +724,6 @@ void Simulation::MotionCallback(int x, int y)
 
 	gMouseX = x;
 	gMouseY = y;
-
-	//setupCamera();
 }
 
 //==================================================================================
@@ -849,12 +846,7 @@ void Simulation::RenderCallback()
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			for(unsigned int j=0;j<gScenes[i]->getNbActors();j++)
 			{
-				//Render
-				//if(true)//flagRender)
-				//{
-					DrawActorIME(gScenes[i]->getActors()[j]);
-				//}
-				//flagRender = false;
+				DrawActorIME(gScenes[i]->getActors()[j]);
 			}
 		}
 
@@ -898,6 +890,8 @@ void Simulation::ReshapeCallback(int width, int height)
 //==================================================================================
 void Simulation::IdleCallback()
 {
+	while(!flagRender){};
+	flagRender = false;
 	glutPostRedisplay();
 }
 
@@ -1266,8 +1260,6 @@ void Simulation::function(int argc, char **argv)
 
 	bool init = InitNx();
 	Simulation::CSL_Scene();
-
-	//((UDPServerThread*)udpServerThread)->start();
 
 	if(gScenes != NULL)
 	{

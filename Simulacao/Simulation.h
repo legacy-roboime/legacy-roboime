@@ -34,7 +34,7 @@ using namespace std;
 
 #include "NxScene1.h"
 //#include "UDPServerThread.h";
-#include "UDPServerSimInt.h"
+//#include "UDPServerSimInt.h"
 //#include "MyUserNotify.h"
 
 #ifdef __PPCGEKKO__

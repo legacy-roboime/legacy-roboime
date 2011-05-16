@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include "Simulation.h"
 #include "UDPServerThread.h"
+#include "UDPServerSimInt.h"
 
 int main(int argc, char **argv)
 {
-	printf("Modulo Simulacao");
+	printf("Modulo Simulacao\n");
 
 	UDPServerSimInt* udpServerSimInt = new UDPServerSimInt(); 
 
@@ -13,10 +14,9 @@ int main(int argc, char **argv)
 
 	Simulation::function(argc, argv);
 
-	//Thread *simulationThread = new Simulation();
-	//((Simulation*)simulationThread)->start();
+	((UDPServerThread*)udpServerThread)->stop();
 	
-	//delete udpServerThread;
-	//delete sim;
+	delete udpServerThread;
+	delete udpServerSimInt;
 	return 0;
 }

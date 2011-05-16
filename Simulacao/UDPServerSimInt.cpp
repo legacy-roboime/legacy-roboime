@@ -134,8 +134,8 @@ void UDPServerSimInt::parsing()
 
 		Simulation::simulate(indexScene);
 		//Simulation::RenderCallback();
-		//Simulation::flagRender = true;
-		//while(Simulation::flagRender){};
+		Simulation::flagRender = true;
+		while(Simulation::flagRender){};
 		//Simulation::IdleCallback();
 
 		out << "ACK 5\n"; // confirmando pacote 5
