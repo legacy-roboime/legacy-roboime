@@ -61,7 +61,7 @@ private:
 
 	static int gMainHandle;
 	static NxVec3 gEye;
-	static NxVec3 gDir;
+	static NxVec3 gDirection;
 	static NxVec3 gNormal;
 	static int gMouseX;
 	static int gMouseY;

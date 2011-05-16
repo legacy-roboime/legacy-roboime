@@ -133,10 +133,10 @@ void UDPServerSimInt::parsing()
 		out << "5 "; //identificador de resposta do pacote 5
 
 		Simulation::simulate(indexScene);
-		//Simulation::RenderCallback();
-		Simulation::flagRender = true;
-		while(Simulation::flagRender){};
-		//Simulation::IdleCallback();
+
+		//Mutex
+		//Simulation::flagRender = true;
+		//while(Simulation::flagRender){};
 
 		out << "ACK 5\n"; // confirmando pacote 5
 

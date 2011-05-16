@@ -7,7 +7,7 @@ NxU32 Simulation::gCurrentScene = 0;
 NxVec3 Simulation::gDefaultGravity = NxVec3(0.0f, - 9.81f, 0.0f);
 UserAllocator *Simulation::gMyAllocator = NULL;
 NxVec3 Simulation::gEye = NxVec3(0, 0, 4100.0f);
-NxVec3 Simulation::gDir = NxVec3( 0,  0,  - 0.7);
+NxVec3 Simulation::gDirection = NxVec3(0, 0, -1); 
 int Simulation::gMouseX = 0;
 int Simulation::gMouseY = 0;
 bool Simulation::gSave = false;
@@ -542,11 +542,11 @@ void Simulation::appKey(unsigned char key, bool down)
 				//gClear = true;
 				//break;
 
-				NxVec3 t = gEye;
-				NxVec3 Vel = gDir;
-				Vel.normalize();
-				Vel *= 200.0f;
-				CreateCube(t, 20, &Vel);
+				//NxVec3 t = gEye;
+				//NxVec3 Vel = gDir;
+				//Vel.normalize();
+				//Vel *= 200.0f;
+				//CreateCube(t, 20, &Vel);
 			}
 			break;
 
@@ -629,13 +629,13 @@ void Simulation::appKey(unsigned char key, bool down)
 
 		case '8':
 			{
-				gEye += gDir * 100.0f;
+				gEye += gDirection * 100.0f;
 			}
 			break;
 
 		case '2':
 			{
-				gEye -= gDir * 100.0f;
+				gEye -= gDirection * 100.0f;
 			}
 			break;
 
@@ -714,13 +714,13 @@ void Simulation::MotionCallback(int x, int y)
 	int dx = gMouseX - x;
 	int dy = gMouseY - y;
 
-	gDir.normalize();
-	gNormal.cross(gDir, NxVec3(0, 1, 0));
+	gDirection.normalize();
+	gNormal.cross(gDirection, NxVec3(0, 1, 0));
 
 	NxQuat qx(NxPiF32 *dx * 20 / 180.0f, NxVec3(0, 1, 0));
-	qx.rotate(gDir);
+	qx.rotate(gDirection);
 	NxQuat qy(NxPiF32 *dy * 20 / 180.0f, gNormal);
-	qy.rotate(gDir);
+	qy.rotate(gDirection);
 
 	gMouseX = x;
 	gMouseY = y;
@@ -823,13 +823,13 @@ void Simulation::RenderCallback()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Setup camera
-	//setupCamera();
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), 1.0f, 10000.0f);
-	gluLookAt(0, 0, 4100.0f, 0, 0, 4100.0f - 0.7f, 0.0f, 1.0f, 0.0f);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	setupCamera();
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), 1.0f, 10000.0f);
+	//gluLookAt(0, 0, 4100.0f, 0, 0, 4100.0f - 0.7f, 0.0f, 1.0f, 0.0f);
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
 
 	//Draw
 	for (NxU32 i = 0; i < gMaxScenes; ++i)
@@ -843,7 +843,7 @@ void Simulation::RenderCallback()
 			//glEnable(GL_LIGHTING);
 			//glPopMatrix();
 
-			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
+			glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			for(unsigned int j=0;j<gScenes[i]->getNbActors();j++)
 			{
 				DrawActorIME(gScenes[i]->getActors()[j]);
@@ -876,7 +876,7 @@ void Simulation::setupCamera()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), 1.0f, 10000.0f);
-	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + gDir.x, gEye.y + gDir.y, gEye.z + gDir.z, 0.0f, 1.0f, 0.0f);
+	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + gDirection.x, gEye.y + gDirection.y, gEye.z + gDirection.z, 0.0f, 1.0f, 0.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -890,8 +890,10 @@ void Simulation::ReshapeCallback(int width, int height)
 //==================================================================================
 void Simulation::IdleCallback()
 {
-	while(!flagRender){};
-	flagRender = false;
+	//Mutex
+	//while(!flagRender){};
+	//flagRender = false;
+
 	glutPostRedisplay();
 }
 
@@ -1193,11 +1195,11 @@ NxJoint* Simulation::getJoint(int indexScene, int indexJoint, int indexRobot)
 
 void Simulation::function(int argc, char **argv)
 {
-	printf("Pressione a teclas w, space, s, b, e t para criar varios objetos.\n");
+	//printf("Pressione a teclas w, space, s, b, e t para criar varios objetos.\n");
 	//printf("Pressione 1 para salvar a cena atual 3 para carregar do arquivo para a cena atual.\n");
 	//printf("Pressione c para limpar a cena atual.\n");
 	//printf("Pressione TAB para seleionar a proxima cena.\n");
-	//printf("Use as teclas direcionais ou 2, 4, 6 e 8 ou d, f, e e g para se mover.\nUse o mouse para girar a camera.\n");
+	printf("Use as teclas direcionais ou 2, 4, 6 e 8 ou d, f, e e g para se mover.\nUse o mouse para girar a camera.\n");
 	//printf("Pressione p para pausar a simulacao.\n");
 	//printf("Pressione X para carregar 'test.xml'\n");
 	//printf("Pressione Y para carregar 'test.dae'\n");
