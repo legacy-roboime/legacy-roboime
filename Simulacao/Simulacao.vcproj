@@ -427,6 +427,10 @@
 							RelativePath=".\NxWheelDesc.h"
 							>
 						</File>
+						<File
+							RelativePath=".\Robot.h"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="Common Header Files"

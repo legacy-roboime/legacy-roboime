@@ -26,6 +26,8 @@ NxReal Simulation::lastDesiredWheelSpeeds[10][4] = {};
 NxReal Simulation::lastWheelTorques[10][4] = {};
 float Simulation::timeStep = 1./60.;
 bool Simulation::flagRender = false;
+float Simulation::widthBorderField = 6050;
+float Simulation::heightBorderField = 4050;
 
 /**
 * Método do PhysX
@@ -609,9 +611,9 @@ void Simulation::appKey(unsigned char key, bool down)
 		case 's':
 			{
 				//CreateStack(10);
-				NxActor* kickerActor = getActorKicker(0, 1);
-				kickerActor->addForce(NxVec3(10,0,0));
-				//kickerActor->setLinearVelocity(NxVec3(0,10,0));
+				NxActor* kickerActor = getActorKicker(0, 4);
+				kickerActor->addForce(NxVec3(1,0,0));
+				//kickerActor->setLinearVelocity(NxVec3(10,0,0));
 			}
 			break;
 
@@ -815,7 +817,7 @@ void Simulation::RenderCallback()
 	//infinitePath(1);
 	//goToThisPose( -130, 10, 3* NxPi / 2., 1, 0);
 	//goToThisPose( -50, -50, 3* NxPi / 2., 1, 0);
-	//goToThisPose( +2000/*110*/, 0, NxPi / 2., 4, 0);
+	//goToThisPose( 2000/*110*/, 0, 3 * NxPi / 2., 4, 0);
 
 	//simulate();
 
@@ -890,6 +892,7 @@ void Simulation::ReshapeCallback(int width, int height)
 //==================================================================================
 void Simulation::IdleCallback()
 {
+	//TODO: Realizar a exclusão mútua dos dados no momento da renderizacao
 	//Mutex
 	//while(!flagRender){};
 	//flagRender = false;
@@ -944,7 +947,27 @@ void Simulation::simulate(int indexScene)
 	// ~Physics code
 }
 
-void Simulation::controlRobot( NxReal* wheelsSpeeds, NxReal dribblerSpeed, int indexScene, NxI32 indexRobot )
+void Simulation::simulate(int indexScene, float dt)
+{
+	NxAllVehicles::updateAllVehicles(dt);
+
+	// Start simulation (non blocking)
+	// Physics code
+	if (gScenes[indexScene] && !gPause)
+	{
+		gScenes[indexScene]->setTiming(dt, 1, NX_TIMESTEP_FIXED);
+		gScenes[indexScene]->simulate(dt);
+	}
+
+	if (gScenes[indexScene] && !gPause)
+	{
+		gScenes[indexScene]->flushStream();
+		gScenes[indexScene]->fetchResults(NX_RIGID_BODY_FINISHED, true);
+	}
+	// ~Physics code
+}
+
+void Simulation::controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot )
 {
 	NxAllVehicles::setActiveVehicle( indexRobot - 1 );
 	NxReal* torqueWheels = new NxReal[4];
@@ -953,22 +976,50 @@ void Simulation::controlRobot( NxReal* wheelsSpeeds, NxReal dribblerSpeed, int i
 		NxReal currentWheelSpeed = ((NxWheel2*) NxAllVehicles::getActiveVehicle()->getWheel(indexWheel))->getAxleSpeed();
 		torqueWheels[indexWheel] = calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed, indexScene, indexRobot, indexWheel);
 	}
-
-	setAngVelocityDribbler( dribblerSpeed );
 	
 	NxAllVehicles::getActiveVehicle()->control( torqueWheels[0], torqueWheels[1], torqueWheels[2], torqueWheels[3] );
 }
 
-void Simulation::setAngVelocityDribbler(NxReal velocityX)
+void Simulation::controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene)
 {
-	NxActor* actorDribbler = getActorDribbler(0, 1);
+	//Control kicker
+	controlKicker( kickerSpeed, indexRobot, indexScene );
+
+	//Control dribbler
+	controlDribbler( dribblerSpeed, indexRobot, indexScene );
+
+	//Control wheels
+	NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY, indexRobot, indexScene); //omnidirecionalidade
+	controlWheels( wheelsSpeeds, indexScene, indexRobot); //metros
+}
+
+void Simulation::controlDribbler( float dribblerSpeed, int indexRobot, int indexScene )
+{
+	//TODO: implementar o controlador
+	//setAngVelocityDribbler(dribblerSpeed, indexRobot, indexScene);
+}
+
+void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScene )
+{
+	//TODO: implementar o controlador
+}
+
+void Simulation::setAngVelocityDribbler(NxReal velocityX, int indexRobot, int indexScene)
+{
+	NxActor* actorDribbler = getActorDribbler(indexScene, indexRobot);
 	actorDribbler->setAngularVelocity(NxVec3(-velocityX,0,0));
 }
 
-void Simulation::addLocalTorqueDribbler(NxReal torqueX)
+void Simulation::addLocalTorqueDribbler(NxReal torqueX, int indexRobot, int indexScene)
 {
-	NxActor* actorDribbler = getActorDribbler(0, 1);
+	NxActor* actorDribbler = getActorDribbler(indexScene, indexRobot);
 	actorDribbler->addLocalTorque(NxVec3(-torqueX,0,0));
+}
+
+void Simulation::addLocalForceKicker(NxReal forceX, int indexRobot, int indexScene)
+{
+	NxActor* actorKicker = getActorKicker(indexScene, indexRobot);
+	actorKicker->addLocalTorque(NxVec3(forceX,0,0));
 }
 
 NxActor* Simulation::getActorBall(int indexScene)
@@ -1268,16 +1319,16 @@ void Simulation::function(int argc, char **argv)
 		if(gScenes[0] != NULL)
 		{
 			//gScenes[0]->setUserContactReport( robotContactReport );
-			createRobotWithDesc(1);
-			createRobotWithDesc(2);
-			createRobotWithDesc(3);
-			createRobotWithDesc(4);
-			createRobotWithDesc(5);
-			createRobotWithDesc(6);
-			createRobotWithDesc(7);
-			createRobotWithDesc(8);
-			createRobotWithDesc(9);
-			createRobotWithDesc(10);
+			createRobotWithDesc(1, 0);
+			createRobotWithDesc(2, 0);
+			createRobotWithDesc(3, 0);
+			createRobotWithDesc(4, 0);
+			createRobotWithDesc(5, 0);
+			createRobotWithDesc(6, 0);
+			createRobotWithDesc(7, 0);
+			createRobotWithDesc(8, 0);
+			createRobotWithDesc(9, 0);
+			createRobotWithDesc(10, 0);
 		}
 	}
 
@@ -1412,8 +1463,8 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 {
 	//Controle proporcional
 	//Velocidades Maximas
-	NxReal maxSpeedAng = 4;
-	NxReal maxLinearSpeed = 20;
+	NxReal maxSpeedAng = 6;
+	NxReal maxLinearSpeed = 6000;
 
 	//Controle de angulo
 	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene ); //TODO: remover redundância de getAngle2DFromRobot tanto em goToThisPose quanto em calcWheelSpeedFromRobotSpeed
@@ -1447,8 +1498,7 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 		speedY = 0;
 	}
 
-	NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY, indexRobot, indexScene);
-	controlRobot( wheelsSpeeds, 100, indexScene, indexRobot); //metros
+	controlRobot(speedX, speedY, speedAng, 10, 10, indexRobot, indexScene);
 }
 
 NxF32 Simulation::calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 )
@@ -1536,7 +1586,7 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 
 	controlRobot.setColumn( 0, NxVec3( speedX * NxMath::cos( -teta ) + speedY * NxMath::sin( teta ), 
 							   speedX * NxMath::sin( -teta ) + speedY * NxMath::cos( teta ),
-							   speedAng*90 ) );
+							   speedAng * Robot::robotRadius ) );
 
 	omniMatrix1 *= controlRobot;
 	omniMatrix2 *= controlRobot;
@@ -1554,7 +1604,7 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	NxReal biggestValue = getBiggestAbsoluteValue(speeds, 4);
 	if(biggestValue > 0.001)
 	{
-		NxReal maxSpeed = 30;
+		NxReal maxSpeed = 21;
 		for( int i = 0; i < 4; i++ )
 		{
 				speeds[i] = speeds[i] / biggestValue * maxSpeed;

@@ -24,15 +24,33 @@ void UDPServerSimInt::parsing()
 
 		//Definindo string para enviar
 		stringstream out;
-		out << "0 "; //identificador de resposta do pacote 0
 
 		//Parametros de Simulacao
 		out << Simulation::timeStep;
 		out << " ";
+		//out << Simulation::timeStep; //identificador da cena que esta sendo renderizada
+		//out << " ";
+		//out << Simulation::timeStep; //quantidade de cenas existentes
+		//out << " ";
 		//Campo
-		out << Simulation::getFieldExtents(indexScene).x;
+		out << Simulation::getFieldExtents(indexScene).x; //largura
 		out << " ";
-		out << Simulation::getFieldExtents(indexScene).y;
+		out << Simulation::getFieldExtents(indexScene).y; //altura
+		out << " ";
+		out << Simulation::widthBorderField; //largura do campo interno (delimitado pelas linhas brancas)
+		out << " ";
+		out << Simulation::heightBorderField; //altura do campo interno (delimitado pelas linhas brancas)
+		//Robo
+		//out << " ";
+		//out << Simulation::getFieldExtents(indexScene).y; //quantidade de robos teammates
+		//out << " ";
+		//out << Simulation::getFieldExtents(indexScene).y; //quantidade de robos opponents
+		//Chutador
+		//Driblador
+		//Roda
+		//Motor
+		//Engrenagem
+		//Bola
 
 		out << "\n";
 
@@ -51,24 +69,27 @@ void UDPServerSimInt::parsing()
 		//Definindo string para enviar
 		stringstream out;
 
-		out << "1 "; //identificador de resposta do pacote 1
-
-		//Ball
+		//Bola
 		NxVec3 ballPos = Simulation::getBallGlobalPos(indexScene);
 		out << ballPos.x;
 		out << " ";
 		out << ballPos.y;
-		//Robot
+		//Robo
 		for(int indexRobot=1; indexRobot<=10; indexRobot++)
 		{
 			NxVec3 robotPos = Simulation::getRobotGlobalPos(indexRobot, indexScene);
 			NxReal robotAngle = Simulation::getAngle2DFromRobot(indexRobot, indexScene);
+			out << " ";
 			out << robotPos.x;
 			out << " ";
 			out << robotPos.y;
 			out << " ";
 			out << robotAngle;
 		}
+		//Motor
+		//Driblador
+		//Chutador
+
 
 		out << "\n";
 
@@ -77,11 +98,11 @@ void UDPServerSimInt::parsing()
 	}
 	else if(temp.compare("2") == 0) //pacote 2 SET STATIC VALUES
 	{
-
+		
 	}
 	else if(temp.compare("3") == 0) //pacote 3 SET DYNAMIC VALUES
 	{
-
+		
 	}
 	else if(temp.compare("4") == 0) //pacote 4 CONTROL
 	{
@@ -95,22 +116,21 @@ void UDPServerSimInt::parsing()
 		//Definindo string para enviar
 		stringstream out;
 
-		out << "4 "; //identificador de resposta do pacote 4
-
 		//Lendo argumentos do robo e controlando
 		for(int indexRobot=1; indexRobot<=10; indexRobot++)
 		{
-			NxReal* robotWheelSpeed = new NxReal[4];
-			for(int indexWheel=0; indexWheel<4; indexWheel++)
-			{
-				os >> temp;
-				robotWheelSpeed[indexWheel] = atof(temp.c_str());
-			}
-
 			os >> temp;
-			float robotdribblerSpeed = atof(temp.c_str());
+			float speedX = atof(temp.c_str());
+			os >> temp;
+			float speedY = atof(temp.c_str());
+			os >> temp;
+			float speedAng = atof(temp.c_str());
+			os >> temp;
+			float dribblerSpeed = atof(temp.c_str());
+			os >> temp;
+			float kickerSpeed = atof(temp.c_str());
 
-			Simulation::controlRobot(robotWheelSpeed, robotdribblerSpeed, indexScene, indexRobot);
+			Simulation::controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 		}
 
 		out << "ACK 4\n"; // confirmando pacote 4
@@ -130,8 +150,6 @@ void UDPServerSimInt::parsing()
 		//Definindo string para enviar
 		stringstream out;
 
-		out << "5 "; //identificador de resposta do pacote 5
-
 		Simulation::simulate(indexScene);
 
 		//Mutex
@@ -143,7 +161,7 @@ void UDPServerSimInt::parsing()
 		//Construindo string para enviar
 		this->sendString.append(out.str());
 	}
-	else if(temp.compare("6") == 0) //pacote 6 GO TO THIS POSE
+	else if(temp.compare("6") == 0) //pacote 6 GO TO THIS POSE FOR ALL ROBOTS
 	{
 		//Lendo argumentos
 		os >> temp;
@@ -154,8 +172,6 @@ void UDPServerSimInt::parsing()
 
 		//Definindo string para enviar
 		stringstream out;
-
-		out << "6 "; //identificador de resposta do pacote 6
 
 		//Lendo argumentos e executando goToThisPose
 		for(int indexRobot=1; indexRobot<=10; indexRobot++)
@@ -186,8 +202,6 @@ void UDPServerSimInt::parsing()
 		//Definindo string para enviar
 		stringstream out;
 
-		out << "7 "; //identificador de resposta do pacote 7
-
 		//Lendo argumentos e executando InfinePath
 		for(int indexRobot=1; indexRobot<=10; indexRobot++)
 		{
@@ -207,8 +221,6 @@ void UDPServerSimInt::parsing()
 		//Definindo string para enviar
 		stringstream out;
 
-		out << "8 "; //identificador de resposta do pacote 8
-
 		//Simulation::RenderCallback();
 		//glutSwapBuffers();
 		//Simulation::RenderCallback();
@@ -216,6 +228,59 @@ void UDPServerSimInt::parsing()
 		Simulation::IdleCallback();
 
 		out << "ACK 8\n"; // confirmando pacote 8
+
+		//Construindo string para enviar
+		this->sendString.append(out.str());
+	}
+	else if(temp.compare("9") == 0) //pacote 9 GO TO THIS POSE THE ROBOT
+	{
+		//Lendo argumentos
+		os >> temp;
+		int indexScene = atoi(temp.c_str());
+		os >> temp;
+		int indexRobot = atoi(temp.c_str());
+
+		//Limpando string para enviar
+		this->sendString = "";
+
+		//Definindo string para enviar
+		stringstream out;
+
+		//Lendo argumentos e executando goToThisPose
+		os >> temp;
+		float x = atof(temp.c_str());
+		os >> temp;
+		float y = atof(temp.c_str());
+		os >> temp;
+		float angle = atof(temp.c_str());
+		Simulation::goToThisPose(x, y, angle, indexRobot, indexScene);
+
+		out << "ACK 9\n"; // confirmando pacote 9
+
+		//Construindo string para enviar
+		this->sendString.append(out.str());
+	}
+	else if(temp.compare("10") == 0) //pacote 10 SIMULATE THE INDEXSCENE WITH DT TIME
+	{
+		//Lendo argumentos
+		os >> temp;
+		int indexScene = atoi(temp.c_str());
+		os >> temp;
+		float dt = atof(temp.c_str());
+
+		//Limpando string para enviar
+		this->sendString = "";
+
+		//Definindo string para enviar
+		stringstream out;
+
+		Simulation::simulate(indexScene, dt);
+
+		//Mutex
+		//Simulation::flagRender = true;
+		//while(Simulation::flagRender){};
+
+		out << "ACK 10\n"; // confirmando pacote 10
 
 		//Construindo string para enviar
 		this->sendString.append(out.str());

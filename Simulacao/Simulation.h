@@ -33,6 +33,7 @@ using namespace std;
 #include "NxAllVehicles.h"
 
 #include "NxScene1.h"
+#include "Robot.h"
 //#include "UDPServerThread.h";
 //#include "UDPServerSimInt.h"
 //#include "MyUserNotify.h"
@@ -114,13 +115,15 @@ private:
 	//static void parserDataFromServer();
 
 	//Robot
-	static void createRobotWithDesc(int indexRobot);
+	static void createRobotWithDesc(int indexRobot, int indexScene);
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
 
 public:
 	static bool flagRender;
+	static float widthBorderField;
+	static float heightBorderField;
 
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
@@ -136,22 +139,27 @@ public:
 	//Metodos para Inteligencia
 	static void simulate();
 	static void simulate( int indexScene );
+	static void simulate( int indexScene, float dt );
 
 	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);
 	static void setBallGlobalPos(NxVec3 pos, int indexScene);
 	static void setRobotLinearVelocity(NxVec3 linVel, int indexScene, int indexRobot);
 	static void setRobotAngularVelocity(NxVec3 angVel, int indexScene, int indexRobot);
 	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
-	static void setAngVelocityDribbler(NxReal velocityX);
+	static void setAngVelocityDribbler(NxReal velocityX, int indexRobot, int indexScene);
 
 	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
 	static NxVec3 getBallGlobalPos( int indexScene );
 	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
 	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
 
-	static void controlRobot( NxReal* wheelsSpeeds, NxReal dribblerSpeed, int indexScene, NxI32 indexRobot );
+	static void controlDribbler( float dribblerSpeed, int indexRobot, int indexScene );
+	static void controlKicker( float kickerSpeed, int indexRobot, int indexScene );
+	static void controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot );
+	static void controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
 
-	static void addLocalTorqueDribbler(NxReal torqueX);
+	static void addLocalTorqueDribbler(NxReal torqueX, int indexRobot, int indexScene);
+	void addLocalForceKicker(NxReal forceX, int indexRobot, int indexScene);
 
 	//Metodos que devem estar no modulo inteligencia
 	static NxReal calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed, int indexScene, int indexRobot, int indexWheel);
