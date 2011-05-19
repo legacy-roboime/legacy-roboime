@@ -970,7 +970,7 @@ void Simulation::simulate(int indexScene, float dt)
 void Simulation::controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot )
 {
 	NxAllVehicles::setActiveVehicle( indexRobot - 1 );
-	NxReal* torqueWheels = new NxReal[4];
+	NxReal torqueWheels[4];
 	for(int indexWheel=0; indexWheel<4; indexWheel++)
 	{
 		NxReal currentWheelSpeed = ((NxWheel2*) NxAllVehicles::getActiveVehicle()->getWheel(indexWheel))->getAxleSpeed();
@@ -1075,9 +1075,17 @@ NxActor* Simulation::getActorRobot(int indexScene, int indexRobot)
 						char* arrayLabel = new char[label.size()+1];
 						arrayLabel[label.size()]=0;
 						memcpy(arrayLabel, label.c_str(), label.size());
-
-						if(strcmp(actorName,arrayLabel)==0) break;
-						else actor = NULL;
+						
+						if(strcmp(actorName,arrayLabel)==0) 
+						{
+							break;
+							delete arrayLabel;
+						}
+						else 
+						{
+							actor = NULL;
+							delete arrayLabel;
+						}
 					}
 				}
 				else continue;
@@ -1113,8 +1121,16 @@ NxActor* Simulation::getActorDribbler(int indexScene, int indexRobot)
 						arrayLabel[label.size()]=0;
 						memcpy(arrayLabel, label.c_str(), label.size());
 
-						if(strcmp(actorName,arrayLabel)==0) break;
-						else actor = NULL;
+						if(strcmp(actorName,arrayLabel)==0)
+						{
+							break;
+							delete arrayLabel;
+						}
+						else 
+						{
+							actor = NULL;
+							delete arrayLabel;
+						}
 					}
 				}
 				else continue;
@@ -1150,8 +1166,16 @@ NxActor* Simulation::getActorKicker(int indexScene, int indexRobot)
 						arrayLabel[label.size()]=0;
 						memcpy(arrayLabel, label.c_str(), label.size());
 
-						if(strcmp(actorName,arrayLabel)==0) break;
-						else actor = NULL;
+						if(strcmp(actorName,arrayLabel)==0)
+						{
+							break;
+							delete arrayLabel;
+						}
+						else 
+						{
+							actor = NULL;
+							delete arrayLabel;
+						}
 					}
 				}
 				else continue;
@@ -1184,8 +1208,16 @@ NxVec3 Simulation::getFieldExtents(int indexScene)
 						arrayLabel[label.size()]=0;
 						memcpy(arrayLabel, label.c_str(), label.size());
 
-						if(strcmp(actorName,arrayLabel)==0) break;
-						else actor = NULL;
+						if(strcmp(actorName,arrayLabel)==0) 
+						{
+							break;
+							delete arrayLabel;
+						}
+						else 
+						{
+							actor = NULL;
+							delete arrayLabel;
+						}
 					}
 				}
 				else continue;
@@ -1233,8 +1265,16 @@ NxJoint* Simulation::getJoint(int indexScene, int indexJoint, int indexRobot)
 						arrayLabel[label.size()]=0;
 						memcpy(arrayLabel, label.c_str(), label.size());
 
-						if(strcmp(jointName,arrayLabel)==0) break;
-						else joint = NULL;
+						if(strcmp(jointName,arrayLabel)==0)
+						{
+							break;
+							delete arrayLabel;
+						}
+						else 
+						{
+							joint = NULL;
+							delete arrayLabel;
+						}
 					}
 				}
 				else continue;
@@ -1561,7 +1601,7 @@ NxReal Simulation::getAngle2DFromRobot( int indexRobot, int indexScene )
 */
 NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene )
 {
-	NxReal* speeds;
+	NxReal speeds[4];
 
 	//Matriz de omnidirecionalidade
 	//Leva em consideracao os angulos das rodas
@@ -1594,7 +1634,6 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	NxVec3 speedAxleWheel1 = omniMatrix1.getColumn(0);
 	NxVec3 speedAxleWheel2 = omniMatrix2.getColumn(0);
 
-	speeds = new NxReal[4];
 	speeds[0] = speedAxleWheel1.x;
 	speeds[1] = speedAxleWheel1.y;
 	speeds[2] = speedAxleWheel1.z;

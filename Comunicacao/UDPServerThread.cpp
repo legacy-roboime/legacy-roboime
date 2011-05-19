@@ -32,7 +32,6 @@ UDPServerThread::UDPServerThread(const char* nm, int _port, string _address)
 }
 void UDPServerThread::run() {
 	try {
-		//udpServer = new UDPServer(port, address);
 		//wait("UDPServerMutex");
 		udpServer->func1();
 		//release("UDPServerMutex");

@@ -34,8 +34,16 @@ NxActor* NxScene1::getActorWheel(int robotNumber, int wheelNumber)
 					arrayLabel[label.size()]=0;
 					memcpy(arrayLabel, label.c_str(), label.size());
 
-					if(strcmp(actorName,arrayLabel)==0) break;
-					else actor = NULL;
+					if(strcmp(actorName,arrayLabel)==0)
+					{
+						break;
+						delete arrayLabel;
+					}
+					else
+					{
+						actor = NULL;
+						delete arrayLabel;
+					}
 				}
 			}
 			else continue;

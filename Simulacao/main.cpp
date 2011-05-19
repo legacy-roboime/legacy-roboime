@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 
 	((UDPServerThread*)udpServerThread)->stop();
 	
-	//delete udpServerThread;
-	//delete udpServerSimInt;
+	delete udpServerThread;
+	delete udpServerSimInt;
 	return 0;
 }

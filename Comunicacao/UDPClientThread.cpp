@@ -32,7 +32,6 @@ UDPClientThread::UDPClientThread(const char* nm, int _port, string _address)
 }
 void UDPClientThread::run() {
 	try {
-		//udpClient = new UDPClient(port, address);
 		//wait("UDPClientMutex");
 		udpClient->func1();
 		//release("UDPClientMutex");
