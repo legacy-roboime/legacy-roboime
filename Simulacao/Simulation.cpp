@@ -811,7 +811,7 @@ void Simulation::RenderCallback()
 	//if(ElapsedTime < 10.0f) return;
 	//PreviousTime = CurrentTime;
 
-	//for(int i=1; i<6; i++) infinitePath(i);
+	//for(int i=1; i<11; i++) infinitePath(i);
 	//infinitePath(1);
 	//infinitePath(3);
 	//infinitePath(1);
@@ -1485,7 +1485,7 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 	{
 		if( distance > distanceThreshold ) 
 			if( distance > 0 ) speed = maxLinearSpeed;
-			else speed = -maxLinearSpeed;
+			else speed = - maxLinearSpeed;
 		else 
 			speed = distance / distanceThreshold * maxLinearSpeed;
 		
@@ -1619,7 +1619,6 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 */
 NxReal Simulation::calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed, int indexScene, int indexRobot, int indexWheel)
 {
-	//0.0000221
 	NxReal currentWheelTorque;
 	NxReal inertiaMoment = 12.57673;
 	currentWheelTorque = Simulation::lastWheelTorques[indexRobot][indexWheel] + inertiaMoment * 20. * (currentDesiredWheelSpeed - currentWheelSpeed) - inertiaMoment * 19.35 * (Simulation::lastDesiredWheelSpeeds[indexRobot][indexWheel] - Simulation::lastWheelSpeeds[indexRobot][indexWheel]);

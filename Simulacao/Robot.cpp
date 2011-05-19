@@ -97,7 +97,7 @@ void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 		wheelDesc[i].maxBrakeForce = 100;
 		wheelDesc[i].frictionToFront = 0.1f;
 		wheelDesc[i].frictionToSide = 0;
-		wheelDesc[i].inverseWheelMass = 0.1;
+		wheelDesc[i].inverseWheelMass = 0.1; //TODO: CONFIGURAR PARÂMETRO
 		wheelDesc[i].wheelFlags |= NX_WF_USE_WHEELSHAPE;
 		vehicleDesc.robotWheels.pushBack(&wheelDesc[i]);
 	}
