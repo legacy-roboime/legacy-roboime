@@ -9,13 +9,15 @@ int main(int argc, char **argv)
 
 	UDPServerSimInt* udpServerSimInt = new UDPServerSimInt(); 
 
-	Thread *udpServerThread = new UDPServerThread((UDPServer*)udpServerSimInt);
+	Thread *udpServerThread;
+
+	udpServerThread = new UDPServerThread((UDPServer*)udpServerSimInt);
 	((UDPServerThread*)udpServerThread)->start();
 
 	Simulation::function(argc, argv);
-
-	((UDPServerThread*)udpServerThread)->stop();
 	
+	((UDPServerThread*)udpServerThread)->stop();
+
 	delete udpServerThread;
 	delete udpServerSimInt;
 	return 0;

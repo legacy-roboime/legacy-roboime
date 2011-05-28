@@ -23,6 +23,9 @@ using namespace std;
 //#include "PerfRenderer.h"
 #include "Timing.h"
 #include "DebugRenderer.h"
+
+#include "GLFontRenderer.h"
+
 #include "MediaPath.h"
 //#include "Utilities.h"
 //#include "SamplesVRDSettings.h"
@@ -44,6 +47,7 @@ printf("__PPCGEKKO__");
 #endif
 
 class MyUserNotify;
+class UDPServerThread;
 
 class Simulation
 {
@@ -121,6 +125,10 @@ private:
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
 
 public:
+	static FILE * outputfile;
+	static bool gravar;
+	static int count;
+
 	static bool flagRender;
 	static float widthBorderField;
 	static float heightBorderField;
@@ -154,7 +162,7 @@ public:
 	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
 
 	static void controlDribbler( float dribblerSpeed, int indexRobot, int indexScene );
-	static void controlKicker( float kickerSpeed, int indexRobot, int indexScene );
+	static void executeKicker( float kickerSpeed, int indexRobot, int indexScene );
 	static void controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot );
 	static void controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
 

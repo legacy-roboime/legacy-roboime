@@ -116,11 +116,12 @@ void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 	wheelDesc[3].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_AFFECTED_BY_HANDBRAKE |*/ flags;
 
 	//Driblador descricao.
-	//NxActor* actorDribbler = getActorDribbler(indexScene, 4);
-	//actorDribbler->setMaxAngularVelocity(1000);
+	NxActor* actorDribbler = getActorDribbler(indexScene, 4);
+	actorDribbler->setMaxAngularVelocity(100);
 
 	//Chutador descricao.
-	//NxActor* kickerActor = getActorKicker(0, 1);
+	NxActor* kickerActor = getActorKicker(indexScene, 4);
+	kickerActor->setMaxAngularVelocity(100);
 
 	//Criar veiculo
 	NxVehicle* vehicle = NxVehicle::createVehicle(gScenes[indexScene], &vehicleDesc);

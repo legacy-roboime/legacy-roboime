@@ -36,8 +36,8 @@ NxActor* NxScene1::getActorWheel(int robotNumber, int wheelNumber)
 
 					if(strcmp(actorName,arrayLabel)==0)
 					{
-						break;
 						delete arrayLabel;
+						break;
 					}
 					else
 					{

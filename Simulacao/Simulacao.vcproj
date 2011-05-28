@@ -168,11 +168,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<AssemblyReference
-			RelativePath="System.dll"
-			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-			MinFrameworkVersion="131072"
-		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}"
 			RelativePathToProject=".\Comunicacao\Comunicacao.vcproj"
@@ -243,6 +238,10 @@
 						</File>
 						<File
 							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\DrawObjects.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\GLFontRenderer.cpp"
 							>
 						</File>
 						<File
@@ -445,6 +444,10 @@
 						</File>
 						<File
 							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\DrawObjects.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\GLFontRenderer.h"
 							>
 						</File>
 						<File

@@ -65,6 +65,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="false"
 				AdditionalDependencies="wsock32.lib"
 			/>
 			<Tool

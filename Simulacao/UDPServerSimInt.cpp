@@ -104,7 +104,7 @@ void UDPServerSimInt::parsing()
 	{
 		
 	}
-	else if(temp.compare("4") == 0) //pacote 4 CONTROL
+	else if(temp.compare("4") == 0) //pacote 4 CONTROL ALL ROBOTS
 	{
 		//Lendo argumentos
 		os >> temp;
@@ -213,26 +213,36 @@ void UDPServerSimInt::parsing()
 		//Construindo string para enviar
 		this->sendString.append(out.str());
 	}
-	else if(temp.compare("8") == 0) //pacote 8 RENDER
+	else if(temp.compare("8") == 0) //pacote 8 CONTROL DRIBBLER AND KICKER ALL ROBOTS
 	{
+		//Lendo argumentos
+		os >> temp;
+		int indexScene = atoi(temp.c_str());
+
 		//Limpando string para enviar
 		this->sendString = "";
 
 		//Definindo string para enviar
 		stringstream out;
 
-		//Simulation::RenderCallback();
-		//glutSwapBuffers();
-		//Simulation::RenderCallback();
-		//Simulation::ReshapeCallback();
-		Simulation::IdleCallback();
+		//Lendo argumentos do robo e controlando
+		for(int indexRobot=1; indexRobot<=10; indexRobot++)
+		{
+			os >> temp;
+			float dribblerSpeed = atof(temp.c_str());
+			os >> temp;
+			float kickerSpeed = atof(temp.c_str());
+
+			Simulation::controlDribbler( dribblerSpeed, indexRobot, indexScene );
+			Simulation::executeKicker( kickerSpeed, indexRobot, indexScene );
+		}
 
 		out << "ACK 8\n"; // confirmando pacote 8
 
 		//Construindo string para enviar
 		this->sendString.append(out.str());
 	}
-	else if(temp.compare("9") == 0) //pacote 9 GO TO THIS POSE THE ROBOT
+	else if(temp.compare("9") == 0) //pacote 9 GO TO THIS POSE ONE ROBOT
 	{
 		//Lendo argumentos
 		os >> temp;
@@ -281,6 +291,68 @@ void UDPServerSimInt::parsing()
 		//while(Simulation::flagRender){};
 
 		out << "ACK 10\n"; // confirmando pacote 10
+
+		//Construindo string para enviar
+		this->sendString.append(out.str());
+	}
+	else if(temp.compare("11") == 0) //pacote 11 CONTROL ONE ROBOT
+	{
+		//Lendo argumentos
+		os >> temp;
+		int indexScene = atoi(temp.c_str());
+
+		//Limpando string para enviar
+		this->sendString = "";
+
+		//Definindo string para enviar
+		stringstream out;
+
+		//Lendo argumentos do robo e controlando
+		os >> temp;
+		int indexRobot = atoi(temp.c_str());
+
+		os >> temp;
+		float speedX = atof(temp.c_str());
+		os >> temp;
+		float speedY = atof(temp.c_str());
+		os >> temp;
+		float speedAng = atof(temp.c_str());
+		os >> temp;
+		float dribblerSpeed = atof(temp.c_str());
+		os >> temp;
+		float kickerSpeed = atof(temp.c_str());
+
+		Simulation::controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+
+		out << "ACK 11\n"; // confirmando pacote 11
+
+		//Construindo string para enviar
+		this->sendString.append(out.str());
+	}
+	else if(temp.compare("12") == 0) //pacote 12 CONTROL DRIBBLER AND KICKER ONE ROBOT
+	{
+		//Lendo argumentos
+		os >> temp;
+		int indexScene = atoi(temp.c_str());
+
+		//Limpando string para enviar
+		this->sendString = "";
+
+		//Definindo string para enviar
+		stringstream out;
+
+		//Lendo argumentos do robo e controlando
+		os >> temp;
+		int indexRobot = atoi(temp.c_str());
+		os >> temp;
+		float dribblerSpeed = atof(temp.c_str());
+		os >> temp;
+		float kickerSpeed = atof(temp.c_str());
+
+		Simulation::controlDribbler( dribblerSpeed, indexRobot, indexScene );
+		Simulation::executeKicker( kickerSpeed, indexRobot, indexScene );
+
+		out << "ACK 12\n"; // confirmando pacote 12
 
 		//Construindo string para enviar
 		this->sendString.append(out.str());

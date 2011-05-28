@@ -740,7 +740,7 @@ void NxWheel2::tick(bool handBrake, NxReal axleTorque, NxReal brakeTorque, NxRea
 
 	//if(getWheelFlag(NX_WF_ACCELERATED)) 
 	//{
-		//wheelShape->setAxleSpeed(axleSpeed);
+		//wheelShape->setAxleSpeed(axleTorque);
 		wheelShape->setMotorTorque(axleTorque);
 	//}
 
