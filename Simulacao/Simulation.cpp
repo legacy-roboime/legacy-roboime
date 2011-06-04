@@ -4,7 +4,7 @@ bool Simulation::gPause = false;
 NxPhysicsSDK *Simulation::gPhysicsSDK = 0;
 NxScene1 *Simulation::gScenes[gMaxScenes] = { 0 };
 NxU32 Simulation::gCurrentScene = 0;
-NxVec3 Simulation::gDefaultGravity = NxVec3(0.0f, - 9.81f, 0.0f);
+NxVec3 Simulation::gDefaultGravity = NxVec3(0.0f, 0.0f, - 9.81f);
 UserAllocator *Simulation::gMyAllocator = NULL;
 NxVec3 Simulation::gEye = NxVec3(0, 0, 4100.0f);
 NxVec3 Simulation::gDirection = NxVec3(0, 0, -1); 
@@ -21,6 +21,7 @@ MyUserNotify Simulation::gUserNotify = MyUserNotify();
 //Thread* Simulation::udpServerThread = new UDPServerThread("UDPServerThread-Simulacao",9786, "127.0.0.1");
 //PerfRenderer    gPerfRenderer = PerfRenderer();
 bool Simulation::keyDown[256];//={false};
+
 NxReal Simulation::lastWheelSpeeds[10][4] = {};
 NxReal Simulation::lastDesiredWheelSpeeds[10][4] = {};
 NxReal Simulation::lastWheelTorques[10][4] = {};
@@ -28,7 +29,7 @@ float Simulation::timeStep = 1./60.;
 bool Simulation::flagRender = false;
 float Simulation::widthBorderField = 6050;
 float Simulation::heightBorderField = 4050;
-FILE * Simulation::outputfile = fopen("C:\\Users\\Bill\\Desktop\\testee.txt","w");
+//FILE * Simulation::outputfile = fopen("C:\\Users\\Bill\\Desktop\\testee.txt","w");
 bool Simulation::gravar = false;
 int Simulation::count = 0;
 
@@ -202,7 +203,7 @@ Simulation::~Simulation(void)
 
 	//ReleaseNx executa a liberacao de memoria
 
-	delete outputfile;
+	//delete outputfile;
 }
 
 void Simulation::releaseScene(NxScene &scene)
@@ -550,7 +551,7 @@ void Simulation::appKey(unsigned char key, bool down)
 				//break;
 
 				//NxVec3 t = gEye;
-				//NxVec3 Vel = gDir;
+				//NxVec3 Vel = gDirection;
 				//Vel.normalize();
 				//Vel *= 200.0f;
 				//CreateCube(t, 20, &Vel);
@@ -628,7 +629,7 @@ void Simulation::appKey(unsigned char key, bool down)
 				NxVec3 velLin = getActorRobot(0,4)->getLinearVelocity();
 				NxVec3 velAng = getActorRobot(0,4)->getAngularVelocity();
 
-				fprintf(outputfile,"%d	%f	%f	%f	%f	%f	%f	%f	%f	%f	%f\n",count, pos.x, pos.y, ang);
+				//fprintf(outputfile,"%d	%f	%f	%f	%f	%f	%f	%f	%f	%f	%f\n",count, pos.x, pos.y, ang);
 				//fprintf(outputfile,"%d	%f	%f\n", count, ang/NxPi*180, velAng.z/NxPi*180); 
 
 				goToThisPose( 500/*110*/, 500, NxPi / 2., 4, 0);
@@ -680,7 +681,7 @@ void Simulation::appKey(unsigned char key, bool down)
 		case 'w':
 			{
 				//NxVec3 t = gEye;
-				//NxVec3 Vel = gDir;
+				//NxVec3 Vel = gDirection;
 				//Vel.normalize();
 				//Vel *= 200.0f;
 				//CreateCube(t, 8, &Vel);
@@ -903,11 +904,11 @@ void Simulation::RenderCallback()
 		gPerfRenderer.render(gScenes[i]->readProfileData(true), glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 		#endif*/
 
-		//char buf[256];
-		//sprintf(buf,"Iteracao Numero: %d\nTempo: %f s\nErro Angular: %f graus\nErro de Posicao X: %f mm\nErro de Posicao Y: %f mm", count, count * 1./60., 90 - ang/NxPi*180, 500 - pos.x, 500 - pos.y);
-		//GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-		//GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
-		//GLFontRenderer::print(0.01, 0.9, 0.050, buf, false, 11, true); 
+		char buf[256];
+		sprintf(buf,"Iteracao Numero: %d\nTempo: %f s\nErro Angular: %f graus\nErro de Posicao X: %f mm\nErro de Posicao Y: %f mm", count, count * 1./60., 90 - ang/NxPi*180, 500 - pos.x, 500 - pos.y);
+		GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
+		GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
 	}
 
 	//glFlush();
@@ -916,11 +917,12 @@ void Simulation::RenderCallback()
 
 void Simulation::setupCamera()
 {
-	// Setup camera
+	// Setup projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), 1.0f, 10000.0f);
 	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + gDirection.x, gEye.y + gDirection.y, gEye.z + gDirection.z, 0.0f, 1.0f, 0.0f);
+	// Setup modelview matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -1369,22 +1371,10 @@ void Simulation::function(int argc, char **argv)
 
 	// Setup lighting
 	glEnable(GL_LIGHTING);
-	float AmbientColor[] = 
-	{
-		0.0f, 0.1f, 0.2f, 0.0f
-	};
-	float DiffuseColor[] = 
-	{
-		1.0f, 1.0f, 1.0f, 0.0f
-	};
-	float SpecularColor[] = 
-	{
-		0.0f, 0.0f, 0.0f, 0.0f
-	};
-	float Position[] = 
-	{
-		100.0f, 100.0f, 400.0f, 1.0f
-	};
+	float AmbientColor[] = {0.0f, 0.1f, 0.2f, 0.0f};
+	float DiffuseColor[] = {1.0f, 1.0f, 1.0f, 0.0f};
+	float SpecularColor[] = {0.0f, 0.0f, 0.0f, 0.0f};
+	float Position[] = {100.0f, 100.0f, 400.0f, 1.0f};
 
 	glutFullScreen();
 

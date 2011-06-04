@@ -125,7 +125,7 @@ private:
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
 
 public:
-	static FILE * outputfile;
+	//static FILE * outputfile;
 	static bool gravar;
 	static int count;
 
