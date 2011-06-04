@@ -56,12 +56,12 @@ void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 	}
 
 	vehicleDesc.position				= NxVec3(robotActor->getGlobalPosition());
-	vehicleDesc.position.z				+= 35;
-	vehicleDesc.mass					= robotActor->getMass();
+	//vehicleDesc.position.z				+= 35;
+	vehicleDesc.mass					= 3;//robotActor->getMass();
 	//vehicleDesc.motorForce				= 70000;
 	//vehicleDesc.maxVelocity				= 300.f;
 	//vehicleDesc.cameraDistance			= 8.0f;
-	vehicleDesc.centerOfMass.set(robotActor->getCMassLocalPosition());
+	vehicleDesc.centerOfMass.set(NxVec3(0,0,0));//robotActor->getCMassLocalPosition());
 	//vehicleDesc.differentialRatio = 3.42f;
 	//vehicleDesc.transmissionEfficiency
 	vehicleDesc.bodyActor = robotActor;

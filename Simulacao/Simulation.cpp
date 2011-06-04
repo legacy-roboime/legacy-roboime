@@ -1034,7 +1034,7 @@ void Simulation::controlRobot(float speedX, float speedY, float speedAng, float 
 
 	//Control wheels
 	NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY, indexRobot, indexScene); //omnidirecionalidade
-	controlWheels( wheelsSpeeds, indexScene, indexRobot); //metros
+	controlWheels( wheelsSpeeds, indexScene, indexRobot); 
 }
 
 void Simulation::controlDribbler( float dribblerSpeed, int indexRobot, int indexScene )
@@ -1635,38 +1635,38 @@ NxReal Simulation::getAngle2DFromRobot( int indexRobot, int indexScene )
 NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene )
 {
 	NxReal speeds[4];
-
+	
 	//Matriz de omnidirecionalidade
 	//Leva em consideracao os angulos das rodas
 	//-0.5446    0.8387    1.0000
 	//-0.5446   -0.8387    1.0000
 	//0.7071   -0.7071    1.0000
 	//0.7071    0.7071    1.0000
-
+	
 	NxReal teta = getAngle2DFromRobot( indexRobot, indexScene );
-
+	
 	NxMat33 omniMatrix1;
 	NxMat33 omniMatrix2;
-
+	
 	omniMatrix1.setRow(0, NxVec3(-0.5446,	0.8387,		1.0000));
 	omniMatrix1.setRow(1, NxVec3(-0.5446,	-0.8387,	1.0000));
 	omniMatrix1.setRow(2, NxVec3(0.7071,	-0.7071,	1.0000));
-
+	
 	omniMatrix2.setRow(0, NxVec3(0.7071,	0.7071,		1.0000));
-
+	
 	NxMat33 controlRobot;
 	controlRobot.zero();
-
+	
 	controlRobot.setColumn( 0, NxVec3( speedX * NxMath::cos( -teta ) + speedY * NxMath::sin( teta ), 
 							   speedX * NxMath::sin( -teta ) + speedY * NxMath::cos( teta ),
 							   speedAng * Robot::robotRadius ) );
-
+	
 	omniMatrix1 *= controlRobot;
 	omniMatrix2 *= controlRobot;
-
+	
 	NxVec3 speedAxleWheel1 = omniMatrix1.getColumn(0);
 	NxVec3 speedAxleWheel2 = omniMatrix2.getColumn(0);
-
+	
 	speeds[0] = speedAxleWheel1.x;
 	speeds[1] = speedAxleWheel1.y;
 	speeds[2] = speedAxleWheel1.z;
@@ -1689,7 +1689,7 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 				speeds[i] = 0;
 		}
 	}
-
+	
 	return speeds;
 }
 
