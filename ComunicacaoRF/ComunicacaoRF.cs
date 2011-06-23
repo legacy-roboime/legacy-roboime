@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Net.Sockets;
 using LR;
 
 namespace ComunicacaoRF
 {
     class ComunicacaoRF
     {
-        private byte[] memoryData;
+        private string memoryData;
         private byte[] translatedData;
+
         private LR.TransmissorRFM12USB transmissorRFM12USB1;
+        private UdpClient client;
+
+        private static float kickerVelocity = 100; // em RPM
+        private static float dribblerVelocity = 100; // em RPM
+        private static float wheelVelocity = 100; // em RPM
+
+        private int serverPort = 9050;
+        private int clientPort = 30000;
 
         public bool Send(byte[] t, byte source, byte dest)
         {
@@ -22,62 +32,113 @@ namespace ComunicacaoRF
             return this.transmissorRFM12USB1.Transmitir(temp);
         }
 
-        public void StorePacket(byte[] pacote, byte velocidade0, byte velocidade1, byte velocidade2, byte velocidade3, byte velocidade4, byte velocidade5, byte velocidade6, byte velocidade7, byte velocidade8, byte velocidade9)
+        public void UDPClientSend()
         {
-            pacote[0] = 0;
-            pacote[1] = 0x22;//pacote com todos os paramentros dos robos
-            pacote[2] = 0;
-            pacote[3] = velocidade0;
-            pacote[4] = velocidade1;
-            pacote[5] = 1;
-            pacote[6] = velocidade2;
-            pacote[7] = velocidade3;
-            pacote[8] = 2;
-            pacote[9] = velocidade4;
-            pacote[10] = velocidade5;
-            pacote[11] = 3;
-            pacote[12] = velocidade6;
-            pacote[13] = velocidade7;
-            pacote[14] = 4;
-            pacote[15] = velocidade8;
-            pacote[16] = velocidade9;
+            while (true)
+            {
+                if (translatedData != null)
+                    client.Send(translatedData, translatedData.Length);
+            }
         }
 
-        public byte[] TranslateProtocol(byte[] data)
+        public static byte ScaleVelocity(float realVelocity, float minVelocity, float maxVelocity)
         {
-            return data;
+            float scaledspeed;
+            if(realVelocity>=0)
+                scaledspeed = (realVelocity - minVelocity) * 127 / (maxVelocity - minVelocity);
+            else
+                scaledspeed = (realVelocity - minVelocity) * 127 / (maxVelocity - minVelocity) + 128;
+            int scaledint = (int) scaledspeed;
+            byte scaled = Byte.Parse(scaledint.ToString());
+            return scaled;
         }
 
-        public void StartCommunication()
+        public static byte[] TranslateProtocol(string intelData)
         {
-            UDPServer server = new UDPServer(9050);
+            int j = 0;
+            byte k = 1;
+            byte[] translated = new byte[36];
+            translated[j] = k; j++; k++;
+            string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
+           
+            for (int i = 0; i < splitData.Length; i++)
+            {
+                if (splitData[i] == "") continue;
+                // Kicker
+                else if ((i) % 6 == 4) translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.kickerVelocity);
+                // Dribbler
+                else if ((i) % 6 == 5)
+                {
+                    translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.dribblerVelocity);
+                    j++;
+                    translated[j] = k++;
+                }
+                // Wheels
+                else translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.wheelVelocity);
+                j++;
+            }
+            return translated;
+        }
+
+        public void StartCommunication(bool realTransmitter)
+        {
+            UDPServer server = new UDPServer(serverPort);
 
             // Initializes the thread in which the UDP server will reside
-            Thread UDPServerThread = new Thread(server.Execute_Test);
+            Thread UDPServerThread = new Thread(server.Execute);
             UDPServerThread.Start();
             while (!UDPServerThread.IsAlive) ;
             Thread.Sleep(1);
 
             this.transmissorRFM12USB1 = new LR.TransmissorRFM12USB();
             this.transmissorRFM12USB1.Inicializar("VIVATxRx", "IME");
-            
 
-            while (true)
+            if (realTransmitter)
             {
-                if (server.data != null)
-                {                    
-                        this.memoryData = server.data;
+                while (true)
+                {
+                    if (server.data != null)
+                    {
+                        this.memoryData = Encoding.ASCII.GetString(server.data, 0, server.recv);
                         this.translatedData = TranslateProtocol(memoryData);
                         Send(this.translatedData, 0xfe, 0xff);
-                        Console.WriteLine(Encoding.ASCII.GetString(server.data, 0, server.recv));
+                        //Console.WriteLine(Encoding.ASCII.GetString(server.data, 0, server.recv));
+                    }
                 }
+            }
+
+            else
+            {
+                this.client = new UdpClient("127.0.0.1", clientPort);
+                Thread UDPClientThread = new Thread(UDPClientSend);
+                UDPClientThread.Start();
+                while (!UDPClientThread.IsAlive) ;
+                Thread.Sleep(1);
+                
+                while (true)
+                {
+                    
+                    if (server.data != null)
+                    {
+                        this.memoryData = Encoding.ASCII.GetString(server.data, 0, server.recv);
+                        this.translatedData = TranslateProtocol(memoryData);
+
+                     //   for (int i = 0; i < translatedData.Length; i++)
+                        //Console.WriteLine(translatedData[i]);
+                    }
+                }       
             }
         }
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Comunicação RF");
             ComunicacaoRF comm = new ComunicacaoRF();
-            comm.StartCommunication();
+            //comm.translatedData = ComunicacaoRF.TranslateProtocol("-1.23 2.14 3.21 -4.1 5.321 -1.324 13.4 42.3 -12.2 43.1 12 32 43 12 54 23 76 43 23 30 45 54 5 7 52 -54 -23 34 54 55\n");
+            //Console.WriteLine("");
+            //for (int i = 0; i < comm.translatedData.Length; i++)
+            //    Console.WriteLine(comm.translatedData[i]);
+            comm.StartCommunication(false);
         }
     }
 }

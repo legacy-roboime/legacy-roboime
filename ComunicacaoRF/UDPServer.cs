@@ -13,7 +13,7 @@ using System.Text;
 public class UDPServer
 {
     public int recv;
-    public byte[] data = new byte[12];
+    public byte[] data = new byte[1024];
 
     IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
 
@@ -29,19 +29,15 @@ public class UDPServer
         newsock.Bind(ipep);
     }
 
-    public void Execute_Test()
+    public void Execute()
     {
-        Console.WriteLine("Waiting for a client...");
+//        Console.WriteLine("Waiting for a client...");
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
         EndPoint tmpRemote = (EndPoint)(sender);        
         while (true)
         {
             recv = newsock.ReceiveFrom(data, ref tmpRemote);
         }
-    }
-
-    public void Execute()
-    {
     }
 }
 
