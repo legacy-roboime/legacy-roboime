@@ -6,48 +6,52 @@
 #include "Motor.h"
 #include "Wheel.h"
 #include "Body.h"
-#include "Pose.h"
 #include "Command.h"
 
 using namespace std;
 
-class Robot : Component {
-	friend class TeamCommand;
+namespace Inteligencia {	
 
-private:
-	//static fields:
-	static list<Robot*> _robot;//Holds all robots of the class
-	static list<int> __i;//internal use for internal index
+	class Robot : Component {
+		friend class TeamCommand;
 
-	//fields:
-	int _yellow_card, _red_card;//counts how many cards of each robot has received
-	int _index, _i;//_index is the index, and _i is the internal index
-	Pose _pose;//current pose (position+speed+accel+orientation)
-	Command _command;//command to be executed
-	Dribbler _dribbler;//dribbler component
-	Kicker _kicker;//kicker component
-	Motor _motor;//motor component
-	Body _body;//body component
-	Wheel _wheel[4];//0:front-left, 1:front-right, 2:back-left, 3:back-right wheels
+	//private:
+	public:
 
-	//methods:
-	void _init();//used in the constructor to add robot to static list _robot
+		//fields:
+		int _yellow_card, _red_card;//counts how many cards of each robot has received
+		int _i;//_index is the index, and _i is the internal index
+		double _x, _y, _speed, _angle;//position, speed, and orientation
+		Command* _command;//command to be executed
+		Dribbler* _dribbler;//dribbler component
+		Kicker* _kicker;//kicker component
+		Motor* _motor;//motor component
+		Body* _body;//body component
+		Wheel* _wheel[4];//0:front-left, 1:front-right, 2:back-left, 3:back-right wheels
 
-public:
-	Robot(void);
-	Robot(int index, Pose pose);//constructor
-	~Robot(void);//destructor	
+		//methods:
+		void _init();//used in the constructors for basic initialization
 
-	//methods:
-	bool can_kick(void);//check if the robot has kicker component and it's working
-	void kick(void);//compel the robot to kick
-	bool can_dribble(void);//chekc if the robot has dribbler component and it's working
-	void start_dribbler(void);//compel the robot start dribbling
-	void stop_dribbler(void);//compel the robot stop dribbling
-	bool is_working(void);//checks if the robot is working
-	bool is_broken(void);//checks if the robot is broken (!working)
-	void repair(void);//fixes all broken parts
-	void break_down(void);//set robot working status to false
-	void compel(Command);//compel a command = issue an order
+	public:
+		Robot();
+		Robot(int index);//constructor
+		~Robot();//destructor	
 
-};
+		//methods:
+		bool can_kick();//check if the robot has kicker component and it's working
+		bool can_dribble();//chekc if the robot has dribbler component and it's working
+		bool is_working();//checks if the robot is working
+		bool is_broken();//checks if the robot is broken (!working)
+		void repair();//fixes all broken parts
+		void break_down();//raise an unknow break status
+		//void compel(Command);//compel a command = issue an order
+
+		//useful methods:
+		void kick();//kick with the standard speed
+		void kick(double);//kick with the given speed
+		void dribble();//dribble with the standard speed
+		void dribble(double);//dribble with the given speed
+		void place(double, double);
+
+	};
+}

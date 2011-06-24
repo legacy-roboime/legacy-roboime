@@ -1,87 +1,92 @@
 #include "Robot.h"
+namespace Inteligencia {
 
-//static elements instanciation:
-list<Robot*> Robot::_robot;
-list<int> Robot::__i;
-
-//constructors/destructor:
-Robot::Robot(void) {
-	_init();
-}
-
-Robot::Robot(int index, Pose pose) {
-	_init();
-	_index = index;
-	_pose = pose;
-}
-
-Robot::~Robot() {
-	_robot.remove(this);
-	int i = _i;
-	__i.push_back(i);
-	__i.sort();
-}
-
-//methods:
-void Robot::_init(void) {
-	if(__i.size() > 0) {
-		_i = __i.front();
-		__i.pop_front();
-	} else {
-		_i = _robot.size();
+	//constructors/destructor:
+	Robot::Robot(void) {
+		_init();
 	}
-	_robot.push_back(this);
-	_yellow_card = false;
-	_red_card = false;
-	_index = -1;
-	for(int i = 0; i < 4; i++) _wheel[i];
-	_pose;
-	_command;
-	_dribbler;
-	_kicker;
-	_motor;
-	_body;
-}
 
-bool Robot::can_kick() {
-	return _kicker.is_active() && _kicker.is_working();
-}
+	Robot::Robot(int index) {
+		_init();
+		_i = index;
+	}
 
-void Robot::kick() {
-	int a = 0;
-}
+	Robot::~Robot() {
+		delete _command;
+		delete _dribbler;
+		delete _kicker;
+		delete _motor;
+		delete _body;
+		for(int i=0; i<4; i++) delete _wheel[i];
+	}
 
-bool Robot::can_dribble() {
-	return _dribbler.is_active() && _dribbler.is_working();
-}
+	//methods:
+	void Robot::_init(void) {
+		_yellow_card = false;
+		_red_card = false;
+		_i = -1;
+		_x = 0.;
+		_y = 0.;
+		_speed = 0.;
+		_angle = 0.;
+		_command = new Command();
+		_dribbler = new Dribbler();
+		_kicker = new Kicker();
+		_motor = new Motor();
+		_body = new Body();
+		for(int i=0; i<4; i++) _wheel[4] = new Wheel();
+	}
 
-void Robot::start_dribbler() {
-	_command.start_dribbler();
-}
+	bool Robot::can_kick() {
+		return _kicker->is_active() && _kicker->is_working();
+	}
 
-void Robot::stop_dribbler() {
-	int a = 0;
-}
+	bool Robot::can_dribble() {
+		return _dribbler->is_active() && _dribbler->is_working();
+	}
 
-bool Robot::is_working() {
-	//if(dribbler.is_broken() ||
-	return true;
-}
+	bool Robot::is_working() {
+		//TODO: implement
+		return true;
+	}
 
-bool Robot::is_broken() {
-	return true;
-}
+	bool Robot::is_broken() {
+		//TODO: implement
+		return false;
+	}
 
-void Robot::repair() {
-	_dribbler.repair();
-	_kicker.repair();
-	_motor.repair();
-	for (int i = 0; i < 4; i++)
-		_wheel[i].repair();
-	_body.repair();
-	_working = true;
-}
+	void Robot::repair() {
+		_dribbler->repair();
+		_kicker->repair();
+		_motor->repair();
+		for (int i = 0; i < 4; i++)
+			_wheel[i]->repair();
+		_body->repair();
+		_working = true;
+	}
 
-void Robot::break_down() {
-	_working = false;
+	void Robot::break_down() {
+		_working = false;
+	}
+	
+	void Robot::kick() {
+		_command->kick(_kicker->speed());
+	}
+
+	void Robot::kick(double speed) {
+		_command->kick(speed);
+	}
+
+	void Robot::dribble() {
+		_command->dribble(_dribbler->speed());
+	}
+
+	void Robot::dribble(double speed) {
+		_command->dribble(speed);
+	}
+
+	void Robot::place(double x, double y) {
+		_x = x;
+		_y = y;
+	}
 }

@@ -45,14 +45,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\Comunicacao&quot;"
+				AdditionalIncludeDirectories="..\Simulacao;..\Comunicacao;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -66,7 +66,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -188,6 +188,10 @@
 				Name="Interface"
 				>
 				<File
+					RelativePath=".\Talk.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\UDPClientIntSim.cpp"
 					>
 				</File>
@@ -224,10 +228,6 @@
 					</File>
 					<File
 						RelativePath=".\Motor.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Pose.cpp"
 						>
 					</File>
 					<File
@@ -268,13 +268,41 @@
 				Name="Core"
 				>
 				<File
-					RelativePath=".\Strategy.cpp"
+					RelativePath=".\Play.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\StrategyX.cpp"
+					RelativePath=".\PlayX.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Skill.cpp"
+					>
+				</File>
+				<Filter
+					Name="Skills"
+					>
+					<File
+						RelativePath=".\Goto.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Loops.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Move.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Plays"
+					>
+				</Filter>
+				<Filter
+					Name="Tactics"
+					>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -337,10 +365,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Pose.h"
-						>
-					</File>
-					<File
 						RelativePath=".\Robot.h"
 						>
 					</File>
@@ -353,22 +377,66 @@
 			<Filter
 				Name="Control"
 				>
+				<File
+					RelativePath=".\Control.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Core"
 				>
 				<File
-					RelativePath=".\Strategy.h"
+					RelativePath=".\Play.h"
 					>
 				</File>
 				<File
-					RelativePath=".\StrategyX.h"
+					RelativePath=".\PlayX.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Skill.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Tactic.h"
+					>
+				</File>
+				<Filter
+					Name="Skills"
+					>
+					<File
+						RelativePath=".\_Skills.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Goto.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Loops.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Move.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Plays"
+					>
+				</Filter>
+				<Filter
+					Name="Tactics"
+					>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Interface"
 				>
+				<File
+					RelativePath=".\Talk.h"
+					>
+				</File>
 				<File
 					RelativePath=".\UDPClientIntSim.h"
 					>

@@ -1,14 +1,16 @@
 #pragma once
+namespace Inteligencia {
 
-class Goal {
+	class Goal {
 
-private:
-	//fields:
-	double _width;
+	private:
+		//fields:
+		double _width;
 
-public:
-	Goal(void);
-	Goal(double width);
-	~Goal(void);
+	public:
+		Goal(void);
+		Goal(double width);
+		~Goal(void);
 
-};
+	};
+}

@@ -1,15 +1,21 @@
 #include "Component.h"
+namespace Inteligencia {
 
-class Wheel : Component {
-	friend class Robot;
+	class Wheel : Component {
+		friend class Robot;
 
-private:
-	//fields:
-	double _angular_speed, _radius;
+	private:
+		//fields:
+		double _speed;//current speed
 
-public:
-	Wheel(void);
-	Wheel(double radius);//Constructor
-	~Wheel(void);//Destructor
+	public:
+		Wheel();
+		Wheel(double);//Constructor
+		~Wheel();//Destructor
 
-};
+		//methods:
+		void speed(double);
+		double speed();
+
+	};
+}

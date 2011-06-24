@@ -1,10 +1,20 @@
 #include "Wheel.h"
+namespace Inteligencia {
 
-Wheel::Wheel() {}
+	Wheel::Wheel() {}
 
-Wheel::Wheel(double radius) {
-	_angular_speed = 0.0;
-	_radius = radius;
+	Wheel::Wheel(double speed) {
+		_speed = speed;
+	}
+
+	Wheel::~Wheel() {}
+
+	void Wheel::speed(double s) {
+		_speed = s;
+	}
+
+	double Wheel::speed() {
+		return _speed;
+	}
+
 }
-
-Wheel::~Wheel() {}

@@ -1,10 +1,20 @@
-//#include "Component.h"
 #include "Motor.h"
+namespace Inteligencia {
 
-Motor::Motor() {}
+	Motor::Motor() {}
 
-Motor::Motor(double torque) {
-	_torque = torque;
+	Motor::Motor(double speed) {
+		_speed = speed;
+	}
+
+	Motor::~Motor() {}
+
+	void Motor::speed(double s) {
+		_speed = s;
+	}
+
+	double Motor::speed() {
+		return _speed;
+	}
+
 }
-
-Motor::~Motor() {}
