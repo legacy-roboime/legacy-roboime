@@ -16,10 +16,12 @@ namespace ComunicacaoRF
         private LR.TransmissorRFM12USB transmissorRFM12USB1;
         private UdpClient client;
 
-        private static float kickerVelocity = 100; // em RPM
-        private static float dribblerVelocity = 100; // em RPM
-        private static float wheelVelocity = 100; // em RPM
-
+        private static float kickerVelocity = 100;
+        // em RPM
+        private static float dribblerVelocity = 100;
+        // em RPM
+        private static float wheelVelocity = 100;
+        // em RPM
         private int serverPort = 9050;
         private int clientPort = 30000;
 
@@ -44,39 +46,69 @@ namespace ComunicacaoRF
         public static byte ScaleVelocity(float realVelocity, float minVelocity, float maxVelocity)
         {
             float scaledspeed;
-            if(realVelocity>=0)
+            if (realVelocity >= 0)
                 scaledspeed = (realVelocity - minVelocity) * 127 / (maxVelocity - minVelocity);
             else
-                scaledspeed = (realVelocity - minVelocity) * 127 / (maxVelocity - minVelocity) + 128;
-            int scaledint = (int) scaledspeed;
+                scaledspeed = 255 - (realVelocity - minVelocity) * 127 / (maxVelocity - minVelocity);
+            int scaledint = (int)scaledspeed;
             byte scaled = Byte.Parse(scaledint.ToString());
             return scaled;
         }
 
-        public static byte[] TranslateProtocol(string intelData)
+        public static string ReverseTranslateProtocol(byte robotData)
         {
-            int j = 0;
-            byte k = 1;
-            byte[] translated = new byte[36];
-            translated[j] = k; j++; k++;
-            string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
-           
-            for (int i = 0; i < splitData.Length; i++)
+            return null;
+        }
+
+        public static byte[] TranslateProtocol(string intelData, bool realTransmitter)
+        {
+            byte[] translated;
+            // Protocolo para o robô
+            if (realTransmitter)
             {
-                if (splitData[i] == "") continue;
-                // Kicker
-                else if ((i) % 6 == 4) translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.kickerVelocity);
-                // Dribbler
-                else if ((i) % 6 == 5)
-                {
-                    translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.dribblerVelocity);
-                    j++;
-                    translated[j] = k++;
-                }
-                // Wheels
-                else translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.wheelVelocity);
+                translated = new byte[36];
+                int j = 0;
+                translated[j] = 0x22;
                 j++;
+                byte k = 1;
+                translated[j] = k;
+                j++;
+                k++;
+                string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
+
+                for (int i = 0; i < splitData.Length; i++)
+                {
+                    if (splitData[i] == "")
+                        // Kicker
+                        continue;
+                    else if ((i) % 6 == 4)
+                        // Dribbler
+                        translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.kickerVelocity);
+                    else if ((i) % 6 == 5)
+                    {
+                        translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.dribblerVelocity);
+                        j++;
+                        translated[j] = k++;
+                    }
+                    else
+                        // Wheels
+                        translated[j] = ComunicacaoRF.ScaleVelocity(float.Parse(splitData[i]), 0, ComunicacaoRF.wheelVelocity);
+                    j++;
+                }
             }
+            //Protocolo para o simulador
+            else
+            {
+                string appendString = "13 0 4 ";
+                intelData = string.Concat(appendString, intelData);
+
+                System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+
+                translated = encoding.GetBytes(intelData);
+
+            }
+
+
             return translated;
         }
 
@@ -87,26 +119,27 @@ namespace ComunicacaoRF
             // Initializes the thread in which the UDP server will reside
             Thread UDPServerThread = new Thread(server.Execute);
             UDPServerThread.Start();
-            while (!UDPServerThread.IsAlive) ;
+            while (!UDPServerThread.IsAlive)
+                ;
             Thread.Sleep(1);
-
-            this.transmissorRFM12USB1 = new LR.TransmissorRFM12USB();
-            this.transmissorRFM12USB1.Inicializar("VIVATxRx", "IME");
 
             if (realTransmitter)
             {
+                this.transmissorRFM12USB1 = new LR.TransmissorRFM12USB();
+                this.transmissorRFM12USB1.Inicializar("VIVATxRx", "IME");
+
                 while (true)
                 {
                     if (server.data != null)
                     {
                         this.memoryData = Encoding.ASCII.GetString(server.data, 0, server.recv);
-                        this.translatedData = TranslateProtocol(memoryData);
+                        this.translatedData = TranslateProtocol(memoryData, realTransmitter);
                         Send(this.translatedData, 0xfe, 0xff);
                         //Console.WriteLine(Encoding.ASCII.GetString(server.data, 0, server.recv));
                     }
                 }
-            }
 
+            }
             else
             {
                 this.client = new UdpClient("127.0.0.1", clientPort);
@@ -114,19 +147,19 @@ namespace ComunicacaoRF
                 UDPClientThread.Start();
                 while (!UDPClientThread.IsAlive) ;
                 Thread.Sleep(1);
-                
+
                 while (true)
                 {
-                    
-                    if (server.data != null)
+
+                    if (server.data != null) 
                     {
                         this.memoryData = Encoding.ASCII.GetString(server.data, 0, server.recv);
-                        this.translatedData = TranslateProtocol(memoryData);
+                        this.translatedData = TranslateProtocol(memoryData, realTransmitter);
 
-                     //   for (int i = 0; i < translatedData.Length; i++)
+                        //   for (int i = 0; i < translatedData.Length; i++)
                         //Console.WriteLine(translatedData[i]);
                     }
-                }       
+                }
             }
         }
 
@@ -138,6 +171,7 @@ namespace ComunicacaoRF
             //Console.WriteLine("");
             //for (int i = 0; i < comm.translatedData.Length; i++)
             //    Console.WriteLine(comm.translatedData[i]);
+
             comm.StartCommunication(false);
         }
     }
