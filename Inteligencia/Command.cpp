@@ -60,6 +60,11 @@ namespace Inteligencia {
 		return speed;
 	}
 
+	void Command::wheels(double w0, double w1, double w2, double w3) {
+		double speed[] = {w0, w1, w2, w3};
+		set_wheel_speed(speed);
+	}
+
 	void Command::wheels(double speed[4]) {
 		set_wheel_speed(speed);
 	}

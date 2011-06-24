@@ -12,37 +12,71 @@ namespace Inteligencia {
 	}
 
 	Robot::~Robot() {
-		delete _command;
-		delete _dribbler;
-		delete _kicker;
-		delete _motor;
-		delete _body;
-		for(int i=0; i<4; i++) delete _wheel[i];
+		delete command;
+		delete dribbler;
+		delete kicker;
+		delete motor;
+		delete body;
+		for(int i=0; i<4; i++) delete wheel[i];
 	}
 
-	//methods:
+	//setters:
+	//TODO: low validation of setters
+	void Robot::i(int i) {
+		_i = i;
+	}
+	void Robot::yellow_card(int i) {
+		_yellow_card = i;
+	}
+	void Robot::red_card(int i) {
+		_red_card = i;
+	}
+	void Robot::add_yellow_card() {
+		_yellow_card++;
+	}
+	void Robot::add_red_card() {
+		_red_card++;
+	}
+	void Robot::x(double d) {
+		_x = d;
+	}
+	void Robot::y(double d) {
+		_y = d;
+	}
+	void Robot::angle(double d) {
+		_angle = d;
+	}
+	void Robot::speed(double d) {
+		_speed = d;
+	}
+
+	void Robot::place(double _x, double _y) {
+		x(_x);
+		y(_y);
+	}
+
 	void Robot::_init(void) {
-		_yellow_card = false;
-		_red_card = false;
-		_i = -1;
-		_x = 0.;
-		_y = 0.;
-		_speed = 0.;
-		_angle = 0.;
-		_command = new Command();
-		_dribbler = new Dribbler();
-		_kicker = new Kicker();
-		_motor = new Motor();
-		_body = new Body();
-		for(int i=0; i<4; i++) _wheel[4] = new Wheel();
+		yellow_card(false);
+		red_card(false);
+		i(-1);
+		x(0.);
+		y(0.);
+		speed(0.);
+		angle(0.);
+		command = new Command();
+		dribbler = new Dribbler();
+		kicker = new Kicker();
+		motor = new Motor();
+		body = new Body();
+		for(int i=0; i<4; i++) wheel[4] = new Wheel();
 	}
 
 	bool Robot::can_kick() {
-		return _kicker->is_active() && _kicker->is_working();
+		return kicker->is_active() && kicker->is_working();
 	}
 
 	bool Robot::can_dribble() {
-		return _dribbler->is_active() && _dribbler->is_working();
+		return dribbler->is_active() && dribbler->is_working();
 	}
 
 	bool Robot::is_working() {
@@ -56,12 +90,11 @@ namespace Inteligencia {
 	}
 
 	void Robot::repair() {
-		_dribbler->repair();
-		_kicker->repair();
-		_motor->repair();
-		for (int i = 0; i < 4; i++)
-			_wheel[i]->repair();
-		_body->repair();
+		dribbler->repair();
+		kicker->repair();
+		motor->repair();
+		for (int i=0; i<4; i++) wheel[i]->repair();
+		body->repair();
 		_working = true;
 	}
 
@@ -70,23 +103,52 @@ namespace Inteligencia {
 	}
 	
 	void Robot::kick() {
-		_command->kick(_kicker->speed());
+		command->kick(kicker->speed());
 	}
 
 	void Robot::kick(double speed) {
-		_command->kick(speed);
+		command->kick(speed);
 	}
 
 	void Robot::dribble() {
-		_command->dribble(_dribbler->speed());
+		command->dribble(dribbler->speed());
 	}
 
 	void Robot::dribble(double speed) {
-		_command->dribble(speed);
+		command->dribble(speed);
 	}
 
-	void Robot::place(double x, double y) {
-		_x = x;
-		_y = y;
+	int Robot::i() {
+		return _i;
 	}
+
+	int Robot::yellow_card() {
+		return _yellow_card;
+	}
+
+	int Robot::red_card() {
+		return _red_card;
+	}
+
+	double Robot::x() {
+		return _x;
+	}
+
+	double Robot::y() {
+		return _y;
+	}
+
+	double Robot::angle() {
+		return _angle;
+	}
+
+	double Robot::speed() {
+		return _speed;
+	}
+
+	double* Robot::place() {
+		double p[] = {_x, _y};
+		return p;
+	}
+
 }

@@ -22,7 +22,8 @@ namespace Inteligencia {
 		double get_kick_speed();
 		double get_dribble_speed();
 		double*get_wheel_speed();
-		void wheels(double*);//set the 4 wheels speed
+		void wheels(double speed[4]);//set the 4 wheels speed
+		void wheels(double, double, double, double);//set the 4 wheels speed
 		void kick(double);//kicks with the given speed
 		//void kick();//kicks with the last speed
 		void force_kick(double);//kicks even without the ball with the given speed (front end to the setter)
