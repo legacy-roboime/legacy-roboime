@@ -357,6 +357,42 @@ void UDPServerSimInt::parsing()
 		//Construindo string para enviar
 		this->sendString.append(out.str());
 	}
+	else if(temp.compare("13") == 0) //pacote 13 CONTROL ONE ROBOT (CONTROL WHEELS)
+	{
+		//Lendo argumentos
+		os >> temp;
+		int indexScene = atoi(temp.c_str());
+
+		//Limpando string para enviar
+		this->sendString = "";
+
+		//Definindo string para enviar
+		stringstream out;
+
+		//Lendo argumentos do robo e controlando
+		os >> temp;
+		int indexRobot = atoi(temp.c_str());
+
+		os >> temp;
+		float speedWheel1 = atof(temp.c_str());
+		os >> temp;
+		float speedWheel2 = atof(temp.c_str());
+		os >> temp;
+		float speedWheel3 = atof(temp.c_str());
+		os >> temp;
+		float speedWheel4 = atof(temp.c_str());
+		os >> temp;
+		float dribblerSpeed = atof(temp.c_str());
+		os >> temp;
+		float kickerSpeed = atof(temp.c_str());
+
+		Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+
+		out << "ACK 11\n"; // confirmando pacote 11
+
+		//Construindo string para enviar
+		this->sendString.append(out.str());
+	}
 	else
 	{
 		this->sendString = "NACK";
