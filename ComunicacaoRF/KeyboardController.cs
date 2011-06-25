@@ -30,7 +30,7 @@ namespace ControleRobo
             }
         }
 
-        public void GetCommandList(object sender, ElapsedEventArgs e)
+        public override void GetCommandList(object sender, ElapsedEventArgs e)
         {
             Command[] commands = new Command[controllerKeys.Length];
             for (int i = 0, j = 0; i < controllerKeys.Length; i++)

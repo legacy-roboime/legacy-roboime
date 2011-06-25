@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 
 namespace ControleRobo
 {
@@ -15,7 +16,7 @@ namespace ControleRobo
         public int robotId;
         public Command[] issuedCommands;
 
-        public void GetCommandList();
+        public abstract void GetCommandList(object sender, ElapsedEventArgs e);
     }
 
 }
