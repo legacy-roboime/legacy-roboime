@@ -65,7 +65,7 @@ namespace Inteligencia {
 		void Client::send_string(string s) {
 			switch(_type) {
 				case TX:
-					//TODO: do
+					_udpclient->setSendString(s);
 					break;
 				case SIMSSL:
 					//TODO: do
@@ -92,6 +92,8 @@ namespace Inteligencia {
 			//NOTE: send and get last string
 			switch(_type) {
 				case TX:
+					_udpclient->service();
+					last_string(_udpclient->getLastReceivedString());
 					//TODO: do
 					break;
 				case SIMSSL:

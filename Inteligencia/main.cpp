@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 {
 	cout << "Modulo Inteligencia" << endl;
 
-	Client* client = new Client(TX);
+	Client* client = new Client(SIM);
 
 	Robot* rob = new Robot(2);
 
