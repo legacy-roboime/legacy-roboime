@@ -4,6 +4,7 @@
 UDPClientThread::UDPClientThread(void):Thread()
 {
 	Thread::setName("UDPClientThread");
+	udpClient = new UDPClient();
 }
 
 UDPClientThread::UDPClientThread(UDPClient* udpClient):Thread()
@@ -20,26 +21,22 @@ UDPClientThread::~UDPClientThread(void)
 UDPClientThread::UDPClientThread(const char* nm)
 {
 	Thread::setName(nm);
-	port=9876;
-	address="127.0.0.1";
+	udpClient = new UDPClient();
 }
 
 UDPClientThread::UDPClientThread(const char* nm, int _port, string _address)
 {
 	Thread::setName(nm);
-	port=_port;
-	address=_address;
+	udpClient = new UDPClient(_address, "", _port);
 }
 void UDPClientThread::run() {
 	try {
 		//wait("UDPClientMutex");
-		udpClient->func1();
+		udpClient->service();
 		//release("UDPClientMutex");
 	}catch(ThreadException ex) {
 		cout << ex.getMessage().c_str() << endl;
 	}		
-
-	Thread::sleep(1000);//16.66); //1./60. s
 }
 	
 

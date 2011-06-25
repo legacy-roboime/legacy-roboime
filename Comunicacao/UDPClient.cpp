@@ -37,8 +37,11 @@ UDPClient::~UDPClient(void)
 {
 }
 
-void UDPClient::func1()
+void UDPClient::service()
 {
+  char sendBuffer[ECHOMAX] = {};				// Buffer for send string (send)
+  this->sendString.copy(sendBuffer, sendString.length(), 0);
+  int echoStringLen;				    // Length of string to echo
   echoStringLen = strlen(sendBuffer);
 
   if (echoStringLen > ECHOMAX) {    // Check input length
@@ -49,8 +52,7 @@ void UDPClient::func1()
 
   try {
     UDPSocket sock;
-  
-	this->sendString.copy(sendBuffer, sendString.length(), 0);
+
     // Send the string to the server
     sock.sendTo(sendBuffer, echoStringLen, servAddress, echoServPort);
   

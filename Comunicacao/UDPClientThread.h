@@ -13,11 +13,8 @@ using namespace openutils;
 class UDPClientThread : public Thread
 {
 private:
-public:
 	UDPClient* udpClient;
-	int port;
-	string address;
-
+public:
 	UDPClientThread(void);
 	UDPClientThread(UDPClient* udpClient);
 	~UDPClientThread(void);

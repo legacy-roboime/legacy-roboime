@@ -203,6 +203,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="UDPMulticast"
+				>
+				<File
+					RelativePath=".\UDPMulticastSender.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPMulticastSenderThread.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -238,6 +250,18 @@
 				</File>
 				<File
 					RelativePath=".\UDPClientThread.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="UDPMulticast"
+				>
+				<File
+					RelativePath=".\UDPMulticastSender.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPMulticastSenderThread.h"
 					>
 				</File>
 			</Filter>
