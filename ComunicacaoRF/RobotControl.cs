@@ -10,6 +10,7 @@ namespace ControleRobo
 {
     class RobotControl
     {
+        #region Variables
         private string intelData;
         private byte[] intelTranslatedData;
         private byte[] robotData;
@@ -29,6 +30,7 @@ namespace ControleRobo
 
         private int serverPort = 9050;
         private int clientPort = 9876;
+        #endregion
 
         public void UDPSend(object sender, ElapsedEventArgs e)
         {
@@ -126,6 +128,19 @@ namespace ControleRobo
             #region realTransmitter
             if (realTransmitter)
             {
+                string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
+                for (int i = 0; i < numberControllers; i++)
+                {
+                    int startRobotInfo = 6 * (controllers[i].robotId - 1);
+                    for (int l = 0; l < 6; l++)
+                    {
+                        if (controllers[i].issuedCommands[l] != Command.None)
+                            splitData[startRobotInfo + l] = 30.ToString();
+                        else
+                            splitData[startRobotInfo + l] = 0.ToString();
+                    }
+                }
+
                 translated = new byte[36];
                 int j = 0;
                 translated[j] = 0x22;
@@ -134,7 +149,6 @@ namespace ControleRobo
                 translated[j] = k;
                 j++;
                 k++;
-                string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
 
                 for (int i = 0; i < splitData.Length; i++)
                 {
@@ -265,7 +279,7 @@ namespace ControleRobo
                     if (server.receivedData != null)
                     {
                         this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
-                        this.intelTranslatedData = TranslateProtocol(intelData, realTransmitter);
+                        this.intelTranslatedData = TranslateProtocol(intelData, realTransmitter, controllers);
                         //Send(this.intelTranslatedData, 0xfe, 0xff);
                         //Console.WriteLine(Encoding.ASCII.GetString(server.data, 0, server.recv));
                     }
@@ -289,7 +303,6 @@ namespace ControleRobo
                 }
             }
         }
-
 
         static void Main(string[] args)
         {
