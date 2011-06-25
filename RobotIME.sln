@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulacao", "Simulacao\Simu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Comunicacao", "Comunicacao\Comunicacao.vcproj", "{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controle", "ComunicacaoRF\Controle.csproj", "{1540404C-8607-4AA8-B5BF-D8F984F4A079}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transmissão", "ComunicacaoRF\Transmissão.csproj", "{1540404C-8607-4AA8-B5BF-D8F984F4A079}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LRTransmissor", "LRTransmissor\LRTransmissor.csproj", "{A6B77C7D-ABB5-4D46-A50A-2C9B55436E14}"
 EndProject
