@@ -16,22 +16,25 @@ namespace Inteligencia {
 		~Command();
 
 		//methods:
-		void set_kick_speed(double);
-		void set_dribble_speed(double);
-		void set_wheel_speed(double speed[4]);
-		double get_kick_speed();
-		double get_dribble_speed();
-		double*get_wheel_speed();
+		//setters:
+		void kick_speed(double);
+		void dribble_speed(double);
+		void wheel_speed(double speed[4]);
+		void force_kick(bool);
+		void force_dribble(bool);
+		//getters:
+		double kick_speed();
+		double dribble_speed();
+		double* wheel_speed();
+		bool force_kick();
+		bool force_dribble();
+		//useful shrothands:
 		void wheels(double speed[4]);//set the 4 wheels speed
 		void wheels(double, double, double, double);//set the 4 wheels speed
 		void kick(double);//kicks with the given speed
-		//void kick();//kicks with the last speed
 		void force_kick(double);//kicks even without the ball with the given speed (front end to the setter)
-		void force_kick();//kicks even without the ball with the last speed set
 		void dribble(double);//dribbles with the given speed (front end to the setter)
-		//void dribble();//dribbles with the last speed
 		void force_dribble(double);//dribbles even without the ball with the given speed
-		void force_dribble();//dribbles even without the ball with the last speed set
 		void reset();//resets the command to its null state
 
 	};

@@ -1,30 +1,31 @@
 #pragma once
-
-#include "stdio.h"
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include <iostream>
-
-#include "UDPClientThread.h"
-#include "UDPClientIntSim.h"
-
-#include "Simulation.h"
-
+#include "Talk.h"
+#include "Robot.h"
 using namespace Inteligencia;
+using namespace Inteligencia::Talk;
 
 int main(int argc, char **argv)
 {
-	printf("Modulo Inteligencia"); 
+	cout << "Modulo Inteligencia" << endl;
 
-	UDPClientIntSim* udpClientIntSim = new UDPClientIntSim();
+	Client* client = new Client(TX);
 
-	while(true)
-	{
-		udpClientIntSim->setSendString("7 0\n");
-		udpClientIntSim->service();
+	Robot* rob = new Robot(2);
 
-		udpClientIntSim->setSendString("5 0\n");
-		udpClientIntSim->service();
-	}
+	system("pause");
+	client->send_string("0 0\n");
+	client->send();
+	cout << client->last_string() << endl;
+
+	client->send_string("1 0\n");
+	client->send();
+	cout << client->last_string() << endl;
+
+	system("pause");
 
 	return 0;
 }

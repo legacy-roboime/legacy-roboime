@@ -35,7 +35,7 @@ public:
 
 	UDPClient(void);
 	~UDPClient(void);
-	UDPClient(string servAddress, char* echoString, unsigned short echoServPort);
+	UDPClient(string servAddress, unsigned short echoServPort);
 	void service();
 	string getLastReceivedString();
 	virtual void parsing();					//Parse the received string

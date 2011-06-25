@@ -1046,13 +1046,19 @@ void Simulation::controlDribbler( float dribblerSpeed, int indexRobot, int index
 void Simulation::executeKicker( float kickerSpeed, int indexRobot, int indexScene )
 {
 	NxActor* kickerActor = getActorKicker(indexScene, 4);
-	kickerActor->addForce(NxVec3(kickerSpeed,0,0));
+	//FIXME: nao fazer nada se der NULL
+	if(kickerActor != NULL) {
+		kickerActor->addForce(NxVec3(kickerSpeed,0,0));
+	}
 }
 
 void Simulation::setAngVelocityDribbler(NxReal velocityX, int indexRobot, int indexScene)
 {
 	NxActor* actorDribbler = getActorDribbler(indexScene, 4);
-	actorDribbler->setAngularVelocity(NxVec3(-velocityX,0,0));
+	//FIXME: nao fazer nada se der NULL
+	if(actorDribbler != NULL) {
+		actorDribbler->setAngularVelocity(NxVec3(-velocityX,0,0));
+	}
 }
 
 void Simulation::addLocalTorqueDribbler(NxReal torqueX, int indexRobot, int indexScene)
@@ -1581,7 +1587,11 @@ NxF32 Simulation::calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 )
 
 NxVec3 Simulation::getRobotGlobalPos( int indexRobot, int indexScene )
 {
-	return getActorRobot( indexScene, indexRobot )->getGlobalPosition();
+	//FIXME:
+	//return getActorRobot( indexScene, indexRobot )->getGlobalPosition();
+	//FIXED?:
+	NxActor* robot = getActorRobot(indexScene, indexRobot);
+	return robot==NULL? NxVec3() : robot->getGlobalPosition();
 }
 
 NxVec3 Simulation::getBallGlobalPos( int indexScene )
@@ -1595,7 +1605,11 @@ void Simulation::setRobotLinearVelocity(NxVec3 linVel, int indexScene, int index
 
 NxMat33 Simulation::getRobotGlobalOrientation( int indexRobot, int indexScene )
 {
-	return getActorRobot( indexScene, indexRobot )->getGlobalOrientation();
+	//FIXME:
+	//return getActorRobot( indexScene, indexRobot )->getGlobalOrientation();
+	//FIXED?:
+	NxActor* robot = getActorRobot(indexScene, indexRobot);
+	return robot==NULL? NxMat33() : robot->getGlobalOrientation();
 }
 
 /**

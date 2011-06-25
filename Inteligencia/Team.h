@@ -1,17 +1,32 @@
 #pragma once
+#include <list>
 #include "Robot.h"
+using namespace std;
 namespace Inteligencia {
 
 	class Team {
 
 	private:
 		//fields:
-		Robot _robot[5];
+		int _i;
+		list<Robot*> _robot;
+
+		//methods:
+		void _init();
 
 	public:
 		Team(void);
-		Team(Robot robot[5]);
+		Team(list<Robot*>);
 		~Team(void);
+
+		//methods:
+		//setters:
+		void i(int);
+		//getters:
+		int i();
+		//useful:
+		void add(Robot*);
+		void sort();
 
 	};
 }

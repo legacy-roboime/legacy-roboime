@@ -43,7 +43,6 @@ namespace Inteligencia {
 		_stage;
 		_steps = 0;
 		_active = true;
-		_team_command;
 	}
 
 	void Play::_take_step() {

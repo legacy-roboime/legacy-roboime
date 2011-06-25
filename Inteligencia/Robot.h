@@ -1,19 +1,15 @@
 #pragma once
-#include <list>
+#include "Body.h"
+#include "Command.h"
 #include "Component.h"
 #include "Dribbler.h"
 #include "Kicker.h"
 #include "Motor.h"
 #include "Wheel.h"
-#include "Body.h"
-#include "Command.h"
-
-using namespace std;
-
 namespace Inteligencia {	
 
 	class Robot : Component {
-		friend class TeamCommand;
+		friend class Updater;
 
 	private:
 		//fields:
@@ -69,6 +65,5 @@ namespace Inteligencia {
 		double angle();
 		double speed();
 		double* place();//returns {x,y}
-
 	};
 }

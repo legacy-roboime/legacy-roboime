@@ -191,14 +191,6 @@
 					RelativePath=".\Talk.cpp"
 					>
 				</File>
-				<File
-					RelativePath=".\UDPClientIntSim.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Control"
-				>
 			</Filter>
 			<Filter
 				Name="Base"
@@ -235,6 +227,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\Team.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\Wheel.cpp"
 						>
 					</File>
@@ -252,14 +248,6 @@
 					</File>
 					<File
 						RelativePath=".\Stage.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Team.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\TeamCommand.cpp"
 						>
 					</File>
 				</Filter>
@@ -328,14 +316,6 @@
 						RelativePath=".\Stage.h"
 						>
 					</File>
-					<File
-						RelativePath=".\Team.h"
-						>
-					</File>
-					<File
-						RelativePath=".\TeamCommand.h"
-						>
-					</File>
 				</Filter>
 				<Filter
 					Name="Robot"
@@ -369,18 +349,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\Team.h"
+						>
+					</File>
+					<File
 						RelativePath=".\Wheel.h"
 						>
 					</File>
 				</Filter>
-			</Filter>
-			<Filter
-				Name="Control"
-				>
-				<File
-					RelativePath=".\Control.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Core"
@@ -424,21 +400,33 @@
 				<Filter
 					Name="Plays"
 					>
+					<File
+						RelativePath=".\_Plays.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="Tactics"
 					>
+					<File
+						RelativePath=".\Tactics.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="Interface"
 				>
 				<File
+					RelativePath=".\Controller.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Talk.h"
 					>
 				</File>
 				<File
-					RelativePath=".\UDPClientIntSim.h"
+					RelativePath=".\Updater.h"
 					>
 				</File>
 			</Filter>

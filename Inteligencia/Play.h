@@ -3,10 +3,7 @@
 #include <string.h>
 #include "Stage.h"
 #include "Tactic.h"
-#include "TeamCommand.h"
-
 using namespace std;
-
 namespace Inteligencia {
 
 	class Play {
@@ -25,8 +22,7 @@ namespace Inteligencia {
 		static Stage __stage;
 		static list<Play*> _play;
 
-		//fields:
-		TeamCommand _team_command;
+		//fields:	
 		Stage _stage;
 		int _steps;
 		bool _active;

@@ -17,7 +17,7 @@ UDPClient::UDPClient(void)
 	//for (int i=0; i<sizeDataBaseVision; i++) dataBaseVision[i] = DataBaseVision();
 }
 
-UDPClient::UDPClient(string servAddress, char* echoString, unsigned short echoServPort)
+UDPClient::UDPClient(string servAddress, unsigned short echoServPort)
 {
 	//this->echoString = echoString;
 	this->servAddress = servAddress;

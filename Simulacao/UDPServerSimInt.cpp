@@ -386,7 +386,7 @@ void UDPServerSimInt::parsing()
 		os >> temp;
 		float kickerSpeed = atof(temp.c_str());
 
-		Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+		//Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 
 		out << "ACK 13\n"; // confirmando pacote 13
 
@@ -421,7 +421,7 @@ void UDPServerSimInt::parsing()
 			os >> temp;
 			float kickerSpeed = atof(temp.c_str());
 
-			Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+			//Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 		}
 
 		out << "ACK 14\n"; // confirmando pacote 14
