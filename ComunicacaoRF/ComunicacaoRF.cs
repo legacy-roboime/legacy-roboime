@@ -15,9 +15,11 @@ namespace ComunicacaoRF
         private byte[] robotData;
         private string robotTranslatedData;
 
+        private UDPServer server;
+
         private TransmissorRFM12USB transmissorRFM12USB1;
         private UdpClient simulationClient;
-        private UdpClient intelClient;
+        //private UdpClient intelClient;
 
         private static System.Timers.Timer sendTimer;
         private static System.Timers.Timer receiveTimer;
@@ -42,6 +44,12 @@ namespace ComunicacaoRF
         {
             if (intelTranslatedData != null)
                 simulationClient.Send(intelTranslatedData, intelTranslatedData.Length);
+        }
+
+        public void TxSend(object sender, ElapsedEventArgs e)
+        {
+            if (intelTranslatedData != null)
+                Send(this.intelTranslatedData, 0xfe, 0xff);
         }
 
         public static byte ScaleVelocity(float realVelocity, float minVelocity, float maxVelocity)
@@ -116,7 +124,13 @@ namespace ComunicacaoRF
 
         public void StartCommunication(bool realTransmitter)
         {
-            UDPServer server = new UDPServer(serverPort);
+            server = new UDPServer(serverPort);
+            //
+            // TODO: Tirar isso daqui e colocar o protocolo do robô 
+            //
+            server.sendData = Encoding.ASCII.GetBytes("MOTHERFUCKER");
+            //
+
             Thread UDPServerThread = new Thread(server.Execute);
             UDPServerThread.Start();
             while (!UDPServerThread.IsAlive) ;
@@ -130,9 +144,9 @@ namespace ComunicacaoRF
 
                 while (true)
                 {
-                    if (server.data != null)
+                    if (server.receivedData != null)
                     {
-                        this.intelData = Encoding.ASCII.GetString(server.data, 0, server.recv);
+                        this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
                         this.intelTranslatedData = TranslateProtocol(intelData, realTransmitter);
                         Send(this.intelTranslatedData, 0xfe, 0xff);
                         //Console.WriteLine(Encoding.ASCII.GetString(server.data, 0, server.recv));
@@ -147,14 +161,15 @@ namespace ComunicacaoRF
                 sendTimer.Elapsed += new ElapsedEventHandler(UDPSend);
                 sendTimer.Enabled = true;
 
-                if (server.data != null)
+                if (server.receivedData != null)
                 {
                     while (true)
                     {
-                        this.intelData = Encoding.ASCII.GetString(server.data, 0, server.recv);
+                        this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
                         this.intelTranslatedData = TranslateProtocol(intelData, realTransmitter);
                         //for (int i = 0; i < translatedData.Length; i++)
                         //Console.WriteLine(translatedData[i]);
+
                     }
                 }
             }
@@ -169,6 +184,7 @@ namespace ComunicacaoRF
             //for (int i = 0; i < comm.translatedData.Length; i++)
             //    Console.WriteLine(comm.translatedData[i]);
 
+            
             comm.StartCommunication(false);
         }
     }

@@ -13,7 +13,8 @@ using System.Text;
 public class UDPServer
 {
     public int recv;
-    public byte[] data = new byte[1024];
+    public byte[] receivedData;
+    public byte[] sendData;
 
     IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
 
@@ -22,6 +23,8 @@ public class UDPServer
 
     public UDPServer(int port)
     {
+        receivedData = new byte[1024];
+        sendData = new byte[1024];
         ipep = new IPEndPoint(IPAddress.Any, port);
 
         newsock = new Socket(AddressFamily.InterNetwork,
@@ -31,12 +34,13 @@ public class UDPServer
 
     public void Execute()
     {
-//        Console.WriteLine("Waiting for a client...");
+        //Console.WriteLine("Waiting for a client...");
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
         EndPoint tmpRemote = (EndPoint)(sender);        
         while (true)
         {
-            recv = newsock.ReceiveFrom(data, ref tmpRemote);
+            recv = newsock.ReceiveFrom(receivedData, ref tmpRemote);
+            newsock.SendTo(sendData, sendData.Length, SocketFlags.None, tmpRemote);
         }
     }
 }
