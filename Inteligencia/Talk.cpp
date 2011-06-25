@@ -98,7 +98,7 @@ namespace Inteligencia {
 					//TODO: do
 					break;
 				case SIM:
-					_udpclient->func1();
+					_udpclient->service();
 					last_string(_udpclient->getLastReceivedString());
 					break;
 				case REFBOX:

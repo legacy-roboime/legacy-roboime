@@ -27,7 +27,7 @@ UDPClientThread::UDPClientThread(const char* nm)
 UDPClientThread::UDPClientThread(const char* nm, int _port, string _address)
 {
 	Thread::setName(nm);
-	udpClient = new UDPClient(_address, "", _port);
+	udpClient = new UDPClient(_address, _port);
 }
 void UDPClientThread::run() {
 	try {
