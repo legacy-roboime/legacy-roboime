@@ -94,7 +94,6 @@ namespace Inteligencia {
 				case TX:
 					_udpclient->service();
 					last_string(_udpclient->getLastReceivedString());
-					//TODO: do
 					break;
 				case SIMSSL:
 					//TODO: do

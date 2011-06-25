@@ -17,9 +17,12 @@ int main(int argc, char **argv)
 	Robot* rob = new Robot(2);
 
 	system("pause");
-	client->send_string("0 0\n");
-	client->send();
-	cout << client->last_string() << endl;
+
+	while(true) {
+		client->send_string("9 0 2 100 100 0\n");
+		client->send();
+		cout << client->last_string() << endl;
+	}
 
 	client->send_string("1 0\n");
 	client->send();
