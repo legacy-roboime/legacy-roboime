@@ -108,6 +108,7 @@ void UDPServer::func1()
 
 		  //cout << "Received packet from " << sourceAddress << ":" << sourcePort << endl;
 		  this->sendString.copy(echoBuffer, sendString.length(), 0);
+		  recvMsgSize = sendString.length();//FIXED
 		  sock.sendTo(echoBuffer, recvMsgSize, sourceAddress, sourcePort);
 	  }
     }
