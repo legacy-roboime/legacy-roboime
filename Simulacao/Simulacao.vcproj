@@ -16,9 +16,6 @@
 		<Platform
 			Name="Win32"
 		/>
-
-
-
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -49,7 +46,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\include\&quot;;&quot;..\Comunicacao\&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
+				AdditionalIncludeDirectories="&quot;..\Comunicacao\&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -69,10 +66,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="PhysXLoader.lib libprotobufd.lib"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib\&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut&quot;"
+				AdditionalDependencies="PhysXLoader.lib"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut&quot;"
 				GenerateDebugInformation="true"
-
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -102,158 +98,6 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -270,13 +114,11 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -297,15 +139,10 @@
 				Name="VCLinkerTool"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-
-
-
-
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
-
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -356,14 +193,6 @@
 							CompileAsManaged="0"
 						/>
 					</FileConfiguration>
-
-
-
-
-
-
-
-
 				</File>
 				<File
 					RelativePath=".\Simulation.cpp"
@@ -380,22 +209,18 @@
 						Name="Robot"
 						>
 						<File
-              
 							RelativePath=".\NxAllRobots.cpp"
 							>
 						</File>
 						<File
-
 							RelativePath=".\NxDribbler.cpp"
 							>
 						</File>
 						<File
-
 							RelativePath=".\NxKicker.cpp"
 							>
 						</File>
 						<File
-              
 							RelativePath=".\NxRobot.cpp"
 							>
 						</File>
@@ -549,26 +374,6 @@
 						>
 					</File>
 				</Filter>
-				<Filter
-					Name="SSLProtobuf"
-					>
-					<File
-						RelativePath=".\messages_robocup_ssl_detection.pb.cc"
-						>
-					</File>
-					<File
-						RelativePath=".\messages_robocup_ssl_geometry.pb.cc"
-						>
-					</File>
-					<File
-						RelativePath=".\messages_robocup_ssl_refbox_log.pb.cc"
-						>
-					</File>
-					<File
-						RelativePath=".\messages_robocup_ssl_wrapper.pb.cc"
-						>
-					</File>
-				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -598,7 +403,6 @@
 						Name="Robot"
 						>
 						<File
-
 							RelativePath=".\NxAllRobots.h"
 							>
 						</File>
@@ -789,26 +593,6 @@
 					</File>
 					<File
 						RelativePath=".\UDPServerSimInt.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="SSLProtobuf"
-					>
-					<File
-						RelativePath=".\messages_robocup_ssl_detection.pb.h"
-						>
-					</File>
-					<File
-						RelativePath=".\messages_robocup_ssl_geometry.pb.h"
-						>
-					</File>
-					<File
-						RelativePath=".\messages_robocup_ssl_refbox_log.pb.h"
-						>
-					</File>
-					<File
-						RelativePath=".\messages_robocup_ssl_wrapper.pb.h"
 						>
 					</File>
 				</Filter>

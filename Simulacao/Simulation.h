@@ -171,7 +171,8 @@ public:
 	static void controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
 
 	static void addLocalTorqueDribbler(NxReal torqueX, int indexRobot, int indexScene);
-	void addLocalForceKicker(NxReal forceX, int indexRobot, int indexScene);
+	static void addLocalForceKicker(NxReal forceX, int indexRobot, int indexScene);
+	//static void createRobot(int indexRobot, int indexScene, string robotLabel, );
 
 	//Metodos que devem estar no modulo inteligencia
 	static NxReal calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed, int indexScene, int indexRobot, int indexWheel);
