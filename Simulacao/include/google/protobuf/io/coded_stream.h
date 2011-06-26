@@ -113,7 +113,7 @@
 #ifndef _MSC_VER
 #include <sys/param.h>
 #endif  // !_MSC_VER
-#include <google/protobuf/stubs/common.h>
+#include "include/google/protobuf/stubs/common.h"
 
 namespace google {
 

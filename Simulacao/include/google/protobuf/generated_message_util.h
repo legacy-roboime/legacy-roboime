@@ -38,7 +38,7 @@
 #ifndef GOOGLE_PROTOBUF_GENERATED_MESSAGE_UTIL_H__
 #define GOOGLE_PROTOBUF_GENERATED_MESSAGE_UTIL_H__
 
-#include <google/protobuf/stubs/common.h>
+#include "include/google/protobuf/stubs/common.h"
 
 
 namespace google {

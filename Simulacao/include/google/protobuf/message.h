@@ -119,9 +119,9 @@
 #include <iosfwd>
 #endif
 
-#include <google/protobuf/message_lite.h>
+#include "include/google/protobuf/message_lite.h"
 
-#include <google/protobuf/stubs/common.h>
+#include "include/google/protobuf/stubs/common.h"
 
 #if defined(_WIN32) && defined(GetMessage)
 // windows.h defines GetMessage() as a macro.  Let's re-define it as an inline

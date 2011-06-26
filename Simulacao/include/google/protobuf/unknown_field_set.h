@@ -40,7 +40,7 @@
 
 #include <string>
 #include <vector>
-#include <google/protobuf/repeated_field.h>
+#include "include/google/protobuf/repeated_field.h"
 
 namespace google {
 namespace protobuf {

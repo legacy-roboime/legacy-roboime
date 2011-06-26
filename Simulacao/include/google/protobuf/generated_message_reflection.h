@@ -40,8 +40,8 @@
 
 #include <string>
 #include <vector>
-#include <google/protobuf/message.h>
-#include <google/protobuf/unknown_field_set.h>
+#include "include/google/protobuf/message.h"
+#include "include/google/protobuf/unknown_field_set.h"
 
 
 namespace google {

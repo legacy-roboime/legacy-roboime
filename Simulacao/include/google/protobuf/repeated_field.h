@@ -48,8 +48,8 @@
 
 #include <string>
 #include <iterator>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/message_lite.h>
+#include "include/google/protobuf/stubs/common.h"
+#include "include/google/protobuf/message_lite.h"
 
 
 namespace google {
