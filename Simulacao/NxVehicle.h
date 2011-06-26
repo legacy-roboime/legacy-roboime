@@ -15,92 +15,97 @@
 
 class NxVehicle {
 private:
-	NxArray<NxWheel*>		_wheels;
-	NxArray<NxVehicle*>		_children;
-	NxActor*				_bodyActor;
-	NxScene*				_nxScene;
+	NxArray<NxWheel*>			_wheels;
+	NxArray<NxVehicle*>			_children;
+	NxActor*					_bodyActor;
+	NxScene*					_nxScene;
 
-	NxArray<NxVehicleMotor*> _vehicleMotors;
-	//NxArray<NxVehicleGears*> _vehicleGears;
-	NxF32					_gearRatio;
+	NxArray<NxVehicleMotor*>	_vehicleMotors;
+	//NxArray<NxVehicleGears*>	_vehicleGears;
+	NxF32						_gearRatio;
 
 	//NxReal					_steeringWheelState;
-	NxReal					_accelerationPedal;
+	NxReal						_accelerationPedal;
 	//NxReal					_brakePedal;
-	//bool					_brakePedalChanged;
-	//bool					_handBrake;
+	//bool						_brakePedalChanged;
+	//bool						_handBrake;
 	//NxReal					_acceleration;
 
 	//NxReal					_digitalSteeringDelta;
 	//NxVec3					_steeringTurnPoint;
 	//NxVec3					_steeringSteerPoint;
 	//NxReal					_steeringMaxAngleRad;
-	NxReal					_motorForce;
-	NxReal					_transmissionEfficiency;
-	NxReal					_differentialRatio;
+	NxReal						_motorForce;
+	NxReal						_transmissionEfficiency;
+	NxReal						_differentialRatio;
 
-	NxVec3					_localVelocity;
-	//bool					_braking;
-	//bool					_releaseBraking;
-	NxReal					_maxVelocity;
-	NxMaterial*				_carMaterial;
-	NxReal					_cameraDistance;
+	NxVec3						_localVelocity;
+	//bool						_braking;
+	//bool						_releaseBraking;
+	NxReal						_maxVelocity;
+	NxMaterial*					_carMaterial;
+	NxReal						_cameraDistance;
 
-	NxVec3					_trailBuffer[NUM_TRAIL_POINTS];
-	NxU32					_nextTrailSlot;
-	NxReal					_lastTrailTime;
+	NxVec3						_trailBuffer[NUM_TRAIL_POINTS];
+	NxU32						_nextTrailSlot;
+	NxReal						_lastTrailTime;
 
-	NxActor*				_mostTouchedActor;
-	void					_computeMostTouchedActor();
-	void					_computeLocalVelocity();
+	NxActor*					_mostTouchedActor;
+	void						_computeMostTouchedActor();
+	void						_computeLocalVelocity();
 	//NxReal					_computeAxisTorque(NxU32 indexMotor);
-	NxReal					_computeRpmFromWheel(NxU32 indexWheel);
+	NxReal						_computeRpmFromWheel(NxU32 indexWheel);
 	//NxReal					_computeMotorRpm(NxReal rpm);
 
-	//void					_updateRpms();
+	//void						_updateRpms();
 
-	NxF32					_getGearRatio();
+	NxF32						_getGearRatio();
 
-	//void					_controlSteering(NxReal steering, bool analogSteering);
-	void					_controlAcceleration(NxReal acceleration, bool analogAcceleration);
-	static NxVehicle*		_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc);
+	//void						_controlSteering(NxReal steering, bool analogSteering);
+	void						_controlAcceleration(NxReal acceleration, bool analogAcceleration);
+	static NxVehicle*			_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc);
 public:
-	void*					userData;
+	void*						userData;
 
-	NxReal					_torqueAxleWheelControl[4];
+	NxReal*						_torqueAxleWheelControl;
+	//NxArray<NxReal>				_torqueAxleWheelControl;
+	//NxReal						_torqueAxleWheelControl[4];
 
 	NxVehicle();
 	~NxVehicle();
 
-	void					handleContactPair(NxContactPair& pair, NxU32 carIndex);
-	void					updateVehicle(NxReal lastTimeStepSize);
-	void					control (NxReal torqueAxleWheel1, NxReal torqueAxleWheel2, NxReal torqueAxleWheel3, NxReal torqueAxleWheel4);
-	void					control1 ();
-	//void					gearUp();
-	//void					gearDown();
+	void						handleContactPair(NxContactPair& pair, NxU32 carIndex);
+	void						updateVehicle(NxReal lastTimeStepSize);
+	void						control (NxReal* torqueWheels);//NxArray<NxReal> torqueWheels);//NxReal t1, NxReal t2, NxReal t3, NxReal t4);//
+	void						control1 ();
+	//void						gearUp();
+	//void						gearDown();
 
-	void					draw(bool debug = false);
+	void						draw(bool debug = false);
 
-	void					applyRandomForce();
+	void						applyRandomForce();
 
-	NxReal					getDriveVelocity() { return NxMath::abs(_localVelocity.x); }
+	NxReal						getDriveVelocity() { return NxMath::abs(_localVelocity.x); }
 
-	NxReal					getMaxVelocity() { return _maxVelocity; }
-	NxU32					getNbMotors() { return _vehicleMotors.size(); }
-	const NxVehicleMotor*	getMotor(NxU32 i) const { return _vehicleMotors[i]; }
-	//const NxVehicleGears*	getGear(NxU32 i) const { return _vehicleGears[i]; }
-	NxActor*				getActor() { return _bodyActor; }
-	NxVehicle*				getChild(NxU32 i);
-	void					addChild(NxVehicle* child);
-	NxU32					nbChildren() { return _children.size(); }
+	NxReal						getMaxVelocity() { return _maxVelocity; }
+	NxU32						getNbMotors() { return _vehicleMotors.size(); }
+	const NxVehicleMotor*		getMotor(NxU32 i) const { return _vehicleMotors[i]; }
+	//const NxVehicleGears*		getGear(NxU32 i) const { return _vehicleGears[i]; }
+	NxActor*					getActor() { return _bodyActor; }
+	NxVehicle*					getChild(NxU32 i);
+	void						addChild(NxVehicle* child);
+	NxU32						nbChildren() { return _children.size(); }
 
-	NxU32					getNbWheels() { return _wheels.size(); }
-	const NxWheel*			getWheel(NxU32 i) { NX_ASSERT(i < _wheels.size()); return _wheels[i]; }
-	NxReal					getCameraDistance() { return _cameraDistance; }
+	NxU32						getNbWheels() { return _wheels.size(); }
+	const NxWheel*				getWheel(NxU32 i) { NX_ASSERT(i < _wheels.size()); return _wheels[i]; }
+	NxReal						getCameraDistance() { return _cameraDistance; }
 
-	NxMat34 getGlobalPose() { return _bodyActor->getGlobalPose(); }
+	NxMat34						getGlobalPose() { return _bodyActor->getGlobalPose(); }
 
-	static NxVehicle* createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc);
+	static NxVehicle*			createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc);
+
+	NxVec3						getBodyPos();
+	NxReal						getAngle2DFromVehicle();
 };
 
 NX_INLINE NxVehicle* NxVehicle::getChild(NxU32 i) {

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <NxVec3.h>
+#include <NxMat33.h>
 
 enum NxWheelFlags {
 	//NX_WF_STEERABLE_INPUT		= (1 << 0),
@@ -22,9 +23,12 @@ enum NxWheelFlags {
 
 class NxWheelDesc {
 public:
+	int						id;
+	NxReal					angWheelRelRobot;
 	NxVec3					position;
 	//NxVec3					wheelAxis;
 	//NxVec3					downAxis;
+	NxMat33					wheelOrientation;
 
 	NxReal					wheelRadius;
 	NxReal					wheelWidth;

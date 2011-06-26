@@ -27,7 +27,7 @@ class NxWheel
 	{
 	public:
 	static NxWheel* createWheel(NxActor* actor, NxWheelDesc* wheelDesc);
-	static NxWheel* createWheel2(NxActor* actor, NxWheelDesc* wheelDesc, int i);
+	static NxWheel* createWheel2(NxActor* actor, NxWheelDesc* wheelDesc);
 
 
 	virtual					~NxWheel() {}
@@ -102,9 +102,9 @@ private:
 class NxWheel2 : public NxWheel
 	{
 	public:
-	NxWheel2(NxActor* actor, NxWheelDesc* wheelDesc);
+	//NxWheel2(NxActor* actor, NxWheelDesc* wheelDesc);
 
-	NxWheel2(NxActor* actor, NxWheelDesc* wheelDesc, int i);
+	NxWheel2(NxActor* actor, NxWheelDesc* wheelDesc);
 	NxReal					getMotorTorque();
 	NxReal					getAxleSpeed(); 
 
@@ -118,6 +118,9 @@ class NxWheel2 : public NxWheel
 	virtual NxReal			getRpm() const;
 	virtual NxVec3			getGroundContactPos() const { return getWheelPos()+NxVec3(0, -wheelShape->getRadius(), 0); }
 	virtual float			getRadius() const { return wheelShape->getRadius(); } 
+
+	NxReal					angWheelRelRobot;
+	int						id;
 
 	private:
 	NxActor* actor;

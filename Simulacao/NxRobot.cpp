@@ -1,8 +1,7 @@
 #include "Simulation.h"
-#include "Robot.h"
+#include "NxRobot.h"
 
-#include "NxVehicle.h"
-#include "NxAllVehicles.h"
+#include "NxAllRobots.h"
 #include "Stream.h"
 #include "cooking.h"
 
@@ -15,7 +14,7 @@ public:
 	virtual void  onContactNotify(NxContactPair& pair, NxU32 events)
 	{
 		NxI32 robotIndex = -1;
-		NxAllVehicles::handlePair(pair, events);
+		NxAllRobots::handlePair(pair, events);
 		
 	}
 
@@ -26,18 +25,18 @@ static NxUserContactReport * robotContactReport = &robotContactReportObj;
 /////////////////////////////////////////////////////////CLASS ROBOT/////////////////////////////////////
 /////////////////////////////////////////////////////////CLASS ROBOT/////////////////////////////////////
 /////////////////////////////////////////////////////////CLASS ROBOT/////////////////////////////////////
-float Robot::robotRadius = 90;
-float Robot::angle1RelativeWheel = 33./180.;
-float Robot::angle2RelativeWheel = 45./180.;
+
 /**
 * 
 */
 void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 {
 	//Veiculo descricao
+	//Body Descricao
 	NxActor* robotActor = Simulation::getActorRobot(indexScene, indexRobot);
 	NxShape*const* robotShapes = robotActor->getShapes();
-	NxU32 nShapes = robotActor->getNbShapes();
+	//NxBounds3 bodyBounds;
+	//robotShapes[0]->getWorldBounds(bodyBounds);
 
 	NxVehicleDesc vehicleDesc;
 	NxConvexShapeDesc robotShape[1];
@@ -56,7 +55,6 @@ void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 	}
 
 	vehicleDesc.position				= NxVec3(robotActor->getGlobalPosition());
-	//vehicleDesc.position.z				+= 35;
 	vehicleDesc.mass					= 3;//robotActor->getMass();
 	//vehicleDesc.motorForce				= 70000;
 	//vehicleDesc.maxVelocity				= 300.f;
@@ -74,10 +72,16 @@ void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 		//vehicleDesc.motorsDesc.push_back(&motorsDesc[i]);
 	//}
 
-	//Roda descricao
-	NxWheelDesc wheelDesc[4];
-	for(NxU32 i=0;i<4;i++)
+	//Roda (Wheel) descricao
+	int numberWheels = getNumberWheels(indexScene, indexRobot);
+	NxWheelDesc* wheelDesc = new NxWheelDesc[numberWheels];
+	for(NxU32 i=0;i<numberWheels;i++)
 	{
+		NxActor* actorWheel = getActorWheel(indexScene,indexRobot,i);
+		NxShape*const* wheelShapes = actorWheel->getShapes();
+		//NxBounds3 wheelBounds;
+		//wheelShapes[0]->getWorldBounds(wheelBounds);
+
 		//Para exportar modelo da roda do 3ds Max
 		//	NxWhee
 		//wheelDesc[i]
@@ -87,6 +91,12 @@ void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 		//robot1Shapes[0]->isWheel()->
 
 		//wheelDesc[i].wheelApproximation = 10;
+		NxMat33 mat33 = robotActor->getGlobalOrientation();
+
+		wheelDesc[i].wheelOrientation = actorWheel->getGlobalOrientation();//NxMat33(wheelOrientation.getColumn(2),wheelOrientation.getColumn(0),wheelOrientation.getColumn(1));
+		wheelDesc[i].position.set(actorWheel->getGlobalPosition()-robotActor->getGlobalPosition());
+		//wheelDesc[i].position.z = 0;
+		wheelDesc[i].id = i;
 		wheelDesc[i].wheelFlags |= NX_WF_BUILD_LOWER_HALF;
 		wheelDesc[i].wheelRadius = 20;
 		//wheelDesc[i].wheelWidth = 100;
@@ -99,32 +109,58 @@ void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 		wheelDesc[i].frictionToSide = 0;
 		wheelDesc[i].inverseWheelMass = 0.1; //TODO: CONFIGURAR PARÂMETRO
 		wheelDesc[i].wheelFlags |= NX_WF_USE_WHEELSHAPE;
+
+		//Angulo das Rodas (Omni)
+		NxVec3 wheelPosRel = actorWheel->getGlobalPosition() - robotActor->getGlobalPosition();
+		wheelDesc[i].angWheelRelRobot = NxMath::atan2( wheelPosRel.y, wheelPosRel.x );
+
 		vehicleDesc.robotWheels.pushBack(&wheelDesc[i]);
+		Simulation::gScenes[indexScene]->releaseActor(*actorWheel);
+
+		NxU32 flags = NX_WF_BUILD_LOWER_HALF;
+		wheelDesc[i].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_STEERABLE_INPUT |*/ flags;
 	}
 
-	NxReal robotRadius = Robot::robotRadius;
-	NxReal angle1 = Robot::angle1RelativeWheel;
-	NxReal angle2 = Robot::angle2RelativeWheel;
-	wheelDesc[0].position.set(	robotRadius*NxMath::cos( NxPi*angle1 ),		robotRadius*NxMath::sin( NxPi*angle1 ),		0);
-	wheelDesc[1].position.set(	-robotRadius*NxMath::cos( NxPi*angle1 ),	robotRadius*NxMath::sin( NxPi*angle1 ),		0);
-	wheelDesc[2].position.set(	-robotRadius*NxMath::cos( NxPi*angle2 ),	-robotRadius*NxMath::sin( NxPi*angle2 ),	0);
-	wheelDesc[3].position.set(	robotRadius*NxMath::cos( NxPi*angle2 ),		-robotRadius*NxMath::sin( NxPi*angle2 ),	0);
-	NxU32 flags = NX_WF_BUILD_LOWER_HALF;
-	wheelDesc[0].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_STEERABLE_INPUT |*/ flags;
-	wheelDesc[1].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_STEERABLE_INPUT |*/ flags;
-	wheelDesc[2].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_AFFECTED_BY_HANDBRAKE |*/ flags;
-	wheelDesc[3].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_AFFECTED_BY_HANDBRAKE |*/ flags;
+	//Orientacao das rodas (robo de 4 rodas)
+	/*float angle1 = NxPi * 45. / 180.;
+	float angle2 = NxPi * 33. / 180.;
+	NxMat33 mat1 = NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1));
+	NxMat33 mat2 = NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1));
+	mat1.rotX(NxPi*0.5);
+	mat2.rotY(NxPi + angle1);
+	wheelDesc[0].wheelOrientation = mat1*mat2;
 
-	//Driblador descricao.
-	NxActor* actorDribbler = getActorDribbler(indexScene, 4);
-	actorDribbler->setMaxAngularVelocity(100);
+	mat1 = NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1));
+	mat2 = NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1));
+	mat1.rotX(NxPi*0.5);
+	mat2.rotY(-angle1);
+	wheelDesc[1].wheelOrientation = mat1*mat2;
 
-	//Chutador descricao.
-	NxActor* kickerActor = getActorKicker(indexScene, 4);
-	kickerActor->setMaxAngularVelocity(100);
+	mat1 = NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1));
+	mat2 = NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1));
+	mat1.rotX(NxPi*0.5);
+	mat2.rotY(2*NxPi - angle);
+	wheelDesc[2].wheelOrientation = mat1*mat2;
 
-	//Criar veiculo
-	NxVehicle* vehicle = NxVehicle::createVehicle(gScenes[indexScene], &vehicleDesc);
+	mat1 = NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1));
+	mat2 = NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1));
+	mat1.rotX(NxPi*0.5);
+	mat2.rotY(3*NxPi*0.25);
+	wheelDesc[3].wheelOrientation = mat1*mat2;*/
+
+	//TODO: Incluir Driblador descricao.
+	//NxActor* actorDribbler = getActorDribbler(indexScene, indexRobot);
+	//actorDribbler->setMaxAngularVelocity(100);
+
+	//TODO: Incluir Chutador descricao.
+	//NxActor* kickerActor = getActorKicker(indexScene, indexRobot);
+	//kickerActor->setMaxAngularVelocity(100);
+
+	//Criar robot, vehicle base
+	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexScene], &vehicleDesc);
+	//NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexScene], &vehicleDesc);
+	//robot->initDefault();
+	robot->setId(indexRobot);
 
 	//Mudar pose do robo
 	//NxQuat q;
@@ -133,4 +169,34 @@ void Simulation::createRobotWithDesc(int indexRobot, int indexScene)
 
 	//Release no actor importado do 3ds Max
 	//gScenes[0]->releaseActor(*robotActor);
+}
+
+NxRobot::NxRobot():NxVehicle()
+{
+	idTeam = 1;
+	robotRadius = 90;
+	angleRelativeWheel1 = NxPi * 33./180.;//NxPi*33./180.;
+	angleRelativeWheel2 = NxPi * 33./180.;//NxPi*33./180.;
+	angleRelativeWheel3 = NxPi * 45./180.;//NxPi*45./180.;
+	angleRelativeWheel4 = NxPi * 45./180.;//NxPi*45./180.;
+}
+
+int NxRobot::getId()
+{
+	return id;
+}
+
+void NxRobot::setId(int id)
+{
+	this->id = id;
+}
+
+int NxRobot::getIdTeam()
+{
+	return idTeam;
+}
+
+void NxRobot::setIdTeam(int idTeam)
+{
+	this->idTeam = idTeam;
 }

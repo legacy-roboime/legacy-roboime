@@ -178,11 +178,11 @@ NxWheel* NxWheel::createWheel(NxActor* actor, NxWheelDesc* wheelDesc)
 	return wheel;
 }
 
-NxWheel* NxWheel::createWheel2(NxActor* actor, NxWheelDesc* wheelDesc, int indexWheel) 
+NxWheel* NxWheel::createWheel2(NxActor* actor, NxWheelDesc* wheelDesc) 
 {
 	if(wheelDesc->wheelFlags & NX_WF_USE_WHEELSHAPE)
 	{
-		return new NxWheel2(actor, wheelDesc, indexWheel);
+		return new NxWheel2(actor, wheelDesc);
 	}
 	
 	NxWheel1* wheel = new NxWheel1(&actor->getScene());
@@ -600,7 +600,7 @@ void NxWheel1::setAngle(NxReal angle)
 |Wheel 2 - uses NxWheelShape
 |
 \*---------------------------------------------------------------------------------------*/
-NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc) : actor(a)
+/*NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc) : actor(a)
 {
 
 	NxScene * scene = &actor->getScene();
@@ -644,11 +644,10 @@ NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc) : actor(a)
 	wheelShapeDesc.longitudalTireForceFunction.stiffnessFactor *= wheelDesc->frictionToFront;
 
 	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));
-}
+}*/
 
-NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc, int indexWheel) : actor(a)
+NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc) : actor(a)
 {
-
 	NxScene * scene = &actor->getScene();
 
 	//create a shared car wheel material to be used by all wheels
@@ -665,31 +664,7 @@ NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc, int indexWheel) : actor(a
 	//Posicao
 	wheelShapeDesc.localPose.t = wheelDesc->position;
 
-	//Orientacao das rodas (robo de 4 rodas)
-	NxMat33 mat1 = wheelShapeDesc.localPose.M;
-	NxMat33 mat2 = wheelShapeDesc.localPose.M;
-	NxReal angle = 33./180.;
-	if(indexWheel==0)
-	{
-		mat1.rotX(NxPi*0.5);
-		mat2.rotY(NxPi + angle*NxPi);
-	}
-	else if(indexWheel==2)
-	{
-		mat1.rotX(NxPi*0.5);
-		mat2.rotY(NxPi*0.25);
-	}
-	else if(indexWheel==1)
-	{
-		mat1.rotX(NxPi*0.5);
-		mat2.rotY(2*NxPi - angle*NxPi);
-	}
-	else //3
-	{
-		mat1.rotX(NxPi*0.5);
-		mat2.rotY(3*NxPi*0.25);
-	}
-	wheelShapeDesc.localPose.M = mat1*mat2;
+	wheelShapeDesc.localPose.M = wheelDesc->wheelOrientation; 
 	wheelShapeDesc.materialIndex = wsm->getMaterialIndex();
 	wheelFlags = wheelDesc->wheelFlags;
 

@@ -1,10 +1,9 @@
 #pragma once
 
 #include <stdio.h>
-#include <string.h>
 #include <sstream>
+#include <string>
 #include <iostream>
-using namespace std;
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -32,11 +31,11 @@ using namespace std;
 #include "cooking.h"
 #include "NXU_helper.h"  // NxuStream helper functions.
 
-#include "NxVehicle.h"
-#include "NxAllVehicles.h"
+#include "NxRobot.h"
+#include "NxAllRobots.h"
 
 #include "NxScene1.h"
-#include "Robot.h"
+#include "NxRobot.h"
 //#include "UDPServerThread.h";
 //#include "UDPServerSimInt.h"
 //#include "MyUserNotify.h"
@@ -45,6 +44,8 @@ using namespace std;
 #include "GLFontRenderer.h"
 printf("__PPCGEKKO__");
 #endif
+
+using namespace std;
 
 class MyUserNotify;
 class UDPServerThread;
@@ -80,9 +81,9 @@ private:
 	//static Thread* Simulation::udpServerThread;
 
 	//Velocidades para controle das rodas
-	static NxReal lastWheelSpeeds[10][4];
-	static NxReal lastDesiredWheelSpeeds[10][4];
-	static NxReal lastWheelTorques[10][4];
+	static NxArray<NxReal*> lastWheelSpeeds;
+	static NxArray<NxReal*> lastDesiredWheelSpeeds;
+	static NxArray<NxReal*> lastWheelTorques; 
 
 	//Robot
 	//extern NxUserContactReport * robotContactReport;
@@ -135,6 +136,8 @@ public:
 
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
+	static NxActor* getActorWheel(int indexScene, int indexRobot, int indexWheel);
+	static int getNumberWheels(int indexScene, int indexRobot);
 	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
 	static NxActor* getActorDribbler(int indexScene, int indexRobot);
 	static NxActor* getActorKicker(int indexScene, int indexRobot);
@@ -165,6 +168,7 @@ public:
 	static void executeKicker( float kickerSpeed, int indexRobot, int indexScene );
 	static void controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot );
 	static void controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
+	static void controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
 
 	static void addLocalTorqueDribbler(NxReal torqueX, int indexRobot, int indexScene);
 	void addLocalForceKicker(NxReal forceX, int indexRobot, int indexScene);
@@ -174,6 +178,9 @@ public:
 	static NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene );
 	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
 	static void infinitePath( int indexRobot );
+
+	//Math
+	static NxReal getAngle2DFromMat33( NxMat33 matrixOrientation );
 };
 
 	/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////

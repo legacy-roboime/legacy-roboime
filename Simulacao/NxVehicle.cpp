@@ -10,7 +10,7 @@
 
 #include "NxVehicle.h"
 #include "NxWheel.h"
-#include "NxAllVehicles.h"
+#include "NxAllRobots.h"
 
 #include <NxActorDesc.h>
 #include <NxBoxShape.h>
@@ -54,7 +54,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	if(vehicleDesc == NULL)
 		return NULL;
 
-	NxVehicle* vehicle = new NxVehicle;
+	NxRobot* vehicle = new NxRobot(); 
 	vehicle->userData = vehicleDesc->userData;
 
 	if(!vehicleDesc->isValid())
@@ -111,12 +111,18 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	}
 
 	//Criando rodas
-	for(NxU32 i = 0; i < vehicleDesc->robotWheels.size(); i++)
+	int nbWheels = vehicleDesc->robotWheels.size();
+	NxReal* torquesZero = new NxReal[nbWheels];
+	for(NxU32 i = 0; i < nbWheels; i++)
 	{
-		NxWheel* wheel = NxWheel::createWheel2(vehicle->_bodyActor, vehicleDesc->robotWheels[i], i);
+		//torquesZero.push_back(0);
+		torquesZero[i] = 0;
+		NxWheel* wheel = NxWheel::createWheel2(vehicle->_bodyActor, vehicleDesc->robotWheels[i]);
 
 		if(wheel)
 		{
+			((NxWheel2*)wheel)->angWheelRelRobot = vehicleDesc->robotWheels[i]->angWheelRelRobot;
+			((NxWheel2*)wheel)->id =vehicleDesc->robotWheels[i]->id;
 			vehicle->_wheels.pushBack(wheel);
 		} else {
 			delete vehicle;
@@ -129,7 +135,8 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	//don't go to sleep.
 	//vehicle->_bodyActor->wakeUp(1e10);
 	
-	vehicle->control(0,0,0,0);
+	vehicle->control(torquesZero);//0,0,0,0);//
+	delete torquesZero;
 	return vehicle;
 }
 
@@ -138,9 +145,9 @@ NxVehicle* NxVehicle::createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	if (vehicleDesc == NULL)
 		return NULL;
 	NxVehicle* vehicle = NxVehicle::_createVehicle(scene, vehicleDesc);
-	NxAllVehicles::AddVehicle(vehicle);
-	if (NxAllVehicles::getActiveVehicleNumber() != -1 || NxAllVehicles::getNumberOfVehicles() == 1)
-		NxAllVehicles::setActiveVehicle(NxAllVehicles::getNumberOfVehicles()-1);
+	NxAllRobots::AddRobot((NxRobot*)vehicle);
+	if (NxAllRobots::getActiveRobotNumber() != -1 || NxAllRobots::getNumberOfRobots() == 1)
+		NxAllRobots::setActiveRobot(NxAllRobots::getNumberOfRobots()-1);
 
 	return vehicle;
 }
@@ -217,6 +224,7 @@ void NxVehicle::updateVehicle(NxReal lastTimeStepSize)
 		wheel->tick(false, _torqueAxleWheelControl[i], 0, lastTimeStepSize);
 	}
 
+	//delete _torqueAxleWheelControl;
 	//printf("---\n");
 }
 
@@ -266,14 +274,11 @@ void NxVehicle::_computeLocalVelocity()
 	//printf("Velocity: %2.3f %2.3f %2.3f\n", _localVelocity.x, _localVelocity.y, _localVelocity.z);
 }
 
-void NxVehicle::control(NxReal torqueAxleWheel1, NxReal torqueAxleWheel2, NxReal torqueAxleWheel3, NxReal torqueAxleWheel4)
+void NxVehicle::control(NxReal* torqueWheels)//NxArray<NxReal> torqueWheels)//NxReal t1, NxReal t2, NxReal t3, NxReal t4)//
 {
 	_bodyActor->wakeUp(0.05);
 
-	_torqueAxleWheelControl[0] = torqueAxleWheel1;
-	_torqueAxleWheelControl[1] = torqueAxleWheel2;
-	_torqueAxleWheelControl[2] = torqueAxleWheel3;
-	_torqueAxleWheelControl[3] = torqueAxleWheel4;
+	_torqueAxleWheelControl = torqueWheels;
 }
 
 void NxVehicle::draw(bool debug) 
@@ -345,4 +350,37 @@ void NxVehicle::applyRandomForce()
 	NxVec3 pos(NxMath::rand(-4.f,4.f),NxMath::rand(-4.f,4.f),NxMath::rand(-4.f,4.f));
 	NxReal force = NxMath::rand(_bodyActor->getMass()*0.5f, _bodyActor->getMass() * 2.f);
 	_bodyActor->addForceAtLocalPos(NxVec3(0, force*100.f, 0), pos);
+}
+
+NxVec3 NxVehicle::getBodyPos()
+{
+	return _bodyActor->getGlobalPosition();
+}
+
+NxReal NxVehicle::getAngle2DFromVehicle()
+{
+	NxMat33 rotMatrix = _bodyActor->getGlobalOrientation();
+	NxMat33 rotMatrixInv;
+	rotMatrix.getInverse(rotMatrixInv);
+	NxVec3 vecY = rotMatrixInv.getColumn(1);
+	NxReal value = vecY.dot(NxVec3(0,1,0));
+	value /= vecY.magnitude();
+
+	NxReal teta = NxMath::acos(value);
+	if( teta < NxPi*0.5 )
+	{
+		if( vecY.x * vecY.y > 0 )
+		{
+			teta = NxPi*2 - teta;
+		}
+	}
+	else
+	{
+		if( vecY.x * vecY.y < 0 )
+		{
+			teta = NxPi*2 - teta;
+		}
+	}
+	teta = NxPi*2 - teta;
+	return teta;
 }
