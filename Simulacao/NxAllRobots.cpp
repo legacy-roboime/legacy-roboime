@@ -91,8 +91,14 @@ void NxAllRobots::handlePair(NxContactPair& pair, NxU32 events) {
 NxRobot* NxAllRobots::getRobotById(int indexRobot)
 {
 	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
-		if(_allRobotsSequential[i]->getId()==indexRobot)
-			return _allRobotsSequential[i];
+		if(_allRobotsSequential[i]!=NULL){
+			if(_allRobotsSequential[i]->getId()==indexRobot)
+				return _allRobotsSequential[i];
+			else
+				return NULL;
+		}
+		else 
+			return NULL;
 	}
 }
 

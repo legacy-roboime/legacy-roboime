@@ -1037,15 +1037,19 @@ void Simulation::controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 inde
 
 void Simulation::controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene)
 {
-	//Execute kicker
-	//executeKicker( kickerSpeed, indexRobot, indexScene );
+	NxRobot* robot = NxAllRobots::getRobotById(indexRobot);
+	if(robot)
+	{
+		//Execute kicker
+		//executeKicker( kickerSpeed, indexRobot, indexScene );
 
-	//Control dribbler
-	//controlDribbler( dribblerSpeed, indexRobot, indexScene );
+		//Control dribbler
+		//controlDribbler( dribblerSpeed, indexRobot, indexScene );
 
-	//Control wheels
-	NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY, indexRobot, indexScene); //omnidirecionalidade
-	controlWheels( wheelsSpeeds, indexScene, indexRobot); 
+		//Control wheels
+		NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY, indexRobot, indexScene); //omnidirecionalidade
+		controlWheels( wheelsSpeeds, indexScene, indexRobot); 
+	}
 }
 
 void Simulation::controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene)

@@ -133,6 +133,8 @@ void UDPServerSimInt::parsing()
 			Simulation::controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 		}
 
+		Simulation::simulate();
+
 		out << "ACK 4\n"; // confirmando pacote 4
 
 		//Construindo string para enviar
