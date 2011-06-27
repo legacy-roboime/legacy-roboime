@@ -25,7 +25,7 @@ bool Simulation::keyDown[256];//={false};
 NxArray<NxReal*> Simulation::lastWheelSpeeds;
 NxArray<NxReal*> Simulation::lastDesiredWheelSpeeds;
 NxArray<NxReal*> Simulation::lastWheelTorques;
-float Simulation::timeStep = 1./60.;
+float Simulation::timeStep = 15./1000.;//1./60.;
 bool Simulation::flagRender = false;
 float Simulation::widthBorderField = 6050;
 float Simulation::heightBorderField = 4050;

@@ -117,7 +117,7 @@ void UDPServerSimInt::parsing()
 		stringstream out;
 
 		//Lendo argumentos do robo e controlando
-		for(int indexRobot=1; indexRobot<=10; indexRobot++)
+		for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float speedX = atof(temp.c_str());
