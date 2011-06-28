@@ -1,17 +1,17 @@
 #pragma once
 #include "NxVehicle.h"
+#include "NxKicker.h"
+#include "NxDribbler.h"
 
 class NxRobot : public NxVehicle
 {
 private: 
 	int id;
 	int idTeam; //0 (Yellow Team) - 1 (Blue Team)
+	NxKicker kicker;
+	NxDribbler dribbler;
 public:
-	float robotRadius;
-	float angleRelativeWheel1;
-	float angleRelativeWheel2;
-	float angleRelativeWheel3;
-	float angleRelativeWheel4;
+	float bodyRadius;
 public:
 	NxRobot();
 

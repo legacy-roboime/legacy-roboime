@@ -120,7 +120,9 @@ private:
 	//static void parserDataFromServer();
 
 	//Robot
-	static void createRobotWithDesc(int indexRobot, int indexScene);
+	static void buildModelRobotWithDesc(int indexRobot, int indexScene);
+	static void cloneRobot(int indexRobot, int indexScene, string robotLabel, NxMat34 pose);
+
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
@@ -136,12 +138,16 @@ public:
 
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
+	static NxActor* getActorRobotByLabel(int indexScene, string robotLabel);
 	static NxActor* getActorWheel(int indexScene, int indexRobot, int indexWheel);
 	static int getNumberWheels(int indexScene, int indexRobot);
 	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
 	static NxActor* getActorDribbler(int indexScene, int indexRobot);
 	static NxActor* getActorKicker(int indexScene, int indexRobot);
 	static NxVec3 getFieldExtents(int indexScene);
+
+	static NxActor* cloneActor(NxActor* actorSource);
+	static NxJoint* cloneJoint(NxJoint* jointSource);
 
 	Simulation(void);
 	~Simulation(void);
@@ -172,7 +178,6 @@ public:
 
 	static void addLocalTorqueDribbler(NxReal torqueX, int indexRobot, int indexScene);
 	static void addLocalForceKicker(NxReal forceX, int indexRobot, int indexScene);
-	//static void createRobot(int indexRobot, int indexScene, string robotLabel, );
 
 	//Metodos que devem estar no modulo inteligencia
 	static NxReal calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed, int indexScene, int indexRobot, int indexWheel);

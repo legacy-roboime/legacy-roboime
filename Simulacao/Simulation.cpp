@@ -1055,13 +1055,13 @@ void Simulation::controlRobot(float speedX, float speedY, float speedAng, float 
 void Simulation::controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene)
 {
 	//Execute kicker
-	executeKicker( kickerSpeed, indexRobot, indexScene );
+	//executeKicker( kickerSpeed, indexRobot, indexScene );
 
 	//Control dribbler
-	controlDribbler( dribblerSpeed, indexRobot, indexScene );
+	//controlDribbler( dribblerSpeed, indexRobot, indexScene );
 
 	//Control wheels
-	NxReal wheelsSpeeds[4];
+	NxReal* wheelsSpeeds = new NxReal[4];
 	wheelsSpeeds[0] = speedWheel1;
 	wheelsSpeeds[1] = speedWheel2;
 	wheelsSpeeds[2] = speedWheel3;
@@ -1168,6 +1168,40 @@ NxActor* Simulation::getActorRobot(int indexScene, int indexRobot)
 						{
 							actor = NULL;
 							delete arrayLabel;
+						}
+					}
+				}
+				else continue;
+			}
+		}
+	}
+	return actor;
+}
+
+NxActor* Simulation::getActorRobotByLabel(int indexScene, string robotLabel)
+{
+	NxActor* actor = NULL;
+	const char* actorName = NULL;
+	if( gScenes != NULL )
+	{
+		if(gScenes[indexScene]!=NULL)
+		{
+			for(unsigned int j=0;j<gScenes[indexScene]->getNbActors();j++)
+			{
+				actor = gScenes[indexScene]->getActors()[j];
+				//gScenes[indexScene]->get
+				if(actor != NULL)
+				{
+					actorName = actor->getName();
+					if(actorName != NULL)
+					{
+						if(strcmp(actorName,robotLabel.c_str())==0) 
+						{
+							break;
+						}
+						else 
+						{
+							actor = NULL;
 						}
 					}
 				}
@@ -1532,7 +1566,7 @@ void Simulation::function(int argc, char **argv)
 			//createRobotWithDesc(1, 0);
 			//createRobotWithDesc(2, 0);
 			//createRobotWithDesc(3, 0);
-			createRobotWithDesc(4, 0);
+			buildModelRobotWithDesc( 4, 0 );
 			//createRobotWithDesc(5, 0);
 			//createRobotWithDesc(6, 0);
 			//createRobotWithDesc(7, 0);
@@ -1542,7 +1576,7 @@ void Simulation::function(int argc, char **argv)
 		}
 	}
 
-	//Save speeds/torques to calc omni
+	//Init speeds/torques to calc omni
 	NxAllRobots::setActiveRobot(0);
 	for(int i=0; i<=NxAllRobots::getBiggestIndexRobot(); i++)
 	{
@@ -1818,7 +1852,7 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 		NxReal angPosWheel = ((NxWheel2*)nxRobot->getWheel(i))->angWheelRelRobot;
 		speeds[i] = -NxMath::sin(angPosWheel) * ( speedX * NxMath::cos( -angRobo ) + speedY * NxMath::sin( angRobo ) ) +
 			NxMath::cos(angPosWheel) * ( speedX * NxMath::sin( -angRobo ) + speedY * NxMath::cos( angRobo ) ) +
-			speedAng * 90/*NxRobot::robotRadius*/;
+			speedAng * nxRobot->bodyRadius;
 	}
 
 	//NxMat33 omniMatrix1;
