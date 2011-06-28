@@ -1,11 +1,13 @@
 #pragma once
+#include <string>
 #include "Body.h"
-#include "Command.h"
+#include "Commander.h"
 #include "Component.h"
 #include "Dribbler.h"
 #include "Kicker.h"
 #include "Motor.h"
 #include "Wheel.h"
+using namespace std;
 namespace Inteligencia {	
 
 	class Robot : Component {
@@ -16,9 +18,12 @@ namespace Inteligencia {
 		int _yellow_card, _red_card;//counts how many cards of each robot has received
 		int _i;//_index is the index, and _i is the internal index
 		double _x, _y, _speed, _angle;//position, speed, and orientation
+		Commander* _commander;//the one to dispatch its commands
+		Updater* _updater;//the one to update it
 
 		//methods:
 		void _init();//used in the constructors for basic initialization
+		string _summary();
 		//modifiers:
 		void repair();//fixes all broken parts
 		void break_down();//raise an unknow break status
@@ -39,7 +44,6 @@ namespace Inteligencia {
 		~Robot();//destructor
 
 		//components:
-		Command* command;//command to be executed
 		Dribbler* dribbler;//dribbler component
 		Kicker* kicker;//kicker component
 		Motor* motor;//motor component
@@ -51,6 +55,12 @@ namespace Inteligencia {
 		bool can_dribble();//chekc if the robot has dribbler component and it's working
 		bool is_working();//checks if the robot is working
 		bool is_broken();//checks if the robot is broken (!working)
+		void command(Command*);//adds a command to be executed
+		void command(double, double, double, double);//
+		void command(double, double, double, double, double d, double k);//
+		void commander(Commander*);//sets its commander
+		void updater(Updater*);//sets its updater
+		string summary();
 		//void compel(Command);//compel a command = issue an order//TODO: think about it.
 		void kick();//kick with the standard speed
 		void kick(double);//kick with the given speed

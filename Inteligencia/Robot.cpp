@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include <sstream>
 namespace Inteligencia {
 
 	//constructors/destructor:
@@ -12,7 +13,7 @@ namespace Inteligencia {
 	}
 
 	Robot::~Robot() {
-		delete command;
+		//TODO: think about commander memory allocation
 		delete dribbler;
 		delete kicker;
 		delete motor;
@@ -21,7 +22,7 @@ namespace Inteligencia {
 	}
 
 	//setters:
-	//TODO: low validation of setters
+	//TODO: validation
 	void Robot::i(int i) {
 		_i = i;
 	}
@@ -55,6 +56,14 @@ namespace Inteligencia {
 		y(_y);
 	}
 
+	string Robot::_summary() {
+		stringstream out;
+		out << "x: " << x() << endl;
+		out << "y: " << y() << endl;
+		out << "angle: " << angle() << endl;
+		return out.str();
+	}
+
 	void Robot::_init(void) {
 		yellow_card(false);
 		red_card(false);
@@ -63,7 +72,6 @@ namespace Inteligencia {
 		y(0.);
 		speed(0.);
 		angle(0.);
-		command = new Command();
 		dribbler = new Dribbler();
 		kicker = new Kicker();
 		motor = new Motor();
@@ -101,21 +109,32 @@ namespace Inteligencia {
 	void Robot::break_down() {
 		_working = false;
 	}
+
+	string Robot::summary() {
+		stringstream out;
+		out << "Summary:" << endl;
+		out << _summary() << endl;
+		return out.str();
+	}
 	
 	void Robot::kick() {
-		command->kick(kicker->speed());
+		//command->kick(kicker->speed());
+		//TODO: redo
 	}
 
 	void Robot::kick(double speed) {
-		command->kick(speed);
+		//command->kick(speed);
+		//TODO: redo
 	}
 
 	void Robot::dribble() {
-		command->dribble(dribbler->speed());
+		//command->dribble(dribbler->speed());
+		//TODO: redo
 	}
 
 	void Robot::dribble(double speed) {
-		command->dribble(speed);
+		//command->dribble(speed);
+		//TODO: redo
 	}
 
 	int Robot::i() {
@@ -151,4 +170,24 @@ namespace Inteligencia {
 		return p;
 	}
 
+	void Robot::command(Command* c) {
+		//TODO: validation, does this command belongs to this robot c->i()==i()?
+		_commander->add(c);
+	}
+
+	void Robot::command(double w0, double w1, double w2, double w3) {
+		_commander->add(new Command(i(), w0, w1, w2, w3));
+	}
+
+	void Robot::command(double w0, double w1, double w2, double w3, double d, double k) {
+		_commander->add(new Command(i(), w0, w1, w2, w3, d, k));
+	}
+	
+	void Robot::commander(Commander* c) {
+		_commander = c;
+	}
+
+	void Robot::updater(Updater* u) {
+		_updater = u;
+	}
 }

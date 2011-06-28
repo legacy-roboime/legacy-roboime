@@ -1,24 +1,40 @@
 #include "Command.h"
 namespace Inteligencia {
 
-	//Command::Command(Command command) {
-	//	reset();
-	//	set_wheel_speed(command.wheels[i]);
-	//	force_kick = command.force_kick;
-	//	force_dribble = command.force_dribble;
-	//}
-
-	Command::Command(double speed[4]) {
+	Command::Command(Command* command) {
 		reset();
+		i(command->i());
+		wheel_speed(command->wheel_speed());
+		force_kick(command->force_kick());
+		force_dribble(command->force_dribble());
+	}
+
+	Command::Command(int ii, double speed[4]) {
+		reset();
+		i(ii);
 		wheel_speed(speed);
 	}
 
-	Command::Command(double w0, double w1, double w2, double w3) {
+	Command::Command(int ii, double speed[4], double d, double k) {
 		reset();
-		_wheel_speed[0] = w0;
-		_wheel_speed[2] = w1;
-		_wheel_speed[2] = w2;
-		_wheel_speed[3] = w3;
+		i(ii);
+		wheel_speed(speed);
+		dribble_speed(d);
+		kick_speed(k);
+	}
+
+	Command::Command(int ii, double w0, double w1, double w2, double w3) {
+		reset();
+		i(ii);
+		wheels(w0, w1, w2, w3);
+	}
+
+	Command::Command(int ii, double w0, double w1, double w2, double w3, double d, double k) {
+		reset();
+		i(ii);
+		wheels(w0, w1, w2, w3);
+		dribble_speed(d);
+		kick_speed(k);
 	}
 
 	Command::Command() {
@@ -28,16 +44,25 @@ namespace Inteligencia {
 	Command::~Command() {}
 
 	void Command::reset() {
-		//FIXME: what's wrong?
-		//_wheel_speed = {.0, .0, .0, .0};
 		for(int i=0; i<4; i++) _wheel_speed[i] = 0.;
+		_kick_speed = 0.;
+		_dribble_speed = 0.;
+		_i = -1;
 		_old = false;
 		_force_kick = false;
 		_force_dribble = false;
 	}
+
+	void Command::_init() {
+		//TODO: is this really necessary?
+	}
 	
 	//methods:
 	//setters:
+	void Command::i(int ii) {
+		_i=ii;
+	}
+
 	void Command::kick_speed(double speed) {
 		_kick_speed = speed;
 	}
@@ -59,6 +84,9 @@ namespace Inteligencia {
 	}
 
 	//getters:
+	int Command::i() {
+		return _i;
+	}
 	double Command::kick_speed() {
 		return _kick_speed;
 	}
@@ -68,8 +96,8 @@ namespace Inteligencia {
 	}
 
 	double* Command::wheel_speed() {
-		double speed[4] = {_wheel_speed[0], _wheel_speed[1], _wheel_speed[2], _wheel_speed[3]};
-		return speed;
+		//double* speed = {_wheel_speed[0], _wheel_speed[1], _wheel_speed[2], _wheel_speed[3]};
+		return _wheel_speed;
 	}
 
 	bool Command::force_kick() {

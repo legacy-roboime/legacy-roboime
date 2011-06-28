@@ -27,7 +27,8 @@ namespace Inteligencia {
 			NxVec3 speed_ax2 = omni2.getColumn(0);
 
 			//limite da volocidade deve ser implementado no envio, nao aqui
-			robot->command->wheels(speed_ax1.x, speed_ax1.y, speed_ax1.z, speed_ax2.x);
+			//TODO: make a better syntax
+			robot->command(speed_ax1.x, speed_ax1.y, speed_ax1.z, speed_ax2.x);
 		}
 	}
 }

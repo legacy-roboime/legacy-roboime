@@ -26,14 +26,14 @@ namespace Inteligencia {
 		Stage _stage;
 		int _steps;
 		bool _active;
-		char _name[40];
+		string _name;
 
 		//methods:
 		void _take_step();
 		void _init();
 
 	public:
-		Play(char name[40]);
+		Play(string name);
 		Play(Stage stage);
 		~Play(void);
 

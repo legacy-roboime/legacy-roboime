@@ -1,28 +1,37 @@
 #pragma once
+#include <vector>
+using namespace std;
 namespace Inteligencia {
 
 	class Command {
+		friend class Commander;
 
 	private:
 		//fields:
-		bool _force_kick, _force_dribble, _old;
-		double _wheel_speed[4], _kick_speed, _dribble_speed;
+		int _i, _timestamp;//TODO: implement timestamping
+		bool _force_kick, _force_dribble, _old;//TODO: implement these
+		double _wheel_speed[4], _kick_speed, _dribble_speed;//self explanatory
+		///methods:
+		void _init();
 
 	public:
-		//Command(Command command);
-		Command(double speed[4]);
-		Command(double, double, double, double);
-		Command();
+		Command(Command* command);//FIXME: is this really useful?
+		Command(int, double*);//index, 4wheels
+		Command(int, double*, double, double);//index, 4wheels, dribbler, kicker
+		Command(int, double, double, double, double);//index, wheel1, wheel2, wheel3, wheel4
+		Command(int, double, double, double, double, double, double);//index, wheel1, ..., wheel4, dribbler, kicker
+		Command();//index will be -1 if not set, and thus won't be dispatched
 		~Command();
 
-		//methods:
 		//setters:
+		void i(int);
 		void kick_speed(double);
 		void dribble_speed(double);
 		void wheel_speed(double speed[4]);
 		void force_kick(bool);
 		void force_dribble(bool);
 		//getters:
+		int i();
 		double kick_speed();
 		double dribble_speed();
 		double* wheel_speed();

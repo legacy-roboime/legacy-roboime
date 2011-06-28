@@ -1,7 +1,6 @@
-#include "stdio.h"
 #include "Play.h"
-namespace Inteligencia {
 
+namespace Inteligencia {
 
 	//static elements instanciation:
 	Stage Play::__stage;
@@ -13,9 +12,8 @@ namespace Inteligencia {
 		_init();
 	}
 
-	Play::Play(char name[40]) {
-		//strcpy(_name, name);
-		strcpy_s(_name, name);
+	Play::Play(string name) {
+		_name = name;
 	}
 
 	Play::Play(Stage stage) {
@@ -24,6 +22,7 @@ namespace Inteligencia {
 	}
 
 	Play::~Play(void) {
+		//FIXME: this is wrong
 		_play.remove(this);
 		int i = _i;
 		__i.push_back(i);
