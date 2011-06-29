@@ -306,7 +306,7 @@ namespace ControleRobo
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Módulo de controle");
+            Console.WriteLine("Módulo de Transmissão");
             RobotControl comm = new RobotControl();
             
             ConsoleKey[] keys = {ConsoleKey.W, ConsoleKey.A, ConsoleKey.S, ConsoleKey.D, ConsoleKey.Q, ConsoleKey.E};
