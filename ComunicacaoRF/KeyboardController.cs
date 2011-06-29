@@ -50,13 +50,16 @@ namespace ControleRobo
             return GetAsyncKeyState((int)key1.key) < 0;
         }
 
-        public void StartReadingInput()
+        public void Start()
         {
-            System.Timers.Timer controllerTimer = new System.Timers.Timer(2);
+            controllerTimer = new System.Timers.Timer(2);
             controllerTimer.Elapsed += new ElapsedEventHandler(GetCommandList);
             controllerTimer.Enabled = true;
         }
-
+        public void Stop()
+        {
+            controllerTimer.Enabled = false;
+        }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(int vkey);

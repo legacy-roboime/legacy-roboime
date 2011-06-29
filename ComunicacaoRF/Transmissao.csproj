@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Protocols.cs" />
     <Compile Include="RobotControl.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="KeyboardController.cs" />
