@@ -32,5 +32,4 @@ namespace Inteligencia {
 		//void u(SIMStatusSingle*);//FIXME: Refactor this
 
 	};
-
 }
