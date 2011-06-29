@@ -30,18 +30,26 @@ namespace ControleRobo
 
         public void UDPSend(object sender, ElapsedEventArgs e)
         {
+            if (server.receivedData != null)
+            {
+                this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
+                this.intelTranslatedData = Protocols.TranslateProtocol(intelData, false);
+                //Console.WriteLine(Encoding.ASCII.GetString(server.data, 0, server.recv));
+            }
             if (intelTranslatedData != null)
                 simulationClient.Send(intelTranslatedData, intelTranslatedData.Length);
         }
         public void TxSend(object sender, ElapsedEventArgs e)
         {
+            if (server.receivedData != null)
+            {
+                this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
+                this.intelTranslatedData = Protocols.TranslateProtocol(intelData, true);
+                //Console.WriteLine(Encoding.ASCII.GetString(server.data, 0, server.recv));
+            }
             if (intelTranslatedData != null)
             {
-                byte[] temp = new byte[2 + intelTranslatedData.Length];
-                temp[0] = 0xfe;
-                temp[1] = 0xff;
-                Array.Copy(intelTranslatedData, 0, temp, 2, intelTranslatedData.Length);
-                transmitter.Transmitir(temp);
+                transmitter.Transmitir(intelTranslatedData);
             }
         }
         public void StartCommunication(bool realTransmitter)
@@ -60,14 +68,10 @@ namespace ControleRobo
                 sendTimer.Elapsed += new ElapsedEventHandler(TxSend);
                 sendTimer.Enabled = true;
 
-                while (true)
+                string blah = "";
+                while (blah != "quit")
                 {
-                    if (server.receivedData != null)
-                    {
-                        this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
-                        this.intelTranslatedData = Protocols.TranslateProtocol(intelData, realTransmitter);
-                        //Console.WriteLine(Encoding.ASCII.GetString(server.data, 0, server.recv));
-                    }
+                    blah = Console.ReadLine();
                 }
 
             }
@@ -78,13 +82,10 @@ namespace ControleRobo
                 sendTimer.Elapsed += new ElapsedEventHandler(UDPSend);
                 sendTimer.Enabled = true;
 
-                if (server.receivedData != null)
+                string blah = "";
+                while (blah != "quit")
                 {
-                    while (true)
-                    {
-                        this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
-                        this.intelTranslatedData = Protocols.TranslateProtocol(intelData, realTransmitter);
-                    }
+                    blah = Console.ReadLine();
                 }
             }
         }
@@ -137,7 +138,7 @@ namespace ControleRobo
 
         static void Main(string[] args)
         {
-            /*
+            
             Console.WriteLine("Módulo de Transmissão - Emissao");
             RobotControl comm = new RobotControl();
             
@@ -148,8 +149,9 @@ namespace ControleRobo
             Controller[] controllers = {controller};
 
             comm.StartCommunication(true);
-            */
+            
 
+            /*
             Console.WriteLine("Módulo de Transmissão - Recepcao");
             RobotControl comm = new RobotControl();
 
@@ -169,6 +171,7 @@ namespace ControleRobo
                     Console.WriteLine();
                 }
             }
+            */
         }
     }
 }

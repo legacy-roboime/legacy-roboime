@@ -7,9 +7,9 @@ namespace ControleRobo
 {
     class Protocols
     {
-        private static float kickerVelocity = 100;
-        private static float dribblerVelocity = 100;
-        private static float wheelVelocity = 100;
+        private static float kickerVelocity = 6;
+        private static float dribblerVelocity = 6;
+        private static float wheelVelocity = 6;
 
         public static byte ScaleVelocity(float realVelocity, float minVelocity, float maxVelocity)
         {
@@ -62,34 +62,13 @@ namespace ControleRobo
             #region realTransmitter
             if (realTransmitter)
             {
-                translated = new byte[36];
-                int j = 0;
-                translated[j] = 0x22;
-                j++;
-                byte k = 1;
-                translated[j] = k;
-                j++;
-                k++;
-                string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
-                for (int i = 0; i < splitData.Length; i++)
-                {
-                    if (splitData[i] == "")
-                        // Kicker
-                        continue;
-                    else if ((i) % 6 == 4)
-                        // Dribbler
-                        translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, kickerVelocity);
-                    else if ((i) % 6 == 5)
-                    {
-                        translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, dribblerVelocity);
-                        j++;
-                        translated[j] = k++;
-                    }
-                    else
-                        // Wheels
-                        translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, wheelVelocity);
-                    j++;
-                }
+                translated = PreliminaryTranslation(intelData); 
+                
+                foreach (byte b in translated)
+                    Console.Write(b.ToString() + " ");
+                Console.WriteLine();
+                Console.WriteLine(intelData);
+                
             }
             #endregion
             //Protocolo para o simulador
@@ -102,6 +81,52 @@ namespace ControleRobo
                 translated = encoding.GetBytes(intelData);
             }
             #endregion
+            return translated;
+        }
+
+        private static byte[] PreliminaryTranslation(string intelData)
+        {
+            byte[] translated;
+            translated = new byte[36];
+            int j = 0;
+            translated[j] = 0x22;
+            j++;
+            byte k = 1;
+            translated[j] = k;
+            j++;
+            k++;
+            Console.WriteLine(k);
+            string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
+            for (int i = 0; (i < splitData.Length) && j < 36; i++)
+            {
+                if (splitData[i] == "")
+                    // Kicker
+                    continue;
+                else if ((j) % 7 == 6)
+                {
+                    // Dribbler
+                    translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, kickerVelocity);
+                    j++;
+                }
+                else if ((j) % 7 == (7) % 7)
+                {
+                    translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, dribblerVelocity);
+                    j++;
+                    if (k != 6)
+                        translated[j] = k++;
+
+                    j++;
+                }
+                else
+                {
+                    // Wheels
+                    translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, wheelVelocity);
+                    j++;
+                }
+                //Console.WriteLine(splitData[i] + " "+i.ToString());
+                //Console.WriteLine(translated[j].ToString() + " " + j.ToString());                   
+            }
+
             return translated;
         }
         public static byte[] TranslateProtocol(string intelData, bool realTransmitter, Controller[] controllers)
@@ -134,24 +159,36 @@ namespace ControleRobo
                 translated[j] = k;
                 j++;
                 k++;
-                for (int i = 0; i < splitData.Length; i++)
+                Console.WriteLine(k); 
+
+                for (int i = 0; (i < splitData.Length) && j < 36; i++)
                 {
                     if (splitData[i] == "")
                         // Kicker
                         continue;
-                    else if ((i) % 6 == 4)
+                    else if ((j) % 7 == 6)
+                    {
                         // Dribbler
                         translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, kickerVelocity);
-                    else if ((i) % 6 == 5)
+                        j++;
+                    }
+                    else if ((j) % 7 == (7) % 7)
                     {
                         translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, dribblerVelocity);
                         j++;
-                        translated[j] = k++;
+                        if (k != 6)
+                            translated[j] = k++;
+
+                        j++;
                     }
                     else
+                    {
                         // Wheels
                         translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, wheelVelocity);
-                    j++;
+                        j++;
+                    }
+                    //Console.WriteLine(splitData[i] + " "+i.ToString());
+                    //Console.WriteLine(translated[j].ToString() + " " + j.ToString());                   
                 }
             }
             #endregion
