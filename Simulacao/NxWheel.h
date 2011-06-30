@@ -39,6 +39,7 @@ class NxWheel
 	virtual NxReal			getRpm() const = 0;
 	virtual NxVec3			getGroundContactPos() const = 0;
 	virtual float			getRadius() const = 0;
+	NxU32					getWheelFlags() { return this->wheelFlags; }
 
 	NX_INLINE bool			hasGroundContact() const { return getTouchedActor() != NULL; }
 	NX_INLINE bool			getWheelFlag(NxWheelFlags flag) const { return (wheelFlags & flag) != 0; }
@@ -118,13 +119,15 @@ class NxWheel2 : public NxWheel
 	virtual NxReal			getRpm() const;
 	virtual NxVec3			getGroundContactPos() const { return getWheelPos()+NxVec3(0, -wheelShape->getRadius(), 0); }
 	virtual float			getRadius() const { return wheelShape->getRadius(); } 
+	NxActor*				getActor(){ return this->actor; }
+	NxWheelShape*			getWheelShape(){ return this->wheelShape; }
 
 	NxReal					angWheelRelRobot;
 	int						id;
 
 	private:
 	NxActor* actor;
-	NxWheelShape * wheelShape;
+	NxWheelShape* wheelShape;
 
 	};
 #endif

@@ -676,7 +676,7 @@ NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc) : actor(a)
 
 	wheelShapeDesc.radius = wheelDesc->wheelRadius;
 	wheelShapeDesc.suspensionTravel = wheelDesc->wheelSuspension; 
-	wheelShapeDesc.inverseWheelMass = wheelDesc->inverseWheelMass;;	//not given!? TODO
+	wheelShapeDesc.inverseWheelMass = wheelDesc->inverseWheelMass;	//not given!? TODO
 
 		//wheelShapeDesc.skinWidth = 0.0001;
 		//Nx

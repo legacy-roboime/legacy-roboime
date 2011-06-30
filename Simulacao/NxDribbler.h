@@ -5,8 +5,9 @@
 class NxDribbler
 {
 private:
-	NxActor* dribbler;
+	
 public:
+	NxActor* dribbler;
 	NxDribbler(void);
 	~NxDribbler(void);
 };

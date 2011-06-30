@@ -5,8 +5,9 @@
 class NxKicker
 {
 private:
-	NxActor* kicker;
+	
 public:
+	NxActor* kicker;
 	NxKicker(void);
 	~NxKicker(void);
 };

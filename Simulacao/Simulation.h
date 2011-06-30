@@ -121,7 +121,7 @@ private:
 
 	//Robot
 	static void buildModelRobotWithDesc(int indexRobot, int indexScene);
-	static void cloneRobot(int indexRobot, int indexScene, string robotLabel, NxMat34 pose);
+	static void cloneRobot(int indexRobot, int indexScene, int indexRobotSource, NxVec3 position);
 
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
@@ -142,6 +142,7 @@ public:
 	static NxActor* getActorWheel(int indexScene, int indexRobot, int indexWheel);
 	static int getNumberWheels(int indexScene, int indexRobot);
 	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
+	static NxArray<NxJoint*> getJoints(int indexScene, int indexRobot);
 	static NxActor* getActorDribbler(int indexScene, int indexRobot);
 	static NxActor* getActorKicker(int indexScene, int indexRobot);
 	static NxVec3 getFieldExtents(int indexScene);

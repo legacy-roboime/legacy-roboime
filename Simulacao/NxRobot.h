@@ -8,9 +8,10 @@ class NxRobot : public NxVehicle
 private: 
 	int id;
 	int idTeam; //0 (Yellow Team) - 1 (Blue Team)
+public:
 	NxKicker kicker;
 	NxDribbler dribbler;
-public:
+	NxArray<NxJoint*> joints;
 	float bodyRadius;
 public:
 	NxRobot();

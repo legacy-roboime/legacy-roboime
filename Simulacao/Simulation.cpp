@@ -860,9 +860,10 @@ void Simulation::RenderCallback()
 	//	//fprintf(outputfile,"%d	%f	%f	%f	%f	%f	%f	%f	%f	%f	%f\n",count, pos.x, pos.y, pos.z, ang, velLin.x, velLin.y, velLin.z, velAng.x, velAng.y, velAng.z);
 	//	fprintf(outputfile,"%d	%f	%f\n", count, ang/NxPi*180, velAng.z/NxPi*180); //giro
 
-	//goToThisPose( 1000/*110*/, 1000, NxPi / 2., 4, 0);
+	//goToThisPose( 1000/*110*/, 1000, 3* NxPi / 2., 4, 0);
 	//controlRobotByWheels(10,10,10,10,0,0,4,0);
 
+	//infinitePath(4);
 	//simulate();
 
 	//	count++;
@@ -1295,12 +1296,14 @@ int Simulation::getNumberWheels(int indexScene, int indexRobot)
 						if(strcmp(actorNameAux,arrayLabel)==0) 
 						{
 							delete arrayLabel;
+							delete actorNameAux;
 							numberOfWheels++;
 						}
 						else 
 						{
 							actor = NULL;
 							delete arrayLabel;
+							delete actorNameAux;
 						}
 					}
 				}
@@ -1500,6 +1503,60 @@ NxJoint* Simulation::getJoint(int indexScene, int indexJoint, int indexRobot)
 	return joint;
 }
 
+NxArray<NxJoint*> Simulation::getJoints(int indexScene, int indexRobot)
+{
+	NxArray<NxJoint*> joints;
+	NxJoint* joint = NULL;
+	const char* jointName = NULL;
+	if( gScenes != NULL )
+	{
+		if(gScenes[indexScene]!=NULL)
+		{
+			gScenes[indexScene]->resetJointIterator();
+			for(unsigned int j=0;j<gScenes[indexScene]->getNbJoints();j++)
+			{
+				joint = gScenes[indexScene]->getNextJoint();
+				if(joint != NULL)
+				{
+					jointName = joint->getName();
+					if(jointName != NULL)
+					{
+						string label;
+						string plabel = "Joint-";
+						stringstream out;
+						stringstream out1;
+						out << indexRobot;
+						label.append(plabel);
+						label.append(out.str());
+						char* arrayLabel = new char[label.size()+1];
+						arrayLabel[label.size()]=0;
+						memcpy(arrayLabel, label.c_str(), label.size());
+						
+						char* jointNameAux = new char[strlen(jointName)-1];
+						jointNameAux[strlen(jointName)-2]=0;
+						memcpy(jointNameAux, jointName, strlen(jointName)-2);
+						
+						if(strcmp(jointNameAux,arrayLabel)==0)
+						{
+							delete arrayLabel;
+							delete jointNameAux;
+							joints.push_back(joint);
+						}
+						else 
+						{
+							joint = NULL;
+							delete arrayLabel;
+							delete jointNameAux;
+						}
+					}
+				}
+				else continue;
+			}
+		}
+	}
+	return joints;
+}
+
 void Simulation::function(int argc, char **argv)
 {
 	//printf("Pressione a teclas w, space, s, b, e t para criar varios objetos.\n");
@@ -1567,6 +1624,7 @@ void Simulation::function(int argc, char **argv)
 			//createRobotWithDesc(2, 0);
 			//createRobotWithDesc(3, 0);
 			buildModelRobotWithDesc( 4, 0 );
+			//cloneRobot( 1, 0, 4, NxVec3( 1000, 1000, 20 ) );
 			//createRobotWithDesc(5, 0);
 			//createRobotWithDesc(6, 0);
 			//createRobotWithDesc(7, 0);
