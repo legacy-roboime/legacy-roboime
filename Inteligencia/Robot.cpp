@@ -10,9 +10,11 @@ namespace Inteligencia {
 		dribbler = new Dribbler();
 		kicker = new Kicker();
 		motor = new Motor();
-		body = new Body();
-		//for(int i=0; i<4; i++) wheel[4] = new Wheel();
-		//TODO: build right wheel angles:
+		body = new Body(150, 90);
+		wheel[0] = new Wheel(-1.02260);
+		wheel[1] = new Wheel( 0.96706);
+		wheel[2] = new Wheel( 2.32842);
+		wheel[3] = new Wheel(-2.38397);
 	}
 
 	Robot::Robot(void) {

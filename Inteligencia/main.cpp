@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
 	while(true) {
 		upd->step();
-		Skills::move(rob, 3.5, 3.5, 0);
+		Skills::move(rob, 3.5, 3.5, .1);
 		com->step();
 	}
 
