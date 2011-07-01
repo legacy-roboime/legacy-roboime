@@ -1,5 +1,7 @@
 #include "UpdaterSIM.h"
 #include "Update.h"
+#include "UpdateBall.h"
+#include "UpdateRobot.h"
 
 using namespace std;
 namespace Inteligencia {
@@ -32,7 +34,17 @@ namespace Inteligencia {
 	void UpdaterSIM::prepare() {
 		while(!_queue.empty()){
 			stringstream in = stringstream(_queue.front());
-			//TODO: parsing
+			//TODO: validation
+			double x, y, a;
+			in >> x;
+			in >> y;
+			_update.push_back(new UpdateBall(1,x,y));
+			for(int k=1; k<=10; k++) {
+				in >> x;
+				in >> y;
+				in >> a;
+				_update.push_back(new UpdateRobot(k,x,y,a));
+			}
 			_queue.pop_front();
 		}
 	}
