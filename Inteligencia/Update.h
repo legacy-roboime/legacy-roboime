@@ -10,9 +10,16 @@ namespace Inteligencia {
 		friend class Updater;//TODO: what's this for?
 
 	private:
+		//fields:
+		int _timestamp;
+
 	public:
-		Update();
+		Update();//TODO: implement timestamping
 		~Update();
+
+		//methods:
 		virtual void apply(Updater*) = 0;//apply an update through an updater
+		int timestamp();
+
 	};
 }

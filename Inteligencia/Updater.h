@@ -29,7 +29,10 @@ namespace Inteligencia {
 		virtual void prepare() = 0;//prepare means parse on most implementations
 		void step();//receive and prepare
 		void apply();
-		deque<Ball*>* balls();
+		int robots();//how many robots?
+		Robot* robot(int);//-th robot
+		int balls();//how many balls?
+		Ball* ball(int);//-th ball
 		//add:
 		void add(Robot*);
 		void add(Ball*);

@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include "Update.h"
+#include "Updater.h"
 
 using namespace std;
 namespace Inteligencia {
@@ -18,5 +19,6 @@ namespace Inteligencia {
 		UpdateRobot(int, double, double, double);
 		~UpdateRobot();
 		void apply(Updater*);//go through the updaters list and apply the update
+
 	};
 }

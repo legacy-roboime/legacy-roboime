@@ -2,9 +2,9 @@
 
 namespace Inteligencia {
 
-	UpdateBall::UpdateBall() {}
+	UpdateBall::UpdateBall() : Update() {}
 
-	UpdateBall::UpdateBall(int i, double x, double y) {
+	UpdateBall::UpdateBall(int i, double x, double y) : Update() {
 		_i = i;
 		_x = x;
 		_y = y;

@@ -7,6 +7,7 @@ namespace Inteligencia {
 
 	private:
 		//fields:
+		int _i;
 		double _radius, _x, _y, _speedx, _speedy;
 
 		//modifiers:
