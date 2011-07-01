@@ -24,10 +24,16 @@ namespace Inteligencia {
 	UpdaterSIM::~UpdaterSIM() {}
 
 	void UpdaterSIM::receive() {
-		//TODO: implement
+		_udpclient->setSendString("1 0\n");
+		_udpclient->service();
+		_queue.push_back(_udpclient->getLastReceivedString());
 	}
 
 	void UpdaterSIM::prepare() {
-		//TODO: implement
+		while(!_queue.empty()){
+			stringstream in = stringstream(_queue.front());
+			//TODO: parsing
+			_queue.pop_front();
+		}
 	}
 }

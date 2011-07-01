@@ -16,6 +16,8 @@ namespace Inteligencia {
 		//fields:
 		deque<Ball*> _ball;
 		deque<Robot*> _robot;
+
+	protected:
 		deque<Update*> _update;
 		deque<Update*> _log;
 		bool __log;
