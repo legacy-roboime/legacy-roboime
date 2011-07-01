@@ -606,7 +606,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\UpdateBall.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Updater.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UpdateRobot.h"
 					>
 				</File>
 				<File
