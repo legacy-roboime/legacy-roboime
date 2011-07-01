@@ -9,9 +9,10 @@ int main(int argc, char *argv[])
 {
 	cout << "Modulo Inteligencia" << endl;
 
-	Commander* com = new CommanderSIM();
 	Robot* rob = new Robot(4);
-	rob->commander(com);
+	Commander* com = new CommanderSIM();
+	com->add(rob);
+	
 
 	system("pause");
 

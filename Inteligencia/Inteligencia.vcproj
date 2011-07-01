@@ -356,7 +356,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Update.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UpdateBall.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Updater.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UpdateRobot.cpp"
 					>
 				</File>
 			</Filter>

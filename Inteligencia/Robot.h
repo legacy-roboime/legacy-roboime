@@ -1,26 +1,27 @@
 #pragma once
 #include <string>
 #include "Body.h"
-#include "Commander.h"
 #include "Component.h"
 #include "Dribbler.h"
 #include "Kicker.h"
 #include "Motor.h"
 #include "Wheel.h"
+//out of base dependencies:
+#include "Commander.h"
+#include "Updater.h"
 
 using namespace std;
 namespace Inteligencia {
 
 	class Robot : Component {
-		friend class Updater;
+		friend class UpdateRobot;
 
 	private:
 		//fields:
 		int _yellow_card, _red_card;//counts how many cards of each robot has received
 		int _i;//_index is the index, and _i is the internal index
-		double _x, _y, _speed, _angle;//position, speed, and orientation
+		double _x, _y, _speedx, _speedy, _angle;//position, speed, and orientation
 		Command* _command;//the one to dispatch its commands
-		Updater* _updater;//the one to update it
 
 		//methods:
 		void _init();//used in the constructors for basic initialization
@@ -36,7 +37,8 @@ namespace Inteligencia {
 		void x(double);
 		void y(double);
 		void angle(double);
-		void speed(double);
+		void speedx(double);//this has to be estimated somehow
+		void speedy(double);//this has to be estimated somehow
 		void place(double, double);
 
 	public:
@@ -59,8 +61,8 @@ namespace Inteligencia {
 		void new_command();//creates a new blank command
 		void command(Command*);//adds a command to be executed
 		void command(double, double, double, double);//
-		void commander(Commander*);//sets its commander
-		void updater(Updater*);//sets its updater
+		//void commander(Commander*);//sets its commander
+		//void updater(Updater*);//sets its updater//NOTE: this generates circular dependency, stop!
 		string summary();
 		void kick();//kick with the standard speed
 		void kick(double);//kick with the given speed
@@ -73,7 +75,8 @@ namespace Inteligencia {
 		double x();
 		double y();
 		double angle();
-		double speed();
+		double speedx();
+		double speedy();
 		//double* place();//returns {x,y}//TODO: think about it
 		Command* command();
 	};

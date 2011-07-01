@@ -27,29 +27,41 @@ namespace Inteligencia {
 	void Robot::i(int i) {
 		_i = i;
 	}
+
 	void Robot::yellow_card(int i) {
 		_yellow_card = i;
 	}
+
 	void Robot::red_card(int i) {
 		_red_card = i;
 	}
+
 	void Robot::add_yellow_card() {
 		_yellow_card++;
 	}
+
 	void Robot::add_red_card() {
 		_red_card++;
 	}
+
 	void Robot::x(double d) {
 		_x = d;
 	}
+
 	void Robot::y(double d) {
 		_y = d;
 	}
+
 	void Robot::angle(double d) {
 		_angle = d;
 	}
-	void Robot::speed(double d) {
-		_speed = d;
+
+	void Robot::speedx(double d) {
+		_speedx = d;
+	}
+
+	void Robot::speedy(double d) {
+		_speedy = d;
 	}
 
 	void Robot::place(double _x, double _y) {
@@ -69,10 +81,6 @@ namespace Inteligencia {
 		yellow_card(false);
 		red_card(false);
 		i(-1);
-		x(0.);
-		y(0.);
-		speed(0.);
-		angle(0.);
 		new_command();
 		dribbler = new Dribbler();
 		kicker = new Kicker();
@@ -159,8 +167,12 @@ namespace Inteligencia {
 		return _angle;
 	}
 
-	double Robot::speed() {
-		return _speed;
+	double Robot::speedx() {
+		return _speedx;
+	}
+
+	double Robot::speedy() {
+		return _speedy;
 	}
 
 	//double* Robot::place() {
@@ -177,13 +189,13 @@ namespace Inteligencia {
 		_command->wheels(w0, w1, w2, w3);
 	}
 	
-	void Robot::commander(Commander* c) {
-		c->add(this);
-	}
+	//void Robot::commander(Commander* c) {
+	//	c->add(this);
+	//}
 
-	void Robot::updater(Updater* u) {
-		_updater = u;
-	}
+	//void Robot::updater(Updater* u) {
+	//	_updater = u;
+	//}
 
 	Command* Robot::command() {
 		return _command;
