@@ -14,11 +14,11 @@ namespace Inteligencia {
 	UpdateRobot::~UpdateRobot() {}
 
 	void UpdateRobot::apply(Updater* u) {
-		for(int k=u->robots()-1; k>=0; k--) {
-			if(u->robot(k)->i()==_i) {
-				u->robot(k)->x(_x);
-				u->robot(k)->y(_y);
-				u->robot(k)->angle(_angle);
+		for(unsigned int k=u->robots(); k>0; k--) {
+			if(u->robot(k-1)->i()==_i) {
+				u->robot(k-1)->x(_x);
+				u->robot(k-1)->y(_y);
+				u->robot(k-1)->angle(_angle);
 			}
 		}
 	}

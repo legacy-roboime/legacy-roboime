@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include "Update.h"
+#include "Updater.h"
 
 using namespace std;
 namespace Inteligencia {

@@ -3,11 +3,16 @@ namespace Inteligencia {
 
 	Ball::Ball() {}
 
-	Ball::Ball(double r) {
+	Ball::Ball(int ii, double r) {
+		i(ii);
 		radius(r);
 	}
 
 	Ball::~Ball(void) {}
+
+	void Ball::i(int ii) {
+		_i = ii;
+	}
 
 	void Ball::radius(double d) {
 		_radius = d;
@@ -32,6 +37,10 @@ namespace Inteligencia {
 	void Ball::place(double d1, double d2) {
 		x(d1);
 		y(d2);
+	}
+
+	int Ball::i() {
+		return _i;
 	}
 
 	double Ball::radius() {

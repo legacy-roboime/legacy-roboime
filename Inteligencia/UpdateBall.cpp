@@ -13,7 +13,12 @@ namespace Inteligencia {
 	UpdateBall::~UpdateBall() {}
 
 	void UpdateBall::apply(Updater* u) {
-		//for(int k=u->
+		for(unsigned int k=u->balls(); k>0; k--) {
+			if(u->ball(k-1)->i()==_i) {
+				u->ball(k-1)->x(_x);
+				u->ball(k-1)->y(_y);
+			}
+		}
 	}
 
 }

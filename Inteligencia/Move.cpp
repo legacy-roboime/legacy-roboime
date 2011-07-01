@@ -1,3 +1,4 @@
+#include <cmath>
 #include "_Skills.h"
 #include "NxPhysics.h"
 
@@ -19,8 +20,8 @@ namespace Inteligencia {
 
 			//NOTE: precision loss due to NxReal casting, you've been warned
 			control.setColumn(0, NxVec3((NxReal)(speed_x * NxMath::cos(-teta) + speed_y * NxMath::sin(teta)),
-										(NxReal)(speed_x * NxMath::sin(-teta) + speed_y * NxMath::cos(teta)),
-										(NxReal)(ang_speed * robot->body->radius())));
+				(NxReal)(speed_x * NxMath::sin(-teta) + speed_y * NxMath::cos(teta)),
+				(NxReal)(ang_speed * robot->body->radius())));
 			omni1 *= control;
 			omni2 *= control;
 
@@ -28,8 +29,19 @@ namespace Inteligencia {
 			NxVec3 speed_ax2 = omni2.getColumn(0);
 
 			//limite da volocidade deve ser implementado no envio, nao aqui
-			//TODO: make a better syntax
 			robot->command(speed_ax1.x, speed_ax1.y, speed_ax1.z, speed_ax2.x);
+
+			//double speed[4];
+
+			//for(int i=0; i<4; i++) {
+				//NxReal angPosWheel = ((NxWheel2*)nxRobot->getWheel(i))->angWheelRelRobot;
+
+				//speeds[i] = -NxMath::sin(angPosWheel) * ( speedX * NxMath::cos( -angRobo ) + speedY * NxMath::sin( angRobo ) ) +
+				//	NxMath::cos(angPosWheel) * ( speedX * NxMath::sin( -angRobo ) + speedY * NxMath::cos( angRobo ) ) +
+				//	speedAng * nxRobot->bodyRadius;
+			//}
+
+			//robot->command(speed[0], speed[1], speed[2], speed[3]);
 		}
 	}
 }

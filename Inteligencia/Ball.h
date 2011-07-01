@@ -11,6 +11,7 @@ namespace Inteligencia {
 		double _radius, _x, _y, _speedx, _speedy;
 
 		//modifiers:
+		void i(int);
 		void radius(double);
 		void x(double);
 		void y(double);
@@ -20,11 +21,12 @@ namespace Inteligencia {
 
 	public:
 		Ball();
-		Ball(double r);
+		Ball(int, double r);
 		//TODO: other constructors needed?
 		~Ball();
 
 		//getters:
+		int i();
 		double radius();
 		double x();
 		double y();

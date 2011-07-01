@@ -2,7 +2,19 @@
 #include <sstream>
 namespace Inteligencia {
 
-	//constructors/destructor:
+	void Robot::_init(void) {
+		yellow_card(false);
+		red_card(false);
+		i(-1);
+		new_command();
+		dribbler = new Dribbler();
+		kicker = new Kicker();
+		motor = new Motor();
+		body = new Body();
+		//for(int i=0; i<4; i++) wheel[4] = new Wheel();
+		//TODO: build right wheel angles:
+	}
+
 	Robot::Robot(void) {
 		_init();
 	}
@@ -75,18 +87,6 @@ namespace Inteligencia {
 		out << "y: " << y() << endl;
 		out << "angle: " << angle() << endl;
 		return out.str();
-	}
-
-	void Robot::_init(void) {
-		yellow_card(false);
-		red_card(false);
-		i(-1);
-		new_command();
-		dribbler = new Dribbler();
-		kicker = new Kicker();
-		motor = new Motor();
-		body = new Body();
-		for(int i=0; i<4; i++) wheel[4] = new Wheel();
 	}
 
 	bool Robot::can_kick() {
