@@ -95,3 +95,11 @@ void UDPClient::setSendString(string sendString)
 {
 	this->sendString = sendString;
 }
+
+string UDPClient::getServAddress() {
+	return servAddress;
+}
+
+unsigned short UDPClient::getEchoServPort() {
+	return echoServPort;
+}

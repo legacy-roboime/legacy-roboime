@@ -4,29 +4,24 @@
 using namespace std;
 namespace Inteligencia {
 
-	CommanderSIM::CommanderSIM() : Commander() {
-		_udpclient = new UDPClient("127.0.0.1", 9876);
-	}
+	UDPClient* CommanderSIM::_udpclient = 0;
 
-	CommanderSIM::CommanderSIM(string address) : Commander() {
-		_udpclient = new UDPClient(address, 9876);
+	CommanderSIM::CommanderSIM() : Commander() {
+		if(_udpclient==0) {
+			if(UpdaterSIM::_udpclient!=0) {
+				_udpclient = UpdaterSIM::_udpclient;
+			} else {
+				_udpclient = new UDPClient("127.0.0.1", 9876);
+			}
+		}
 	}
 
 	CommanderSIM::CommanderSIM(string address, unsigned short port) : Commander() {
+		delete _udpclient;
 		_udpclient = new UDPClient(address, port);
 	}
 
-	CommanderSIM::CommanderSIM(unsigned short port) : Commander() {
-		_udpclient = new UDPClient("127.0.0.1", port);
-	}
-
-	CommanderSIM::CommanderSIM(UDPClient* udpclient) {
-		_udpclient = udpclient;
-	}
-
-	CommanderSIM::~CommanderSIM() {
-		delete _udpclient;
-	}
+	CommanderSIM::~CommanderSIM() {}
 
 	void CommanderSIM::prepare() {
 		for(int n=_robot.size()-1; n>=0; n--) {

@@ -371,6 +371,10 @@
 					RelativePath=".\UpdateRobot.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\UpdaterSIM.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Base"
@@ -474,10 +478,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\Inteligencia.h"
-				>
-			</File>
 			<Filter
 				Name="Base"
 				>

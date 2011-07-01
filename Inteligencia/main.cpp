@@ -1,9 +1,12 @@
-#include "Inteligencia.h"
+#pragma once
+#include <iostream>
+#include <cstdlib>
+#include "Robot.h"
 #include "_Skills.h"
 #include "CommanderSIM.h"
+#include "UpdaterSIM.h"
 
 using namespace Inteligencia;
-using namespace Inteligencia::Skills;
 
 int main(int argc, char *argv[])
 {
@@ -11,14 +14,16 @@ int main(int argc, char *argv[])
 
 	Robot* rob = new Robot(4);
 	Commander* com = new CommanderSIM();
+	Updater* upd = new UpdaterSIM();
 	com->add(rob);
-	
+	upd->add(rob);
+
 
 	system("pause");
 
 	while(true) {
-		move(rob, 1.5, 1.5, 0);
-		//rob->command(30, 30, 20, 20);
+		upd->step();
+		Skills::move(rob, 1.5, 1.5, 0);
 		com->step();
 	}
 

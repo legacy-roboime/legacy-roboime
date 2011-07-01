@@ -9,6 +9,12 @@ namespace Inteligencia {
 
 	Updater::~Updater() {}
 
+	void Updater::step() {
+		receive();
+		prepare();
+		apply();
+	}
+
 	void Updater::apply() {
 		while(!_update.empty()) {
 			_update.front()->apply(this);
