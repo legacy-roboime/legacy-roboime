@@ -29,24 +29,17 @@ namespace Inteligencia {
 	}
 
 	void CommanderSIM::prepare() {
-		while(!_command.empty()) {
+		for(int n=_robot.size()-1; n>=0; n--) {
 			stringstream out;
-			Command* c = _command.front();
+			Robot* r = _robot[n];
+			Command* c = r->command();
+			r->new_command();
 			//TODO: implement logging
-			_command.pop_front();
 			double* w = c->wheel_speed();
 			double  k = c->kick_speed();
 			double  d = c->dribble_speed();
-			int     i = c->i();
-			out << 13   << " "
-				<< 0    << " "
-				<< i    << " "
-				<< w[0] << " "
-				<< w[1] << " "
-				<< w[2] << " "
-				<< w[3] << " "
-				<< d    << " " 
-				<< k    << endl;
+			int     i = r->i();
+			out <<"13 0 "<<i<<" "<<w[0]<<" "<<w[1]<<" "<<w[2]<<" "<<w[3]<<" "<<d<<" "<<k<<endl;
 			_queue.push_back(out.str());
 			out.clear();
 		}

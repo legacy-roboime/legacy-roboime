@@ -4,7 +4,7 @@ using namespace std;
 namespace Inteligencia {
 
 	Commander::Commander() {
-		__log = true;
+		__log = false;
 		//TODO: implement?
 	}
 
@@ -13,11 +13,11 @@ namespace Inteligencia {
 	}
 
 	//methods:
-	void Commander::add(Command* c) {
-		_command.push_back(c);
+	void Commander::add(Robot* r) {
+		_robot.push_back(r);
 	}
 
-	void Commander::del(Command* c) {
+	void Commander::del(Robot* r) {
 		//TODO: implement
 	}
 

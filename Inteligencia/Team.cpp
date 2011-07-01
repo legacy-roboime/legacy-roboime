@@ -9,9 +9,9 @@ namespace Inteligencia {
 		_init();
 	}
 
-	Team::Team(list<Robot*> team) {
+	Team::Team(deque<Robot*> team) {
 		_init();
-		_robot = list<Robot*>(team);
+		_robot = team;
 	}
 
 	Team::~Team() {
@@ -36,8 +36,9 @@ namespace Inteligencia {
 	//used on sort
 	bool comp(Robot* r1, Robot* r2) {return r1->i() < r2->i();}
 
-	void Team::sort() {
-		_robot.sort(comp);
-	}
+	//void Team::sort() {
+		//_robot.sort(comp);
+		//TODO: consider removing this method.
+	//}
 
 }

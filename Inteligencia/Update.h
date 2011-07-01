@@ -7,5 +7,11 @@ namespace Inteligencia {
 
 	class Update {
 		friend class Updater;
+
+	private:
+	public:
+		Update();
+		~Update();
+		virtual void apply(Updater*) = 0;
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
-#include <list>
+#include <deque>
 #include "Robot.h"
+
 using namespace std;
 namespace Inteligencia {
 
@@ -9,15 +10,15 @@ namespace Inteligencia {
 	private:
 		//fields:
 		int _i;
-		list<Robot*> _robot;
+		deque<Robot*> _robot;
 
 		//methods:
 		void _init();
 
 	public:
-		Team(void);
-		Team(list<Robot*>);
-		~Team(void);
+		Team();
+		Team(deque<Robot*> team);
+		~Team();
 
 		//methods:
 		//setters:
@@ -26,7 +27,7 @@ namespace Inteligencia {
 		int i();
 		//useful:
 		void add(Robot*);
-		void sort();
+		//void sort();
 
 	};
 }

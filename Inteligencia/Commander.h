@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 #include "Command.h"
+#include "Robot.h"
 
 using namespace std;
 namespace Inteligencia {
@@ -12,7 +13,7 @@ namespace Inteligencia {
 
 	protected:
 		//fields:
-		deque<Command*> _command;
+		deque<Robot*> _robot;
 		deque<Command*> _log;
 		bool __log;
 
@@ -21,8 +22,8 @@ namespace Inteligencia {
 		~Commander();
 
 		//methods:
-		void add(Command*);
-		void del(Command*);
+		void add(Robot*);
+		void del(Robot*);
 		virtual void prepare() = 0;
 		virtual void send() = 0;
 		void step();

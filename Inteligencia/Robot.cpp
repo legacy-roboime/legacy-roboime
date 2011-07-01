@@ -14,6 +14,7 @@ namespace Inteligencia {
 
 	Robot::~Robot() {
 		//TODO: think about commander memory allocation
+		delete _command;
 		delete dribbler;
 		delete kicker;
 		delete motor;
@@ -72,6 +73,7 @@ namespace Inteligencia {
 		y(0.);
 		speed(0.);
 		angle(0.);
+		new_command();
 		dribbler = new Dribbler();
 		kicker = new Kicker();
 		motor = new Motor();
@@ -118,23 +120,19 @@ namespace Inteligencia {
 	}
 	
 	void Robot::kick() {
-		//command->kick(kicker->speed());
-		//TODO: redo
+		_command->kick(kicker->speed());
 	}
 
 	void Robot::kick(double speed) {
-		//command->kick(speed);
-		//TODO: redo
+		_command->kick(speed);
 	}
 
 	void Robot::dribble() {
-		//command->dribble(dribbler->speed());
-		//TODO: redo
+		_command->dribble(dribbler->speed());
 	}
 
 	void Robot::dribble(double speed) {
-		//command->dribble(speed);
-		//TODO: redo
+		_command->dribble(speed);
 	}
 
 	int Robot::i() {
@@ -165,29 +163,33 @@ namespace Inteligencia {
 		return _speed;
 	}
 
-	double* Robot::place() {
-		double p[] = {_x, _y};
-		return p;
-	}
+	//double* Robot::place() {
+	//	double p[] = {_x, _y};
+	//	return p;
+	//}
 
 	void Robot::command(Command* c) {
-		//TODO: validation, does this command belongs to this robot c->i()==i()?
-		_commander->add(c);
+		_command = c;
+		c->i(i());
 	}
 
 	void Robot::command(double w0, double w1, double w2, double w3) {
-		_commander->add(new Command(i(), w0, w1, w2, w3));
-	}
-
-	void Robot::command(double w0, double w1, double w2, double w3, double d, double k) {
-		_commander->add(new Command(i(), w0, w1, w2, w3, d, k));
+		_command->wheels(w0, w1, w2, w3);
 	}
 	
 	void Robot::commander(Commander* c) {
-		_commander = c;
+		c->add(this);
 	}
 
 	void Robot::updater(Updater* u) {
 		_updater = u;
+	}
+
+	Command* Robot::command() {
+		return _command;
+	}
+
+	void Robot::new_command() {
+		_command = new Command(i(),0.,0.,0.,0.,0.,0.);
 	}
 }

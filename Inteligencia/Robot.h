@@ -7,8 +7,9 @@
 #include "Kicker.h"
 #include "Motor.h"
 #include "Wheel.h"
+
 using namespace std;
-namespace Inteligencia {	
+namespace Inteligencia {
 
 	class Robot : Component {
 		friend class Updater;
@@ -18,7 +19,7 @@ namespace Inteligencia {
 		int _yellow_card, _red_card;//counts how many cards of each robot has received
 		int _i;//_index is the index, and _i is the internal index
 		double _x, _y, _speed, _angle;//position, speed, and orientation
-		Commander* _commander;//the one to dispatch its commands
+		Command* _command;//the one to dispatch its commands
 		Updater* _updater;//the one to update it
 
 		//methods:
@@ -55,13 +56,12 @@ namespace Inteligencia {
 		bool can_dribble();//chekc if the robot has dribbler component and it's working
 		bool is_working();//checks if the robot is working
 		bool is_broken();//checks if the robot is broken (!working)
+		void new_command();//creates a new blank command
 		void command(Command*);//adds a command to be executed
 		void command(double, double, double, double);//
-		void command(double, double, double, double, double d, double k);//
 		void commander(Commander*);//sets its commander
 		void updater(Updater*);//sets its updater
 		string summary();
-		//void compel(Command);//compel a command = issue an order//TODO: think about it.
 		void kick();//kick with the standard speed
 		void kick(double);//kick with the given speed
 		void dribble();//dribble with the standard speed
@@ -74,6 +74,7 @@ namespace Inteligencia {
 		double y();
 		double angle();
 		double speed();
-		double* place();//returns {x,y}
+		//double* place();//returns {x,y}//TODO: think about it
+		Command* command();
 	};
 }

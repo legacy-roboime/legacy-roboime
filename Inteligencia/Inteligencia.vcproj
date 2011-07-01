@@ -469,10 +469,6 @@
 			<Filter
 				Name="Base"
 				>
-				<File
-					RelativePath=".\Base.h"
-					>
-				</File>
 				<Filter
 					Name="Stage"
 					>

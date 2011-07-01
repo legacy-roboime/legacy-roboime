@@ -139,19 +139,19 @@ namespace ControleRobo
         static void Main(string[] args)
         {
             
-            Console.WriteLine("Módulo de Transmissão - Emissao");
-            RobotControl comm = new RobotControl();
+            //Console.WriteLine("Módulo de Transmissão - Emissao");
+            //RobotControl comm = new RobotControl();
             
-            ConsoleKey[] keys = {ConsoleKey.W, ConsoleKey.A, ConsoleKey.S, ConsoleKey.D, ConsoleKey.Q, ConsoleKey.E};
-            KeyboardController controller = new KeyboardController(2, keys);
-            controller.Start();
+            //ConsoleKey[] keys = {ConsoleKey.W, ConsoleKey.A, ConsoleKey.S, ConsoleKey.D, ConsoleKey.Q, ConsoleKey.E};
+            //KeyboardController controller = new KeyboardController(2, keys);
+            //controller.Start();
 
-            Controller[] controllers = {controller};
+            //Controller[] controllers = {controller};
 
-            comm.StartCommunication(true);
+            //comm.StartCommunication(true);
             
 
-            /*
+            
             Console.WriteLine("Módulo de Transmissão - Recepcao");
             RobotControl comm = new RobotControl();
 
@@ -171,7 +171,7 @@ namespace ControleRobo
                     Console.WriteLine();
                 }
             }
-            */
+            
         }
     }
 }

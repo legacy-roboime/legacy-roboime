@@ -7,19 +7,20 @@ namespace Inteligencia {
 			double teta = robot->angle();
 
 			NxMat33 omni1;//CUSTOM:
-			omni1.setRow(0, NxVec3(-0.5446,  0.8387,  1.0000));
-			omni1.setRow(1, NxVec3(-0.5446,	-0.8387,  1.0000));
-			omni1.setRow(2, NxVec3( 0.7071, -0.7071,  1.0000));
+			omni1.setRow(0, NxVec3(-0.5446f,  0.8387f,  1.0000f));
+			omni1.setRow(1, NxVec3(-0.5446f, -0.8387f,  1.0000f));
+			omni1.setRow(2, NxVec3( 0.7071f, -0.7071f,  1.0000f));
 
 			NxMat33 omni2;//CUSTOM:
-			omni2.setRow(0, NxVec3( 0.7071,  0.7071,  1.0000));
+			omni2.setRow(0, NxVec3( 0.7071f,  0.7071f,  1.0000f));
 
 			NxMat33 control;
 			control.zero();
 
-			control.setColumn(0, NxVec3(speed_x * NxMath::cos(-teta) + speed_y * NxMath::sin(teta),
-										speed_x * NxMath::sin(-teta) + speed_y * NxMath::cos(teta),
-										ang_speed * robot->body->radius()));
+			//NOTE: precision loss due to NxReal casting, you've been warned
+			control.setColumn(0, NxVec3((NxReal)(speed_x * NxMath::cos(-teta) + speed_y * NxMath::sin(teta)),
+										(NxReal)(speed_x * NxMath::sin(-teta) + speed_y * NxMath::cos(teta)),
+										(NxReal)(ang_speed * robot->body->radius())));
 			omni1 *= control;
 			omni2 *= control;
 
