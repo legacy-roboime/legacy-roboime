@@ -5,7 +5,7 @@ namespace Inteligencia {
 	//static elements instanciation:
 	Stage Play::__stage;
 	list<Play*> Play::_play;
-	list<unsigned int> Play::__i;
+	list<size_t> Play::__i;
 
 	//constructors/destructor:
 	Play::Play(void) {
@@ -24,7 +24,7 @@ namespace Inteligencia {
 	Play::~Play(void) {
 		//FIXME: this is wrong
 		_play.remove(this);
-		unsigned int i = _i;
+		size_t i = _i;
 		__i.push_back(i);
 		__i.sort();
 		//puts("DESTROYED!!!!!");

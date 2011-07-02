@@ -60,6 +60,7 @@ namespace Inteligencia {
 		bool is_broken();//checks if the robot is broken (!working)
 		void new_command();//creates a new blank command
 		void command(Command*);//adds a command to be executed
+		void command(double speed[4]);//
 		void command(double, double, double, double);//
 		//void commander(Commander*);//sets its commander
 		//void updater(Updater*);//sets its updater//NOTE: this generates circular dependency, stop!

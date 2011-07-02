@@ -1,46 +1,32 @@
-#include <cmath>
 #include "_Skills.h"
-#include "NxPhysics.h"
 
 namespace Inteligencia {
 	namespace Skills {
-		void move(Robot* robot, double speed_x, double speed_y, double speed_ang){
-			double theta = robot->angle();
 
-			//NxMat33 omni1;//CUSTOM:
-			//omni1.setRow(0, NxVec3(-0.5446f,  0.8387f,  1.0000f));
-			//omni1.setRow(1, NxVec3(-0.5446f, -0.8387f,  1.0000f));
-			//omni1.setRow(2, NxVec3( 0.7071f, -0.7071f,  1.0000f));
+		Move::Move(Robot* r) : Skill(r) {}
 
-			//NxMat33 omni2;//CUSTOM:
-			//omni2.setRow(0, NxVec3( 0.7071f,  0.7071f,  1.0000f));
-
-			//NxMat33 control;
-			//control.zero();
-
-			////NOTE: precision loss due to NxReal casting, you've been warned
-			//control.setColumn(0, NxVec3((NxReal)(speed_x * NxMath::cos(-theta) + speed_y * NxMath::sin(theta)),
-			//	(NxReal)(speed_x * NxMath::sin(-theta) + speed_y * NxMath::cos(theta)),
-			//	(NxReal)(speed_ang * robot->body->radius())));
-			//omni1 *= control;
-			//omni2 *= control;
-
-			//NxVec3 speed_ax1 = omni1.getColumn(0);
-			//NxVec3 speed_ax2 = omni2.getColumn(0);
-
-			////limite da volocidade deve ser implementado no envio, nao aqui
-			//robot->command(speed_ax1.x, speed_ax1.y, speed_ax1.z, speed_ax2.x);
-
-			double speed[4];
-
-			for(int i=0; i<4; i++) {
-				double alpha = robot->wheel[i]->angle();
-				speed[i] = cos(alpha)*(speed_x*sin(-theta) + speed_y*cos(theta))
-						 - sin(alpha)*(speed_x*cos(-theta) + speed_y*sin(theta))
-						 + speed_ang*robot->body->radius();
-			}
-
-			robot->command(speed[0], speed[1], speed[2], speed[3]);
+		Move::Move(Robot* r, double sx, double sy, double sa) : Skill(r) {
+			set(sx, sy, sa);
 		}
+
+		Move::~Move() {}
+
+		void Move::set(double sx, double sy, double sa) {
+			speed_x = sx; speed_y = sy; speed_ang = sa;
+		}
+
+		void Move::step() {
+			theta = _robot->angle();
+			//NOTE this is made for a 4 wheels robot, different number of wheels need some restructuring
+			for(int i=0; i<4; i++) {
+				alpha = _robot->wheel[i]->angle();
+				speed[i] = cos(alpha)*(speed_y*cos(theta) - speed_x*sin(theta))
+						 - sin(alpha)*(speed_x*cos(theta) + speed_y*sin(theta))
+						 + speed_ang*_robot->body->radius();
+			}
+			//TODO: implement speed limit to smoothen movement
+			_robot->command(speed);
+		}
+
 	}
 }

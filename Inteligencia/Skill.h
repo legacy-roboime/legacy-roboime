@@ -1,14 +1,21 @@
 #pragma once
 #include "Robot.h"
+
 namespace Inteligencia {
 	namespace Skills {
-		//include your skill header here:
 
 		class Skill {
+		protected:
+			Robot* _robot;
 
 		public:
-			Skill();
+			Skill(Robot*);
 			~Skill();
+
+			//methods:
+			virtual void step() = 0;
+			//setters:
+			virtual void robot(Robot*);
 
 		};
 	}

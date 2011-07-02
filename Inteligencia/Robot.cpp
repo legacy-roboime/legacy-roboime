@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include <sstream>
+
 namespace Inteligencia {
 
 	void Robot::_init(void) {
@@ -185,6 +186,10 @@ namespace Inteligencia {
 	void Robot::command(Command* c) {
 		_command = c;
 		c->i(i());
+	}
+
+	void Robot::command(double s[4]) {
+		_command->wheels(s);
 	}
 
 	void Robot::command(double w0, double w1, double w2, double w3) {

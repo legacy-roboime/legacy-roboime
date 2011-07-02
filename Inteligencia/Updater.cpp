@@ -39,19 +39,19 @@ namespace Inteligencia {
 		//TODO: implement
 	}
 
-	unsigned int Updater::robots() {
+	size_t Updater::robots() {
 		return _robot.size();
 	}
 
-	Robot* Updater::robot(unsigned int i) {
+	Robot* Updater::robot(size_t i) {
 		return _robot[i];
 	}
 
-	unsigned int Updater::balls() {
+	size_t Updater::balls() {
 		return _ball.size();
 	}
 
-	Ball* Updater::ball(unsigned int i) {
+	Ball* Updater::ball(size_t i) {
 		return _ball[i];
 	}
 

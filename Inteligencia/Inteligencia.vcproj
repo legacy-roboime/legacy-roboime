@@ -218,7 +218,7 @@
 				Name="VCLinkerTool"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -435,18 +435,6 @@
 			<Filter
 				Name="Core"
 				>
-				<File
-					RelativePath=".\Play.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\PlayX.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Skill.cpp"
-					>
-				</File>
 				<Filter
 					Name="Skills"
 					>
@@ -462,10 +450,22 @@
 						RelativePath=".\Move.cpp"
 						>
 					</File>
+					<File
+						RelativePath=".\Skill.cpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="Plays"
 					>
+					<File
+						RelativePath=".\Play.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\PlayX.cpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="Tactics"
@@ -537,22 +537,6 @@
 			<Filter
 				Name="Core"
 				>
-				<File
-					RelativePath=".\Play.h"
-					>
-				</File>
-				<File
-					RelativePath=".\PlayX.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Skill.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Tactic.h"
-					>
-				</File>
 				<Filter
 					Name="Skills"
 					>
@@ -572,6 +556,10 @@
 						RelativePath=".\Move.h"
 						>
 					</File>
+					<File
+						RelativePath=".\Skill.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="Plays"
@@ -580,12 +568,24 @@
 						RelativePath=".\_Plays.h"
 						>
 					</File>
+					<File
+						RelativePath=".\Play.h"
+						>
+					</File>
+					<File
+						RelativePath=".\PlayX.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="Tactics"
 					>
 					<File
 						RelativePath=".\_Tactics.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Tactic.h"
 						>
 					</File>
 				</Filter>

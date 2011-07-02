@@ -31,10 +31,10 @@ namespace Inteligencia {
 		virtual void prepare() = 0;//prepare means parse on most implementations
 		void step();//receive and prepare
 		void apply();
-		unsigned int robots();//how many robots?
-		Robot* robot(unsigned int);//-th robot
-		unsigned int balls();//how many balls?
-		Ball* ball(unsigned int);//-th ball
+		size_t robots();//how many robots?
+		Robot* robot(size_t);//-th robot
+		size_t balls();//how many balls?
+		Ball* ball(size_t);//-th ball
 		//add:
 		void add(Robot*);
 		void add(Ball*);

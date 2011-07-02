@@ -14,7 +14,7 @@ namespace Inteligencia {
 	UpdateRobot::~UpdateRobot() {}
 
 	void UpdateRobot::apply(Updater* u) {
-		for(unsigned int k=u->robots(); k>0; k--) {
+		for(size_t k=u->robots(); k>0; k--) {
 			if(u->robot(k-1)->i()==_i) {
 				u->robot(k-1)->x(_x);
 				u->robot(k-1)->y(_y);

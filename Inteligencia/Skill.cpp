@@ -2,8 +2,15 @@
 namespace Inteligencia {
 	namespace Skills {
 
-		Skill::Skill(){}
-		Skill::~Skill(){}
+		Skill::Skill(Robot* r) {
+			robot(r);
+		}
+
+		Skill::~Skill() {}
+
+		void Skill::robot(Robot* r) {
+			_robot = r;
+		}
 
 	}
 }

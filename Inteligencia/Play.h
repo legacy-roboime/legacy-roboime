@@ -10,10 +10,10 @@ namespace Inteligencia {
 
 	private:
 		//static fields:
-		static list<unsigned int> __i;//internal use for internal index
+		static list<size_t> __i;//internal use for internal index
 
 		//fields:
-		unsigned int _i;
+		size_t _i;
 
 	protected:
 		Play(void);//must always be called on the constructor

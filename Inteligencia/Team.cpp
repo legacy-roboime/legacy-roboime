@@ -1,4 +1,5 @@
 #include "Team.h"
+
 namespace Inteligencia {
 
 	void Team::_init() {

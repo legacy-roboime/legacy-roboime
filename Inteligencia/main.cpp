@@ -7,6 +7,7 @@
 #include "UpdaterSIM.h"
 
 using namespace Inteligencia;
+using namespace Inteligencia::Skills;
 
 int main(int argc, char *argv[])
 {
@@ -21,9 +22,10 @@ int main(int argc, char *argv[])
 
 	system("pause");
 
+	Skill* mov = new Loops::Circle(rob, 1500, 1500, 600, 10);
 	while(true) {
 		upd->step();
-		Skills::move(rob, 3.5, 3.5, .1);
+		mov->step();
 		com->step();
 	}
 

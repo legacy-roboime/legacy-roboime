@@ -24,7 +24,7 @@ namespace Inteligencia {
 	CommanderSIM::~CommanderSIM() {}
 
 	void CommanderSIM::prepare() {
-		for(unsigned int n=_robot.size(); n>0; n--) {
+		for(size_t n=_robot.size(); n>0; n--) {
 			stringstream out;
 			Robot* r = _robot[n-1];
 			Command* c = r->command();
