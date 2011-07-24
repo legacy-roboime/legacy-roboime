@@ -329,6 +329,10 @@
 			ReferencedProjectIdentifier="{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}"
 			RelativePathToProject=".\Comunicacao\Comunicacao.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}"
+			RelativePathToProject=".\Simulacao\Simulacao.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -372,7 +376,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\UpdaterReferee.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\UpdaterSIM.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UpdaterVision.cpp"
 					>
 				</File>
 			</Filter>
@@ -630,7 +642,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\UpdaterReferee.h"
+					>
+				</File>
+				<File
 					RelativePath=".\UpdaterSIM.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UpdaterVision.h"
 					>
 				</File>
 			</Filter>

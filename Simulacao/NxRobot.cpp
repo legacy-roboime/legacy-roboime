@@ -184,11 +184,11 @@ void Simulation::buildModelRobotWithDesc(int indexRobot, int indexScene)
 
 	//TODO: Incluir Driblador descricao.
 	NxActor* actorDribbler = getActorDribbler(indexScene, indexRobot);
-	actorDribbler->setMaxAngularVelocity(100);
+	actorDribbler->setMaxAngularVelocity(0.0001);
 
 	//TODO: Incluir Chutador descricao.
 	NxActor* kickerActor = getActorKicker(indexScene, indexRobot);
-	kickerActor->setMaxAngularVelocity(100);
+	kickerActor->setMaxAngularVelocity(0.0001);
 
 	//Criar robot, vehicle base
 	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexScene], &vehicleDesc);
@@ -210,11 +210,11 @@ void Simulation::buildModelRobotWithDesc(int indexRobot, int indexScene)
 	//gScenes[0]->releaseActor(*robotActor);
 }
 
-void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource, NxVec3 newPosition)
+void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource, NxVec3 newPosition, int indexDestScene)
 {
 	NxRobot* nxRobotSource = NxAllRobots::getRobotById(indexRobotSource);
 	//Body
-	NxActor* robotActor = Simulation::cloneActor(nxRobotSource->getActor());
+	NxActor* robotActor = Simulation::cloneActor(nxRobotSource->getActor(),indexDestScene);
 	NxShape*const* robotShapes = robotActor->getShapes();
 	//NxBounds3 bodyBounds;
 	//robotShapes[0]->getWorldBounds(bodyBounds);
@@ -285,15 +285,15 @@ void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource
 	}
 
 	//TODO: Incluir Driblador descricao.
-	NxActor* actorDribbler = cloneActor(nxRobotSource->dribbler.dribbler);
+	NxActor* actorDribbler = cloneActor(nxRobotSource->dribbler.dribbler,indexDestScene);
 	actorDribbler->setMaxAngularVelocity(100);
 
 	//TODO: Incluir Chutador descricao.
-	NxActor* kickerActor = cloneActor(nxRobotSource->kicker.kicker);
+	NxActor* kickerActor = cloneActor(nxRobotSource->kicker.kicker,indexDestScene);
 	kickerActor->setMaxAngularVelocity(100);
 
 	//Criar robot, vehicle base
-	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexScene], &vehicleDesc);
+	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexDestScene], &vehicleDesc);
 	//NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexScene], &vehicleDesc);
 	robot->setId(indexRobot);
 	robot->setIdTeam(nxRobotSource->getIdTeam());
@@ -306,7 +306,7 @@ void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource
 	{	
 		NxActor* actor1;
 		NxActor* actor2;
-		robot->joints.push_back(cloneJoint(nxRobotSource->joints[i]));
+		robot->joints.push_back(cloneJoint(nxRobotSource->joints[i],indexDestScene));
 		robot->joints[i]->getActors(&actor1, &actor2);
 		const char* name1 = actor1->getName();
 		const char* name2 = actor2->getName();
@@ -338,55 +338,4 @@ void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource
 	robot->kicker.kicker->setGlobalPosition(robot->kicker.kicker->getGlobalPosition() - robot->getActor()->getGlobalPosition() + newPosition);
 	robot->dribbler.dribbler->setGlobalPosition(robot->dribbler.dribbler->getGlobalPosition() - robot->getActor()->getGlobalPosition() + newPosition);
 	robot->getActor()->setGlobalPosition(newPosition);
-}
-
-NxActor* Simulation::cloneActor(NxActor* actorSource)
-{
-	NxActorDesc actorDesc;
-	actorSource->saveToDesc(actorDesc);
-
-	//// Create body
-	NxBodyDesc bodyDesc;
-	actorSource->saveBodyToDesc(bodyDesc);
-	actorDesc.body = &bodyDesc;
-
-	for(int i=0; i<actorSource->getNbShapes(); i++)
-	{
-		NxShapeType type = (actorSource->getShapes())[i]->getType();
-		if(type==NxShapeType::NX_SHAPE_BOX){
-			NxBoxShapeDesc boxDesc;
-			(actorSource->getShapes())[i]->isBox()->saveToDesc(boxDesc);
-			actorDesc.shapes.push_back(&boxDesc);
-		}
-		else if(type==NxShapeType::NX_SHAPE_CONVEX){
-			NxConvexShapeDesc convexShapeDesc;
-			//static NxConvexMeshDesc convexMeshDesc;
-			(actorSource->getShapes())[i]->isConvexMesh()->saveToDesc(convexShapeDesc);
-					
-			//MemoryWriteBuffer buf;
-			//bool status = CookConvexMesh(convexMeshDesc, buf);
-			//if(status){
-			//	convexShapeDesc.meshData = gPhysicsSDK->createConvexMesh(MemoryReadBuffer(buf.data);
-				actorDesc.shapes.push_back(&convexShapeDesc);
-			//}
-		}
-	}
-
-	return gScenes[gCurrentScene]->createActor(actorDesc);
-}
-
-NxJoint* Simulation::cloneJoint(NxJoint* jointSource){
-	NxJoint* joint;
-	
-	NxJointType type = jointSource->getType();
-	if(type==NxJointType::NX_JOINT_REVOLUTE){
-		
-	}
-	else if(type==NxJointType::NX_JOINT_D6){
-		NxD6JointDesc d6JointDesc;
-		jointSource->isD6Joint()->saveToDesc(d6JointDesc);
-		joint = gScenes[gCurrentScene]->createJoint(d6JointDesc);
-	}
-	
-	return joint;
 }

@@ -2,6 +2,7 @@
 #include "Update.h"
 #include "UpdateBall.h"
 #include "UpdateRobot.h"
+#include "UpdaterSIM.h"
 
 using namespace std;
 namespace Inteligencia {
@@ -16,6 +17,7 @@ namespace Inteligencia {
 				_udpclient = new UDPClient("127.0.0.1", 9876);
 			}
 		}
+		_udpClientThread = new UDPClientThread(_udpclient);
 	}
 
 	UpdaterSIM::UpdaterSIM(string address, unsigned short port) : Updater() {
@@ -23,11 +25,14 @@ namespace Inteligencia {
 		_udpclient = new UDPClient(address, port);
 	}
 
-	UpdaterSIM::~UpdaterSIM() {}
+	UpdaterSIM::~UpdaterSIM() {
+		delete _udpclient;
+		delete _udpClientThread;
+	}
 
 	void UpdaterSIM::receive() {
 		_udpclient->setSendString("1 0\n");
-		_udpclient->service();
+		//_udpClientThread->sttttttttart();
 		_queue.push_back(_udpclient->getLastReceivedString());
 	}
 

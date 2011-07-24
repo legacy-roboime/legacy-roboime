@@ -2,7 +2,8 @@
 #include "UDPServer.h"
 #include "Simulation.h"
 
-class UDPServerSimInt : public UDPServer
+class UDPServerSimInt :
+	public UDPServer
 {
 public:
 	UDPServerSimInt(void);

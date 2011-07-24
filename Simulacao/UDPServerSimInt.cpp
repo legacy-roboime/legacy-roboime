@@ -1,6 +1,6 @@
 #include "UDPServerSimInt.h"
 
-UDPServerSimInt::UDPServerSimInt(void) : UDPServer()
+UDPServerSimInt::UDPServerSimInt(void): UDPServer()
 {
 }
 

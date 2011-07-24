@@ -2,7 +2,7 @@
 #include <deque>
 #include "Updater.h"
 #include "CommanderSIM.h"
-#include "UDPClient.h"
+#include "UDPClientThread.h"
 
 using namespace std;
 namespace Inteligencia {
@@ -12,6 +12,7 @@ namespace Inteligencia {
 
 	private:
 		static UDPClient* _udpclient;//Use the same server as CommanderSIM when possible
+		UDPClientThread* _udpClientThread;
 		deque<string> _queue;
 
 	public:

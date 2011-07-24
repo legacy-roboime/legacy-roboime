@@ -31,6 +31,7 @@ public:
 	static void selectNext();
 	
 	static NxRobot* getRobotById(int indexRobot);
+	static NxRobot* getRobot(int indexRobot, int indexScene, int idTeam);
 	static int getBiggestIndexRobot();
 	~NxAllRobots();
 };

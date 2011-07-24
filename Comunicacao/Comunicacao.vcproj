@@ -68,7 +68,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				LinkLibraryDependencies="true"
 				AdditionalDependencies="libprotobufd.lib wsock32.lib"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib\&quot;"
 			/>
@@ -304,6 +303,10 @@
 				RelativePath=".\PracticalSocket.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\SimpleThread.cpp"
+				>
+			</File>
 			<Filter
 				Name="UDPServer"
 				>
@@ -331,6 +334,14 @@
 			<Filter
 				Name="UDPMulticast"
 				>
+				<File
+					RelativePath=".\UDPMulticastReceiver.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPMulticastReceiverThread.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\UDPMulticastSender.cpp"
 					>
@@ -374,6 +385,10 @@
 				RelativePath=".\PracticalSocket.h"
 				>
 			</File>
+			<File
+				RelativePath=".\SimpleThread.h"
+				>
+			</File>
 			<Filter
 				Name="UDPServer"
 				>
@@ -401,6 +416,14 @@
 			<Filter
 				Name="UDPMulticast"
 				>
+				<File
+					RelativePath=".\UDPMulticastReceiver.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UDPMulticastReceiverThread.h"
+					>
+				</File>
 				<File
 					RelativePath=".\UDPMulticastSender.h"
 					>

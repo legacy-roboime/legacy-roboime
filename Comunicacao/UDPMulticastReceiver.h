@@ -16,21 +16,22 @@
 
 using namespace std;
 
-class UDPMulticastSender
+class UDPMulticastReceiver
 {
 private:
 	static const int ECHOMAX = 2048;//512 // Longest string to echo
-	string servAddress;					  // multicast address
+	string multiAddress;			      // multicast address
 	unsigned short port;				  // port
 	unsigned char multicastTTL;			  // Default TTL
-	char sendBuffer[ECHOMAX];			  // message to send
+	char receiveBuffer[ECHOMAX];		  // received message
 	int bufLen;							  // lenght of message to send 
 public:
-	UDPMulticastSender(void);
-	~UDPMulticastSender(void);
-	void send();
+	UDPMulticastReceiver(void);
+	UDPMulticastReceiver(string address, unsigned short port);
+	~UDPMulticastReceiver(void);
+	void receive();
 	virtual void buildSendMessage();
-	char* getSendBuffer();
+	char* getReceiveBuffer();
 	int getBufLen();
 	void setBufLen(int bufLen);
 };

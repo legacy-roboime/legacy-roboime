@@ -102,6 +102,19 @@ NxRobot* NxAllRobots::getRobotById(int indexRobot)
 	}
 }
 
+NxRobot* NxAllRobots::getRobot(int indexRobot, int indexScene, int idTeam){
+	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
+		if(_allRobotsSequential[i]!=NULL){
+			if(_allRobotsSequential[i]->getId()==indexRobot && _allRobotsSequential[i]->getIdTeam()==idTeam && _allRobotsSequential[i]->getActor()->getScene().userData)
+				return _allRobotsSequential[i];
+			else
+				return NULL;
+		}
+		else 
+			return NULL;
+	}
+}
+
 int NxAllRobots::getBiggestIndexRobot()
 {
 	int biggest = -1;

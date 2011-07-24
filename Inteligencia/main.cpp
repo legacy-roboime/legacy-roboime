@@ -6,12 +6,30 @@
 #include "CommanderSIM.h"
 #include "UpdaterSIM.h"
 
+#include "UDPServerThread.h"
+#include "UDPMulticastSenderThread.h"
+#include "UDPMulticastSenderSSLVision.h"
+#include "SimpleThread.h"
+#include "SimulationView.h"
+#include "UDPServerSimInt.h"
+
 using namespace Inteligencia;
 using namespace Inteligencia::Skills;
 
 int main(int argc, char *argv[])
 {
 	cout << "Modulo Inteligencia" << endl;
+
+	UDPMulticastSenderSSLVision* udpMulticastSenderSSLVision = new UDPMulticastSenderSSLVision();
+	Thread* udpMulticastSenderThread = new UDPMulticastSenderThread(udpMulticastSenderSSLVision);
+	udpMulticastSenderThread->start();
+
+	UDPServerSimInt* udpServerSimInt = new UDPServerSimInt();
+	Thread* udpServerThread = new UDPServerThread((UDPServer*)udpServerSimInt);
+	udpServerThread->start();
+
+	Thread* simpleThread = new SimpleThread(SimulationView::mainLoop, argc, argv);
+	simpleThread->start();
 
 	Robot* rob = new Robot(4);
 	Commander* com = new CommanderSIM();
