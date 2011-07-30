@@ -34,7 +34,8 @@ namespace ControleRobo
         #endregion
 
         public void UDPSend(object sender, ElapsedEventArgs e)
-        {            
+        {
+            this.server.sendData = Encoding.ASCII.GetBytes("MOTHAFUCKA");
             if (server.receivedData != null)
             {
                 this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
