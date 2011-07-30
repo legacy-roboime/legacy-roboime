@@ -41,7 +41,8 @@ namespace ControleRobo
                 this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
                 Console.WriteLine(intelData);
                 this.intelTranslatedData = Protocols.TranslateProtocol(intelData, false);
-                Console.WriteLine(intelTranslatedData);
+                for(int i=0; i<intelTranslatedData.Length; i++)
+                    Console.Write(intelTranslatedData[i]);
             }
             if (intelTranslatedData != null)
             {
@@ -103,7 +104,7 @@ namespace ControleRobo
             else
             {
                 this.simulationClient = new UdpClient("127.0.0.1", clientPort);
-                sendTimer = new System.Timers.Timer(700);
+                sendTimer = new System.Timers.Timer(70);
                 sendTimer.Elapsed += new ElapsedEventHandler(UDPSend);
                 sendTimer.Enabled = true;
 
