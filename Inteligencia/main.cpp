@@ -28,10 +28,12 @@ int main(int argc, char *argv[])
 	Thread* udpServerThread = new UDPServerThread((UDPServer*)udpServerSimInt);
 	udpServerThread->start();
 
-	Thread* simpleThread = new SimpleThread(SimulationView::mainLoop, argc, argv);
-	simpleThread->start();
+	//Thread* simpleThread = new SimpleThread(SimulationView::mainLoop, argc, argv);
+	//simpleThread->start();
 
-	Robot* rob = new Robot(4);
+	SimulationView::mainLoop(argc, argv);
+
+	/*Robot* rob = new Robot(4);
 	Commander* com = new CommanderSIM();
 	Updater* upd = new UpdaterSIM();
 	com->add(rob);
@@ -47,7 +49,7 @@ int main(int argc, char *argv[])
 		com->step();
 	}
 
-	system("pause");
+	system("pause");*/
 
 	return 0;
 }
