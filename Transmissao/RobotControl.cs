@@ -41,13 +41,11 @@ namespace ControleRobo
                 this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
                 Console.WriteLine(intelData);
                 this.intelTranslatedData = Protocols.TranslateProtocol(intelData, false);
-                for(int i=0; i<intelTranslatedData.Length; i++)
-                    Console.Write(intelTranslatedData[i]);
+                Console.WriteLine(Encoding.ASCII.GetString(intelTranslatedData));
             }
             if (intelTranslatedData != null)
             {
                 simulationClient.Send(intelTranslatedData, intelTranslatedData.Length);
-                
             }
         }
         public void TxSendReceive(object sender, ElapsedEventArgs e)

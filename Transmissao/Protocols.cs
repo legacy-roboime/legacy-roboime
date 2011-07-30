@@ -86,9 +86,8 @@ namespace ControleRobo
             else
             {
                 string appendString = "15 0 0 ";
-                System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
                 intelData = string.Concat(appendString, intelData);
-                translated = encoding.GetBytes(intelData);
+                translated = Encoding.ASCII.GetBytes(intelData);
             }
             #endregion
             return translated;
