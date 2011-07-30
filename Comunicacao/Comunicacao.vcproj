@@ -54,7 +54,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
+				WarningLevel="1"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -180,6 +180,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -199,7 +200,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="libprotobuf.lib wsock32.lib"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib\&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"

@@ -39,8 +39,8 @@
 #ifndef GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 #define GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 
-#include "include/google/protobuf/stubs/common.h"
-#include "include/google/protobuf/io/coded_stream.h"
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/io/coded_stream.h>
 
 namespace google {
 namespace protobuf {

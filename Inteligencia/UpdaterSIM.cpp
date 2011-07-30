@@ -32,6 +32,7 @@ namespace Inteligencia {
 
 	void UpdaterSIM::receive() {
 		_udpclient->setSendString("1 0\n");
+		_udpclient->service();
 		//_udpClientThread->sttttttttart();
 		_queue.push_back(_udpclient->getLastReceivedString());
 	}
