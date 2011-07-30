@@ -15,7 +15,7 @@ namespace ControleRobo
         {
             float scaledspeed;
             if (realVelocity > maxVelocity)
-                throw (new Exception("Given velocity exceeds maximum velocity for the component."));
+                throw (new System. Exception("Given velocity exceeds maximum velocity for the component."));
             if (realVelocity >= 0)
                 scaledspeed = (realVelocity - minVelocity) * 127 / (maxVelocity - minVelocity);
             else
@@ -41,12 +41,22 @@ namespace ControleRobo
         {
             string[] splitData = new String[robotData.Length-1];
             string temp = "";
-            splitData[0] = ReverseScaleVelocity(robotData[1], 0, wheelVelocity).ToString();
-            splitData[1] = ReverseScaleVelocity(robotData[2], 0, wheelVelocity).ToString();
-            splitData[2] = ReverseScaleVelocity(robotData[3], 0, wheelVelocity).ToString();
-            splitData[3] = ReverseScaleVelocity(robotData[4], 0, wheelVelocity).ToString();
-            splitData[4] = ReverseScaleVelocity(robotData[5], 0, kickerVelocity).ToString();
-            splitData[5] = ReverseScaleVelocity(robotData[6], 0, dribblerVelocity).ToString();
+            if (robotData[2] == (byte)0)
+            {
+                splitData[0] = ((int)robotData[1]).ToString();
+                splitData[1] = (-Math.Sign(ReverseScaleVelocity(robotData[3], 0, 100))).ToString(); //Returns -1 if no ball, 1 if has ball
+                splitData[2] = (Math.Abs(ReverseScaleVelocity(robotData[3], 0, 100))).ToString(); //Battery level
+                splitData[3] = ReverseScaleVelocity(robotData[3], 0, wheelVelocity).ToString();
+                splitData[4] = ReverseScaleVelocity(robotData[4], 0, wheelVelocity).ToString();
+                splitData[5] = ReverseScaleVelocity(robotData[5], 0, wheelVelocity).ToString();
+                splitData[6] = ReverseScaleVelocity(robotData[6], 0, wheelVelocity).ToString();
+            }
+            if (robotData[2] == (byte)1)
+            {
+                splitData[0] = ((int)robotData[1]).ToString();
+                splitData[1] = (-Math.Sign(ReverseScaleVelocity(robotData[3], 0, 100))).ToString(); //Returns -1 if no ball, 1 if has ball
+                splitData[2] = (Math.Abs(ReverseScaleVelocity(robotData[3], 0, 100))).ToString(); //Battery level
+            }
             foreach (string subString in splitData)
             {
                 temp = String.Concat(temp, " ");
@@ -75,7 +85,7 @@ namespace ControleRobo
             #region simulation
             else
             {
-                string appendString = "13 0 4 ";
+                string appendString = "15 0 0 ";
                 System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
                 intelData = string.Concat(appendString, intelData);
                 translated = encoding.GetBytes(intelData);

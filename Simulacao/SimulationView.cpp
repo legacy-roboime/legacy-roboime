@@ -756,8 +756,8 @@ void SimulationView::mainLoop(int argc, char **argv)
 	glutRemapButtonExt(8, '3', true); // Shift + left shoulder to load
 #endif
 	// Initialize Glut
-	glutInit(&argc, argv);
-	//glutInitWindowSize(512, 512);
+	//glutInit(&argc, argv);
+	glutInitWindowSize(512, 512);
 
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	gMainHandle = glutCreateWindow("Simulação - RobotIME");
@@ -798,7 +798,7 @@ void SimulationView::mainLoop(int argc, char **argv)
 
 	bool init = Simulation::InitNx();
 	CSL_Scene();
-	glutFullScreen();
+	//glutFullScreen();
 
 	if(Simulation::gScenes[0] != NULL)
 	{

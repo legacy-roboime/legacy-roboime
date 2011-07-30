@@ -1,11 +1,4 @@
-﻿/*
-C# Network Programming 
-by Richard Blum
-
-Publisher: Sybex 
-ISBN: 0782141765
-*/
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -36,7 +29,7 @@ public class UDPServer
     {
         //Console.WriteLine("Waiting for a client...");
         IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
-        EndPoint tmpRemote = (EndPoint)(sender);        
+        EndPoint tmpRemote = (EndPoint)(sender);
         while (true)
         {
             recv = newsock.ReceiveFrom(receivedData, ref tmpRemote);
