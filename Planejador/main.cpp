@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 	Thread* udpMulticastSenderThread = new UDPMulticastSenderThread(udpMulticastSenderSSLVision);
 	udpMulticastSenderThread->start();
 
-	UDPServerIntSim* udpServerSimInt = new UDPServerIntSim();
+	UDPServerSimInt* udpServerSimInt = new UDPServerSimInt();
 	Thread* udpServerThread = new UDPServerThread((UDPServer*)udpServerSimInt);
 	udpServerThread->start();
 

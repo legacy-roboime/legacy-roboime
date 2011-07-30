@@ -27,6 +27,8 @@ private:
 	static NxVec3 gEye;
 	static NxVec3 Dir;
 	static NxVec3 N;
+	static GLdouble zNear;
+	static GLdouble zFar;
 	static int mx;
 	static int my;
 	static DebugRenderer gDebugRenderer;

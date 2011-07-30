@@ -13,6 +13,8 @@
 
 #define NUM_TRAIL_POINTS 1600
 
+//class NxScene;
+
 class NxVehicle {
 private:
 	NxArray<NxWheel*>			_wheels;
@@ -63,8 +65,9 @@ private:
 
 	//void						_controlSteering(NxReal steering, bool analogSteering);
 	void						_controlAcceleration(NxReal acceleration, bool analogAcceleration);
-	static NxVehicle*			_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc);
+	static NxVehicle*			_createVehicle(NxScene* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
 public:
+	//int							indexScene;
 	void*						userData;
 
 	NxReal*						_torqueAxleWheelControl;
@@ -102,7 +105,7 @@ public:
 
 	NxMat34						getGlobalPose() { return _bodyActor->getGlobalPose(); }
 
-	static NxVehicle*			createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc);
+	static NxVehicle*			createVehicle(NxScene* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
 
 	NxVec3						getBodyPos();
 	NxReal						getAngle2DFromVehicle();

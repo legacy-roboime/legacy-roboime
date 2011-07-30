@@ -4,19 +4,24 @@
 
 class NxField
 {
-private:
-	NxActor* actorParedeLateralPositive;
-	NxActor* actorParedeLateralNegative;
-	NxActor* actorParedeFundoNegative;
-	NxActor* actorParedeFundoPositive;
+public:
+	int indexScene;
+	float widthBorderField;
+	float heightBorderField;
+	NxActor* actorParedeLateralPositivo;
+	NxActor* actorParedeLateralNegativo;
+	NxActor* actorParedeFundoNegativo;
+	NxActor* actorParedeFundoPositivo;
 	NxActor* actorCampo;
-	NxActor* actorGolPositiveParedeFundo;
-	NxActor* actorGolPositiveParedeNegative;
-	NxActor* actorGolPositiveParedePositive;
-	NxActor* actorGolNegativeParedeFundo;
-	NxActor* actorGolNegativeParedePositive;
-	NxActor* actorGolNegativeParedeNegative;
+	NxActor* actorGolPositivoParedeFundo;
+	NxActor* actorGolPositivoParedeNegativo;
+	NxActor* actorGolPositivoParedePositivo;
+	NxActor* actorGolNegativoParedeFundo;
+	NxActor* actorGolNegativoParedePositivo;
+	NxActor* actorGolNegativoParedeNegativo;
 public:
 	NxField(void);
 	~NxField(void);
+
+	void cloneField(int indexNewScene);
 };

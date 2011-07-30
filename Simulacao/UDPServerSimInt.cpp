@@ -37,9 +37,9 @@ void UDPServerSimInt::parsing()
 		out << " ";
 		out << Simulation::getFieldExtents(indexScene).y; //altura
 		out << " ";
-		out << Simulation::widthBorderField; //largura do campo interno (delimitado pelas linhas brancas)
+		out << Simulation::allFields.getFieldByScene(indexScene).widthBorderField; //largura do campo interno (delimitado pelas linhas brancas)
 		out << " ";
-		out << Simulation::heightBorderField; //altura do campo interno (delimitado pelas linhas brancas)
+		out << Simulation::allFields.getFieldByScene(indexScene).heightBorderField; //altura do campo interno (delimitado pelas linhas brancas)
 		//Robo
 		//out << " ";
 		//out << Simulation::getFieldExtents(indexScene).y; //quantidade de robos teammates
@@ -207,7 +207,7 @@ void UDPServerSimInt::parsing()
 		//Lendo argumentos e executando InfinePath
 		for(int indexRobot=1; indexRobot<=10; indexRobot++)
 		{
-			Simulation::infinitePath(indexRobot);
+			Simulation::infinitePath(indexRobot, indexScene);
 		}
 
 		out << "ACK 7\n"; // confirmando pacote 7
@@ -427,6 +427,66 @@ void UDPServerSimInt::parsing()
 		}
 
 		out << "ACK 14\n"; // confirmando pacote 14
+
+		//Construindo string para enviar
+		this->sendString.append(out.str());
+	}
+	else if(temp.compare("15") == 0) //pacote 15 CONTROL ALL ROBOTS FROM TEAM(CONTROL WHEELS)
+	{
+		//Lendo argumentos
+		os >> temp;
+		int indexScene = atoi(temp.c_str());
+
+		//Limpando string para enviar
+		this->sendString = "";
+
+		//Definindo string para enviar
+		stringstream out;
+
+		os >> temp;
+		int indexTeam = atoi(temp.c_str());
+		
+		//Lendo argumentos do robo e controlando
+		if(indexTeam==0){
+			for(int indexRobot=0; indexRobot<5; indexRobot++)
+			{
+				os >> temp;
+				float speedWheel1 = atof(temp.c_str());
+				os >> temp;
+				float speedWheel2 = atof(temp.c_str());
+				os >> temp;
+				float speedWheel3 = atof(temp.c_str());
+				os >> temp;
+				float speedWheel4 = atof(temp.c_str());
+				os >> temp;
+				float dribblerSpeed = atof(temp.c_str());
+				os >> temp;
+				float kickerSpeed = atof(temp.c_str());
+
+				Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+			}
+		}
+		else{
+			for(int indexRobot=5; indexRobot<10; indexRobot++)
+			{
+				os >> temp;
+				float speedWheel1 = atof(temp.c_str());
+				os >> temp;
+				float speedWheel2 = atof(temp.c_str());
+				os >> temp;
+				float speedWheel3 = atof(temp.c_str());
+				os >> temp;
+				float speedWheel4 = atof(temp.c_str());
+				os >> temp;
+				float dribblerSpeed = atof(temp.c_str());
+				os >> temp;
+				float kickerSpeed = atof(temp.c_str());
+
+				Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+			}
+		}
+
+		out << "ACK 15\n"; // confirmando pacote 15
 
 		//Construindo string para enviar
 		this->sendString.append(out.str());

@@ -81,6 +81,7 @@ private:
 	NxCapsuleShape*			wheelCapsule;
 	NxConvexShape*			wheelConvex;
 	NxScene *				scene;
+	//int						indexScene;
 
 	NxMaterial*				material;
 	NxReal					_frictionToSide;

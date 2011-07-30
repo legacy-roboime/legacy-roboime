@@ -6,33 +6,35 @@
 
 class NxAllRobots {
 private:
-	static std::set<NxRobot*> _allRobots;
-	static NxArray<NxRobot*> _allRobotsSequential;
-	static std::set<NxRobot*> _allChildRobots;
+	std::set<NxRobot*> _allRobots;
+	NxArray<NxRobot*> _allRobotsSequential;
+	std::set<NxRobot*> _allChildRobots;
 	
-	static NxI32 _activeRobot;
-	static NxRobot* _activeRobotP;
-	static void setActiveRobotP();
+	NxI32 _activeRobot;
+	NxRobot* _activeRobotP;
+	void setActiveRobotP();
 public:
-	static void AddRobot(NxRobot* v);
-	static void AddChildRobot(NxRobot* v);
-	//static void RemoveRobot(NxRobot* v);
+	void AddRobot(NxRobot* v);
+	void AddChildRobot(NxRobot* v);
+	//void RemoveRobot(NxRobot* v);
 
-	static void updateAllRobots(NxReal lastTimeStep);
-	static void drawRobots(bool debug = false);
+	void updateAllRobots(NxReal lastTimeStep);
+	void drawRobots(bool debug = false);
 
-	static bool isRobot(NxRobot* v);
-	static void handlePair(NxContactPair& pair, NxU32 events);
+	bool isRobot(NxRobot* v);
+	void handlePair(NxContactPair& pair, NxU32 events);
 
-	static NxU32 getNumberOfRobots() { return (NxU32)_allRobots.size(); }
-	static void setActiveRobot(NxI32 v) { _activeRobot = v; setActiveRobotP(); }
-	static NxRobot* getActiveRobot() { return _activeRobotP; }
-	static NxI32 getActiveRobotNumber() { return _activeRobot; }
-	static void selectNext();
+	NxU32 getNumberOfRobots() { return (NxU32)_allRobots.size(); }
+	void setActiveRobot(NxI32 v) { _activeRobot = v; setActiveRobotP(); }
+	NxRobot* getActiveRobot() { return _activeRobotP; }
+	NxI32 getActiveRobotNumber() { return _activeRobot; }
+	void selectNext();
 	
-	static NxRobot* getRobotById(int indexRobot);
-	static NxRobot* getRobot(int indexRobot, int indexScene, int idTeam);
-	static int getBiggestIndexRobot();
+	NxArray<NxRobot*> getRobotsByScene(int indexScene);
+	NxRobot* getRobotByIdScene(int indexRobot, int indexScene);
+	NxRobot* getRobotByIdSceneTeam(int indexRobot, int indexScene, int idTeam);
+	int getBiggestIndexRobot();
+	NxAllRobots();
 	~NxAllRobots();
 };
 

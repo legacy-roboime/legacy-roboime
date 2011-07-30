@@ -4,9 +4,12 @@
 
 class NxBall
 {
-private:
-	NxArray<NxActor*> balls; 
+public:
+	int indexScene;
+	NxActor* ball; 
 public:
 	NxBall(void);
 	~NxBall(void);
+
+	void cloneBall(int indexNewScene);
 };

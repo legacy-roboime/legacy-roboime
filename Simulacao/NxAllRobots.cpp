@@ -1,11 +1,5 @@
 #include "NxAllRobots.h"
 
-std::set<NxRobot*>		NxAllRobots::_allRobots;
-NxArray<NxRobot*>		NxAllRobots::_allRobotsSequential;
-std::set<NxRobot*>		NxAllRobots::_allChildRobots;
-NxI32					NxAllRobots::_activeRobot = -1;
-NxRobot*				NxAllRobots::_activeRobotP;
-
 void NxAllRobots::AddRobot(NxRobot* v) {
 	if (!isRobot(v)) {
 		_allRobots.insert(v);
@@ -88,24 +82,32 @@ void NxAllRobots::handlePair(NxContactPair& pair, NxU32 events) {
 	}
 }
 
-NxRobot* NxAllRobots::getRobotById(int indexRobot)
+NxArray<NxRobot*> NxAllRobots::getRobotsByScene(int indexScene)
 {
+	NxArray<NxRobot*> robots;
 	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
 		if(_allRobotsSequential[i]!=NULL){
-			if(_allRobotsSequential[i]->getId()==indexRobot)
-				return _allRobotsSequential[i];
-			else
-				return NULL;
+			if(_allRobotsSequential[i]->indexScene==indexScene)
+				robots.push_back(_allRobotsSequential[i]);
 		}
-		else 
-			return NULL;
 	}
+	return robots;
 }
 
-NxRobot* NxAllRobots::getRobot(int indexRobot, int indexScene, int idTeam){
+NxRobot* NxAllRobots::getRobotByIdScene(int indexRobot, int indexScene){
 	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
 		if(_allRobotsSequential[i]!=NULL){
-			if(_allRobotsSequential[i]->getId()==indexRobot && _allRobotsSequential[i]->getIdTeam()==idTeam && _allRobotsSequential[i]->getActor()->getScene().userData)
+			if(_allRobotsSequential[i]->getId()==indexRobot && _allRobotsSequential[i]->indexScene==indexScene)
+				return _allRobotsSequential[i];
+		}
+	}
+	return NULL;
+}
+
+NxRobot* NxAllRobots::getRobotByIdSceneTeam(int indexRobot, int indexScene, int idTeam){
+	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
+		if(_allRobotsSequential[i]!=NULL){
+			if(_allRobotsSequential[i]->getId()==indexRobot && _allRobotsSequential[i]->getIdTeam()==idTeam && _allRobotsSequential[i]->indexScene==indexScene)
 				return _allRobotsSequential[i];
 			else
 				return NULL;
@@ -123,6 +125,10 @@ int NxAllRobots::getBiggestIndexRobot()
 			biggest=_allRobotsSequential[i]->getId();
 	}
 	return biggest;
+}
+
+NxAllRobots::NxAllRobots(){
+	_activeRobot = -1;
 }
 
 NxAllRobots::~NxAllRobots()

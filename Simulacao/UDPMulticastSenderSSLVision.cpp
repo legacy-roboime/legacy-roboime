@@ -20,6 +20,8 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 
 	if(true)//withDetection)
 	{
+		NxScene1* baseScene = Simulation::gScenes[Simulation::gBaseScene];
+
 		SSL_DetectionFrame detectionFrame = SSL_DetectionFrame();
 
 		detectionFrame.set_frame_number(0);
@@ -27,7 +29,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 		detectionFrame.set_t_capture(0);
 		detectionFrame.set_t_sent(0);
 
-		NxVec3 ballGlobalPos = Simulation::getBallGlobalPos(0);
+		NxVec3 ballGlobalPos = Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->getGlobalPosition();
 		SSL_DetectionBall* detectionBall = detectionFrame.add_balls();
 		detectionBall->set_area(1);
 		detectionBall->set_confidence(1);
@@ -37,10 +39,11 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 		detectionBall->set_y(ballGlobalPos.y);
 		detectionBall->set_z(1);
 
-		NxAllRobots::setActiveRobot(0);
-		for(int i=0; i<NxAllRobots::getNumberOfRobots(); i++)
+		NxAllRobots* allRobots = &Simulation::allRobots;
+		allRobots->setActiveRobot(0);
+		for(int i=0; i<allRobots->getNumberOfRobots(); i++)
 		{
-			NxRobot* robot = NxAllRobots::getActiveRobot();
+			NxRobot* robot = allRobots->getActiveRobot();
 			NxReal angulo = Simulation::getAngle2DFromRobot(4, 0);
 			NxVec3 robotPos = robot->getBodyPos();
 			SSL_DetectionRobot* detectionRobot;
@@ -59,7 +62,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 			detectionRobot->set_x(robotPos.x);
 			detectionRobot->set_y(robotPos.y);
 
-			NxAllRobots::selectNext();
+			allRobots->selectNext();
 		}
 
 		SSL_DetectionFrame * nframe = wrapperPacket.mutable_detection();

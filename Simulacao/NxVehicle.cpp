@@ -11,6 +11,7 @@
 #include "NxVehicle.h"
 #include "NxWheel.h"
 #include "NxAllRobots.h"
+#include "Simulation.h"
 
 #include <NxActorDesc.h>
 #include <NxBoxShape.h>
@@ -115,7 +116,6 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	NxReal* torquesZero = new NxReal[nbWheels];
 	for(NxU32 i = 0; i < nbWheels; i++)
 	{
-		//torquesZero.push_back(0);
 		torquesZero[i] = 0;
 		NxWheel* wheel = NxWheel::createWheel2(vehicle->_bodyActor, vehicleDesc->robotWheels[i]);
 
@@ -130,11 +130,8 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 		}
 	}
 
-	//Criando driblador.
-
 	//don't go to sleep.
 	//vehicle->_bodyActor->wakeUp(1e10);
-	
 	vehicle->control(torquesZero);//0,0,0,0);//
 	delete torquesZero;
 	return vehicle;
@@ -145,9 +142,11 @@ NxVehicle* NxVehicle::createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	if (vehicleDesc == NULL)
 		return NULL;
 	NxVehicle* vehicle = NxVehicle::_createVehicle(scene, vehicleDesc);
-	NxAllRobots::AddRobot((NxRobot*)vehicle);
-	if (NxAllRobots::getActiveRobotNumber() != -1 || NxAllRobots::getNumberOfRobots() == 1)
-		NxAllRobots::setActiveRobot(NxAllRobots::getNumberOfRobots()-1);
+	//NxAllRobots allRobots = Simulation::allRobots;
+	Simulation::allRobots.AddRobot((NxRobot*)vehicle);
+	//int nbRobots = allRobots.getNumberOfRobots();
+	//if (allRobots.getActiveRobotNumber() != -1 || nbRobots == 1)
+	//	allRobots.setActiveRobot(nbRobots-1);
 
 	return vehicle;
 }

@@ -345,8 +345,9 @@ NxWheel* NxWheel::createWheel2(NxActor* actor, NxWheelDesc* wheelDesc)
 	return wheel;
 }
 
-NxWheel1::NxWheel1(NxScene * s)  : scene(s)
+NxWheel1::NxWheel1(NxScene * s/*int indexScene*/)  : scene(s)
 { 
+
 }
 
 NxWheel1::~NxWheel1() 

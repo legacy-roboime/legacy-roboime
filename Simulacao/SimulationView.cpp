@@ -12,6 +12,8 @@ bool SimulationView::gravar = false;
 int SimulationView::count = 0;
 DebugRenderer SimulationView::gDebugRenderer = DebugRenderer();
 //PerfRenderer    gPerfRenderer = PerfRenderer();
+GLdouble SimulationView::zNear = 1.0f;
+GLdouble SimulationView::zFar = 10000.0f;//
 
 /**
 * Método do PhysX adaptado
@@ -184,7 +186,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 		//case '-':	break;
 	case 'e':
 		{
-			//NxAllRobots::selectNext();
+			//Simulation::allRobots.selectNext();
 		} 
 		break;
 
@@ -453,8 +455,9 @@ void SimulationView::RenderCallback()
 	//NxMat33 rotMat = NxMat33(NxVec3(NxMath::cos(teta),-NxMath::sin(teta),0),NxVec3(NxMath::sin(teta),NxMath::cos(teta),0),NxVec3(0,0,1));
 	//Dir = rotMat*Dir;
 
-	//Simulation::infinitePath(4);
-	//Simulation::simulate(0);
+	//Simulation::infinitePath(4,0);
+	//Simulation::goToThisPose( 1000/*110*/, 1000, 3* NxPi / 2., 4, 1);
+	//Simulation::simulate();
 
 	//double dif;
 	//if( timeLastSimulate!=0 ) 
@@ -518,14 +521,15 @@ void SimulationView::RenderCallback()
 		{
 			//Render
 			/*glPushMatrix();
-			const NxDebugRenderable *dbgRenderable=gScenes[i]->getDebugRenderable();
+			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
 			gDebugRenderer.renderData(*dbgRenderable);
 			glEnable(GL_LIGHTING);
 			glPopMatrix();*/
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			//glColor4f(0.6f,0.6f,0.6f,1.0f);
-			for(unsigned int j = 0 ; j < Simulation::gScenes[i]->getNbActors() ; j++ )
+			int nbActors = Simulation::gScenes[i]->getNbActors();
+			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
 				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
 			}
@@ -553,6 +557,7 @@ void SimulationView::RenderCallback()
 		//GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
 	}
 	glPopMatrix();
+
 	//glFlush();
 	glutSwapBuffers();
 }
@@ -562,7 +567,7 @@ void SimulationView::setupCamera()
 	// Setup projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), 1.0f, 10000.0f);
+	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), zNear, zFar);
 	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + Dir.x, gEye.y + Dir.y, gEye.z + Dir.z, 0.0f, 1.0f, 0.0f);
 
 	// Setup modelview matrix
@@ -624,8 +629,9 @@ NX_BOOL SimulationView::LoadScene(const char *pFilename,NXU::NXU_FileType type)
 
 	Simulation::gLoad = 0;
 
-	if ( success )
+	if ( success ){
 		printf("Cena %d carregada do arquivo %s.\n", Simulation::gBaseScene, pFilename);
+	}
 
 	return success;
 }
@@ -771,8 +777,8 @@ void SimulationView::mainLoop(int argc, char **argv)
 	glClearColor(0.3f, 0.4f, 0.5f, 1.0);
 	glEnable(GL_DEPTH_TEST);//glEnable(GL_DEPTH_BUFFER_BIT);//
 	glDepthFunc(GL_LEQUAL);
-	glClearDepth(10000.0f);
-	glDepthRange(0.0, 1.0);
+	glClearDepth(zFar);
+	glDepthRange(zNear, zFar);
 	glEnable(GL_COLOR_MATERIAL);
 #if !defined(__PPCGEKKO__)
 	glEnable(GL_CULL_FACE);
@@ -794,14 +800,15 @@ void SimulationView::mainLoop(int argc, char **argv)
 	CSL_Scene();
 	glutFullScreen();
 
-
 	if(Simulation::gScenes[0] != NULL)
 	{
 		//gScenes[0]->setUserContactReport( robotContactReport );
 		//createRobotWithDesc(1, 0);
 		//createRobotWithDesc(2, 0);
 		//createRobotWithDesc(3, 0);
-		Simulation::buildModelRobotWithDesc( 4, 0 );
+		Simulation::buildModelRobot( 4, Simulation::gBaseScene, 1 );
+		Simulation::buildModelField( Simulation::gBaseScene );
+		Simulation::buildModelBall( Simulation::gBaseScene );
 		//cloneRobot( 1, 0, 4, NxVec3( 1000, 1000, 20 ) );
 		//createRobotWithDesc(5, 0);
 		//createRobotWithDesc(6, 0);
@@ -812,25 +819,34 @@ void SimulationView::mainLoop(int argc, char **argv)
 	}
 
 	//Init speeds/torques to calc omni
-	for(int i=0; i<=NxAllRobots::getBiggestIndexRobot(); i++)
-	{
-		NxRobot* nxRobot = NxAllRobots::getRobotById(i);
-		NxReal* wheels;
-		if(nxRobot)
+	for(int k=0; k<Simulation::nbExistScenes; k++){ 
+		std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
+		std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
+		std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
+		NxAllRobots* allRobots = &Simulation::allRobots;
+		for(int i=0; i<=allRobots->getBiggestIndexRobot(); i++)
 		{
-			int nbWheels = nxRobot->getNbWheels();
-			wheels = new NxReal[nbWheels];
-			for(int j=0; j<nbWheels; j++)
+			NxRobot* nxRobot = allRobots->getRobotByIdScene(i, k);
+			NxReal* wheels;
+			if(nxRobot)
 			{
-				wheels[j]=0;
+				int nbWheels = nxRobot->getNbWheels();
+				wheels = new NxReal[nbWheels];
+				for(int j=0; j<nbWheels; j++)
+				{
+					wheels[j]=0;
+				}
 			}
+			lastWheelSpeedsArray.push_back(wheels);
+			lastDesiredWheelSpeedsArray.push_back(wheels);
+			lastWheelTorquesArray.push_back(wheels);
 		}
-		Simulation::lastWheelSpeeds.push_back(wheels);
-		Simulation::lastDesiredWheelSpeeds.push_back(wheels);
-		Simulation::lastWheelTorques.push_back(wheels);
+		Simulation::lastWheelSpeeds.push_back(lastWheelSpeedsArray);
+		Simulation::lastDesiredWheelSpeeds.push_back(lastDesiredWheelSpeedsArray);
+		Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
 	}
 
-	Simulation::cloneScene(Simulation::gBaseScene);
+	//Simulation::cloneScene(Simulation::gBaseScene);
 
 	// Initialize physics scene and start the application main loop if scene was created
 	if (init)

@@ -16,12 +16,13 @@ ErrorStream Simulation::gErrorStream = ErrorStream();
 MyUserNotify Simulation::gUserNotify = MyUserNotify();
 time_t Simulation::timeLastSimulate = NULL;
 
-NxArray<NxReal*> Simulation::lastWheelSpeeds;
-NxArray<NxReal*> Simulation::lastDesiredWheelSpeeds;
-NxArray<NxReal*> Simulation::lastWheelTorques;
+std::vector<std::vector<NxReal*>> Simulation::lastWheelSpeeds = std::vector<std::vector<NxReal*>>();
+std::vector<std::vector<NxReal*>> Simulation::lastDesiredWheelSpeeds = std::vector<std::vector<NxReal*>>();
+std::vector<std::vector<NxReal*>> Simulation::lastWheelTorques = std::vector<std::vector<NxReal*>>();
 float Simulation::timeStep = 15./1000.;//1./60.;
-float Simulation::widthBorderField = 6050;
-float Simulation::heightBorderField = 4050;
+NxAllRobots Simulation::allRobots = NxAllRobots();
+NxAllBalls Simulation::allBalls =  NxAllBalls();
+NxAllFields Simulation::allFields =  NxAllFields();
 
 /**
 * Método do PhysX
@@ -80,34 +81,6 @@ Simulation::~Simulation(void)
 void Simulation::releaseScene(NxScene &scene)
 {
 	gPhysicsSDK->releaseScene(scene);
-}
-
-void Simulation::cloneScene(int indexSource){
-	NxSceneDesc sceneDesc;
-	if (gScenes[indexSource]!=NULL)
-		gScenes[indexSource]->saveToDesc(sceneDesc);
-	gScenes[nbExistScenes] = (NxScene1*)gPhysicsSDK->createScene(sceneDesc);
-
-	NxAllRobots::setActiveRobot(0);
-	int nbRobots = NxAllRobots::getNumberOfRobots();
-	for(int i=0; i<nbRobots; i++){
-		NxRobot* robot = NxAllRobots::getActiveRobot();
-		cloneRobot(robot->getId(), indexSource, robot->getId(), robot->getBodyPos(), nbExistScenes);
-		NxAllRobots::selectNext();
-	}
-
-	nbExistScenes++;
-
-	//NxActor** actors = gScenes[indexSource]->getActors();
-	//for(int i=0; i<gScenes[indexSource]->getNbActors(); i++)
-	//	cloneActor(actors[i], gScenes.size()-1);
-
-	//gScenes[indexSource]->resetJointIterator();
-	//for(int i=0; i<gScenes[indexSource]->getNbJoints(); i++){
-	//	NxJoint* joint = gScenes[indexSource]->getNextJoint();
-	//	if (joint!=NULL)
-	//		cloneJoint(joint, gScenes.size()-1);
-	//}
 }
 //==================================================================================
 void Simulation::CreateCube(const NxVec3 &pos, int size, const NxVec3 *initial_velocity)
@@ -303,7 +276,13 @@ void Simulation::ReleaseNx()
 //==================================================================================
 void Simulation::simulate()
 {
-	NxAllRobots::updateAllRobots(timeStep);
+	for (NxU32 i = 0; i < nbExistScenes; ++i)
+	{
+		if (gScenes[i] && !gPause)
+		{
+			allRobots.updateAllRobots(timeStep);
+		}
+	}
 
 	// Start simulation (non blocking)
 	// Physics code
@@ -330,7 +309,12 @@ void Simulation::simulate()
 
 void Simulation::simulate(int indexScene)
 {
-	NxAllRobots::updateAllRobots(timeStep);
+	if (gScenes[indexScene] && !gPause)
+	{
+		NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexScene);
+		for(int i=0;i<robots.size(); i++)
+			robots[i]->updateVehicle(timeStep);
+	}
 
 	// Start simulation (non blocking)
 	// Physics code
@@ -350,7 +334,12 @@ void Simulation::simulate(int indexScene)
 
 void Simulation::simulate(int indexScene, float dt)
 {
-	NxAllRobots::updateAllRobots(dt);
+	if (gScenes[indexScene] && !gPause)
+	{
+		NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexScene);
+		for(int i=0;i<robots.size(); i++)
+			robots[i]->updateVehicle(dt);
+	}
 
 	// Start simulation (non blocking)
 	// Physics code
@@ -368,33 +357,87 @@ void Simulation::simulate(int indexScene, float dt)
 	// ~Physics code
 }
 
-void Simulation::controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot )
-{
-	NxRobot* robot = NxAllRobots::getRobotById(indexRobot);
-	int nbWheels = robot->getNbWheels();
-	NxReal* torqueWheels = new NxReal[nbWheels];
-	for(int indexWheel=0; indexWheel<nbWheels; indexWheel++)
-	{
-		NxReal currentWheelSpeed = ((NxWheel2*) robot->getWheel(indexWheel))->getAxleSpeed();
-		//torqueWheels.push_back(calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed, indexScene, indexRobot, indexWheel));
-		torqueWheels[indexWheel] = calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed, indexScene, indexRobot, indexWheel);
+void Simulation::cloneScene(int indexSceneSource){
+	NxSceneDesc sceneDesc;
+	if (gScenes[indexSceneSource]!=NULL)
+		gScenes[indexSceneSource]->saveToDesc(sceneDesc);
+	gScenes[Simulation::nbExistScenes] = (NxScene1*)gPhysicsSDK->createScene(sceneDesc);
+
+	std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
+	std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
+	std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
+
+	Simulation::lastWheelSpeeds.push_back(lastWheelSpeedsArray);
+	Simulation::lastDesiredWheelSpeeds.push_back(lastDesiredWheelSpeedsArray);
+	Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
+
+	NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexSceneSource);
+	for(int i=0; i<robots.size(); i++){
+		robots[i]->cloneRobot(nbExistScenes, robots[i]->getId(), robots[i]->getBodyPos(), robots[i]->getIdTeam());
 	}
 
-	delete wheelsSpeeds;
+	/*//Criando e Zerando matrizes para controle
+	NxReal* wheels;
+	if(robot)
+	{
+		int nbWheels = robot->getNbWheels();
+		wheels = new NxReal[nbWheels];
+		for(int j=0; j<nbWheels; j++)
+		{
+			wheels[j]=0;
+		}
+	}
+	Simulation::lastWheelSpeeds[indexNewScene].push_back(wheels);
+	Simulation::lastDesiredWheelSpeeds[indexNewScene].push_back(wheels);
+	Simulation::lastWheelTorques[indexNewScene].push_back(wheels);*/
 
-	robot->control( torqueWheels );//torqueWheels[0], torqueWheels[1], torqueWheels[2], torqueWheels[3] );
+	allFields.getFieldByScene(indexSceneSource).cloneField(nbExistScenes);
+
+	allBalls.getBallByScene(indexSceneSource).cloneBall(nbExistScenes);
+
+	nbExistScenes++;
+
+	//NxActor** actors = gScenes[indexSource]->getActors();
+	//for(int i=0; i<gScenes[indexSource]->getNbActors(); i++)
+	//	cloneActor(actors[i], gScenes.size()-1);
+
+	//gScenes[indexSource]->resetJointIterator();
+	//for(int i=0; i<gScenes[indexSource]->getNbJoints(); i++){
+	//	NxJoint* joint = gScenes[indexSource]->getNextJoint();
+	//	if (joint!=NULL)
+	//		cloneJoint(joint, gScenes.size()-1);
+	//}
+}
+
+void Simulation::controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot )
+{
+	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
+	if(robot){
+		int nbWheels = robot->getNbWheels();
+		NxReal* torqueWheels = new NxReal[nbWheels];
+		for(int indexWheel=0; indexWheel<nbWheels; indexWheel++)
+		{
+			NxReal currentWheelSpeed = ((NxWheel2*) robot->getWheel(indexWheel))->getAxleSpeed();
+			//torqueWheels.push_back(calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed, indexScene, indexRobot, indexWheel));
+			torqueWheels[indexWheel] = calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed, indexScene, indexRobot, indexWheel);
+		}
+
+		delete wheelsSpeeds;
+
+		robot->control( torqueWheels );//torqueWheels[0], torqueWheels[1], torqueWheels[2], torqueWheels[3] );
+	}
 }
 
 void Simulation::controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene)
 {
-	NxRobot* robot = NxAllRobots::getRobotById(indexRobot);
+	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
 	if(robot)
 	{
 		//Execute kicker
-		executeKicker( kickerSpeed, indexRobot, indexScene );
+		//executeKicker( kickerSpeed, indexRobot, indexScene );
 
 		//Control dribbler
-		controlDribbler( dribblerSpeed, indexRobot, indexScene );
+		//controlDribbler( dribblerSpeed, indexRobot, indexScene );
 
 		//Control wheels
 		NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY, indexRobot, indexScene); //omnidirecionalidade
@@ -524,7 +567,7 @@ NxActor* Simulation::getActorRobot(int indexScene, int indexRobot)
 	return actor;
 }
 
-NxActor* Simulation::getActorRobotByLabel(int indexScene, string robotLabel)
+NxActor* Simulation::getActorByLabel(int indexScene, string label)
 {
 	NxActor* actor = NULL;
 	const char* actorName = NULL;
@@ -539,7 +582,7 @@ NxActor* Simulation::getActorRobotByLabel(int indexScene, string robotLabel)
 				actorName = actor->getName();
 				if(actorName != NULL)
 				{
-					if(strcmp(actorName,robotLabel.c_str())==0) 
+					if(strcmp(actorName,label.c_str())==0) 
 					{
 						break;
 					}
@@ -878,7 +921,7 @@ NxArray<NxJoint*> Simulation::getJoints(int indexScene, int indexRobot)
 	return joints;
 }
 
-void Simulation::infinitePath(int indexRobot)
+void Simulation::infinitePath(int indexRobot, int indexScene)
 {
 	static int i[10] = {0};//=0;
 	//if( i>7 ) i=0;
@@ -926,14 +969,14 @@ void Simulation::infinitePath(int indexRobot)
 	pontos[7].x = -1000;
 	pontos[7].y = -1000;
 
-	NxVec3 posRobot = getRobotGlobalPos(indexRobot, 0);
+	NxVec3 posRobot = getRobotGlobalPos(indexRobot, indexScene);
 	NxReal distance = calcDistanceVec2D(pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, posRobot.x, posRobot.y);
 	if( distance < 100 ) 
 	{
 		flags[indexRobot-1][i[indexRobot-1]]=true;
 	}
 
-	goToThisPose( pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, 3* NxPi / 2., indexRobot, 0);
+	goToThisPose( pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, 3* NxPi / 2., indexRobot, indexScene);
 }
 
 void Simulation::setBallGlobalPos(NxVec3 pos, int indexScene)
@@ -1081,7 +1124,7 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	//0.7071    0.7071    1.0000
 
 	NxReal angRobo = getAngle2DFromRobot( indexRobot, indexScene );
-	NxRobot* nxRobot = NxAllRobots::getRobotById(indexRobot);
+	NxRobot* nxRobot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
 	int nbWheels = nxRobot->getNbWheels();
 	NxReal* speeds = new NxReal[nbWheels];
 
@@ -1155,12 +1198,12 @@ NxReal Simulation::calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxR
 {
 	NxReal currentWheelTorque;
 	NxReal inertiaMoment = 12.57673;
-	currentWheelTorque = (Simulation::lastWheelTorques[indexRobot])[indexWheel] + inertiaMoment * 20. * (currentDesiredWheelSpeed - currentWheelSpeed) - inertiaMoment * 19.35 * ((Simulation::lastDesiredWheelSpeeds[indexRobot])[indexWheel] - (Simulation::lastWheelSpeeds[indexRobot])[indexWheel]);
+	currentWheelTorque = (Simulation::lastWheelTorques[indexScene][indexRobot])[indexWheel] + inertiaMoment * 20. * (currentDesiredWheelSpeed - currentWheelSpeed) - inertiaMoment * 19.35 * ((Simulation::lastDesiredWheelSpeeds[indexScene][indexRobot])[indexWheel] - (Simulation::lastWheelSpeeds[indexScene][indexRobot])[indexWheel]);
 
 	//Avançando iteração
-	Simulation::lastDesiredWheelSpeeds[indexRobot][indexWheel] = currentDesiredWheelSpeed;
-	Simulation::lastWheelTorques[indexRobot][indexWheel] = currentWheelTorque;
-	Simulation::lastWheelSpeeds[indexRobot][indexWheel] = currentWheelSpeed;
+	Simulation::lastDesiredWheelSpeeds[indexScene][indexRobot][indexWheel] = currentDesiredWheelSpeed;
+	Simulation::lastWheelTorques[indexScene][indexRobot][indexWheel] = currentWheelTorque;
+	Simulation::lastWheelSpeeds[indexScene][indexRobot][indexWheel] = currentWheelSpeed;
 
 	return currentWheelTorque;
 }
@@ -1216,10 +1259,14 @@ NxActor* Simulation::cloneActor(NxActor* actorSource, int indexDestScene)
 	NxActorDesc actorDesc;
 	actorSource->saveToDesc(actorDesc);
 
-	//// Create body
-	NxBodyDesc bodyDesc;
-	actorSource->saveBodyToDesc(bodyDesc);
-	actorDesc.body = &bodyDesc;
+	const char* name = actorSource->getName();
+
+	// Create body
+	if(actorSource->isDynamic()){
+		NxBodyDesc bodyDesc;
+		actorSource->saveBodyToDesc(bodyDesc);
+		actorDesc.body = &bodyDesc;
+	}
 
 	for(int i=0; i<actorSource->getNbShapes(); i++)
 	{
@@ -1242,128 +1289,6 @@ NxActor* Simulation::cloneActor(NxActor* actorSource, int indexDestScene)
 			//}
 		}
 	}
-
+	bool teste = actorDesc.isValid();
 	return gScenes[indexDestScene]->createActor(actorDesc);
 }
-
-NxJoint* Simulation::cloneJoint(NxJoint* jointSource, int indexDestScene){
-	NxJoint* joint;
-	
-	NxJointType type = jointSource->getType();
-	if(type==NxJointType::NX_JOINT_REVOLUTE){
-		
-	}
-	else if(type==NxJointType::NX_JOINT_D6){
-		NxD6JointDesc d6JointDesc;
-		jointSource->isD6Joint()->saveToDesc(d6JointDesc);
-		joint = gScenes[indexDestScene]->createJoint(d6JointDesc);
-	}
-	
-	return joint;
-}
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-
-MyUserNotify::MyUserNotify(void)
-{
-}
-
-MyUserNotify::~MyUserNotify(void)
-{
-}
-
-void	MyUserNotify::NXU_errorMessage(bool isError, const char *str)
-{
-	if (isError)
-	{
-		printf("NxuStream ERROR: %s\r\n", str);
-	}
-	else
-	{
-		printf("NxuStream WARNING: %s\r\n", str);
-	}
-}
-
-void	MyUserNotify::NXU_notifyScene(NxU32 sno,	NxScene	*scene,	const	char *userProperties)
-{
-		Simulation::gScenes[Simulation::gBaseScene] = (NxScene1*)scene;
-		Simulation::gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1.0f);
-		Simulation::gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, 1.0f);
-		Simulation::gPhysicsSDK->setParameter(NX_VISUALIZE_CLOTH_MESH, 1.0f );
-}
-
-void	MyUserNotify::NXU_notifyJoint(NxJoint	*joint,	const	char *userProperties){}
-
-void	MyUserNotify::NXU_notifyActor(NxActor	*actor,	const	char *userProperties){}
-
-void	MyUserNotify::NXU_notifyCloth(NxCloth	*cloth,	const	char *userProperties){}
-
-void	MyUserNotify::NXU_notifyFluid(NxFluid	*fluid,	const	char *userProperties){}
-
-void 	MyUserNotify::NXU_notifyTriangleMesh(NxTriangleMesh *t,const char *userProperties){}
-
-void 	MyUserNotify::NXU_notifyConvexMesh(NxConvexMesh *c,const char *userProperties){}
-
-void 	MyUserNotify::NXU_notifyClothMesh(NxClothMesh *t,const char *userProperties){}
-
-void 	MyUserNotify::NXU_notifyCCDSkeleton(NxCCDSkeleton *t,const char *userProperties){}
-
-void 	MyUserNotify::NXU_notifyHeightField(NxHeightField *t,const char *userProperties){}
-
-NxScene *MyUserNotify::NXU_preNotifyScene(unsigned	int	sno, NxSceneDesc &scene, const char	*userProperties)
-{
-		assert( Simulation::gScenes[Simulation::gBaseScene] == 0 );
-		if ( Simulation::gScenes[Simulation::gBaseScene] )
-		{
-			Simulation::releaseScene(*Simulation::gScenes[Simulation::gBaseScene]);
-			Simulation::gScenes[Simulation::gBaseScene] = 0;
-		}
-		return 0;
-}
-
-bool	MyUserNotify::NXU_preNotifyJoint(NxJointDesc &joint, const char	*userProperties) { return	true; }
-
-bool	MyUserNotify::NXU_preNotifyActor(NxActorDesc &actor, const char	*userProperties)
-{
-	for (NxU32 i=0; i<actor.shapes.size(); i++)
-	{
-		NxShapeDesc *s = actor.shapes[i];
-		s->shapeFlags|=NX_SF_VISUALIZATION; // make sure the shape visualization flags are on so we can see things!
-	}
-	return true;
-}
-
-bool 	MyUserNotify::NXU_preNotifyTriangleMesh(NxTriangleMeshDesc &t,const char *userProperties) { return true;	}
-
-bool 	MyUserNotify::NXU_preNotifyConvexMesh(NxConvexMeshDesc &t,const char *userProperties)	{	return true; }
-
-bool 	MyUserNotify::NXU_preNotifyClothMesh(NxClothMeshDesc &t,const char *userProperties) { return true; }
-
-bool 	MyUserNotify::NXU_preNotifyCCDSkeleton(NxSimpleTriangleMesh &t,const char *userProperties)	{	return true; }
-
-bool 	MyUserNotify::NXU_preNotifyHeightField(NxHeightFieldDesc &t,const char *userProperties) {	return true; }
-
-bool 	MyUserNotify::NXU_preNotifySceneInstance(const char *name,const char *sceneName,const char *userProperties,NxMat34 &rootNode,NxU32 depth) { return true; }
-
-
-void	MyUserNotify::NXU_notifySceneFailed(unsigned	int	sno, NxSceneDesc &scene, const char	*userProperties) { }
-
-void	MyUserNotify::NXU_notifyJointFailed(NxJointDesc &joint, const char	*userProperties) {  }
-
-void	MyUserNotify::NXU_notifyActorFailed(NxActorDesc &actor, const char	*userProperties) { }
-
-void 	MyUserNotify::NXU_notifyTriangleMeshFailed(NxTriangleMeshDesc &t,const char *userProperties) {	}
-
-void 	MyUserNotify::NXU_notifyConvexMeshFailed(NxConvexMeshDesc &t,const char *userProperties)	{	 }
-
-void 	MyUserNotify::NXU_notifyClothMeshFailed(NxClothMeshDesc &t,const char *userProperties) { }
-
-void 	MyUserNotify::NXU_notifyCCDSkeletonFailed(NxSimpleTriangleMesh &t,const char *userProperties)	{	 }
-
-void 	MyUserNotify::NXU_notifyHeightFieldFailed(NxHeightFieldDesc &t,const char *userProperties) {	}

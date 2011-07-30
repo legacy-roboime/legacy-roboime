@@ -1,30 +1,8 @@
-#include "Simulation.h"
 #include "NxRobot.h"
-
+#include "Simulation.h"
 #include "NxAllRobots.h"
 #include "Stream.h"
 #include "cooking.h"
-
-/////////////////////////////////////////////////////////CLASS MyContactReport/////////////////////////////////////
-/////////////////////////////////////////////////////////CLASS MyContactReport/////////////////////////////////////
-/////////////////////////////////////////////////////////CLASS MyContactReport/////////////////////////////////////
-class MyContactReport : public NxUserContactReport
-{
-public:
-	virtual void  onContactNotify(NxContactPair& pair, NxU32 events)
-	{
-		NxI32 robotIndex = -1;
-		NxAllRobots::handlePair(pair, events);
-		
-	}
-
-}	static robotContactReportObj;
-
-static NxUserContactReport * robotContactReport = &robotContactReportObj;
-
-/////////////////////////////////////////////////////////CLASS ROBOT/////////////////////////////////////
-/////////////////////////////////////////////////////////CLASS ROBOT/////////////////////////////////////
-/////////////////////////////////////////////////////////CLASS ROBOT/////////////////////////////////////
 
 NxRobot::NxRobot():NxVehicle()
 {
@@ -52,14 +30,7 @@ void NxRobot::setIdTeam(int idTeam)
 	this->idTeam = idTeam;
 }
 
-/////////////////////////////////////////////////////////CLASS SIMULATION/////////////////////////////////////
-/////////////////////////////////////////////////////////CLASS SIMULATION/////////////////////////////////////
-/////////////////////////////////////////////////////////CLASS SIMULATION/////////////////////////////////////
-
-/**
-* 
-*/
-void Simulation::buildModelRobotWithDesc(int indexRobot, int indexScene)
+void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 {
 	//Veiculo descricao
 	//Body Descricao
@@ -79,7 +50,7 @@ void Simulation::buildModelRobotWithDesc(int indexRobot, int indexScene)
 		bool status = CookConvexMesh(convexMesh, buf);
 		if(status)
 		{
-			robotShape[0].meshData = gPhysicsSDK->createConvexMesh(MemoryReadBuffer(buf.data));
+			robotShape[0].meshData = Simulation::gPhysicsSDK->createConvexMesh(MemoryReadBuffer(buf.data));
 			vehicleDesc.robotShapes.pushBack(&robotShape[0]);
 			
 		}
@@ -104,7 +75,7 @@ void Simulation::buildModelRobotWithDesc(int indexRobot, int indexScene)
 	//}
 
 	//Roda (Wheel) descricao
-	int numberWheels = getNumberWheels(indexScene, indexRobot);
+	int numberWheels = Simulation::getNumberWheels(indexScene, indexRobot);
 	NxWheelDesc* wheelDesc = new NxWheelDesc[numberWheels];
 	for(NxU32 i=0;i<numberWheels;i++)
 	{
@@ -183,16 +154,18 @@ void Simulation::buildModelRobotWithDesc(int indexRobot, int indexScene)
 	wheelDesc[3].wheelOrientation = mat1*mat2;*/
 
 	//TODO: Incluir Driblador descricao.
-	NxActor* actorDribbler = getActorDribbler(indexScene, indexRobot);
+	NxActor* actorDribbler = Simulation::getActorDribbler(indexScene, indexRobot);
 	actorDribbler->setMaxAngularVelocity(0.0001);
 
 	//TODO: Incluir Chutador descricao.
-	NxActor* kickerActor = getActorKicker(indexScene, indexRobot);
+	NxActor* kickerActor = Simulation::getActorKicker(indexScene, indexRobot);
 	kickerActor->setMaxAngularVelocity(0.0001);
 
 	//Criar robot, vehicle base
-	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexScene], &vehicleDesc);
+	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(Simulation::gScenes[indexScene], &vehicleDesc);
 	robot->setId(indexRobot);
+	robot->setIdTeam(indexTeam);
+	robot->indexScene = indexScene;
 	robot->bodyRadius = 90;
 	robot->dribbler.dribbler = actorDribbler;
 	robot->kicker.kicker = kickerActor;
@@ -210,11 +183,11 @@ void Simulation::buildModelRobotWithDesc(int indexRobot, int indexScene)
 	//gScenes[0]->releaseActor(*robotActor);
 }
 
-void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource, NxVec3 newPosition, int indexDestScene)
+void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPosition, int indexNewTeam)
 {
-	NxRobot* nxRobotSource = NxAllRobots::getRobotById(indexRobotSource);
+	NxRobot* nxRobotSource = Simulation::allRobots.getRobotByIdScene(this->getId(), this->indexScene);
 	//Body
-	NxActor* robotActor = Simulation::cloneActor(nxRobotSource->getActor(),indexDestScene);
+	NxActor* robotActor = Simulation::cloneActor(nxRobotSource->getActor(),indexNewScene);
 	NxShape*const* robotShapes = robotActor->getShapes();
 	//NxBounds3 bodyBounds;
 	//robotShapes[0]->getWorldBounds(bodyBounds);
@@ -250,7 +223,7 @@ void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource
 	NxWheelDesc* wheelDesc = new NxWheelDesc[numberWheels];
 	for(NxU32 i=0;i<numberWheels;i++)
 	{
-		//NxActor* wheelModel = Simulation::getActorWheel(indexScene,indexRobot,i);
+		//NxActor* wheelModel = Simulation::getActorWheel(indexSourceScene,indexNewRobot,i);
 		//NxActorDesc wheelActorDesc;
 		//wheelModel->saveToDesc(wheelActorDesc);
 		//Simulation::gScenes[0]->releaseActor(*wheelModel);
@@ -285,18 +258,19 @@ void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource
 	}
 
 	//TODO: Incluir Driblador descricao.
-	NxActor* actorDribbler = cloneActor(nxRobotSource->dribbler.dribbler,indexDestScene);
+	NxActor* actorDribbler = Simulation::cloneActor(nxRobotSource->dribbler.dribbler,indexNewScene);
 	actorDribbler->setMaxAngularVelocity(100);
 
 	//TODO: Incluir Chutador descricao.
-	NxActor* kickerActor = cloneActor(nxRobotSource->kicker.kicker,indexDestScene);
+	NxActor* kickerActor = Simulation::cloneActor(nxRobotSource->kicker.kicker,indexNewScene);
 	kickerActor->setMaxAngularVelocity(100);
 
 	//Criar robot, vehicle base
-	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexDestScene], &vehicleDesc);
-	//NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexScene], &vehicleDesc);
-	robot->setId(indexRobot);
-	robot->setIdTeam(nxRobotSource->getIdTeam());
+	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(Simulation::gScenes[Simulation::nbExistScenes], &vehicleDesc);
+	//NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexSourceScene], &vehicleDesc);
+	robot->setId(indexNewRobot);
+	robot->setIdTeam(indexNewTeam);
+	robot->indexScene = indexNewScene;
 	robot->bodyRadius = nxRobotSource->bodyRadius;
 	robot->kicker.kicker = kickerActor;
 	robot->dribbler.dribbler = actorDribbler;
@@ -304,38 +278,65 @@ void Simulation::cloneRobot(int indexRobot, int indexScene, int indexRobotSource
 	//Joints
 	for(int i=0; i<nxRobotSource->joints.size(); i++)
 	{	
-		NxActor* actor1;
-		NxActor* actor2;
-		robot->joints.push_back(cloneJoint(nxRobotSource->joints[i],indexDestScene));
-		robot->joints[i]->getActors(&actor1, &actor2);
-		const char* name1 = actor1->getName();
-		const char* name2 = actor2->getName();
-		const char* bodyName = robot->getActor()->getName();
-		const char* dribblerName = robot->dribbler.dribbler->getName();
-		const char* kickerName = robot->kicker.kicker->getName();
-
-		if( strcmp( name1, bodyName )==0 ){
-			actor1 = robot->getActor();
-		}
-		else if( strcmp( name2, bodyName )==0 ) {
-			actor2 = robot->getActor();
-		}
-		else if( strcmp( name1, dribblerName )==0 ){
-			actor1 = robot->dribbler.dribbler;
-		}
-		else if( strcmp( name2, dribblerName )==0 ){
-			actor2 = robot->dribbler.dribbler;
-		}
-		else if( strcmp( name1, kickerName )==0 ){
-			actor1 = robot->kicker.kicker;
-		}
-		else if( strcmp( name2, kickerName )==0 ){
-			actor2 = robot->kicker.kicker;
-		}
+		robot->joints.push_back(robot->cloneJointRobot(nxRobotSource->joints[i],indexNewScene));
 	}
 
 	//Transladando os componentes do robo
 	robot->kicker.kicker->setGlobalPosition(robot->kicker.kicker->getGlobalPosition() - robot->getActor()->getGlobalPosition() + newPosition);
 	robot->dribbler.dribbler->setGlobalPosition(robot->dribbler.dribbler->getGlobalPosition() - robot->getActor()->getGlobalPosition() + newPosition);
 	robot->getActor()->setGlobalPosition(newPosition);
+}
+
+NxJoint* NxRobot::cloneJointRobot(NxJoint* jointSource, int indexDestScene){
+	NxJoint* joint;
+	
+	NxJointType type = jointSource->getType();
+	if(type==NxJointType::NX_JOINT_REVOLUTE){
+		
+	}
+	else if(type==NxJointType::NX_JOINT_D6){
+		NxD6JointDesc d6JointDesc;
+
+		jointSource->isD6Joint()->saveToDesc(d6JointDesc);
+		
+		NxActor* actor1;
+		NxActor* actor2;
+
+		jointSource->getActors(&actor1, &actor2);
+		const char* name1 = actor1->getName();
+		const char* name2 = actor2->getName();
+		const char* bodyName = this->getActor()->getName();
+		const char* dribblerName = this->dribbler.dribbler->getName();
+		const char* kickerName = this->kicker.kicker->getName();
+
+		if( strcmp( name1, bodyName )==0 ){
+			d6JointDesc.actor[0] = NULL;
+			d6JointDesc.actor[0] = this->getActor();
+		}
+		else if( strcmp( name1, dribblerName )==0 ){
+			d6JointDesc.actor[0] = NULL;
+			d6JointDesc.actor[0] = this->dribbler.dribbler;
+		}
+		else if( strcmp( name1, kickerName )==0 ){
+			d6JointDesc.actor[0] = NULL;
+			d6JointDesc.actor[0] = this->kicker.kicker;
+		}
+		if( strcmp( name2, bodyName )==0 ) {
+			d6JointDesc.actor[1] = NULL;
+			d6JointDesc.actor[1] = this->getActor();
+		}
+		else if( strcmp( name2, dribblerName )==0 ){
+			d6JointDesc.actor[1] = NULL;
+			d6JointDesc.actor[1] = this->dribbler.dribbler;
+		}
+		
+		else if( strcmp( name2, kickerName )==0 ){
+			d6JointDesc.actor[1] = NULL;
+			d6JointDesc.actor[1] = this->kicker.kicker;
+		}
+
+		joint = Simulation::gScenes[indexDestScene]->createJoint(d6JointDesc);
+	}
+	
+	return joint;
 }

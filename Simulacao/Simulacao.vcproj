@@ -355,6 +355,22 @@
 					Name="PhysX"
 					>
 					<File
+						RelativePath=".\MyContactReport.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\MyUserNotify.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\NxAllBalls.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\NxAllFields.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\NxBall.cpp"
 						>
 					</File>
@@ -556,6 +572,22 @@
 				<Filter
 					Name="PhysX"
 					>
+					<File
+						RelativePath=".\MyContactReport.h"
+						>
+					</File>
+					<File
+						RelativePath=".\MyUserNotify.h"
+						>
+					</File>
+					<File
+						RelativePath=".\NxAllBalls.h"
+						>
+					</File>
+					<File
+						RelativePath=".\NxAllFields.h"
+						>
+					</File>
 					<File
 						RelativePath=".\NxBall.h"
 						>

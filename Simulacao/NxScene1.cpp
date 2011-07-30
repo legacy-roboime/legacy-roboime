@@ -1,15 +1,27 @@
 
 #include "NxScene1.h"
+#include "Simulation.h"
 
 NxScene1::NxScene1(void):NxScene()
 {
+	//indexScene = new int;
+	//allRobots = new NxAllRobots();
+	//field = new NxField();
+	//balls = new NxArray<NxBall>();
 }
 
 NxScene1::~NxScene1(void)//:~NxScene()
 {
 }
 
-NxActor* NxScene1::getActorWheel(int robotNumber, int wheelNumber)
+/*void NxScene1::initNxScene1(){
+	indexScene = new int;
+	allRobots = new NxAllRobots();
+	field = new NxField();
+	//balls = new NxArray<NxBall>();
+}*/
+
+/*NxActor* NxScene1::getActorWheel(int robotNumber, int wheelNumber)
 {
 	NxActor* actor = NULL;
 	const char* actorName = NULL;
@@ -50,4 +62,4 @@ NxActor* NxScene1::getActorWheel(int robotNumber, int wheelNumber)
 		}
 	}
 	return actor;
-}
+}*/

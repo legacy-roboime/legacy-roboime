@@ -17,19 +17,17 @@
 #include "Timing.h"
 #include "MediaPath.h"
 #include "cooking.h"
-#include "NXU_helper.h"  // NxuStream helper functions.
 //#include "Utilities.h"
 //#include "SamplesVRDSettings.h"
 
-#include "NxRobot.h"
-#include "NxAllRobots.h"
-
 #include "NxScene1.h"
-#include "NxRobot.h"
+#include "MyUserNotify.h"
+#include "NxAllRobots.h"
+#include "NxAllBalls.h"
+#include "NxAllFields.h"
+#include <vector>
 
 using namespace std;
-
-class MyUserNotify;
 
 class Simulation
 {
@@ -38,7 +36,7 @@ private:
 	static bool gSave;
 	static int	gLoad;
 	static bool gClear;
-
+	
 	static NxPhysicsSDK *gPhysicsSDK;
 	static const NxU32 gMaxScenes = 100;
 	static /*NxArray<NxScene1*>*/NxScene1* gScenes[gMaxScenes];
@@ -49,21 +47,26 @@ private:
 	static ErrorStream gErrorStream;
 	static MyUserNotify gUserNotify;
 	//extern NxUserContactReport * robotContactReport;
-
+	
 	//Velocidades para controle das rodas
-	static NxArray<NxReal*> lastWheelSpeeds;
-	static NxArray<NxReal*> lastDesiredWheelSpeeds;
-	static NxArray<NxReal*> lastWheelTorques; 
-
-	static float timeStep;
+	static std::vector<std::vector<NxReal*>> lastWheelSpeeds;
+	static std::vector<std::vector<NxReal*>> lastDesiredWheelSpeeds;
+	static std::vector<std::vector<NxReal*>> lastWheelTorques; 
+	
 	static time_t timeLastSimulate;
-
-	static float widthBorderField;
-	static float heightBorderField;
-
+	
 	friend class MyUserNotify;
 	friend class UDPServerSimInt;
 	friend class SimulationView;
+	friend class NxRobot;
+	friend class NxScene1;
+	friend class UDPMulticastSenderSSLVision;
+	friend class NxWheel;
+	friend class NxWheel1;
+	friend class NxWheel2;
+	friend class NxVehicle;
+	friend class NxField;
+	friend class NxBall;
 private:
 	static void releaseScene(NxScene &scene);
 	static void CreateCube(const NxVec3 &pos, int size, const NxVec3 *initial_velocity = NULL);
@@ -74,8 +77,6 @@ private:
 	static void ReleaseNx();
 
 	static NxActor* cloneActor(NxActor* actorSource, int indexDestScene);
-	static NxJoint* cloneJoint(NxJoint* jointSource, int indexDestScene);
-	static void buildModelRobotWithDesc(int indexRobot, int indexScene);
 
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
@@ -83,7 +84,7 @@ private:
 
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
-	static NxActor* getActorRobotByLabel(int indexScene, string robotLabel);
+	static NxActor* getActorByLabel(int indexScene, string label);
 	static NxActor* getActorWheel(int indexScene, int indexRobot, int indexWheel);
 	static int getNumberWheels(int indexScene, int indexRobot);
 	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
@@ -95,11 +96,21 @@ private:
 	~Simulation(void);
 public:
 	/**
+	* Atributos para inteligência
+	*/
+	static NxAllRobots allRobots;
+	static NxAllBalls allBalls;
+	static NxAllFields allFields;
+	static float timeStep;
+
+	/**
 	* Metodos para Inteligencia
 	*/
 	//build simulation
-	static void cloneRobot(int indexRobot, int indexScene, int indexRobotSource, NxVec3 newPosition, int indexDestScene);
-	static void cloneScene(int indexSource);
+	static void buildModelField(int indexScene);
+	static void buildModelBall(int indexScene);
+	static void buildModelRobot(int indexRobot, int indexScene, int indexTeam);
+	static void cloneScene(int indexSceneSource);
 
 	//advance simulation
 	static void simulate();
@@ -137,77 +148,5 @@ public:
 	static NxReal calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed, int indexScene, int indexRobot, int indexWheel);
 	static NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene );
 	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
-	static void infinitePath( int indexRobot );
-};
-
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////CLASS MyUserNotify////////////////////////////////////////////////////////////////////
-
-class MyUserNotify: public NXU_userNotify, public NXU_errorReport
-{
-public:
-	virtual void	NXU_errorMessage(bool isError, const char *str);
-
-	virtual void	NXU_notifyScene(NxU32 sno,	NxScene	*scene,	const	char *userProperties);
-
-	virtual void	NXU_notifyJoint(NxJoint	*joint,	const	char *userProperties);
-
-	virtual void	NXU_notifyActor(NxActor	*actor,	const	char *userProperties);
-
-	virtual void	NXU_notifyCloth(NxCloth	*cloth,	const	char *userProperties);
-
-	virtual void	NXU_notifyFluid(NxFluid	*fluid,	const	char *userProperties);
-
-	virtual void 	NXU_notifyTriangleMesh(NxTriangleMesh *t,const char *userProperties);
-
-	virtual void 	NXU_notifyConvexMesh(NxConvexMesh *c,const char *userProperties);
-
-	virtual void 	NXU_notifyClothMesh(NxClothMesh *t,const char *userProperties);
-
-	virtual void 	NXU_notifyCCDSkeleton(NxCCDSkeleton *t,const char *userProperties);
-
-	virtual void 	NXU_notifyHeightField(NxHeightField *t,const char *userProperties);
-
-	virtual NxScene *NXU_preNotifyScene(unsigned	int	sno, NxSceneDesc &scene, const char	*userProperties);
-
-	virtual bool	NXU_preNotifyJoint(NxJointDesc &joint, const char	*userProperties);
-
-	virtual bool	NXU_preNotifyActor(NxActorDesc &actor, const char	*userProperties);
-
-	virtual bool 	NXU_preNotifyTriangleMesh(NxTriangleMeshDesc &t,const char *userProperties);
-
-	virtual bool 	NXU_preNotifyConvexMesh(NxConvexMeshDesc &t,const char *userProperties);
-
-	virtual bool 	NXU_preNotifyClothMesh(NxClothMeshDesc &t,const char *userProperties);
-
-	virtual bool 	NXU_preNotifyCCDSkeleton(NxSimpleTriangleMesh &t,const char *userProperties);
-
-	virtual bool 	NXU_preNotifyHeightField(NxHeightFieldDesc &t,const char *userProperties);
-
-	virtual bool 	NXU_preNotifySceneInstance(const char *name,const char *sceneName,const char *userProperties,NxMat34 &rootNode,NxU32 depth);
-
-	virtual void	NXU_notifySceneFailed(unsigned	int	sno, NxSceneDesc &scene, const char	*userProperties);
-
-	virtual void	NXU_notifyJointFailed(NxJointDesc &joint, const char	*userProperties);
-
-	virtual void	NXU_notifyActorFailed(NxActorDesc &actor, const char	*userProperties);
-
-	virtual void 	NXU_notifyTriangleMeshFailed(NxTriangleMeshDesc &t,const char *userProperties);
-
-	virtual void 	NXU_notifyConvexMeshFailed(NxConvexMeshDesc &t,const char *userProperties);
-
-	virtual void 	NXU_notifyClothMeshFailed(NxClothMeshDesc &t,const char *userProperties);
-
-	virtual void 	NXU_notifyCCDSkeletonFailed(NxSimpleTriangleMesh &t,const char *userProperties);
-
-	virtual void 	NXU_notifyHeightFieldFailed(NxHeightFieldDesc &t,const char *userProperties);
-
-	MyUserNotify(void);
-	~MyUserNotify(void);
+	static void infinitePath( int indexRobot , int indexScene );
 };
