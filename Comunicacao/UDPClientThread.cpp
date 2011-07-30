@@ -44,3 +44,7 @@ string UDPClientThread::getLastReceivedString()
 {
 	return this->udpClient->getLastReceivedString();
 }
+
+void UDPClientThread::setSendString(string sendString) {
+	udpClient->setSendString(sendString);
+}

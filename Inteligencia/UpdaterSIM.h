@@ -11,8 +11,7 @@ namespace Inteligencia {
 		friend class CommanderSIM;
 
 	private:
-		static UDPClient* _udpclient;//Use the same server as CommanderSIM when possible
-		UDPClientThread* _udpClientThread;
+		static UDPClientThread* _udpclient;//Use the same server as CommanderSIM when possible
 		deque<string> _queue;
 
 	public:

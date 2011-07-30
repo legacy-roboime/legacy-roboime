@@ -7,32 +7,31 @@
 using namespace std;
 namespace Inteligencia {
 
-	UDPClient* UpdaterSIM::_udpclient = 0;
+	UDPClientThread* UpdaterSIM::_udpclient = 0;
 
 	UpdaterSIM::UpdaterSIM() : Updater() {
 		if(_udpclient==0) {
 			if(CommanderSIM::_udpclient!=0) {
 				_udpclient = CommanderSIM::_udpclient;
 			} else {
-				_udpclient = new UDPClient("127.0.0.1", 9876);
+				_udpclient = new UDPClientThread("_udpclient", 9876, "127.0.0.1");
+				_udpclient->start();
 			}
 		}
-		_udpClientThread = new UDPClientThread(_udpclient);
 	}
 
 	UpdaterSIM::UpdaterSIM(string address, unsigned short port) : Updater() {
 		delete _udpclient;
-		_udpclient = new UDPClient(address, port);
+		_udpclient = new UDPClientThread("_udpclient", port, address);
 	}
 
 	UpdaterSIM::~UpdaterSIM() {
 		delete _udpclient;
-		delete _udpClientThread;
 	}
 
 	void UpdaterSIM::receive() {
 		_udpclient->setSendString("1 0\n");
-		_udpclient->service();
+		_udpclient->run();
 		_queue.push_back(_udpclient->getLastReceivedString());
 	}
 

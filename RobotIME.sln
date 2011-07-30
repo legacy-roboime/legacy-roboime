@@ -48,7 +48,6 @@ Global
 		{3FDFDD46-FA44-40A1-9A39-8F8132EF1A3D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{3FDFDD46-FA44-40A1-9A39-8F8132EF1A3D}.Debug|Mixed Platforms x64.ActiveCfg = Debug|Win32
 		{3FDFDD46-FA44-40A1-9A39-8F8132EF1A3D}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{3FDFDD46-FA44-40A1-9A39-8F8132EF1A3D}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{3FDFDD46-FA44-40A1-9A39-8F8132EF1A3D}.Release|Mixed Platforms x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

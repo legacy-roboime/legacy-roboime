@@ -1,30 +1,26 @@
-#include "CommanderSIM.h"
+#include "CommanderTX.h"
 #include "Command.h"
 
 using namespace std;
 namespace Inteligencia {
 
-	UDPClientThread* CommanderSIM::_udpclient = 0;
+	UDPClientThread* CommanderTX::_udpclient = 0;
 
-	CommanderSIM::CommanderSIM() : Commander() {
+	CommanderTX::CommanderTX() : Commander() {
 		if(_udpclient==0) {
-			if(UpdaterSIM::_udpclient!=0) {
-				_udpclient = UpdaterSIM::_udpclient;
-			} else {
-				_udpclient = new UDPClientThread("_udpclient", 9876, "127.0.0.1");
-				_udpclient->start();
-			}
+			_udpclient = new UDPClientThread("_udpclient", 9050, "127.0.0.1");
+			_udpclient->start();
 		}
 	}
 
-	CommanderSIM::CommanderSIM(string address, unsigned short port) : Commander() {
+	CommanderTX::CommanderTX(string address, unsigned short port) : Commander() {
 		delete _udpclient;
 		_udpclient = new UDPClientThread("_udpclient", port, address);
 	}
 
-	CommanderSIM::~CommanderSIM() {}
+	CommanderTX::~CommanderTX() {}
 
-	void CommanderSIM::prepare() {
+	void CommanderTX::prepare() {
 		for(size_t n=_robot.size(); n>0; n--) {
 			stringstream out;
 			Robot* r = _robot[n-1];
@@ -35,13 +31,13 @@ namespace Inteligencia {
 			double  k = c->kick_speed();
 			double  d = c->dribble_speed();
 			int     i = r->i();
-			out <<"13 0 "<<i<<" "<<w[0]<<" "<<w[1]<<" "<<w[2]<<" "<<w[3]<<" "<<d<<" "<<k<<endl;
+			out <<i<<" "<<w[0]<<" "<<w[1]<<" "<<w[2]<<" "<<w[3]<<" "<<d<<" "<<k<<endl;
 			_queue.push_back(out.str());
 			out.clear();
 		}
 	}
 
-	void CommanderSIM::send() {
+	void CommanderTX::send() {
 		while(!_queue.empty()) {
 			_udpclient->setSendString(_queue.front());
 			_udpclient->run();

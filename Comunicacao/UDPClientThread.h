@@ -22,4 +22,5 @@ public:
 	UDPClientThread(const char* nm, int port, string address);
 	void run();
 	string getLastReceivedString();
+	void setSendString(string sendString);
 };
