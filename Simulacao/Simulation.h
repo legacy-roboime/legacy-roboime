@@ -82,6 +82,8 @@ private:
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
 
+	static void simulateRun();
+
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
 	static NxActor* getActorByLabel(int indexScene, string label);

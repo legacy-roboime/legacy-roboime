@@ -390,6 +390,10 @@
 				RelativePath=".\SimpleThread.h"
 				>
 			</File>
+			<File
+				RelativePath=".\TimePosix.h"
+				>
+			</File>
 			<Filter
 				Name="UDPServer"
 				>

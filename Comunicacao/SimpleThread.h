@@ -14,10 +14,12 @@ private:
 	int argc;
 	char** argv;
 	void (*function) (int, char**);
+	void (*function1) (void);
 public:
 	SimpleThread(void);
-	SimpleThread(void (*function) (int, char**));
-	SimpleThread(void (*function) (int, char**), int argc, char** argv);
+	SimpleThread(void (*function1) (void)); //SimulateRun
+	SimpleThread(void (*function) (int, char**)); //MainLoop
+	SimpleThread(void (*function) (int, char**), int argc, char** argv); //MainLoop
 	~SimpleThread(void);
 	void run();
 };

@@ -181,14 +181,10 @@ bool Simulation::InitNx()
 		gPhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect(SAMPLES_VRD_HOST, SAMPLES_VRD_PORT, SAMPLES_VRD_EVENTMASK);
 #endif
 
-	if (!InitCooking(gMyAllocator, &gErrorStream)) {
+	/*if (!InitCooking(gMyAllocator, &gErrorStream)) {
 		printf("\nError: Unable to initialize the cooking library, exiting the sample.\n\n");
 		return false;
-	}
-
-	//gPhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.025f);
-	//gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1.0f);
-	//gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, 1.0f);
+	}*/
 
 	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.025f);
 	//enable visualisation
@@ -274,6 +270,22 @@ void Simulation::ReleaseNx()
 	}
 }
 //==================================================================================
+void Simulation::simulateRun(){
+	double dif;
+	if( timeLastSimulate!=0 ) 
+		dif = difftime(time(NULL), timeLastSimulate);
+	else
+		dif = 0;
+	
+	dif *= 1000;
+	dif -= timeStep;
+	if(dif>0)
+		Sleep(dif);
+
+	simulate(gBaseScene);
+	timeLastSimulate = time(NULL);
+}
+
 void Simulation::simulate()
 {
 	for (NxU32 i = 0; i < nbExistScenes; ++i)
@@ -357,58 +369,6 @@ void Simulation::simulate(int indexScene, float dt)
 	// ~Physics code
 }
 
-void Simulation::cloneScene(int indexSceneSource){
-	NxSceneDesc sceneDesc;
-	if (gScenes[indexSceneSource]!=NULL)
-		gScenes[indexSceneSource]->saveToDesc(sceneDesc);
-	gScenes[Simulation::nbExistScenes] = (NxScene1*)gPhysicsSDK->createScene(sceneDesc);
-
-	std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
-	std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
-	std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
-
-	Simulation::lastWheelSpeeds.push_back(lastWheelSpeedsArray);
-	Simulation::lastDesiredWheelSpeeds.push_back(lastDesiredWheelSpeedsArray);
-	Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
-
-	NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexSceneSource);
-	for(int i=0; i<robots.size(); i++){
-		robots[i]->cloneRobot(nbExistScenes, robots[i]->getId(), robots[i]->getBodyPos(), robots[i]->getIdTeam());
-	}
-
-	/*//Criando e Zerando matrizes para controle
-	NxReal* wheels;
-	if(robot)
-	{
-		int nbWheels = robot->getNbWheels();
-		wheels = new NxReal[nbWheels];
-		for(int j=0; j<nbWheels; j++)
-		{
-			wheels[j]=0;
-		}
-	}
-	Simulation::lastWheelSpeeds[indexNewScene].push_back(wheels);
-	Simulation::lastDesiredWheelSpeeds[indexNewScene].push_back(wheels);
-	Simulation::lastWheelTorques[indexNewScene].push_back(wheels);*/
-
-	allFields.getFieldByScene(indexSceneSource).cloneField(nbExistScenes);
-
-	allBalls.getBallByScene(indexSceneSource).cloneBall(nbExistScenes);
-
-	nbExistScenes++;
-
-	//NxActor** actors = gScenes[indexSource]->getActors();
-	//for(int i=0; i<gScenes[indexSource]->getNbActors(); i++)
-	//	cloneActor(actors[i], gScenes.size()-1);
-
-	//gScenes[indexSource]->resetJointIterator();
-	//for(int i=0; i<gScenes[indexSource]->getNbJoints(); i++){
-	//	NxJoint* joint = gScenes[indexSource]->getNextJoint();
-	//	if (joint!=NULL)
-	//		cloneJoint(joint, gScenes.size()-1);
-	//}
-}
-
 void Simulation::controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot )
 {
 	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
@@ -434,10 +394,10 @@ void Simulation::controlRobot(float speedX, float speedY, float speedAng, float 
 	if(robot)
 	{
 		//Execute kicker
-		//executeKicker( kickerSpeed, indexRobot, indexScene );
+		executeKicker( kickerSpeed, indexRobot, indexScene );
 
 		//Control dribbler
-		//controlDribbler( dribblerSpeed, indexRobot, indexScene );
+		controlDribbler( dribblerSpeed, indexRobot, indexScene );
 
 		//Control wheels
 		NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY, indexRobot, indexScene); //omnidirecionalidade
@@ -448,10 +408,10 @@ void Simulation::controlRobot(float speedX, float speedY, float speedAng, float 
 void Simulation::controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene)
 {
 	//Execute kicker
-	//executeKicker( kickerSpeed, indexRobot, indexScene );
+	executeKicker( kickerSpeed, indexRobot, indexScene );
 
 	//Control dribbler
-	//controlDribbler( dribblerSpeed, indexRobot, indexScene );
+	controlDribbler( dribblerSpeed, indexRobot, indexScene );
 
 	//Control wheels
 	NxReal* wheelsSpeeds = new NxReal[4];
@@ -1287,8 +1247,81 @@ NxActor* Simulation::cloneActor(NxActor* actorSource, int indexDestScene)
 			//	convexShapeDesc.meshData = gPhysicsSDK->createConvexMesh(MemoryReadBuffer(buf.data);
 				actorDesc.shapes.push_back(&convexShapeDesc);
 			//}
+
+			/*	NxConvexShapeDesc robotShape[1];
+			if(robotShapes)
+			{
+			static NxConvexMeshDesc convexMesh;
+			robotShapes[0]->isConvexMesh()->getConvexMesh().saveToDesc(convexMesh);
+
+			MemoryWriteBuffer buf;
+			bool status = CookConvexMesh(convexMesh, buf);
+			if(status)
+			{
+			robotShape[0].meshData = Simulation::gPhysicsSDK->createConvexMesh(MemoryReadBuffer(buf.data));
+			vehicleDesc.robotShapes.pushBack(&robotShape[0]);
+
+			}
+			}*/
+		}
+		else if(type==NxShapeType::NX_SHAPE_SPHERE){
+			NxSphereShapeDesc shapeDesc;
+			(actorSource->getShapes())[i]->isSphere()->saveToDesc(shapeDesc);	
+			actorDesc.shapes.push_back(&shapeDesc);
+		}
+		else if(type==NxShapeType::NX_SHAPE_WHEEL){
+			NxWheelShapeDesc shapeDesc;
+			(actorSource->getShapes())[i]->isWheel()->saveToDesc(shapeDesc);	
+			actorDesc.shapes.push_back(&shapeDesc);
+		}
+		else if(type==NxShapeType::NX_SHAPE_PLANE){
+			NxPlaneShapeDesc shapeDesc;
+			(actorSource->getShapes())[i]->isPlane()->saveToDesc(shapeDesc);	
+			actorDesc.shapes.push_back(&shapeDesc);
+		}
+		else if(type==NxShapeType::NX_SHAPE_CAPSULE){
+			NxCapsuleShapeDesc shapeDesc;
+			(actorSource->getShapes())[i]->isCapsule()->saveToDesc(shapeDesc);	
+			actorDesc.shapes.push_back(&shapeDesc);
 		}
 	}
-	bool teste = actorDesc.isValid();
+	int tam = actorDesc.shapes.size();
 	return gScenes[indexDestScene]->createActor(actorDesc);
+}
+
+void Simulation::cloneScene(int indexSceneSource){
+	NxSceneDesc sceneDesc;
+	if (gScenes[indexSceneSource]!=NULL)
+		gScenes[indexSceneSource]->saveToDesc(sceneDesc);
+	gScenes[Simulation::nbExistScenes] = (NxScene1*)gPhysicsSDK->createScene(sceneDesc);
+
+	std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
+	std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
+	std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
+
+	Simulation::lastWheelSpeeds.push_back(lastWheelSpeedsArray);
+	Simulation::lastDesiredWheelSpeeds.push_back(lastDesiredWheelSpeedsArray);
+	Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
+
+	NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexSceneSource);
+	for(int i=0; i<robots.size(); i++){
+		robots[i]->cloneRobot(nbExistScenes, robots[i]->getId(), robots[i]->getBodyPos(), robots[i]->getIdTeam());
+	}
+
+	allFields.getFieldByScene(indexSceneSource).cloneField(nbExistScenes);
+
+	allBalls.getBallByScene(indexSceneSource).cloneBall(nbExistScenes);
+
+	nbExistScenes++;
+
+	//NxActor** actors = gScenes[indexSource]->getActors();
+	//for(int i=0; i<gScenes[indexSource]->getNbActors(); i++)
+	//	cloneActor(actors[i], gScenes.size()-1);
+
+	//gScenes[indexSource]->resetJointIterator();
+	//for(int i=0; i<gScenes[indexSource]->getNbJoints(); i++){
+	//	NxJoint* joint = gScenes[indexSource]->getNextJoint();
+	//	if (joint!=NULL)
+	//		cloneJoint(joint, gScenes.size()-1);
+	//}
 }

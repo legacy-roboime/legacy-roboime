@@ -32,6 +32,9 @@ int main(int argc, char *argv[])
 	Thread* simpleThread = new SimpleThread(SimulationView::mainLoop, argc, argv);
 	simpleThread->start();
 
+	Thread* simpleThread = new SimpleThread(SimulationView::mainLoop, argc, argv);
+	simpleThread->start();
+
 	//SimulationView::mainLoop(argc, argv);
 
 	Robot* rob = new Robot(4);

@@ -130,6 +130,7 @@ void DrawActorIME(NxActor* actor)
 			{
 				while (nShapes--)
 				{
+					const char* nameee = shapes[nShapes]->getName();
 					DrawShapeIME(shapes[nShapes], NxVec3(1,1,1)); //Branco
 				}
 			}
@@ -459,20 +460,6 @@ void SimulationView::RenderCallback()
 	//Simulation::goToThisPose( 1000/*110*/, 1000, 3* NxPi / 2., 4, 1);
 	//Simulation::simulate();
 
-	//double dif;
-	//if( timeLastSimulate!=0 ) 
-	//	dif = difftime(time(NULL), timeLastSimulate);
-	//else
-	//	dif = 0;
-	//
-	//dif *= 1000;
-	//dif -= timeStep;
-	//if(dif>0)
-	//	Sleep(dif);
-
-	//simulate();
-	//timeLastSimulate = time(NULL);
-
 	//	count++;
 
 	//	if(count == 1000) exit(0);
@@ -531,6 +518,7 @@ void SimulationView::RenderCallback()
 			int nbActors = Simulation::gScenes[i]->getNbActors();
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
+				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
 				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
 			}
 		}
@@ -802,20 +790,9 @@ void SimulationView::mainLoop(int argc, char **argv)
 
 	if(Simulation::gScenes[0] != NULL)
 	{
-		//gScenes[0]->setUserContactReport( robotContactReport );
-		//createRobotWithDesc(1, 0);
-		//createRobotWithDesc(2, 0);
-		//createRobotWithDesc(3, 0);
 		Simulation::buildModelRobot( 4, Simulation::gBaseScene, 1 );
 		Simulation::buildModelField( Simulation::gBaseScene );
 		Simulation::buildModelBall( Simulation::gBaseScene );
-		//cloneRobot( 1, 0, 4, NxVec3( 1000, 1000, 20 ) );
-		//createRobotWithDesc(5, 0);
-		//createRobotWithDesc(6, 0);
-		//createRobotWithDesc(7, 0);
-		//createRobotWithDesc(8, 0);
-		//createRobotWithDesc(9, 0);
-		//createRobotWithDesc(10, 0);
 	}
 
 	//Init speeds/torques to calc omni
@@ -847,6 +824,25 @@ void SimulationView::mainLoop(int argc, char **argv)
 	}
 
 	//Simulation::cloneScene(Simulation::gBaseScene);
+
+	//Build Scene
+	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);
+	defaultMaterial0->setRestitution(0.5f);
+	defaultMaterial0->setStaticFriction(0.3f);
+	defaultMaterial0->setDynamicFriction(0.3f);
+
+	NxMaterial *defaultMaterial1 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(1);
+	//NxReal real2 = defaultMaterial1->getRestitution();
+	//NxReal real = defaultMaterial1->getStaticFriction();
+	//NxReal real1 = defaultMaterial1->getDynamicFriction();
+	defaultMaterial1->setRestitution(0.5f);
+	defaultMaterial1->setStaticFriction(0.3f);
+	defaultMaterial1->setDynamicFriction(0.3f);
+
+	NxMaterial *defaultMaterial2 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(2);
+	defaultMaterial2->setRestitution(0.5f);
+	defaultMaterial2->setStaticFriction(0.3f);
+	defaultMaterial2->setDynamicFriction(0.3f);
 
 	// Initialize physics scene and start the application main loop if scene was created
 	if (init)

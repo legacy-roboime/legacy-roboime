@@ -1,4 +1,5 @@
 #include "UDPMulticastSenderSSLVision.h"
+#include "TimePosix.h"
 
 UDPMulticastSenderSSLVision::UDPMulticastSenderSSLVision(void)
 {
@@ -16,7 +17,11 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 
 
 	SSL_WrapperPacket wrapperPacket;
-	//static unsigned long int frameNumber = 0;
+	static unsigned long int frameNumber = 0;
+	
+	timeval tv;
+	gettimeofday(&tv,NULL);
+	double time = (double)tv.tv_sec + tv.tv_usec*(1.0E-6);
 
 	if(true)//withDetection)
 	{
@@ -24,10 +29,10 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 
 		SSL_DetectionFrame detectionFrame = SSL_DetectionFrame();
 
-		detectionFrame.set_frame_number(0);
+		detectionFrame.set_frame_number(frameNumber);
 		detectionFrame.set_camera_id(0);
-		detectionFrame.set_t_capture(0);
-		detectionFrame.set_t_sent(0);
+		detectionFrame.set_t_capture(time);
+		detectionFrame.set_t_sent(time);
 
 		NxVec3 ballGlobalPos = Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->getGlobalPosition();
 		SSL_DetectionBall* detectionBall = detectionFrame.add_balls();
@@ -39,11 +44,10 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 		detectionBall->set_y(ballGlobalPos.y);
 		detectionBall->set_z(1);
 
-		NxAllRobots* allRobots = &Simulation::allRobots;
-		allRobots->setActiveRobot(0);
-		for(int i=0; i<allRobots->getNumberOfRobots(); i++)
+		NxArray<NxRobot*> allRobots = Simulation::allRobots.getRobotsByScene(Simulation::gBaseScene);
+		for(int i=0; i<allRobots.size(); i++)
 		{
-			NxRobot* robot = allRobots->getActiveRobot();
+			NxRobot* robot = allRobots[i];
 			NxReal angulo = Simulation::getAngle2DFromRobot(4, 0);
 			NxVec3 robotPos = robot->getBodyPos();
 			SSL_DetectionRobot* detectionRobot;
@@ -61,8 +65,6 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 			detectionRobot->set_robot_id(robot->getId()-1); //FOI SUBTRAIDO 1 PQ NO TEAMBOTS OS INDICES DOS ROBOS VAI DE 0 A 4
 			detectionRobot->set_x(robotPos.x);
 			detectionRobot->set_y(robotPos.y);
-
-			allRobots->selectNext();
 		}
 
 		SSL_DetectionFrame * nframe = wrapperPacket.mutable_detection();
@@ -115,7 +117,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 	SSL_WrapperPacket packet;
 	packet.ParseFromString(buffer);
 
-	//frameNumber++;
+	frameNumber++;
 
 	// Optional:  Delete all global objects allocated by libprotobuf.
 	google::protobuf::ShutdownProtobufLibrary();

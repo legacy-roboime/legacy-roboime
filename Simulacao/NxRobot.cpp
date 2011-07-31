@@ -39,7 +39,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//NxBounds3 bodyBounds;
 	//robotShapes[0]->getWorldBounds(bodyBounds);
 
-	NxVehicleDesc vehicleDesc;
+	/*NxVehicleDesc vehicleDesc;
 	NxConvexShapeDesc robotShape[1];
 	if(robotShapes)
 	{
@@ -54,10 +54,20 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 			vehicleDesc.robotShapes.pushBack(&robotShape[0]);
 			
 		}
-	}
+	}*/
+
+	/*NxVehicleDesc vehicleDesc;
+	for(int i=0; i<robotActor->getNbShapes()-Simulation::getNumberWheels(indexScene, indexRobot); i++)
+	{
+		NxConvexShapeDesc convexShapeDesc;
+		robotActor->getShapes()[i]->isConvexMesh()->saveToDesc(convexShapeDesc);
+		vehicleDesc.robotShapes.push_back(&convexShapeDesc);
+	}*/
+
+	NxVehicleDesc vehicleDesc;
 
 	vehicleDesc.position				= NxVec3(robotActor->getGlobalPosition());
-	vehicleDesc.mass					= 3;//robotActor->getMass();
+	vehicleDesc.mass					= 4;//robotActor->getMass(); //PLUGIN TAH COM PROBLEMA XML ERRADO
 	//vehicleDesc.motorForce				= 70000;
 	//vehicleDesc.maxVelocity				= 300.f;
 	//vehicleDesc.cameraDistance			= 8.0f;
@@ -110,8 +120,8 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 		wheelDesc[i].springDamping = 0;
 		wheelDesc[i].springBias = 0.0f;
 		wheelDesc[i].maxBrakeForce = 100;
-		wheelDesc[i].frictionToFront = 0.1f;
-		wheelDesc[i].frictionToSide = 0;
+		wheelDesc[i].frictionToFront = 0.1f;//0.1f;
+		wheelDesc[i].frictionToSide = 0;//0.02f;//
 		wheelDesc[i].inverseWheelMass = 0.1; //TODO: CONFIGURAR PARÂMETRO
 		wheelDesc[i].wheelFlags |= NX_WF_USE_WHEELSHAPE;
 
@@ -156,10 +166,46 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//TODO: Incluir Driblador descricao.
 	NxActor* actorDribbler = Simulation::getActorDribbler(indexScene, indexRobot);
 	actorDribbler->setMaxAngularVelocity(0.0001);
+	actorDribbler->setMass(0.0000001); //PLUGIN TAH COM PROBLEMA XML ERRADO
+
+	/*NxVehicleDesc vehicleDesc;
+	NxConvexShapeDesc robotShape[1];
+	if(robotShapes)
+	{
+		static NxConvexMeshDesc convexMesh;
+		robotShapes[0]->isConvexMesh()->getConvexMesh().saveToDesc(convexMesh);
+
+		MemoryWriteBuffer buf;
+		bool status = CookConvexMesh(convexMesh, buf);
+		if(status)
+		{
+			robotShape[0].meshData = Simulation::gPhysicsSDK->createConvexMesh(MemoryReadBuffer(buf.data));
+			vehicleDesc.robotShapes.pushBack(&robotShape[0]);
+			
+		}
+	}*/
 
 	//TODO: Incluir Chutador descricao.
 	NxActor* kickerActor = Simulation::getActorKicker(indexScene, indexRobot);
 	kickerActor->setMaxAngularVelocity(0.0001);
+	kickerActor->setMass(0.0000001); //PLUGIN TAH COM PROBLEMA XML ERRADO
+
+	/*NxVehicleDesc vehicleDesc;
+	NxConvexShapeDesc robotShape[1];
+	if(robotShapes)
+	{
+		static NxConvexMeshDesc convexMesh;
+		robotShapes[0]->isConvexMesh()->getConvexMesh().saveToDesc(convexMesh);
+
+		MemoryWriteBuffer buf;
+		bool status = CookConvexMesh(convexMesh, buf);
+		if(status)
+		{
+			robotShape[0].meshData = Simulation::gPhysicsSDK->createConvexMesh(MemoryReadBuffer(buf.data));
+			vehicleDesc.robotShapes.pushBack(&robotShape[0]);
+			
+		}
+	}*/
 
 	//Criar robot, vehicle base
 	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(Simulation::gScenes[indexScene], &vehicleDesc);
@@ -192,13 +238,31 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 	//NxBounds3 bodyBounds;
 	//robotShapes[0]->getWorldBounds(bodyBounds);
 
-	NxVehicleDesc vehicleDesc;
+	/*NxVehicleDesc vehicleDesc;
 	for(int i=0; i<nxRobotSource->getActor()->getNbShapes()-nxRobotSource->getNbWheels(); i++)
 	{
 		NxConvexShapeDesc convexShapeDesc;
 		nxRobotSource->getActor()->getShapes()[i]->isConvexMesh()->saveToDesc(convexShapeDesc);
 		vehicleDesc.robotShapes.push_back(&convexShapeDesc);
-	}
+	}*/
+
+	/*NxConvexShapeDesc robotShape[1];
+	if(robotShapes)
+	{
+		static NxConvexMeshDesc convexMesh;
+		robotShapes[0]->isConvexMesh()->getConvexMesh().saveToDesc(convexMesh);
+
+		MemoryWriteBuffer buf;
+		bool status = CookConvexMesh(convexMesh, buf);
+		if(status)
+		{
+			robotShape[0].meshData = Simulation::gPhysicsSDK->createConvexMesh(MemoryReadBuffer(buf.data));
+			vehicleDesc.robotShapes.pushBack(&robotShape[0]);
+			
+		}
+	}*/
+
+	NxVehicleDesc vehicleDesc;
 
 	vehicleDesc.position				= NxVec3(robotActor->getGlobalPosition());
 	vehicleDesc.mass					= robotActor->getMass();
@@ -247,8 +311,8 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 		wheelDesc[i].springDamping = 0;
 		wheelDesc[i].springBias = 0.0f;
 		wheelDesc[i].maxBrakeForce = 100;
-		wheelDesc[i].frictionToFront = 0.1f;
-		wheelDesc[i].frictionToSide = 0;
+		wheelDesc[i].frictionToFront = 0.1f;//0.1f;
+		wheelDesc[i].frictionToSide = 0;//0.02f;//
 		wheelDesc[i].inverseWheelMass = wheelShape->getInverseWheelMass(); //TODO: CONFIGURAR PARÂMETRO
 
 		//Angulo das Rodas (Omni)
@@ -285,6 +349,26 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 	robot->kicker.kicker->setGlobalPosition(robot->kicker.kicker->getGlobalPosition() - robot->getActor()->getGlobalPosition() + newPosition);
 	robot->dribbler.dribbler->setGlobalPosition(robot->dribbler.dribbler->getGlobalPosition() - robot->getActor()->getGlobalPosition() + newPosition);
 	robot->getActor()->setGlobalPosition(newPosition);
+
+	//Criando e Zerando matrizes para controle
+	int diff = robot->getId() - Simulation::lastWheelSpeeds[indexNewScene].size();
+	if(diff>=0){
+		for(int i=0; i<diff+1; i++){
+			NxReal* wheels;
+			if(robot)
+			{
+				int nbWheels = robot->getNbWheels();
+				wheels = new NxReal[nbWheels];
+				for(int j=0; j<nbWheels; j++)
+				{
+					wheels[j]=0;
+				}
+			}
+			Simulation::lastWheelSpeeds[indexNewScene].push_back(wheels);
+			Simulation::lastDesiredWheelSpeeds[indexNewScene].push_back(wheels);
+			Simulation::lastWheelTorques[indexNewScene].push_back(wheels);
+		}
+	}
 }
 
 NxJoint* NxRobot::cloneJointRobot(NxJoint* jointSource, int indexDestScene){
