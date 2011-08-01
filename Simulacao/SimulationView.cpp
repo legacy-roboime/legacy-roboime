@@ -211,11 +211,11 @@ void SimulationView::appKey(unsigned char key, bool down)
 		{
 
 
-			//NxVec3 t = gEye;
-			//NxVec3 Vel = Dir;
-			//Vel.normalize();
-			//Vel *= 200.0f;
-			//CreateCube(t, 20, &Vel);
+			NxVec3 t = gEye;
+			NxVec3 Vel = Dir;
+			Vel.normalize();
+			Vel *= 200.0f;
+			Simulation::CreateCube(t, 20, &Vel);
 		}
 		break;
 
@@ -435,11 +435,11 @@ void SimulationView::RenderCallback()
 	if(Simulation::gScenes[0] == NULL) return;
 
 	//compute elapsed time
-	//static unsigned int PreviousTime = 0;
-	//unsigned int CurrentTime = getTime();
-	//unsigned int ElapsedTime = CurrentTime - PreviousTime;
-	//if(ElapsedTime < 10.0f) return;
-	//PreviousTime = CurrentTime;
+	static unsigned int PreviousTime = 0;
+	unsigned int CurrentTime = getTime();
+	unsigned int ElapsedTime = CurrentTime - PreviousTime;
+	if(ElapsedTime < 10.0f) return;
+	PreviousTime = CurrentTime;
 
 	//if(gravar)
 	//{
@@ -471,34 +471,106 @@ void SimulationView::RenderCallback()
 	//Setup camera
 	setupCamera();
 
-	//// Render all actors
-	//int nbActors = gScenes[0]->getNbActors();
-	//NxActor** actors = gScenes[0]->getActors();
-	//while(nbActors--)
+	//Draw
+	glPushMatrix();
+	for (NxU32 i = 0; i < Simulation::nbExistScenes; ++i)
+	{
+		if (Simulation::gScenes[i])
+		{
+			//Render
+			/*glPushMatrix();
+			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
+			gDebugRenderer.renderData(*dbgRenderable);
+			glEnable(GL_LIGHTING);
+			glPopMatrix();*/
+
+			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
+			//glColor4f(0.6f,0.6f,0.6f,1.0f);
+			int nbActors = Simulation::gScenes[i]->getNbActors();
+			for(unsigned int j = 0 ; j < nbActors ; j++ )
+			{
+				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
+				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
+			}
+		}
+
+		//Show Render Performance
+		/*#ifdef __PPCGEKKO__	
+		char buf[256];
+		sprintf(buf,
+		"Use the arrow keys to move the camera.\n"
+		"Press the keys b, +, -, 1 and 2 to create various things.\n");
+
+		GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
+		GLFontRenderer::print(0.01, 0.9, 0.036, buf, false, 11, true);   
+		#else
+		//Print profile results (if enabled)
+		gPerfRenderer.render(gScenes[i]->readProfileData(true), glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		#endif*/
+
+		//char buf[256];
+		//sprintf(buf,"Iteracao Numero: %d\nTempo: %f s\nErro Angular: %f graus\nErro de Posicao X: %f mm\nErro de Posicao Y: %f mm", count, count * 1./60., 90 - ang/NxPi*180, 500 - pos.x, 500 - pos.y);
+		//GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		//GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
+		//GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
+	}
+	glPopMatrix();
+
+	//glFlush();
+	glutSwapBuffers();
+}
+
+void SimulationView::RenderSimulationCallback()
+{
+	if(Simulation::gScenes[0] == NULL) return;
+
+	//compute elapsed time
+	static unsigned int PreviousTime = 0;
+	unsigned int CurrentTime = getTime();
+	unsigned int ElapsedTime = CurrentTime - PreviousTime;
+	if(ElapsedTime < 10.0f) return;
+	PreviousTime = CurrentTime;
+
+	//if(gravar)
 	//{
-	//	NxActor* actor = *actors++;
-	//	if(!actor->userData) continue;
 
-	//	// Render actor
-	//	glPushMatrix();
-	//	float glMat[16];
-	//	actor->getGlobalPose().getColumnMajor44(glMat);
-	//	glMultMatrixf(glMat);
-	//	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	//	glutSolidCube(float(size_t(actor->userData))*2.0f);
-	//	glPopMatrix();
+	//	//fprintf(outputfile,"%d	%f	%f	%f	%f	%f	%f	%f	%f	%f	%f\n",count, pos.x, pos.y, pos.z, ang, velLin.x, velLin.y, velLin.z, velAng.x, velAng.y, velAng.z);
+	//	fprintf(outputfile,"%d	%f	%f\n", count, ang/NxPi*180, velAng.z/NxPi*180); //giro
 
-	//	// Render shadow
-	//	glPushMatrix();
-	//	const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
-	//	glMultMatrixf(shadowMat);
-	//	glMultMatrixf(glMat);
-	//	glDisable(GL_LIGHTING);
-	//	glColor4f(0.1f, 0.2f, 0.3f, 1.0f);
-	//	glutSolidCube(float(size_t(actor->userData))*2.0f);
-	//	glEnable(GL_LIGHTING);
-	//	glPopMatrix();
+	//goToThisPose( 1000/*110*/, 1000, 3* NxPi / 2., 4, 0);
+	//controlRobotByWheels(10,10,10,10,0,0,4,0);
+
+	//float teta = NxPi/180.;
+	//Dir.normalize();
+	//N.cross(Dir,NxVec3(0,1,0));
+	//NxMat33 rotMat = NxMat33(NxVec3(NxMath::cos(teta),-NxMath::sin(teta),0),NxVec3(NxMath::sin(teta),NxMath::cos(teta),0),NxVec3(0,0,1));
+	//Dir = rotMat*Dir;
+
+	//Simulation::infinitePath(4,0);
+	//Simulation::goToThisPose( 1000/*110*/, 1000, 3* NxPi / 2., 4, 1);
+	//Simulation::simulate();
+
+	//	count++;
+
+	//	if(count == 1000) exit(0);
 	//}
+
+	double diff;
+	timeval tv;
+	TimePosix::gettimeofday(&tv,NULL);
+	diff =  ((double)tv.tv_sec + tv.tv_usec*(1.0E-6)) - ((double)Simulation::timeLastSimulate.tv_sec + Simulation::timeLastSimulate.tv_usec*(1.0E-6));
+
+	if(diff>=Simulation::timeStep){
+		Simulation::simulate(Simulation::gBaseScene,/*diff*/Simulation::timeStep,1);
+		TimePosix::gettimeofday(&Simulation::timeLastSimulate,NULL);
+	}
+
+	// Clear buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//Setup camera
+	setupCamera();
 
 	//Draw
 	glPushMatrix();
@@ -745,7 +817,7 @@ void SimulationView::mainLoop(int argc, char **argv)
 #endif
 	// Initialize Glut
 	//glutInit(&argc, argv);
-	glutInitWindowSize(512, 512);
+	//glutInitWindowSize(512, 512);
 
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	gMainHandle = glutCreateWindow("Simulação - RobotIME");
@@ -786,7 +858,7 @@ void SimulationView::mainLoop(int argc, char **argv)
 
 	bool init = Simulation::InitNx();
 	CSL_Scene();
-	//glutFullScreen();
+	glutFullScreen();
 
 	if(Simulation::gScenes[0] != NULL)
 	{
@@ -843,6 +915,132 @@ void SimulationView::mainLoop(int argc, char **argv)
 	defaultMaterial2->setRestitution(0.5f);
 	defaultMaterial2->setStaticFriction(0.3f);
 	defaultMaterial2->setDynamicFriction(0.3f);
+
+	// Initialize physics scene and start the application main loop if scene was created
+	if (init)
+		glutMainLoop(); 
+}
+
+void SimulationView::mainSimulationLoop(int argc, char **argv)
+{
+	//printf("Pressione a teclas w, space, s, b, e t para criar varios objetos.\n");
+	//printf("Pressione 1 para salvar a cena atual 3 para carregar do arquivo para a cena atual.\n");
+	//printf("Pressione c para limpar a cena atual.\n");
+	//printf("Pressione TAB para seleionar a proxima cena.\n");
+	printf("Use as teclas direcionais ou 2, 4, 6 e 8 ou d, f, e e g para se mover.\nUse o mouse para girar a camera.\n");
+	//printf("Pressione p para pausar a simulacao.\n");
+	//printf("Pressione X para carregar 'test.xml'\n");
+	//printf("Pressione Y para carregar 'test.dae'\n");
+	//printf("Pressione Z para carregar 'testbin.nxb'\n");
+
+#if defined(_XBOX) || defined(__CELLOS_LV2__)
+	glutRemapButtonExt(8, '1', false); // Left shoulder to save
+	glutRemapButtonExt(9, 'c', false); // Right shoulder to clear
+	glutRemapButtonExt(8, '3', true); // Shift + left shoulder to load
+#endif
+	// Initialize Glut
+	//glutInit(&argc, argv);
+	//glutInitWindowSize(512, 512);
+
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	gMainHandle = glutCreateWindow("Simulação - RobotIME");
+	glutSetWindow(gMainHandle);
+	glutDisplayFunc(RenderSimulationCallback);
+	glutReshapeFunc(ReshapeCallback);
+	glutIdleFunc(IdleCallback);
+	glutKeyboardFunc(callback_key);
+	glutKeyboardUpFunc(callback_keyUp);
+	glutSpecialFunc(ArrowKeyCallback);
+	glutMouseFunc(MouseCallback);
+	glutMotionFunc(MotionCallback);
+	MotionCallback(0, 0);
+	atexit(Simulation::ReleaseNx);
+
+	// Setup default render states
+	glClearColor(0.3f, 0.4f, 0.5f, 1.0);
+	glEnable(GL_DEPTH_TEST);//glEnable(GL_DEPTH_BUFFER_BIT);//
+	glDepthFunc(GL_LEQUAL);
+	glClearDepth(zFar);
+	glDepthRange(zNear, zFar);
+	glEnable(GL_COLOR_MATERIAL);
+#if !defined(__PPCGEKKO__)
+	glEnable(GL_CULL_FACE);
+#endif
+
+	// Setup lighting
+	glEnable(GL_LIGHTING);
+	float AmbientColor[] = { 0.0f, 0.1f, 0.2f, 0.0f };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, AmbientColor);
+	float DiffuseColor[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, DiffuseColor);
+	float SpecularColor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	glLightfv(GL_LIGHT0, GL_SPECULAR, SpecularColor);
+	float Position[] = { 100.0f, 100.0f, 400.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, Position);
+	glEnable(GL_LIGHT0);
+
+	bool init = Simulation::InitNx();
+	CSL_Scene();
+	glutFullScreen();
+
+	if(Simulation::gScenes[0] != NULL)
+	{
+		Simulation::buildModelRobot( 4, Simulation::gBaseScene, 1 );
+		Simulation::buildModelField( Simulation::gBaseScene );
+		Simulation::buildModelBall( Simulation::gBaseScene );
+	}
+
+	//Init speeds/torques to calc omni
+	for(int k=0; k<Simulation::nbExistScenes; k++){ 
+		std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
+		std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
+		std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
+		NxAllRobots* allRobots = &Simulation::allRobots;
+		for(int i=0; i<=allRobots->getBiggestIndexRobot(); i++)
+		{
+			NxRobot* nxRobot = allRobots->getRobotByIdScene(i, k);
+			NxReal* wheels;
+			if(nxRobot)
+			{
+				int nbWheels = nxRobot->getNbWheels();
+				wheels = new NxReal[nbWheels];
+				for(int j=0; j<nbWheels; j++)
+				{
+					wheels[j]=0;
+				}
+			}
+			lastWheelSpeedsArray.push_back(wheels);
+			lastDesiredWheelSpeedsArray.push_back(wheels);
+			lastWheelTorquesArray.push_back(wheels);
+		}
+		Simulation::lastWheelSpeeds.push_back(lastWheelSpeedsArray);
+		Simulation::lastDesiredWheelSpeeds.push_back(lastDesiredWheelSpeedsArray);
+		Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
+	}
+
+	//Simulation::cloneScene(Simulation::gBaseScene);
+
+	//Build Scene
+	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);
+	defaultMaterial0->setRestitution(0.5f);
+	defaultMaterial0->setStaticFriction(0.3f);
+	defaultMaterial0->setDynamicFriction(0.3f);
+
+	NxMaterial *defaultMaterial1 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(1);
+	//NxReal real2 = defaultMaterial1->getRestitution();
+	//NxReal real = defaultMaterial1->getStaticFriction();
+	//NxReal real1 = defaultMaterial1->getDynamicFriction();
+	defaultMaterial1->setRestitution(0.5f);
+	defaultMaterial1->setStaticFriction(0.3f);
+	defaultMaterial1->setDynamicFriction(0.3f);
+
+	NxMaterial *defaultMaterial2 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(2);
+	defaultMaterial2->setRestitution(0.5f);
+	defaultMaterial2->setStaticFriction(0.3f);
+	defaultMaterial2->setDynamicFriction(0.3f);
+
+	//Real advance of time/simulate
+	TimePosix::gettimeofday(&Simulation::timeLastSimulate,NULL);
 
 	// Initialize physics scene and start the application main loop if scene was created
 	if (init)

@@ -3,6 +3,7 @@
 #include "ou_thread.h"
 #include <string>
 #include <iostream>
+#include <windows.h>          // For ::Sleep()
 
 using namespace std;
 using namespace openutils;

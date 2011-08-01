@@ -4,7 +4,8 @@
 #include <sstream>
 #include <string>
 #include <iostream>
-#include <time.h>
+//#include <time.h>
+#include <vector>
 
 // Physics code
 #undef random
@@ -25,7 +26,7 @@
 #include "NxAllRobots.h"
 #include "NxAllBalls.h"
 #include "NxAllFields.h"
-#include <vector>
+#include "TimePosix.h"
 
 using namespace std;
 
@@ -53,7 +54,7 @@ private:
 	static std::vector<std::vector<NxReal*>> lastDesiredWheelSpeeds;
 	static std::vector<std::vector<NxReal*>> lastWheelTorques; 
 	
-	static time_t timeLastSimulate;
+	static timeval timeLastSimulate;
 	
 	friend class MyUserNotify;
 	friend class UDPServerSimInt;
@@ -81,8 +82,6 @@ private:
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
-
-	static void simulateRun();
 
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
@@ -118,6 +117,9 @@ public:
 	static void simulate();
 	static void simulate( int indexScene );
 	static void simulate( int indexScene, float dt );
+	static void simulate( int indexScene, float dt , int maxStepIter );
+	static void simVisionRun();
+	static bool initSimulation();
 
 	//setters
 	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);

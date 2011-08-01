@@ -41,6 +41,7 @@ private:
 	static void MouseCallback(int button, int state, int x, int y);
 	static void MotionCallback(int x, int y);
 	static void RenderCallback();
+	static void RenderSimulationCallback();
 	static void setupCamera();
 	static void ReshapeCallback(int width, int height);
 	static void IdleCallback();
@@ -48,10 +49,13 @@ private:
 	static void SaveScene(const char *pFilename);
 	static bool FileExistTestSimple(const char *fname);
 	static void CSL_Scene();
+
+	friend class Simulation;
 public:
 	SimulationView(void);
 	~SimulationView(void);
 
 	//main loop simulation
 	static void mainLoop(int argc, char **argv);
+	static void mainSimulationLoop(int argc, char **argv);
 };

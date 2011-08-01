@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	//Thread* udpServerThread = new UDPServerThread(udpServerSimInt);
 	//udpServerThread->start();
 
-	SimulationView::mainLoop(argc, argv);
+	SimulationView::mainSimulationLoop(argc, argv);
 	
 	//TODO: FAZER CHEGAR NESSE TRECHO DE CODIGO
 	//((UDPServerThread*)udpServerThread)->stop();

@@ -1,4 +1,5 @@
 #include "Simulation.h"
+#include "SimulationView.h"
 
 bool Simulation::gPause = false;
 bool Simulation::gSave = false;
@@ -14,12 +15,12 @@ NxVec3 Simulation::gDefaultGravity = NxVec3(0.0f, 0.0f, - 9.81f);
 UserAllocator *Simulation::gMyAllocator = NULL;
 ErrorStream Simulation::gErrorStream = ErrorStream();
 MyUserNotify Simulation::gUserNotify = MyUserNotify();
-time_t Simulation::timeLastSimulate = NULL;
+timeval Simulation::timeLastSimulate;
 
 std::vector<std::vector<NxReal*>> Simulation::lastWheelSpeeds = std::vector<std::vector<NxReal*>>();
 std::vector<std::vector<NxReal*>> Simulation::lastDesiredWheelSpeeds = std::vector<std::vector<NxReal*>>();
 std::vector<std::vector<NxReal*>> Simulation::lastWheelTorques = std::vector<std::vector<NxReal*>>();
-float Simulation::timeStep = 15./1000.;//1./60.;
+float Simulation::timeStep = 1./60.;//15./1000.;//
 NxAllRobots Simulation::allRobots = NxAllRobots();
 NxAllBalls Simulation::allBalls =  NxAllBalls();
 NxAllFields Simulation::allFields =  NxAllFields();
@@ -270,20 +271,20 @@ void Simulation::ReleaseNx()
 	}
 }
 //==================================================================================
-void Simulation::simulateRun(){
-	double dif;
-	if( timeLastSimulate!=0 ) 
-		dif = difftime(time(NULL), timeLastSimulate);
-	else
-		dif = 0;
-	
-	dif *= 1000;
-	dif -= timeStep;
-	if(dif>0)
-		Sleep(dif);
+void Simulation::simVisionRun(){
+	TimePosix::gettimeofday(&timeLastSimulate,NULL);
+	while(true){
+		double diff;
+		timeval tv;
+		TimePosix::gettimeofday(&tv,NULL);
+		diff =  ((double)tv.tv_sec + tv.tv_usec*(1.0E-6)) - ((double)timeLastSimulate.tv_sec + timeLastSimulate.tv_usec*(1.0E-6));
 
-	simulate(gBaseScene);
-	timeLastSimulate = time(NULL);
+		if(diff>=timeStep){//>0){
+			//Sleep(dif);
+			simulate(gBaseScene,diff,1);
+			TimePosix::gettimeofday(&timeLastSimulate,NULL);
+		}
+	}
 }
 
 void Simulation::simulate()
@@ -358,6 +359,31 @@ void Simulation::simulate(int indexScene, float dt)
 	if (gScenes[indexScene] && !gPause)
 	{
 		gScenes[indexScene]->setTiming(dt, 1, NX_TIMESTEP_FIXED);
+		gScenes[indexScene]->simulate(dt);
+	}
+
+	if (gScenes[indexScene] && !gPause)
+	{
+		gScenes[indexScene]->flushStream();
+		gScenes[indexScene]->fetchResults(NX_RIGID_BODY_FINISHED, true);
+	}
+	// ~Physics code
+}
+
+void Simulation::simulate(int indexScene, float dt, int maxStepIter )
+{
+	if (gScenes[indexScene] && !gPause)
+	{
+		NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexScene);
+		for(int i=0;i<robots.size(); i++)
+			robots[i]->updateVehicle(dt);
+	}
+
+	// Start simulation (non blocking)
+	// Physics code
+	if (gScenes[indexScene] && !gPause)
+	{
+		gScenes[indexScene]->setTiming(dt, maxStepIter, NX_TIMESTEP_FIXED);
 		gScenes[indexScene]->simulate(dt);
 	}
 
@@ -1324,4 +1350,69 @@ void Simulation::cloneScene(int indexSceneSource){
 	//	if (joint!=NULL)
 	//		cloneJoint(joint, gScenes.size()-1);
 	//}
+}
+
+bool Simulation::initSimulation()
+{
+	bool init = Simulation::InitNx();
+	SimulationView::CSL_Scene();
+
+	if(Simulation::gScenes[0] != NULL)
+	{
+		Simulation::buildModelRobot( 4, Simulation::gBaseScene, 1 );
+		Simulation::buildModelField( Simulation::gBaseScene );
+		Simulation::buildModelBall( Simulation::gBaseScene );
+	}
+
+	//Init speeds/torques to calc omni
+	for(int k=0; k<Simulation::nbExistScenes; k++){ 
+		std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
+		std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
+		std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
+		NxAllRobots* allRobots = &Simulation::allRobots;
+		for(int i=0; i<=allRobots->getBiggestIndexRobot(); i++)
+		{
+			NxRobot* nxRobot = allRobots->getRobotByIdScene(i, k);
+			NxReal* wheels;
+			if(nxRobot)
+			{
+				int nbWheels = nxRobot->getNbWheels();
+				wheels = new NxReal[nbWheels];
+				for(int j=0; j<nbWheels; j++)
+				{
+					wheels[j]=0;
+				}
+			}
+			lastWheelSpeedsArray.push_back(wheels);
+			lastDesiredWheelSpeedsArray.push_back(wheels);
+			lastWheelTorquesArray.push_back(wheels);
+		}
+		Simulation::lastWheelSpeeds.push_back(lastWheelSpeedsArray);
+		Simulation::lastDesiredWheelSpeeds.push_back(lastDesiredWheelSpeedsArray);
+		Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
+	}
+
+	//Simulation::cloneScene(Simulation::gBaseScene);
+
+	//Build Scene
+	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);
+	defaultMaterial0->setRestitution(0.5f);
+	defaultMaterial0->setStaticFriction(0.3f);
+	defaultMaterial0->setDynamicFriction(0.3f);
+
+	NxMaterial *defaultMaterial1 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(1);
+	//NxReal real2 = defaultMaterial1->getRestitution();
+	//NxReal real = defaultMaterial1->getStaticFriction();
+	//NxReal real1 = defaultMaterial1->getDynamicFriction();
+	defaultMaterial1->setRestitution(0.5f);
+	defaultMaterial1->setStaticFriction(0.3f);
+	defaultMaterial1->setDynamicFriction(0.3f);
+
+	NxMaterial *defaultMaterial2 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(2);
+	defaultMaterial2->setRestitution(0.5f);
+	defaultMaterial2->setStaticFriction(0.3f);
+	defaultMaterial2->setDynamicFriction(0.3f);
+
+	// Initialize physics scene and start the application main loop if scene was created
+	return init; 
 }

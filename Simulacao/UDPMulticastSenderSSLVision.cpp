@@ -1,5 +1,5 @@
 #include "UDPMulticastSenderSSLVision.h"
-#include "TimePosix.h"
+#include "Simulation.h"
 
 UDPMulticastSenderSSLVision::UDPMulticastSenderSSLVision(void)
 {
@@ -15,12 +15,11 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 	// compatible with the version of the headers we compiled against.
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-
 	SSL_WrapperPacket wrapperPacket;
 	static unsigned long int frameNumber = 0;
 	
 	timeval tv;
-	gettimeofday(&tv,NULL);
+	TimePosix::gettimeofday(&tv,NULL);
 	double time = (double)tv.tv_sec + tv.tv_usec*(1.0E-6);
 
 	if(true)//withDetection)
