@@ -246,7 +246,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//}
 
 			//udpServerThread->stop();
-			NxActor* actorDribbler = Simulation::getActorDribbler(0, 1);
+			NxActor* actorDribbler = Simulation::getActorDribbler(0, 4);
 			actorDribbler->addLocalTorque(NxVec3(-10,0,0));
 		}
 		break;
@@ -255,6 +255,8 @@ void SimulationView::appKey(unsigned char key, bool down)
 		{
 			//NxActor* actorDribbler = getActorDribbler(0, 1);
 			//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
+			//Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->putToSleep();
+			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->setGlobalPosition(NxVec3(0,0,20));
 		}
 		break;
 
@@ -268,6 +270,8 @@ void SimulationView::appKey(unsigned char key, bool down)
 			orientation.rotZ(-3.1416/4);
 			actor->setGlobalOrientation(orientation);
 			}*/
+			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->putToSleep();
+			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->setGlobalPosition(NxVec3(0,0,30));
 		}
 		break;
 
@@ -441,6 +445,9 @@ void SimulationView::RenderCallback()
 	if(ElapsedTime < 10.0f) return;
 	PreviousTime = CurrentTime;
 
+	// Clear buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//if(gravar)
 	//{
 
@@ -463,10 +470,7 @@ void SimulationView::RenderCallback()
 	//	count++;
 
 	//	if(count == 1000) exit(0);
-	//}
-
-	// Clear buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//
 
 	//Setup camera
 	setupCamera();
@@ -532,6 +536,9 @@ void SimulationView::RenderSimulationCallback()
 	if(ElapsedTime < 10.0f) return;
 	PreviousTime = CurrentTime;
 
+	// Clear buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//if(gravar)
 	//{
 
@@ -562,12 +569,9 @@ void SimulationView::RenderSimulationCallback()
 	diff =  ((double)tv.tv_sec + tv.tv_usec*(1.0E-6)) - ((double)Simulation::timeLastSimulate.tv_sec + Simulation::timeLastSimulate.tv_usec*(1.0E-6));
 
 	if(diff>=Simulation::timeStep){
-		Simulation::simulate(Simulation::gBaseScene,/*diff*/Simulation::timeStep,1);
+		Simulation::simulate(Simulation::gBaseScene,diff/*Simulation::timeStep*//*ElapsedTime*/,8);
 		TimePosix::gettimeofday(&Simulation::timeLastSimulate,NULL);
 	}
-
-	// Clear buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Setup camera
 	setupCamera();
@@ -579,20 +583,20 @@ void SimulationView::RenderSimulationCallback()
 		if (Simulation::gScenes[i])
 		{
 			//Render
-			/*glPushMatrix();
+			//glPushMatrix();
 			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
 			gDebugRenderer.renderData(*dbgRenderable);
 			glEnable(GL_LIGHTING);
-			glPopMatrix();*/
+			//glPopMatrix();
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			//glColor4f(0.6f,0.6f,0.6f,1.0f);
-			int nbActors = Simulation::gScenes[i]->getNbActors();
+			/*int nbActors = Simulation::gScenes[i]->getNbActors();
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
 				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
 				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
-			}
+			}*/
 		}
 
 		//Show Render Performance

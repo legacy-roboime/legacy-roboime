@@ -281,7 +281,7 @@ void Simulation::simVisionRun(){
 
 		if(diff>=timeStep){//>0){
 			//Sleep(dif);
-			simulate(gBaseScene,diff,1);
+			simulate(gBaseScene,diff,8);
 			TimePosix::gettimeofday(&timeLastSimulate,NULL);
 		}
 	}

@@ -133,7 +133,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 		Simulation::gScenes[indexScene]->releaseActor(*actorWheel);
 
 		NxU32 flags = NX_WF_BUILD_LOWER_HALF;
-		wheelDesc[i].wheelFlags |= NX_WF_ACCELERATED | /*NX_WF_STEERABLE_INPUT |*/ flags;
+		wheelDesc[i].wheelFlags |= NX_WF_ACCELERATED | NX_WF_AFFECTED_BY_HANDBRAKE;// |/*NX_WF_STEERABLE_INPUT |*/ flags;
 	}
 
 	//Orientacao das rodas (robo de 4 rodas)
@@ -323,11 +323,9 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 
 	//TODO: Incluir Driblador descricao.
 	NxActor* actorDribbler = Simulation::cloneActor(nxRobotSource->dribbler.dribbler,indexNewScene);
-	actorDribbler->setMaxAngularVelocity(100);
 
 	//TODO: Incluir Chutador descricao.
 	NxActor* kickerActor = Simulation::cloneActor(nxRobotSource->kicker.kicker,indexNewScene);
-	kickerActor->setMaxAngularVelocity(100);
 
 	//Criar robot, vehicle base
 	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(Simulation::gScenes[Simulation::nbExistScenes], &vehicleDesc);
@@ -423,4 +421,26 @@ NxJoint* NxRobot::cloneJointRobot(NxJoint* jointSource, int indexDestScene){
 	}
 	
 	return joint;
+}
+void NxRobot::setGlobalPosition(NxVec3 position){
+	//get relative distances from body
+	NxVec3 bodyPos = this->getBodyPos();
+	NxVec3 dribblerPos = this->dribbler.dribbler->getGlobalPosition();
+	NxVec3 kickerPos = this->kicker.kicker->getGlobalPosition();
+
+	this->dribbler.dribbler->setGlobalPosition(position+(-bodyPos+dribblerPos));
+	this->kicker.kicker->setGlobalPosition(position+(-bodyPos+kickerPos));
+	this->getActor()->setGlobalPosition(position);
+}
+
+void NxRobot::setGlobalOrientation(NxMat33 orientation){
+	
+}
+
+void NxRobot::putToSleep(){
+	this->dribbler.dribbler->putToSleep();
+	this->kicker.kicker->putToSleep();
+	for(int i=0; i<this->getNbWheels(); i++)
+		((NxWheel2*)(this->getWheel(i)))->getActor()->putToSleep();
+	this->getActor()->putToSleep();
 }
