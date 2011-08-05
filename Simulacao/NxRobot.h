@@ -22,6 +22,7 @@ public:
 	void setGlobalPosition(NxVec3 position);
 	void setGlobalOrientation(NxMat33 orientation);
 	void putToSleep();
+	void resetToInitialPose();
 
 	//getters and setters
 	int getId();

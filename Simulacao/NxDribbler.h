@@ -8,6 +8,7 @@ private:
 	
 public:
 	NxActor* dribbler;
+	NxMat34 initialPose;
 	NxDribbler(void);
 	~NxDribbler(void);
 };

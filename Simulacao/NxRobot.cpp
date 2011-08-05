@@ -219,6 +219,11 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//Joints
 	robot->joints = Simulation::getJoints(indexScene, indexRobot);
 
+	//Initial Pose
+	robot->setInitialBodyPose(robotActor->getGlobalPose());
+	robot->kicker.initialPose = kickerActor->getGlobalPose();
+	robot->dribbler.initialPose = actorDribbler->getGlobalPose();
+
 	//Mudar pose do robo
 	//NxQuat q;
 	//q.
@@ -343,6 +348,11 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 		robot->joints.push_back(robot->cloneJointRobot(nxRobotSource->joints[i],indexNewScene));
 	}
 
+	//Initial Pose
+	robot->setInitialBodyPose(robotActor->getGlobalPose());
+	robot->kicker.initialPose = kickerActor->getGlobalPose();
+	robot->dribbler.initialPose = actorDribbler->getGlobalPose();
+
 	//Transladando os componentes do robo
 	robot->kicker.kicker->setGlobalPosition(robot->kicker.kicker->getGlobalPosition() - robot->getActor()->getGlobalPosition() + newPosition);
 	robot->dribbler.dribbler->setGlobalPosition(robot->dribbler.dribbler->getGlobalPosition() - robot->getActor()->getGlobalPosition() + newPosition);
@@ -424,17 +434,19 @@ NxJoint* NxRobot::cloneJointRobot(NxJoint* jointSource, int indexDestScene){
 }
 void NxRobot::setGlobalPosition(NxVec3 position){
 	//get relative distances from body
-	NxVec3 bodyPos = this->getBodyPos();
-	NxVec3 dribblerPos = this->dribbler.dribbler->getGlobalPosition();
-	NxVec3 kickerPos = this->kicker.kicker->getGlobalPosition();
+	//NxVec3 bodyPos = this->getBodyPos();
+	//NxVec3 dribblerPos = this->dribbler.dribbler->getGlobalPosition();
+	//NxVec3 kickerPos = this->kicker.kicker->getGlobalPosition();
 
-	this->dribbler.dribbler->setGlobalPosition(position+(-bodyPos+dribblerPos));
-	this->kicker.kicker->setGlobalPosition(position+(-bodyPos+kickerPos));
+	this->dribbler.dribbler->setGlobalPosition(position+(-this->getInitialBodyPose().t + this->dribbler.initialPose.t));
+	this->kicker.kicker->setGlobalPosition(position+(-this->getInitialBodyPose().t + this->kicker.initialPose.t));
 	this->getActor()->setGlobalPosition(position);
 }
 
 void NxRobot::setGlobalOrientation(NxMat33 orientation){
-	
+	this->dribbler.dribbler->setGlobalOrientation(orientation);
+	this->kicker.kicker->setGlobalOrientation(orientation);
+	this->getActor()->setGlobalOrientation(orientation);
 }
 
 void NxRobot::putToSleep(){
@@ -443,4 +455,10 @@ void NxRobot::putToSleep(){
 	for(int i=0; i<this->getNbWheels(); i++)
 		((NxWheel2*)(this->getWheel(i)))->getActor()->putToSleep();
 	this->getActor()->putToSleep();
+}
+
+void NxRobot::resetToInitialPose(){
+	this->dribbler.dribbler->setGlobalPose(this->dribbler.initialPose);
+	this->kicker.kicker->setGlobalPose(this->kicker.initialPose);
+	this->getActor()->setGlobalPose(this->getInitialBodyPose());
 }

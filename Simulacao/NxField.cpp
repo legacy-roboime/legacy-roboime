@@ -45,3 +45,30 @@ void NxField::cloneField(int indexNewScene){
 	field.indexScene = indexNewScene;
 	Simulation::allFields.fields.push_back(field);
 }
+
+void NxField::setDimensions(float fieldLength, float fieldWidth, float linesLength, float linesWidth){
+	NxShape* const * shapesCampo = this->actorCampo->getShapes();
+	NxBoxShape* boxCampo = shapesCampo[0]->isBox();
+	NxVec3 dimensionsCampo = boxCampo->getDimensions();
+	boxCampo->setDimensions(NxVec3(fieldWidth,fieldLength,dimensionsCampo.z)); //padrao de eixos diferente do global
+
+	NxShape* const * shapesParedeFundoNegativo = this->actorParedeFundoNegativo->getShapes();
+	NxBoxShape* boxParedeFundoNegativo = shapesParedeFundoNegativo[0]->isBox();
+	NxVec3 dimensionsParedeFundoNegativo = boxParedeFundoNegativo->getDimensions();
+	boxParedeFundoNegativo->setDimensions(NxVec3(fieldWidth,dimensionsParedeFundoNegativo.y,dimensionsParedeFundoNegativo.z)); //padrao de eixos diferente do global
+
+	NxShape* const * shapesParedeFundoPositivo = this->actorParedeFundoPositivo->getShapes();
+	NxBoxShape* boxParedeFundoPositivo = shapesParedeFundoPositivo[0]->isBox();
+	NxVec3 dimensionsParedeFundoPositivo = boxParedeFundoPositivo->getDimensions();
+	boxParedeFundoPositivo->setDimensions(NxVec3(fieldWidth,dimensionsParedeFundoPositivo.y,dimensionsParedeFundoPositivo.z)); //padrao de eixos diferente do global
+
+	NxShape* const * shapesParedeLateralNegativo = this->actorParedeLateralNegativo->getShapes();
+	NxBoxShape* boxParedeLateralNegativo = shapesParedeLateralNegativo[0]->isBox();
+	NxVec3 dimensionsParedeLateralNegativo = boxParedeLateralNegativo->getDimensions();
+	boxParedeLateralNegativo->setDimensions(NxVec3(dimensionsParedeLateralNegativo.x,fieldLength,dimensionsParedeLateralNegativo.z)); //padrao de eixos diferente do global
+
+	NxShape* const * shapesParedeLateralPositivo = this->actorParedeLateralPositivo->getShapes();
+	NxBoxShape* boxParedeLateralPositivo = shapesParedeLateralPositivo[0]->isBox();
+	NxVec3 dimensionsParedeLateralPositivo = boxParedeLateralPositivo->getDimensions();
+	boxParedeLateralPositivo->setDimensions(NxVec3(dimensionsParedeLateralPositivo.x,fieldLength,dimensionsParedeLateralPositivo.z)); //padrao de eixos diferente do global
+}

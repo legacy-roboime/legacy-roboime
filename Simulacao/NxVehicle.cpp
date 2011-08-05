@@ -383,3 +383,11 @@ NxReal NxVehicle::getAngle2DFromVehicle()
 	teta = NxPi*2 - teta;
 	return teta;
 }
+
+NxMat34 NxVehicle::getInitialBodyPose(){
+	return this->initialBodyPose;
+}
+
+void NxVehicle::setInitialBodyPose(NxMat34 initialBodyPose){
+	this->initialBodyPose = initialBodyPose;
+}

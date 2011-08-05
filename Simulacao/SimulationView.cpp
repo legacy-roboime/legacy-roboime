@@ -187,7 +187,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 		//case '-':	break;
 	case 'e':
 		{
-			//Simulation::allRobots.selectNext();
+			Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(5000, 3000, 0, 0);
 		} 
 		break;
 
@@ -255,8 +255,9 @@ void SimulationView::appKey(unsigned char key, bool down)
 		{
 			//NxActor* actorDribbler = getActorDribbler(0, 1);
 			//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
-			//Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->putToSleep();
+			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->resetToInitialPose();
 			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->setGlobalPosition(NxVec3(0,0,20));
+			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->putToSleep();
 		}
 		break;
 
@@ -270,8 +271,8 @@ void SimulationView::appKey(unsigned char key, bool down)
 			orientation.rotZ(-3.1416/4);
 			actor->setGlobalOrientation(orientation);
 			}*/
-			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->putToSleep();
 			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->setGlobalPosition(NxVec3(0,0,30));
+			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->putToSleep();
 		}
 		break;
 
@@ -591,12 +592,12 @@ void SimulationView::RenderSimulationCallback()
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			//glColor4f(0.6f,0.6f,0.6f,1.0f);
-			/*int nbActors = Simulation::gScenes[i]->getNbActors();
+			int nbActors = Simulation::gScenes[i]->getNbActors();
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
 				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
 				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
-			}*/
+			}
 		}
 
 		//Show Render Performance

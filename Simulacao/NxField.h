@@ -24,4 +24,5 @@ public:
 	~NxField(void);
 
 	void cloneField(int indexNewScene);
+	void setDimensions(float fieldLength, float fieldWidth, float linesLength, float linesWidth);
 };

@@ -21,6 +21,7 @@ private:
 	NxArray<NxVehicle*>			_children;
 	NxActor*					_bodyActor;
 	NxScene*					_nxScene;
+	NxMat34						initialBodyPose;
 
 	NxArray<NxVehicleMotor*>	_vehicleMotors;
 	//NxArray<NxVehicleGears*>	_vehicleGears;
@@ -68,6 +69,8 @@ private:
 	static NxVehicle*			_createVehicle(NxScene* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
 public:
 	//int							indexScene;
+	NxMat34						getInitialBodyPose();
+	void						setInitialBodyPose(NxMat34 initialBodyPose);
 	void*						userData;
 
 	NxReal*						_torqueAxleWheelControl;
