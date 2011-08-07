@@ -1,22 +1,20 @@
 #pragma once
-#include <deque>
 #include <QThread>
 #include <QMutex>
 #include <QMutexLocker>
 
-#include "Updater.h"
-#include "robocup_ssl_client.h"
+//#include "timer.h"//TODO: make this work
+#include "robocup_ssl_server.h"
 #include "messages_robocup_ssl_detection.pb.h"
 #include "messages_robocup_ssl_geometry.pb.h"
 #include "messages_robocup_ssl_wrapper.pb.h"
 
 using namespace std;
-namespace Inteligencia {
+namespace Simulation {
 
-	class UpdaterVision : public Updater, public QThread {
+	class SSLServer : public QThread {
 	private:
-		RoboCupSSLClient _client;
-		deque<SSL_WrapperPacket> _packet;
+		RoboCupSSLServer _server;
 		QMutex _mutex;
 		bool _stop;
 
@@ -24,14 +22,14 @@ namespace Inteligencia {
 		void run();
 
 	public:
-		UpdaterVision();
-		UpdaterVision(string address, int port);
-		~UpdaterVision();
+		SSLServer();
+		SSLServer(string address, int port);
+		~SSLServer();
 
 		//methods:
 		void stop();
 		void prepare();
-		void receive();
+		void send();
 
 	};
 }

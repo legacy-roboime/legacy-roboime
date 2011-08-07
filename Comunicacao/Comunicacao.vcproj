@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\include&quot;"
+				AdditionalIncludeDirectories="..\Comunicacao\include;..\Comunicacao\util;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include\QtCore"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -68,7 +68,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="libprotobufd.lib wsock32.lib"
+				LinkLibraryDependencies="true"
+				AdditionalDependencies="libprotobufd.lib wsock32.lib ws2_32.lib"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib\&quot;"
 			/>
 			<Tool
@@ -180,7 +181,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\include&quot;"
+				AdditionalIncludeDirectories="..\Comunicacao\include;..\Comunicacao\util;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include\QtCore"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -199,7 +200,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="libprotobuf.lib wsock32.lib"
+				AdditionalDependencies="libprotobuf.lib wsock32.lib ws2_32.lib"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib\&quot;"
 			/>
 			<Tool
@@ -293,10 +294,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\main.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\ou_thread.cpp"
 				>
 			</File>
@@ -369,6 +366,22 @@
 				</File>
 				<File
 					RelativePath=".\messages_robocup_ssl_wrapper.pb.cc"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="ssl-vision"
+				>
+				<File
+					RelativePath=".\netraw.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\robocup_ssl_client.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\robocup_ssl_server.cpp"
 					>
 				</File>
 			</Filter>
@@ -455,6 +468,22 @@
 				</File>
 				<File
 					RelativePath=".\messages_robocup_ssl_wrapper.pb.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="ssl-vision"
+				>
+				<File
+					RelativePath=".\netraw.h"
+					>
+				</File>
+				<File
+					RelativePath=".\robocup_ssl_client.h"
+					>
+				</File>
+				<File
+					RelativePath=".\robocup_ssl_server.h"
 					>
 				</File>
 			</Filter>

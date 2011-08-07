@@ -47,6 +47,8 @@ namespace ControleRobo
             {
                 simulationClient.Send(intelTranslatedData, intelTranslatedData.Length);
             }
+            //String temp = "5 0\n";
+            //simulationClient.Send(Encoding.ASCII.GetBytes(temp), Encoding.ASCII.GetByteCount(temp));
         }
         public void TxSendReceive(object sender, ElapsedEventArgs e)
         {
@@ -88,7 +90,7 @@ namespace ControleRobo
             {
                 transmitter = new LR.TransmissorRFM12USB();
                 transmitter.Inicializar("VIVATxRx", "IME");
-                sendTimer = new System.Timers.Timer(700);
+                sendTimer = new System.Timers.Timer(70);
                 sendTimer.Elapsed += new ElapsedEventHandler(TxSendReceive);
                 sendTimer.Enabled = true;
 

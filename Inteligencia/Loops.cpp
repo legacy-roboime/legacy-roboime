@@ -29,7 +29,7 @@ namespace Inteligencia {
 					d = sqrt(n - r*r);
 					costheta = (dx*d + dy*r)/n;
 					sintheta = (dy*d - dx*r)/n;
-					move->set(abs(s)*costheta, abs(s)*sintheta, 0);
+					move->set(abs(s)*costheta, abs(s)*sintheta, 0.0);
 				}
 				move->step();
 			}

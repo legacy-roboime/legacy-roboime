@@ -24,7 +24,7 @@ void UDPMulticastReceiver::receive(){
 		sock.joinGroup(multiAddress);
 
 		for (;;) {
- 			buildSendMessage();
+ 			buildReceiveMessage();
 
 			int bytesRcvd = sock.recvFrom(receiveBuffer, bufLen, multiAddress, port);
 		}
@@ -34,9 +34,7 @@ void UDPMulticastReceiver::receive(){
 	}
 }
 
-void UDPMulticastReceiver::buildSendMessage(){
-	printf("buildSendMessage Super classe\n");
-}
+void UDPMulticastReceiver::buildReceiveMessage(){}
 
 int UDPMulticastReceiver::getBufLen(){
 	return bufLen;

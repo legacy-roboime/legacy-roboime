@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="Simulacao"
+	Name="LibSimulation"
 	ProjectGUID="{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}"
 	RootNamespace="RobotIME"
 	SccProjectName="Svn"
@@ -256,6 +256,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\Comunicacao\;..\Comunicacao\include\;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -274,7 +275,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="PhysXLoader64.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\win64&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut\x64&quot;"
+				IgnoreDefaultLibraryNames="comunicacao.lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -319,26 +323,6 @@
 			<Filter
 				Name="Simulation"
 				>
-				<File
-					RelativePath=".\main.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAsManaged="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAsManaged="0"
-						/>
-					</FileConfiguration>
-				</File>
 				<Filter
 					Name="PhysX"
 					>

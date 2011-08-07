@@ -11,6 +11,7 @@ using namespace std;
 namespace Inteligencia {
 
 	class Updater {
+		friend class Update;//do not remove this
 
 	private:
 		//fields:
@@ -28,8 +29,8 @@ namespace Inteligencia {
 
 		//methods:
 		virtual void receive() = 0;//receive the information
-		virtual void prepare() = 0;//prepare means parse on most implementations
-		void step();//receive and prepare
+		virtual void prepare();//prepare means parse on most implementations
+		virtual void step();//receive, prepare and apply
 		void apply();
 		size_t robots();//how many robots?
 		Robot* robot(size_t);//-th robot

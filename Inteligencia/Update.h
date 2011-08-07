@@ -2,24 +2,32 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <stdio.h>
+#include "Updater.h"
 
 using namespace std;
 namespace Inteligencia {
 
 	class Update {
-		friend class Updater;//TODO: what's this for?
+		friend class Updater;//do not remove this
 
-	private:
+	protected:
 		//fields:
-		int _timestamp;
+		float _confidence;
+		double _time_received;
+		double _time_sent;
+		double _time_capture;
 
 	public:
-		Update();//TODO: implement timestamping
+		Update(float confidene, double time_sent, double time_capture);
+		Update();
 		~Update();
 
 		//methods:
 		virtual void apply(Updater*) = 0;//apply an update through an updater
-		int timestamp();
+		double time_sent();
+		double time_received();
+		double time_capture();
 
 	};
 }

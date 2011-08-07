@@ -22,11 +22,11 @@ namespace Inteligencia {
 		~Commander();
 
 		//methods:
-		void add(Robot*);
-		void del(Robot*);
-		virtual void prepare() = 0;
+		virtual void add(Robot*);
+		virtual void del(Robot*);
+		virtual void prepare();
 		virtual void send() = 0;
-		void step();
+		virtual void step();
 
 	};
 }

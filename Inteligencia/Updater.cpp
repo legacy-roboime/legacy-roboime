@@ -55,4 +55,6 @@ namespace Inteligencia {
 		return _ball[i];
 	}
 
+	void Updater::prepare() {}
+
 }

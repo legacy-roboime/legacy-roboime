@@ -44,7 +44,7 @@ namespace Inteligencia {
 			double x, y, a;
 			in >> x;
 			in >> y;
-			_update.push_back(new UpdateBall(1,x,y));
+			_update.push_back(new UpdateBall(x,y));
 			for(int k=1; k<=10; k++) {
 				in >> x;
 				in >> y;

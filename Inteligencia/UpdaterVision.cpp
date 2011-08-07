@@ -6,53 +6,66 @@
 using namespace std;
 namespace Inteligencia {
 
-	UDPMulticastReceiver* UpdaterVision::_udpMulticastReceiver = 0;
-	UDPMulticastReceiverThread* UpdaterVision::_udpMulticastReceiverThread = 0;
-
 	UpdaterVision::UpdaterVision() : Updater() {
-		if(_udpMulticastReceiver==0) {
-			_udpMulticastReceiver = new UDPMulticastReceiver();
+		_stop = false;
+	}
+
+	UpdaterVision::UpdaterVision(string address, int port) : Updater() {
+		//TODO: implement
+	}
+
+	UpdaterVision::~UpdaterVision() {}
+
+	void UpdaterVision::run() {
+		_client.open(true);
+		SSL_WrapperPacket packet;
+		while(true) {
+			if(_client.receive(packet)) _packet.push_back(packet);
+			QMutexLocker locker(&_mutex);
+			if(_stop) return;
 		}
-		if(_udpMulticastReceiverThread==0) {
-			_udpMulticastReceiverThread = new UDPMulticastReceiverThread(_udpMulticastReceiver);
-		}
 	}
 
-	UpdaterVision::UpdaterVision(string address, unsigned short port) : Updater() {
-		_udpMulticastReceiver = new UDPMulticastReceiver(address, port);
-		_udpMulticastReceiverThread = new UDPMulticastReceiverThread(_udpMulticastReceiver);
-	}
-
-	UpdaterVision::~UpdaterVision() {
-		delete _udpMulticastReceiver;
-		delete _udpMulticastReceiverThread;
-	}
-
-	void UpdaterVision::start() {
-		_udpMulticastReceiverThread->start();
-		//_queue.push_back(_udpclient->getLastReceivedString());
-	}
-	
-	void UpdaterVision::stop() {
-		_udpMulticastReceiverThread->stop();
-		//_queue.push_back(_udpclient->getLastReceivedString());
+	void UpdaterVision::receive() {
+		if(!isRunning()) start();
 	}
 
 	void UpdaterVision::prepare() {
-		while(!_queue.empty()){
-			stringstream in = stringstream(_queue.front());
-			//TODO: validation
-			double x, y, a;
-			in >> x;
-			in >> y;
-			_update.push_back(new UpdateBall(1,x,y));
-			for(int k=1; k<=10; k++) {
-				in >> x;
-				in >> y;
-				in >> a;
-				_update.push_back(new UpdateRobot(k,x,y,a));
-			}
-			_queue.pop_front();
+		while(!_packet.empty()){
+			QMutexLocker locker(&_mutex);
+			SSL_WrapperPacket packet = _packet.front();
+			if (packet.has_detection()) {
+                SSL_DetectionFrame detection = packet.detection();
+				//TODO: implement UpdateStage
+				//double t_now = GetTimeSec();
+                //printf("Camera ID=%d FRAME=%d T_CAPTURE=%.4f\n",detection.camera_id(),detection.frame_number(),detection.t_capture());
+                //printf("SSL-Vision Processing Latency                   %7.3fms\n",(detection.t_sent()-detection.t_capture())*1000.0);
+                //printf("Network Latency (assuming synched system clock) %7.3fms\n",(t_now-detection.t_sent())*1000.0);
+                //printf("Total Latency   (assuming synched system clock) %7.3fms\n",(t_now-detection.t_capture())*1000.0);
+				double t_capture = detection.t_capture();
+				double t_sent = detection.t_sent();
+				//balls:
+                for (int i = 0; i < detection.balls_size(); i++) {
+                    SSL_DetectionBall ball = detection.balls(i);
+					//TODO: implement ball z
+                    //if (ball.has_z()) ;
+					_update.push_back(new UpdateBall(ball.x(),ball.y(),ball.confidence(),t_sent,t_capture));
+                }
+                //blue robots:
+                for (int i = 0; i < detection.robots_blue_size(); i++) {
+                    SSL_DetectionRobot robot = detection.robots_blue(i);
+					_update.push_back(new UpdateRobot(robot.robot_id()+1,robot.x(),robot.y(),
+						robot.orientation(),robot.confidence(),t_sent,t_capture));
+                }
+                //yellow robots:
+                for (int i = 0; i < detection.robots_yellow_size(); i++) {
+                    SSL_DetectionRobot robot = detection.robots_yellow(i);
+                    _update.push_back(new UpdateRobot(robot.robot_id()+1,robot.x(),robot.y(),
+						robot.orientation(),robot.confidence(),t_sent,t_capture));
+                }
+
+            }
+			_packet.pop_front();
 		}
 	}
 }

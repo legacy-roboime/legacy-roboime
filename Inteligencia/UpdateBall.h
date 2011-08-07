@@ -11,12 +11,12 @@ namespace Inteligencia {
 	class UpdateBall : public Update {
 
 	private:
-		int _i;
 		double _x, _y;
 		UpdateBall();//there's no point on doin this
 
 	public:
-		UpdateBall(int, double, double);
+		UpdateBall(double x, double y);
+		UpdateBall(double x, double y, float confidence, double t_sent, double t_capture);
 		~UpdateBall();
 		void apply(Updater*);//go through the updaters list and apply the update
 	};

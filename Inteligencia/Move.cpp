@@ -25,6 +25,23 @@ namespace Inteligencia {
 						 + speed_ang*_robot->body->radius();
 			}
 			//TODO: implement speed limit to smoothen movement
+			//HINT:
+			//NxReal biggestValue = getBiggestAbsoluteValue(speeds, nbWheels);
+			//if(biggestValue > 0.0001)
+			//{
+			//	NxReal maxSpeed = 21;
+			//	for( int i = 0; i < nbWheels; i++ )
+			//	{
+			//		speeds[i] = speeds[i] / biggestValue * maxSpeed;
+			//	}
+			//}
+			//else
+			//{
+			//	for( int i = 0; i < nbWheels; i++ )
+			//	{
+			//		speeds[i] = 0;
+			//	}
+			//}
 			_robot->command(speed);
 		}
 

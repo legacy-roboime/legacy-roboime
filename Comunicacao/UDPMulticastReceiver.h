@@ -30,7 +30,7 @@ public:
 	UDPMulticastReceiver(string address, unsigned short port);
 	~UDPMulticastReceiver(void);
 	void receive();
-	virtual void buildSendMessage();
+	virtual void buildReceiveMessage();
 	char* getReceiveBuffer();
 	int getBufLen();
 	void setBufLen(int bufLen);

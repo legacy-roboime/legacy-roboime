@@ -20,6 +20,7 @@ namespace Inteligencia {
 		~CommanderTX();
 
 		//methods:
+		void add(Robot*);
 		void prepare();
 		void send();
 	};

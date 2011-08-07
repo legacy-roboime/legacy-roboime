@@ -20,6 +20,7 @@ namespace Inteligencia {
 		//fields:
 		int _yellow_card, _red_card;//counts how many cards of each robot has received
 		int _i;//_index is the index, and _i is the internal index
+		int _color_code;//color code//TODO: implement
 		double _x, _y, _speedx, _speedy, _angle;//position, speed, and orientation
 		Command* _command;//the one to dispatch its commands
 

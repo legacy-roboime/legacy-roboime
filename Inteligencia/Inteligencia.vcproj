@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Simulacao;..\Comunicacao;..\Comunicacao\include;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
+				AdditionalIncludeDirectories="..\LibSimulation;..\Comunicacao;..\Comunicacao\util;..\Comunicacao\include;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include\QtCore;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -68,6 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\lib\QtCored4.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;"
 				GenerateDebugInformation="true"
@@ -197,7 +198,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\Simulacao;..\Comunicacao;..\Comunicacao\include;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
+				AdditionalIncludeDirectories="..\LibSimulation;..\Comunicacao;..\Comunicacao\util;..\Comunicacao\include;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include\QtCore;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -216,6 +217,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\lib\QtCore4.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\Win32&quot;"
 				GenerateDebugInformation="true"
@@ -329,10 +331,6 @@
 			ReferencedProjectIdentifier="{5D7A8BF5-424F-4380-99F3-ED700DF3F7BF}"
 			RelativePathToProject=".\Comunicacao\Comunicacao.vcproj"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{01AF3371-9AB8-4A89-AE9A-98976EF5DC0F}"
-			RelativePathToProject=".\Simulacao\Simulacao.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter
@@ -385,6 +383,10 @@
 				</File>
 				<File
 					RelativePath=".\UpdaterSIM.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UpdaterSIMi.cpp"
 					>
 				</File>
 				<File
@@ -626,6 +628,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\CommanderSIMi.h"
+					>
+				</File>
+				<File
 					RelativePath=".\CommanderTX.h"
 					>
 				</File>
@@ -655,6 +661,10 @@
 				</File>
 				<File
 					RelativePath=".\UpdaterSIM.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UpdaterSIMi.h"
 					>
 				</File>
 				<File
