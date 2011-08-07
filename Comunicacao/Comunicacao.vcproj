@@ -247,6 +247,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\Comunicacao\include;..\Comunicacao\util;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include;C:\QtSDK\Desktop\Qt\4.7.3\msvc2008\include\QtCore"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -265,7 +266,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="libprotobuf.lib wsock32.lib"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="libprotobuf.lib wsock32.lib ws2_32.lib"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)\lib\x64&quot;"
 			/>
 			<Tool

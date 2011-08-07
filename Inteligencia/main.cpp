@@ -8,7 +8,6 @@
 #include "CommanderSIM.h"
 #include "CommanderTX.h"
 #include "UpdaterSIM.h"
-//#define NOMINMAX//don't ask me why
 #include "UpdaterVision.h"
 
 using namespace Inteligencia;
