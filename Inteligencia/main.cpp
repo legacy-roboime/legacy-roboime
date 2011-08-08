@@ -27,14 +27,14 @@ int main(int argc, char *argv[]) {
 	com->add(rob);
 	upd->add(rob);
 
-	system("pause");
+	//system("pause");
 	//Skill* test = new Loops::Circle(rob, -1200, 1500, 600, 16);
-	Tactic* test = new Controller(1, rob, sta, 10);
+	Tactic* test = new Controller(1, rob, sta, 20);
 	while(true) {
 		upd->step();
 		test->step();
 		com->step();
-		//Sleep(30);
+		Sleep(1000/60);
 	}
 
 	return app.exec();

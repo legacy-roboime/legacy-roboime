@@ -1,4 +1,5 @@
 #include "UDPServerSimInt.h"
+#include "Simulation.h"
 
 UDPServerSimInt::UDPServerSimInt(void): UDPServer()
 {
@@ -10,6 +11,8 @@ UDPServerSimInt::~UDPServerSimInt(void)
 
 void UDPServerSimInt::parsing()
 {
+	QMutexLocker locker(&Simulation::mutex);
+
 	string temp; 
 	std::stringstream os(this->receiveString);
 	os >> temp;

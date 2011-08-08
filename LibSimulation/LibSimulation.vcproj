@@ -49,7 +49,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Comunicacao\;..\Comunicacao\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
+				AdditionalIncludeDirectories="..\Comunicacao;..\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -92,7 +92,7 @@
 			Name="Debug|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			ManagedExtensions="0"
 			>
@@ -115,7 +115,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Comunicacao\;..\Comunicacao\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
+				AdditionalIncludeDirectories="..\Comunicacao;..\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -134,18 +134,12 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
+				Name="VCLibrarianTool"
 				AdditionalDependencies="PhysXLoader64.lib"
-				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\win64&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut\x64&quot;"
-				IgnoreDefaultLibraryNames="comunicacao.lib"
-				GenerateDebugInformation="true"
-				TargetMachine="17"
+				AdditionalLibraryDirectories="..\lib\x64"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -155,9 +149,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -190,7 +181,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\Comunicacao\;..\Comunicacao\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
+				AdditionalIncludeDirectories="..\Comunicacao;..\Simulation;..\include;..\include\Qt\4.7.3;..\include\Qt\4.7.3\QtCore;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="false"
@@ -209,7 +200,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="PhysXLoader.lib"
+				AdditionalDependencies="PhysXLoader.lib QtCore4.lib"
 				AdditionalLibraryDirectories="..\lib"
 			/>
 			<Tool
@@ -232,8 +223,8 @@
 			Name="Release|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="1"
-			CharacterSet="1"
+			ConfigurationType="4"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -256,7 +247,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\Comunicacao\;..\Comunicacao\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
+				AdditionalIncludeDirectories="..\Comunicacao;..\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -274,22 +265,12 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
+				Name="VCLibrarianTool"
 				AdditionalDependencies="PhysXLoader64.lib"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\SDKs\lib\win64&quot;;&quot;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Graphics\lib\win32\glut\x64&quot;"
-				IgnoreDefaultLibraryNames="comunicacao.lib"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="17"
+				AdditionalLibraryDirectories="..\lib\x64"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -299,9 +280,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

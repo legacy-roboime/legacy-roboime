@@ -25,12 +25,9 @@ int main(int argc, char* argv[]) {
 	Thread* simpleThread = new SimpleThread(SimulationView::mainLoop, argc, argv);
 	simpleThread->start();
 
-	QMutex mutex;
 
 	while(true) {
-		mutex.lock();
 		Simulation::simulate(0);
-		mutex.unlock();
 		Sleep(1000/60);
 	}
 

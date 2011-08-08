@@ -24,6 +24,8 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 
 	if(true)//withDetection)
 	{
+		QMutexLocker locker(&Simulation::mutex);
+
 		NxScene1* baseScene = Simulation::gScenes[Simulation::gBaseScene];
 
 		SSL_DetectionFrame detectionFrame = SSL_DetectionFrame();
@@ -71,6 +73,8 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 	}
 	if(false)//withGeometry)
 	{
+		QMutexLocker locker(&Simulation::mutex);
+
 		SSL_GeometryData geometryData = SSL_GeometryData();
 
 		SSL_GeometryFieldSize* geometryFieldSize = geometryData.mutable_field();

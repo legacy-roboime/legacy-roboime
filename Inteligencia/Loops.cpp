@@ -6,7 +6,7 @@ namespace Inteligencia {
 
 			Circle::Circle(Robot* r, double x, double y, double radius, double speed) : Skill(r) {
 				set(x,y,radius,speed);
-				move = new Move(r,speed,0,0);
+				move = new Move(r,speed);
 			}
 
 			Circle::~Circle() {
@@ -29,7 +29,7 @@ namespace Inteligencia {
 					d = sqrt(n - r*r);
 					costheta = (dx*d + dy*r)/n;
 					sintheta = (dy*d - dx*r)/n;
-					move->set(abs(s)*costheta, abs(s)*sintheta, 0.0);
+					move->set(abs(s)*costheta, abs(s)*sintheta);
 				}
 				move->step();
 			}

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <QThread>
+#include <QMutex>
+#include <QMutexLocker>
 #include <stdio.h>
 #include <sstream>
 #include <string>
@@ -37,6 +40,8 @@ private:
 	static bool gSave;
 	static int	gLoad;
 	static bool gClear;
+
+	static QMutex mutex;
 	
 	static NxPhysicsSDK *gPhysicsSDK;
 	static const NxU32 gMaxScenes = 100;

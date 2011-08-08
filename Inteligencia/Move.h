@@ -11,13 +11,13 @@ namespace Inteligencia {
 			double speed[4], theta, alpha;//internal
 
 		public:
-			Move(Robot*);
-			Move(Robot*,double speed_x, double speed_y, double speed_ang);
+			//Move(Robot*);
+			Move(Robot*,double speed_x=0.0, double speed_y=0.0, double speed_ang=0.0);
 			~Move();
 
 			//methods:
 			void step();//the actual algorithm
-			void set(double speed_x, double speed_y, double speed_ang);
+			void set(double speed_x=0.0, double speed_y=0.0, double speed_ang=0.0);
 		};
 	}
 }

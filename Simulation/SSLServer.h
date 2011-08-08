@@ -1,4 +1,5 @@
 #pragma once
+#define NOMINMAX
 #include <QThread>
 #include <QMutex>
 #include <QMutexLocker>
@@ -10,13 +11,14 @@
 #include "messages_robocup_ssl_wrapper.pb.h"
 
 using namespace std;
-namespace Simulation {
+//namespace LibSimulation {
 
 	class SSLServer : public QThread {
 	private:
-		RoboCupSSLServer _server;
-		QMutex _mutex;
-		bool _stop;
+		SSL_WrapperPacket wrapperPacket;
+		RoboCupSSLServer server;
+		QMutex mutex;
+		bool withDetection, withGeometry;
 
 		//methods:
 		void run();
@@ -27,9 +29,9 @@ namespace Simulation {
 		~SSLServer();
 
 		//methods:
-		void stop();
 		void prepare();
 		void send();
+		void refresh();
 
 	};
-}
+//}

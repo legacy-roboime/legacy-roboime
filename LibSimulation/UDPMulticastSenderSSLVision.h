@@ -1,4 +1,6 @@
 #pragma once
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "UDPMulticastSender.h"
 #include "messages_robocup_ssl_refbox_log.pb.h"

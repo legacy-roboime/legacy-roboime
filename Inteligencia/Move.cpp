@@ -3,8 +3,6 @@
 namespace Inteligencia {
 	namespace Skills {
 
-		Move::Move(Robot* r) : Skill(r) {}
-
 		Move::Move(Robot* r, double sx, double sy, double sa) : Skill(r) {
 			set(sx, sy, sa);
 		}

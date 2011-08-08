@@ -6,6 +6,8 @@ bool Simulation::gSave = false;
 int	Simulation::gLoad = 2;//0;
 bool Simulation::gClear = false;
 
+QMutex Simulation::mutex;
+
 NxPhysicsSDK *Simulation::gPhysicsSDK = 0;
 //NxArray<NxScene1*> Simulation::gScenes = NxArray<NxScene1*>();
 int Simulation::nbExistScenes = 1;
@@ -322,6 +324,8 @@ void Simulation::simulate()
 
 void Simulation::simulate(int indexScene)
 {
+	QMutexLocker locker(&mutex);
+
 	if (gScenes[indexScene] && !gPause)
 	{
 		NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexScene);

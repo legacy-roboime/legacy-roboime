@@ -2,9 +2,8 @@
 #include <deque>
 #include <QThread>
 #include <QMutex>
-#include <QMutexLocker>
-
 #include "Updater.h"
+
 #include "robocup_ssl_client.h"
 #include "messages_robocup_ssl_detection.pb.h"
 #include "messages_robocup_ssl_geometry.pb.h"

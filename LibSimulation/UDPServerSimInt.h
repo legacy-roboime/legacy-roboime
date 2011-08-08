@@ -1,6 +1,5 @@
 #pragma once
 #include "UDPServer.h"
-#include "Simulation.h"
 
 class UDPServerSimInt : public UDPServer
 {
