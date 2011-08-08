@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include "Team.h"
 #include "Ball.h"
 #include "Goal.h"
@@ -12,7 +12,7 @@ namespace Inteligencia {
 		Ball* _ball;
 		Goal* _our_goal;
 		Goal* _their_goal;//our_goal must be defended their_goal must be attacked
-		Team t;
+		//Team t;
 		Team* _our_team;
 		Team* _their_team;
 
