@@ -28,11 +28,11 @@ int main(int argc, char *argv[]) {
 	upd->add(rob);
 
 	system("pause");
-	//Skill* mov = new Loops::Circle(rob, -1200, 1500, 600, 16);
-	Tactic* con = new Controller(1, rob, sta, 10);
+	//Skill* test = new Loops::Circle(rob, -1200, 1500, 600, 16);
+	Tactic* test = new Controller(1, rob, sta, 10);
 	while(true) {
 		upd->step();
-		con->step();
+		test->step();
 		com->step();
 		//Sleep(30);
 	}
