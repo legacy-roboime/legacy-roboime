@@ -1,32 +1,31 @@
-#pragma once
 #include "Controller.h"
-#include "Math.h"
-#include "_Skills.h"
+
 namespace Inteligencia {
 	namespace Tactics {
 		Controller::Controller(int id, Robot* r, Stage* s, double speed) : Tactic(r,s){
-			controller = new CXBOXController(id);
-			move = new Skills::Move(r, 0, 0, 0);
+			_controller = new CXBOXController(id);
+			_move = new Skills::Move(r, 0.0, 0.0, 0.0);
+			_speed = speed;
 		}
 		Controller::~Controller() {
-			delete controller;
-			delete move;
+			delete _controller;
+			delete _move;
 		}
 
 		void Controller::robot(Robot* r) {
-			move->robot(r);
+			_move->robot(r);
 		}
 
 		void Controller::step() {
-			if(controller->IsConnected()){
-				double x = (double) controller->GetState().Gamepad.sThumbLX;
-				double y = (double) controller->GetState().Gamepad.sThumbLY;
-				double v = sqrt(x*x + y*y);
-				move->set(x*v_max/v, y*v_max/v, 0.0);
-				//return EXIT_SUCCESS;
+			if(_controller->IsConnected()){
+				double x = ((double)_controller->GetState().Gamepad.sThumbLX)/32768.0;
+				double y = ((double)_controller->GetState().Gamepad.sThumbLY)/32768.0;
+				//cout << "x: " << x << endl;
+				//cout << "y: " << y << endl;
+				//double v = sqrt(x*x + y*y);
+				_move->set(x*_speed, y*_speed, 0.0);
+				_move->step();
 			}
-			move->step();
-			//else return EXIT_FAILURE;
 		}
 	}
 }

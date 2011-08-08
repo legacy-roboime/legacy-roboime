@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
 	system("pause");
 	//Skill* mov = new Loops::Circle(rob, -1200, 1500, 600, 16);
-	Tactic* con = new Controller(1, rob, sta, 1.0e26);
+	Tactic* con = new Controller(1, rob, sta, 10);
 	while(true) {
 		upd->step();
 		con->step();

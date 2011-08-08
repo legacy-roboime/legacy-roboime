@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include "CXBOXController.h"
 #include "Tactic.h"
 #include "Move.h"
@@ -9,10 +10,10 @@ namespace Inteligencia {
 		class Controller : public Tactic{
 		private:
 			int id;
-			CXBOXController* controller;
-			Robot* r;
-			Skills::Move * move;
-			double v_max;
+			CXBOXController* _controller;
+			Robot* _robot;
+			Skills::Move * _move;
+			double _speed;
 				
 		public:
 			Controller(int controller_id, Robot*, Stage*, double speed);

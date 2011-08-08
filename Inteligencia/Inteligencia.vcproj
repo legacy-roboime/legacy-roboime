@@ -367,10 +367,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\CXBOXController.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Update.cpp"
 					>
 				</File>
@@ -662,6 +658,10 @@
 				</File>
 				<File
 					RelativePath=".\CommanderTX.h"
+					>
+				</File>
+				<File
+					RelativePath=".\CXBOXController.h"
 					>
 				</File>
 				<File
