@@ -1,4 +1,5 @@
 #include "Skill.h"
+
 namespace Inteligencia {
 	namespace Skills {
 

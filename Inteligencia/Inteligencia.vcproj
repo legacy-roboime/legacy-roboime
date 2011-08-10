@@ -477,6 +477,10 @@
 						RelativePath=".\Skill.cpp"
 						>
 					</File>
+					<File
+						RelativePath=".\Stir.cpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="Plays"
@@ -600,11 +604,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Orientate.h"
+						RelativePath=".\Skill.h"
 						>
 					</File>
 					<File
-						RelativePath=".\Skill.h"
+						RelativePath=".\Stir.h"
 						>
 					</File>
 				</Filter>

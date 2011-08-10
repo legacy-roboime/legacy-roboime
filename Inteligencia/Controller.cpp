@@ -1,4 +1,5 @@
 #include "Controller.h"
+#include <cmath>
 
 namespace Inteligencia {
 	namespace Tactics {

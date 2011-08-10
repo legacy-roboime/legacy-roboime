@@ -16,10 +16,8 @@ namespace Inteligencia {
 
 	public:
 		Command(Command* command);//FIXME: is this really useful?
-		Command(int, double*);//index, 4wheels
-		Command(int, double*, double, double);//index, 4wheels, dribbler, kicker
-		Command(int, double, double, double, double);//index, wheel1, wheel2, wheel3, wheel4
-		Command(int, double, double, double, double, double, double);//index, wheel1, ..., wheel4, dribbler, kicker
+		Command(int, double*, double dribble=0.0, double kick=0.0);//index, 4wheels, dribbler, kicker
+		Command(int, double w0=0.0, double w1=0.0, double w2=0.0, double w3=0.0, double dribble=0.0, double kick=0.0);//index, wheel1, ..., wheel4, dribbler, kicker
 		Command();//index will be -1 if not set, and thus won't be dispatched
 		~Command();
 

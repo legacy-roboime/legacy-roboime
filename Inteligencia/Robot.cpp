@@ -7,15 +7,15 @@ namespace Inteligencia {
 		yellow_card(false);
 		red_card(false);
 		i(-1);
-		new_command();
-		dribbler = new Dribbler();
-		kicker = new Kicker();
-		motor = new Motor();
-		body = new Body(150, 90);
-		wheel[0] = new Wheel(-1.02260);
-		wheel[1] = new Wheel( 0.96706);
-		wheel[2] = new Wheel( 2.32842);
-		wheel[3] = new Wheel(-2.38397);
+		_command = new Command(_i);
+		_dribbler = new Dribbler();
+		_kicker = new Kicker();
+		_motor = new Motor();
+		_body = new Body(150, 90);
+		_wheel[0] = new Wheel(-1.02260);
+		_wheel[1] = new Wheel( 0.96706);
+		_wheel[2] = new Wheel( 2.32842);
+		_wheel[3] = new Wheel(-2.38397);
 	}
 
 	Robot::Robot(void) {
@@ -30,13 +30,36 @@ namespace Inteligencia {
 	Robot::~Robot() {
 		//TODO: think about commander memory allocation
 		delete _command;
-		delete dribbler;
-		delete kicker;
-		delete motor;
-		delete body;
-		for(int i=0; i<4; i++) delete wheel[i];
+		delete _dribbler;
+		delete _kicker;
+		delete _motor;
+		delete _body;
+		for(int i=0; i<4; i++) delete _wheel[i];
 	}
 
+	Dribbler* Robot::dribbler() {
+		return _dribbler;
+	}
+
+	Kicker* Robot::kicker() {
+		return _kicker;
+	}
+
+	Motor* Robot::motor() {
+		return _motor;
+	}
+
+	Body* Robot::body() {
+		return _body;
+	}
+
+	Wheel** Robot::wheel() {
+		return _wheel;
+	}
+
+	size_t Robot::wheels() {
+		return (size_t) 4;//TODO: make this flexible
+	}
 	//setters:
 	//TODO: validation
 	void Robot::i(int i) {
@@ -93,11 +116,11 @@ namespace Inteligencia {
 	}
 
 	bool Robot::can_kick() {
-		return kicker->is_active() && kicker->is_working();
+		return _kicker->is_active() && _kicker->is_working();
 	}
 
 	bool Robot::can_dribble() {
-		return dribbler->is_active() && dribbler->is_working();
+		return _dribbler->is_active() && _dribbler->is_working();
 	}
 
 	bool Robot::is_working() {
@@ -111,11 +134,11 @@ namespace Inteligencia {
 	}
 
 	void Robot::repair() {
-		dribbler->repair();
-		kicker->repair();
-		motor->repair();
-		for (int i=0; i<4; i++) wheel[i]->repair();
-		body->repair();
+		_dribbler->repair();
+		_kicker->repair();
+		_motor->repair();
+		for (int i=0; i<4; i++) _wheel[i]->repair();
+		_body->repair();
 		_working = true;
 	}
 
@@ -131,7 +154,7 @@ namespace Inteligencia {
 	}
 	
 	void Robot::kick() {
-		_command->kick(kicker->speed());
+		_command->kick(_kicker->speed());
 	}
 
 	void Robot::kick(double speed) {
@@ -139,7 +162,7 @@ namespace Inteligencia {
 	}
 
 	void Robot::dribble() {
-		_command->dribble(dribbler->speed());
+		_command->dribble(_dribbler->speed());
 	}
 
 	void Robot::dribble(double speed) {
@@ -209,6 +232,7 @@ namespace Inteligencia {
 	}
 
 	void Robot::new_command() {
+		delete _command;
 		_command = new Command(i(),0.,0.,0.,0.,0.,0.);
 	}
 }

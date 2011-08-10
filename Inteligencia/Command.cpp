@@ -9,24 +9,12 @@ namespace Inteligencia {
 		force_dribble(command->force_dribble());
 	}
 
-	Command::Command(int ii, double speed[4]) {
-		reset();
-		i(ii);
-		wheel_speed(speed);
-	}
-
 	Command::Command(int ii, double speed[4], double d, double k) {
 		reset();
 		i(ii);
 		wheel_speed(speed);
 		dribble_speed(d);
 		kick_speed(k);
-	}
-
-	Command::Command(int ii, double w0, double w1, double w2, double w3) {
-		reset();
-		i(ii);
-		wheels(w0, w1, w2, w3);
 	}
 
 	Command::Command(int ii, double w0, double w1, double w2, double w3, double d, double k) {

@@ -1,5 +1,4 @@
 #pragma once
-#include <cmath>
 #include "CXBOXController.h"
 #include "Tactic.h"
 #include "Move.h"

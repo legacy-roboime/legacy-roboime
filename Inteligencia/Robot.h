@@ -17,6 +17,13 @@ namespace Inteligencia {
 		friend class UpdateRobot;
 
 	private:
+		//components:
+		Dribbler* _dribbler;//dribbler component
+		Kicker* _kicker;//kicker component
+		Motor* _motor;//motor component
+		Body* _body;//body component
+		Wheel* _wheel[4];//0:front-left, 1:front-right, 2:back-left, 3:back-right wheels
+
 		//fields:
 		int _yellow_card, _red_card;//counts how many cards of each robot has received
 		int _i;//_index is the index, and _i is the internal index
@@ -48,11 +55,12 @@ namespace Inteligencia {
 		~Robot();//destructor
 
 		//components:
-		Dribbler* dribbler;//dribbler component
-		Kicker* kicker;//kicker component
-		Motor* motor;//motor component
-		Body* body;//body component
-		Wheel* wheel[4];//0:front-left, 1:front-right, 2:back-left, 3:back-right wheels
+		Dribbler* dribbler();//access dribbler
+		Kicker* kicker();//access kicker
+		Motor* motor();//access motor
+		Body* body();//access body
+		Wheel** wheel();//access wheels
+		size_t wheels();//number of wheels
 
 		//methods:
 		bool can_kick();//check if the robot has kicker component and it's working

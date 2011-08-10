@@ -38,13 +38,13 @@ namespace Inteligencia {
 			if(_robot[n]!=0) {
 				Robot* r = _robot[n];
 				Command* c = r->command();
-				r->new_command();
 				//TODO: implement logging
 				double* w = c->wheel_speed();
 				double  k = c->kick_speed();
 				double  d = c->dribble_speed();
 				out << w[0] << " " << w[1] << " " << w[2] << " " 
 					<< w[3] << " " << d    << " " << k    << " ";
+				r->new_command();
 			} else {
 				out << "0 0 0 0 0 0 ";
 			}
