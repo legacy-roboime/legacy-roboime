@@ -103,8 +103,6 @@
     <Compile Include="LRTransmissor\NativeCode.cs" />
     <Compile Include="Protocols.cs" />
     <Compile Include="RobotControl.cs" />
-    <Compile Include="Controller.cs" />
-    <Compile Include="KeyboardController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LRTransmissor\Transmissor.cs">
       <SubType>Component</SubType>
