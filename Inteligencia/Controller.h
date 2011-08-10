@@ -1,32 +1,22 @@
 #pragma once
 #include "CXBOXController.h"
 #include "Tactic.h"
-#include "Move.h"
+#include "Stir.h"
 
 namespace Inteligencia {
 	namespace Tactics {
 
-		class Controller : public Tactic{
+		class Controller : public Tactic {
 		private:
 			int _id;
-			double _x;
-			double _y;
-			double _ang;
+			double _sx, _sy, _dx, _dy;//internal
+			double _bspeed, _bang;//boosts(internal)
+			double _speed;//base speed
 			CXBOXController* _controller;
 			Robot* _robot;
-			Skills::Move * _move;
-//		Skills::Kick * _kick;
-//		Skills::Dribble * _dribble;
-			double _speed;
+			Skills::Stir* _stir;
 				
 		public:
-			double set_x();
-			double set_y();
-			double set_ang();
-			bool should_kick();
-			void trigger_kick();
-			bool should_dribble();
-			void trigger_dribble();
 			Controller(int controller_id, Robot*, Stage*, double speed);
 			~Controller();
 			void robot(Robot*);

@@ -18,6 +18,13 @@ private:
 public:
     CXBOXController(int playerNumber);
     XINPUT_STATE GetState();
+	double ThumbRX();
+	double ThumbRY();
+	double ThumbLX();
+	double ThumbLY();
+	double TriggerR();
+	double TriggerL();
+	bool ButtonPressed(WORD buttons);
     bool IsConnected();
     void Vibrate(int leftVal = 0, int rightVal = 0);
 };

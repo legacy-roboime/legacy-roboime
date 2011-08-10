@@ -1,76 +1,65 @@
 #include "Controller.h"
 #include <cmath>
 
+using namespace Inteligencia::Skills;
+
 namespace Inteligencia {
 	namespace Tactics {
 		Controller::Controller(int id, Robot* r, Stage* s, double speed) : Tactic(r,s){
-			_id = id;
-			_x = 0;
-			_y = 0;
 			_controller = new CXBOXController(id);
-			 //_kick = new Skills::Kick(r);
+			_stir = new Stir(r);
+			robot(r);
+			_id = id;
+			_sx = 0.0;
+			_sy = 0.0;
+			_dx = 0.0;
+			_dy = 0.0;
+			_bspeed = 1.0;
+			_bang = 1.0;
 			//_dribble = new Skills::Dribble(r);
-			_move = new Skills::Move(r, 0.0, 0.0, 0.0);
 			_speed = speed;
 		}
 		Controller::~Controller() {
 			delete _controller;
-			delete _move;
+			delete _stir;
 		}
 
 		void Controller::robot(Robot* r) {
-			_move->robot(r);
+			_robot = r;
+			_stir->robot(r);
 		}
 
-		double Controller::set_x() {
-			_x = ((double)_controller->GetState().Gamepad.sThumbLX)/32768.0;
-			return _x;
-		}
-		double Controller::set_y() {
-			_y = ((double)_controller->GetState().Gamepad.sThumbLY)/32768.0;
-			return _y;
-		}
-		double Controller::set_ang() {
-			double x = ((double)_controller->GetState().Gamepad.sThumbRX)/32768.0;
-			double y = ((double)_controller->GetState().Gamepad.sThumbRY)/32768.0;
-			_ang = atan2(y, x);
-			return _ang;
-		}
-		bool Controller::should_kick() {
-			if(_controller->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)
-			{
-				return true;
-			}
-			else return false;
-		}
-
-		void Controller::trigger_kick()
-		{
-			double strength = _controller->GetState().Gamepad.bRightTrigger/255;
-			//TODO: Botar o kick aqui				
-		}
-
-		bool Controller::should_dribble(){
-			if(_controller->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)
-			{
-				return true;
-			}
-			else return false;
-		}
-		void Controller::trigger_dribble(){
-			double strength = _controller->GetState().Gamepad.bLeftTrigger/255;
-			//TODO: Botar o drible aqui
-		}
 		void Controller::step() {
 			if(_controller->IsConnected()){
-				set_x();	
-				set_y();
-				_move->set(_x*_speed, _y*_speed, 0.0);
-				if(should_kick()){
+				//right thumb:
+				_sx = _controller->ThumbLX();
+				_sy = _controller->ThumbLY();
+				//left thumb:
+				double t_dx = _controller->ThumbRX();
+				double t_dy = _controller->ThumbRY();
+				//left thumb considerable?
+				if(sqrt(t_dx * t_dx + t_dy * t_dy) > .3) {
+					_dx = t_dx; _dy = t_dy;
 				}
-				if(should_dribble()){
+				if(_controller->ButtonPressed(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+					_robot->kick(_controller->TriggerR());
 				}
-				_move->step();
+				if(_controller->ButtonPressed(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+					_robot->dribble(_controller->TriggerL());
+				}
+				if(_controller->ButtonPressed(XINPUT_GAMEPAD_LEFT_THUMB)) {
+					_bang = 2.0;
+				} else {
+					_bang = 1.0;
+				}
+				if(_controller->ButtonPressed(XINPUT_GAMEPAD_RIGHT_THUMB)) {
+					_bspeed = 2.0;
+				} else {
+					_bspeed = 1.0;
+				}
+				_stir->rate(0.06 * _bang);
+				_stir->set(_sx * _bspeed * _speed, _sy * _bspeed * _speed, _dx, _dy);
+				_stir->step();
 			}
 		}
 	}
