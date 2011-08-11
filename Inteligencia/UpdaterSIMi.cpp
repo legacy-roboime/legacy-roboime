@@ -6,6 +6,7 @@
 #include "UpdaterSIM.h"
 
 using namespace std;
+
 namespace Inteligencia {
 
 	UpdaterSIMi::UpdaterSIMi() : Updater() {

@@ -2,6 +2,7 @@
 #include "Command.h"
 
 using namespace std;
+
 namespace Inteligencia {
 
 	UDPClientThread* CommanderTX::_udpclient = 0;
@@ -39,9 +40,9 @@ namespace Inteligencia {
 				Robot* r = _robot[n];
 				Command* c = r->command();
 				//TODO: implement logging
-				double* w = c->wheel_speed();
-				double  k = c->kick_speed();
-				double  d = c->dribble_speed();
+				real* w = c->wheel_speed();
+				real  k = c->kick_speed();
+				real  d = c->dribble_speed();
 				out << w[0] << " " << w[1] << " " << w[2] << " " 
 					<< w[3] << " " << d    << " " << k    << " ";
 				r->new_command();

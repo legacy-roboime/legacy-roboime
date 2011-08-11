@@ -1,8 +1,10 @@
 #pragma once
+#include "Inteligencia.h"
 #include <deque>
 #include "Robot.h"
 
 using namespace std;
+
 namespace Inteligencia {
 
 	class Team {

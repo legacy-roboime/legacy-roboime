@@ -1,10 +1,10 @@
 #pragma once
+#include "Inteligencia.h"
 #include <deque>
 #include "Commander.h"
 #include "UpdaterSIMi.h"
 //#include "Simulation.h"
 
-using namespace std;
 namespace Inteligencia {
 
 	class CommanderSIMi : public Commander {

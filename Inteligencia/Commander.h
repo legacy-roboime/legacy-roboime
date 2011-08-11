@@ -1,4 +1,5 @@
 #pragma once
+#include "Inteligencia.h"
 #include <deque>
 #include <string>
 #include <sstream>
@@ -7,6 +8,7 @@
 #include "Robot.h"
 
 using namespace std;
+
 namespace Inteligencia {
 
 	class Commander {

@@ -61,14 +61,14 @@ namespace Inteligencia {
 				//blue robots:
 				for (int i = 0; i < detection.robots_blue_size(); i++) {
 					SSL_DetectionRobot robot = detection.robots_blue(i);
-					_update.push_back(new UpdateRobot(robot.robot_id()+1,robot.x(),robot.y(),
-						robot.orientation(),robot.confidence(),t_sent,t_capture));
+					_update.push_back(new UpdateRobot(robot.robot_id()+1,(real)robot.x(),(real)robot.y(),
+						(real)robot.orientation(),robot.confidence(),t_sent,t_capture));
 				}
 				//yellow robots:
 				for (int i = 0; i < detection.robots_yellow_size(); i++) {
 					SSL_DetectionRobot robot = detection.robots_yellow(i);
-					_update.push_back(new UpdateRobot(robot.robot_id()+1,robot.x(),robot.y(),
-						robot.orientation(),robot.confidence(),t_sent,t_capture));
+					_update.push_back(new UpdateRobot(robot.robot_id()+1,(real)robot.x(),(real)robot.y(),
+						(real)robot.orientation(),robot.confidence(),t_sent,t_capture));
 				}
 
 			}

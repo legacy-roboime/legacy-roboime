@@ -1,5 +1,5 @@
-//#include "Simulation.h"
 #include "_Skills.h"
+
 namespace Inteligencia {
 	namespace Skills {
 
@@ -7,7 +7,7 @@ namespace Inteligencia {
 		//Goto::~Goto(){}
 
 		////TODO: traduzir controle
-		//void Goto::Pose(Robot robot, double x, double y, double angle){/*
+		//void Goto::Pose(Robot robot, real x, real y, real angle){/*
 		//	//Controle proporcional
 		//	//Velocidades Maximas
 		//	NxReal maxSpeedAng = 6;

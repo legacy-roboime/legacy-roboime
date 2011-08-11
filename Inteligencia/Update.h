@@ -1,11 +1,11 @@
 #pragma once
+#include "Inteligencia.h"
 #include <sstream>
 #include <string>
 #include <iostream>
 #include <stdio.h>
 #include "Updater.h"
 
-using namespace std;
 namespace Inteligencia {
 
 	class Update {

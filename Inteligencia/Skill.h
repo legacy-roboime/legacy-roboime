@@ -1,4 +1,5 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Robot.h"
 
 namespace Inteligencia {

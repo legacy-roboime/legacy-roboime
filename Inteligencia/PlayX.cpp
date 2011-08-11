@@ -1,4 +1,5 @@
 #include "PlayX.h"
+
 namespace Inteligencia {
 
 	PlayX::PlayX(void) : Play() {}

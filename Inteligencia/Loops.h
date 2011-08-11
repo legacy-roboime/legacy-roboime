@@ -1,4 +1,5 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Skill.h"
 
 namespace Inteligencia {
@@ -8,14 +9,14 @@ namespace Inteligencia {
 			class Circle : public Skill {
 
 			private:
-				double cx, cy, r, s;//required
-				double dx, dy, d, n, sintheta, costheta;//internal
+				real cx, cy, r, s;//required
+				real dx, dy, d, n, sintheta, costheta;//internal
 				Move* move;
 
 			public:
-				Circle(Robot* r, double x, double y, double radius, double speed);
+				Circle(Robot* r, real x, real y, real radius, real speed);
 				~Circle();
-				void set(double x, double y, double radius, double speed);
+				void set(real x, real y, real radius, real speed);
 				void robot(Robot*);
 				void step();
 			};

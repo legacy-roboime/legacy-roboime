@@ -1,15 +1,17 @@
 #pragma once
+#include "Inteligencia.h"
+
 namespace Inteligencia {
 
 	class Goal {
 
 	private:
 		//fields:
-		double _width;
+		real _width;
 
 	public:
 		Goal(void);
-		Goal(double width);
+		Goal(real width);
 		~Goal(void);
 
 	};

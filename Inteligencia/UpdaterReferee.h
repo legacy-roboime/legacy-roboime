@@ -1,9 +1,9 @@
 #pragma once
+#include "Inteligencia.h"
 #include <deque>
 #include "Updater.h"
 #include "UDPMulticastReceiverThread.h"
 
-using namespace std;
 namespace Inteligencia {
 
 	class UpdaterReferee : public Updater {

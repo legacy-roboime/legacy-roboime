@@ -1,16 +1,13 @@
 #pragma once
 #include "Inteligencia.h"
-#include "CXBOXController.h"
 #include "Tactic.h"
 #include "Stir.h"
 
 namespace Inteligencia {
 	namespace Tactics {
 
-		class Controller : public Tactic {
+		class Goalkeeper : public Tactic {
 		private:
-			int _id;
-			int _dribs;//dribbler sign
 			real _sx, _sy, _dx, _dy;//internal
 			real _bspeed, _bang;//boosts(internal)
 			real _speed;//base speed
@@ -18,7 +15,7 @@ namespace Inteligencia {
 			Skills::Stir* _stir;
 				
 		public:
-			Controller(int controller_id, Robot*, Stage*, real speed);
+			Controller(Robot*, Stage*);
 			~Controller();
 			void robot(Robot*);
 			void step();

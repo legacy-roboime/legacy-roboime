@@ -1,10 +1,10 @@
 #pragma once
+#include "Inteligencia.h"
 #include <deque>
 #include "Updater.h"
 #include "CommanderSIM.h"
 #include "UDPClientThread.h"
 
-using namespace std;
 namespace Inteligencia {
 
 	class UpdaterSIM : public Updater {

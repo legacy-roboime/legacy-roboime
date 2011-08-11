@@ -1,9 +1,10 @@
 #include "Ball.h"
+
 namespace Inteligencia {
 
 	Ball::Ball() {}
 
-	Ball::Ball(int ii, double r) {
+	Ball::Ball(int ii, real r) {
 		i(ii);
 		radius(r);
 	}
@@ -14,27 +15,27 @@ namespace Inteligencia {
 		_i = ii;
 	}
 
-	void Ball::radius(double d) {
+	void Ball::radius(real d) {
 		_radius = d;
 	}
 
-	void Ball::x(double d) {
+	void Ball::x(real d) {
 		_x = d;
 	}
 
-	void Ball::y(double d) {
+	void Ball::y(real d) {
 		_y = d;
 	}
 
-	void Ball::speedx(double d) {
+	void Ball::speedx(real d) {
 		_speedx = d;
 	}
 
-	void Ball::speedy(double d) {
+	void Ball::speedy(real d) {
 		_speedy = d;
 	}
 
-	void Ball::place(double d1, double d2) {
+	void Ball::place(real d1, real d2) {
 		x(d1);
 		y(d2);
 	}
@@ -43,23 +44,23 @@ namespace Inteligencia {
 		return _i;
 	}
 
-	double Ball::radius() {
+	real Ball::radius() {
 		return _radius;
 	}
 
-	double Ball::x() {
+	real Ball::x() {
 		return _x;
 	}
 
-	double Ball::y() {
+	real Ball::y() {
 		return _y;
 	}
 
-	double Ball::speedx() {
+	real Ball::speedx() {
 		return _speedx;
 	}
 
-	double Ball::speedy() {
+	real Ball::speedy() {
 		return _speedy;
 	}
 

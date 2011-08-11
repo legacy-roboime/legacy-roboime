@@ -1,5 +1,7 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Component.h"
+
 namespace Inteligencia {
 
 	class Dribbler : Component {
@@ -7,16 +9,16 @@ namespace Inteligencia {
 
 	private:
 		//fields:
-		double _speed;//standard dribbling speed
+		real _speed;//standard dribbling speed
 
 	public:
 		Dribbler(void);
-		Dribbler(double force);
+		Dribbler(real force);
 		~Dribbler(void);
 
 		//methods:
-		void speed(double);
-		double speed();
+		void speed(real);
+		real speed();
 
 	};
 }

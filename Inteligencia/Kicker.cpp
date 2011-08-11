@@ -1,20 +1,20 @@
-//#include "Component.h"
 #include "Kicker.h"
+
 namespace Inteligencia {
 
 	Kicker::Kicker() {}
 
-	Kicker::Kicker(double speed) {
+	Kicker::Kicker(real speed) {
 		_speed = speed;
 	}
 
 	Kicker::~Kicker() {}
 
-	void Kicker::speed(double s) {
+	void Kicker::speed(real s) {
 		_speed = s;
 	}
 
-	double Kicker::speed() {
+	real Kicker::speed() {
 		return _speed;
 	}
 

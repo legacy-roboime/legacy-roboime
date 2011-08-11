@@ -1,5 +1,7 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Component.h"
+
 namespace Inteligencia {
 
 	class Motor : Component {
@@ -7,16 +9,16 @@ namespace Inteligencia {
 
 	private:
 		//fields:
-		double _speed;//max speed of a wheel
+		real _speed;//max speed of a wheel
 
 	public:
 		Motor(void);
-		Motor(double);
+		Motor(real);
 		~Motor(void);
 
 		//methods:
-		void speed(double);
-		double speed();
+		void speed(real);
+		real speed();
 
 	};
 }

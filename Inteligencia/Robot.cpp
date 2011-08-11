@@ -7,6 +7,12 @@ namespace Inteligencia {
 		yellow_card(false);
 		red_card(false);
 		i(-1);
+		cc(-1);
+		x(0.0);
+		y(0.0);
+		speedx(0.0);
+		speedy(0.0);
+		angle(0.0);
 		_command = new Command(_i);
 		_dribbler = new Dribbler();
 		_kicker = new Kicker();
@@ -66,6 +72,10 @@ namespace Inteligencia {
 		_i = i;
 	}
 
+	void Robot::cc(int i) {
+		_cc = i;
+	}
+
 	void Robot::yellow_card(int i) {
 		_yellow_card = i;
 	}
@@ -82,27 +92,27 @@ namespace Inteligencia {
 		_red_card++;
 	}
 
-	void Robot::x(double d) {
+	void Robot::x(real d) {
 		_x = d;
 	}
 
-	void Robot::y(double d) {
+	void Robot::y(real d) {
 		_y = d;
 	}
 
-	void Robot::angle(double d) {
+	void Robot::angle(real d) {
 		_angle = d;
 	}
 
-	void Robot::speedx(double d) {
+	void Robot::speedx(real d) {
 		_speedx = d;
 	}
 
-	void Robot::speedy(double d) {
+	void Robot::speedy(real d) {
 		_speedy = d;
 	}
 
-	void Robot::place(double _x, double _y) {
+	void Robot::place(real _x, real _y) {
 		x(_x);
 		y(_y);
 	}
@@ -157,7 +167,7 @@ namespace Inteligencia {
 		_command->kick(_kicker->speed());
 	}
 
-	void Robot::kick(double speed) {
+	void Robot::kick(real speed) {
 		_command->kick(speed);
 	}
 
@@ -165,7 +175,7 @@ namespace Inteligencia {
 		_command->dribble(_dribbler->speed());
 	}
 
-	void Robot::dribble(double speed) {
+	void Robot::dribble(real speed) {
 		_command->dribble(speed);
 	}
 
@@ -181,28 +191,28 @@ namespace Inteligencia {
 		return _red_card;
 	}
 
-	double Robot::x() {
+	real Robot::x() {
 		return _x;
 	}
 
-	double Robot::y() {
+	real Robot::y() {
 		return _y;
 	}
 
-	double Robot::angle() {
+	real Robot::angle() {
 		return _angle;
 	}
 
-	double Robot::speedx() {
+	real Robot::speedx() {
 		return _speedx;
 	}
 
-	double Robot::speedy() {
+	real Robot::speedy() {
 		return _speedy;
 	}
 
-	//double* Robot::place() {
-	//	double p[] = {_x, _y};
+	//real* Robot::place() {
+	//	real p[] = {_x, _y};
 	//	return p;
 	//}
 
@@ -211,11 +221,11 @@ namespace Inteligencia {
 		c->i(i());
 	}
 
-	void Robot::command(double s[4]) {
+	void Robot::command(real* s) {
 		_command->wheels(s);
 	}
 
-	void Robot::command(double w0, double w1, double w2, double w3) {
+	void Robot::command(real w0, real w1, real w2, real w3) {
 		_command->wheels(w0, w1, w2, w3);
 	}
 	

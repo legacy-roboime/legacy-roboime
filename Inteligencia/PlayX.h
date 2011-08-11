@@ -1,5 +1,7 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Play.h"
+
 namespace Inteligencia {
 
 	class PlayX : public Play {

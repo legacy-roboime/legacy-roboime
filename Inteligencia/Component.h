@@ -1,4 +1,6 @@
 #pragma once
+#include "Inteligencia.h"
+
 namespace Inteligencia {
 
 	class Component {

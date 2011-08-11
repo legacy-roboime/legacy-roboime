@@ -1,3 +1,4 @@
+#include "Inteligencia.h"
 #ifndef _XBOX_CONTROLLER_H_
 #define _XBOX_CONTROLLER_H_
 
@@ -18,12 +19,12 @@ private:
 public:
     CXBOXController(int playerNumber);
     XINPUT_STATE GetState();
-	double ThumbRX();
-	double ThumbRY();
-	double ThumbLX();
-	double ThumbLY();
-	double TriggerR();
-	double TriggerL();
+	real ThumbRX();
+	real ThumbRY();
+	real ThumbLX();
+	real ThumbLY();
+	real TriggerR();
+	real TriggerL();
 	bool ButtonPressed(WORD buttons);
     bool IsConnected();
     void Vibrate(int leftVal = 0, int rightVal = 0);

@@ -514,6 +514,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Inteligencia.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Minmax.h"
 				>
 			</File>
@@ -637,6 +641,10 @@
 					</File>
 					<File
 						RelativePath=".\Controller.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Goalkeeper.h"
 						>
 					</File>
 					<File

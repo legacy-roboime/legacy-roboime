@@ -1,4 +1,5 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Skill.h"
 #include "Robot.h"
 #include "Stage.h"

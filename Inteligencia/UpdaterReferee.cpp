@@ -4,6 +4,7 @@
 #include "UpdateRobot.h"
 
 using namespace std;
+
 namespace Inteligencia {
 
 	UDPMulticastReceiver* UpdaterReferee::_udpMulticastReceiver = 0;
@@ -41,7 +42,7 @@ namespace Inteligencia {
 		while(!_queue.empty()){
 			stringstream in = stringstream(_queue.front());
 			//TODO: validation
-			double x, y, a;
+			real x, y, a;
 			in >> x;
 			in >> y;
 			_update.push_back(new UpdateBall(x,y));

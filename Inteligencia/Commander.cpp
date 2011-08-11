@@ -1,6 +1,7 @@
 #include "Commander.h"
 
 using namespace std;
+
 namespace Inteligencia {
 
 	Commander::Commander() {

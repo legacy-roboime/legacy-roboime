@@ -1,5 +1,7 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Component.h"
+
 namespace Inteligencia {
 
 	class Kicker : Component {
@@ -7,16 +9,16 @@ namespace Inteligencia {
 
 	private:
 		//fields:
-		double _speed;//standard kicking speed
+		real _speed;//standard kicking speed
 
 	public:
 		Kicker(void);
-		Kicker(double force);
+		Kicker(real force);
 		~Kicker(void);
 
 		//methods:
-		void speed(double);
-		double speed();
+		void speed(real);
+		real speed();
 
 	};
 }

@@ -2,8 +2,9 @@
 #include <cmath>
 #define M_2PI	6.2831853071795865
 #define M_PI	3.1415926535897932
+#define __q(x)	((x) > M_PI ? (x) - M_2PI : -(x) > M_PI ? (x) + M_2PI : (x))
+real __n(real ang) {return ang > M_PI ? __n(ang - M_2PI) : -ang > M_PI ? __n(ang + M_2PI) : ang;}
 
-double n(double ang) {return ang > M_PI ? n(ang - M_2PI) : -ang > M_PI ? n(ang + M_2PI) : ang;}
 namespace Inteligencia {
 	namespace Skills {
 
@@ -13,13 +14,13 @@ namespace Inteligencia {
 			set(0.0,0.0,0.0);
 		}
 
-		Stir::Stir(Robot* r, double sx, double sy, double o) : Skill(r) {
+		Stir::Stir(Robot* r, real sx, real sy, real o) : Skill(r) {
 			ratio = .05;
 			move = new Move(r);
 			set(sx,sy,o);
 		}
 
-		Stir::Stir(Robot* r, double sx, double sy, double dx, double dy) : Skill(r) {
+		Stir::Stir(Robot* r, real sx, real sy, real dx, real dy) : Skill(r) {
 			ratio = .05;
 			move = new Move(r);
 			set(sx,sy,dx,dy);
@@ -29,7 +30,7 @@ namespace Inteligencia {
 			delete move;
 		}
 
-		void Stir::rate(double d) {
+		void Stir::rate(real d) {
 			ratio = d;
 		}
 
@@ -38,27 +39,26 @@ namespace Inteligencia {
 		}
 
 		void Stir::step() {
-			delta = angle - _robot->angle();
-			omega = n(delta);
+			omega = __q(angle - _robot->angle());
 			move->set(speed_x, speed_y, ratio * omega);
 			move->step();
 		}
 
-		void Stir::set(double sx, double sy) {
+		void Stir::set(real sx, real sy) {
 			speed_x = sx;
 			speed_y = sy;
 		}
 
-		void Stir::set(double sx, double sy, double o) {
+		void Stir::set(real sx, real sy, real o) {
 			speed_x = sx;
 			speed_y = sy;
 			angle = o;
 		}
 
-		void Stir::set(double sx, double sy, double dx, double dy) {
+		void Stir::set(real sx, real sy, real dx, real dy) {
 			speed_x = sx;
 			speed_y = sy;
-			double a = atan2(dy,dx);
+			real a = atan2(dy,dx);
 			angle = a < 0 ? M_2PI + a : a;
 		}
 	}

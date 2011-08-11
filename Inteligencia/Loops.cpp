@@ -4,7 +4,7 @@ namespace Inteligencia {
 	namespace Skills {
 		namespace Loops {
 
-			Circle::Circle(Robot* r, double x, double y, double radius, double speed) : Skill(r) {
+			Circle::Circle(Robot* r, real x, real y, real radius, real speed) : Skill(r) {
 				set(x,y,radius,speed);
 				move = new Move(r,speed);
 			}
@@ -13,7 +13,7 @@ namespace Inteligencia {
 				delete move;
 			}
 
-			void Circle::set(double x, double y, double radius, double speed) {
+			void Circle::set(real x, real y, real radius, real speed) {
 				cx = x; cy = y; r = radius; s = speed;
 			}
 

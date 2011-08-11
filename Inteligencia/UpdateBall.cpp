@@ -4,12 +4,12 @@ namespace Inteligencia {
 
 	UpdateBall::UpdateBall() : Update() {}
 
-	UpdateBall::UpdateBall(double x, double y) : Update() {
+	UpdateBall::UpdateBall(real x, real y) : Update() {
 		_x = x;
 		_y = y;
 	}
 
-	UpdateBall::UpdateBall(double x, double y, float c, double t1, double t2) : Update(c,t1,t2) {
+	UpdateBall::UpdateBall(real x, real y, float c, double t1, double t2) : Update(c,t1,t2) {
 		_x = x;
 		_y = y;
 	}

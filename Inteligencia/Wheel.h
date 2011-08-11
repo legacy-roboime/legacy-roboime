@@ -1,5 +1,7 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Component.h"
+
 namespace Inteligencia {
 
 	class Wheel : Component {
@@ -7,18 +9,18 @@ namespace Inteligencia {
 
 	private:
 		//fields:
-		double _speed;//current speed
-		const double _angle;//wheel angle, it's not supposed to change on runtime
+		real _speed;//current speed
+		const real _angle;//wheel angle, it's not supposed to change on runtime
 
 	public:
 		//Wheel();
-		Wheel(double ang = 0);//Constructor
+		Wheel(real ang = 0);//Constructor
 		~Wheel();//Destructor
 
 		//methods:
-		void speed(double);
-		double speed();
-		double angle();
+		void speed(real);
+		real speed();
+		real angle();
 
 	};
 }

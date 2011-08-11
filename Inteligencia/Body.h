@@ -1,5 +1,7 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Component.h"
+
 namespace Inteligencia {
 
 	class Body : Component {
@@ -7,18 +9,18 @@ namespace Inteligencia {
 
 	private:
 		//fields:
-		double _height, _radius;//does this has any use?
+		real _height, _radius;//does this has any use?
 
 	public:
 		Body(void);
-		Body(double height, double radius);
+		Body(real height, real radius);
 		~Body(void);
 
 		//methods:
-		void height(double);
-		double height();
-		void radius(double);
-		double radius();
+		void height(real);
+		real height();
+		void radius(real);
+		real radius();
 
 	};
 }

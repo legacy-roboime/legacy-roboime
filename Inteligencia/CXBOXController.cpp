@@ -44,30 +44,30 @@ void CXBOXController::Vibrate(int leftVal, int rightVal) {
     XInputSetState(_controllerNum, &Vibration);
 }
 
-double CXBOXController::ThumbRX() {
-	return ((double)GetState().Gamepad.sThumbRX)/32768.0;
+real CXBOXController::ThumbRX() {
+	return ((real)GetState().Gamepad.sThumbRX)/32768.0;
 }
 
-double CXBOXController::ThumbRY() {
-	return ((double)GetState().Gamepad.sThumbRY)/32768.0;
+real CXBOXController::ThumbRY() {
+	return ((real)GetState().Gamepad.sThumbRY)/32768.0;
 }
 
-double CXBOXController::ThumbLX() {
-	return ((double)GetState().Gamepad.sThumbLX)/32768.0;
+real CXBOXController::ThumbLX() {
+	return ((real)GetState().Gamepad.sThumbLX)/32768.0;
 }
 
-double CXBOXController::ThumbLY() {
-	return ((double)GetState().Gamepad.sThumbLY)/32768.0;
+real CXBOXController::ThumbLY() {
+	return ((real)GetState().Gamepad.sThumbLY)/32768.0;
 }
 
-double CXBOXController::TriggerR() {
-	return ((double)GetState().Gamepad.bRightTrigger)/255.0;
+real CXBOXController::TriggerR() {
+	return ((real)GetState().Gamepad.bRightTrigger)/255.0;
 }
 
-double CXBOXController::TriggerL() {
-	return ((double)GetState().Gamepad.bLeftTrigger)/255.0;
+real CXBOXController::TriggerL() {
+	return ((real)GetState().Gamepad.bLeftTrigger)/255.0;
 }
 
 bool CXBOXController::ButtonPressed(WORD w) {
-	return GetState().Gamepad.wButtons & w;
+	return (GetState().Gamepad.wButtons & w) != 0;
 }

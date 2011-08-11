@@ -4,14 +4,14 @@ namespace Inteligencia {
 
 	UpdateRobot::UpdateRobot() : Update() {}
 
-	UpdateRobot::UpdateRobot(int i, double x, double y, double a) : Update() {
+	UpdateRobot::UpdateRobot(int i, real x, real y, real a) : Update() {
 		_cc = i;
 		_x = x;
 		_y = y;
 		_angle = a;
 	}
 
-	UpdateRobot::UpdateRobot(int i, double x, double y, double a, float c, double t1, double t2) : Update(c,t1,t2) {
+	UpdateRobot::UpdateRobot(int i, real x, real y, real a, float c, double t1, double t2) : Update(c,t1,t2) {
 		_cc = i;
 		_x = x;
 		_y = y;

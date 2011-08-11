@@ -1,9 +1,9 @@
 #pragma once
+#include "Inteligencia.h"
 #include <deque>
 #include "Updater.h"
 #include "CommanderSIMi.h"
 
-using namespace std;
 namespace Inteligencia {
 
 	class UpdaterSIMi : public Updater {

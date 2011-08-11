@@ -1,4 +1,5 @@
 #include "Component.h"
+
 namespace Inteligencia {
 
 	Component::Component() {

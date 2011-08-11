@@ -1,28 +1,29 @@
 #include "Body.h"
+
 namespace Inteligencia {
 
 	Body::Body() {}
 
-	Body::Body(double height, double radius) {
+	Body::Body(real height, real radius) {
 		_height = height;
 		_radius = radius;
 	}
 
 	Body::~Body() {}
 
-	void Body::height(double h) {
+	void Body::height(real h) {
 		_height = h;
 	}
 
-	double Body::height() {
+	real Body::height() {
 		return _height;
 	}
 
-	void Body::radius(double r) {
+	void Body::radius(real r) {
 		_radius = r;
 	}
 
-	double Body::radius() {
+	real Body::radius() {
 		return _radius;
 	}
 

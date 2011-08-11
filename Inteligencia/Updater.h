@@ -1,4 +1,5 @@
 #pragma once
+#include "Inteligencia.h"
 #include <deque>
 #include <string>
 #include <sstream>
@@ -7,7 +8,6 @@
 #include "Ball.h"
 #include "Update.h"
 
-using namespace std;
 namespace Inteligencia {
 
 	class Updater {

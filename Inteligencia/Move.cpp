@@ -4,20 +4,20 @@
 namespace Inteligencia {
 	namespace Skills {
 
-		Move::Move(Robot* r, double sx, double sy, double sa) : Skill(r) {
+		Move::Move(Robot* r, real sx, real sy, real sa) : Skill(r) {
 			set(sx, sy, sa);
 		}
 
 		Move::~Move() {}
 
-		void Move::set(double sx, double sy, double sa) {
+		void Move::set(real sx, real sy, real sa) {
 			speed_x = sx; speed_y = sy; speed_ang = sa;
 		}
 
 		void Move::step() {
 			theta = _robot->angle();
 			//NOTE this is made for a 4 wheels robot, different number of wheels need some restructuring
-			for(int i=0; i<_robot->wheels(); i++) {
+			for(size_t i=0; i<_robot->wheels(); i++) {
 				alpha = _robot->wheel()[i]->angle();
 				speed[i] = cos(alpha) * (speed_y * cos(theta) - speed_x * sin(theta))
 						 - sin(alpha) * (speed_x * cos(theta) + speed_y * sin(theta))
@@ -41,6 +41,7 @@ namespace Inteligencia {
 			//		speeds[i] = 0;
 			//	}
 			//}
+			//_robot->command(speed);
 			_robot->command(speed);
 		}
 

@@ -1,4 +1,5 @@
 #include "Tactic.h"
+
 namespace Inteligencia {
 	namespace Tactics {
 

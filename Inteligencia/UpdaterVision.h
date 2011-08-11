@@ -1,4 +1,5 @@
 #pragma once
+#include "Inteligencia.h"
 #include <deque>
 #include <QThread>
 #include <QMutex>
@@ -9,7 +10,6 @@
 #include "messages_robocup_ssl_geometry.pb.h"
 #include "messages_robocup_ssl_wrapper.pb.h"
 
-using namespace std;
 namespace Inteligencia {
 
 	class UpdaterVision : public Updater, public QThread {

@@ -1,9 +1,10 @@
 #include "Goal.h"
+
 namespace Inteligencia {
 
 	Goal::Goal(void){}
 
-	Goal::Goal(double width) {
+	Goal::Goal(real width) {
 		_width = width;
 	}
 

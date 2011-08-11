@@ -1,5 +1,7 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Skill.h"
+
 namespace Inteligencia {
 	namespace Skills {
 
@@ -8,7 +10,7 @@ namespace Inteligencia {
 		//public:
 		//	Goto();
 		//	~Goto();
-		//	static void Pose(Robot robot, double x, double y, double angle);
+		//	static void Pose(Robot robot, real x, real y, real angle);
 		//};
 
 	}

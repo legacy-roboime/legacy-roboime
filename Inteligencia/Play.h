@@ -1,9 +1,12 @@
 #pragma once
+#include "Inteligencia.h"
 #include <list>
 #include <string.h>
 #include "Stage.h"
 #include "Tactic.h"
+
 using namespace std;
+
 namespace Inteligencia {
 
 	class Play {

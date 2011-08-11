@@ -1,20 +1,20 @@
-//#include "Component.h"
 #include "Dribbler.h"
+
 namespace Inteligencia {
 
 	Dribbler::Dribbler() {}
 
-	Dribbler::Dribbler(double speed) {
+	Dribbler::Dribbler(real speed) {
 		_speed = speed;
 	}
 
 	Dribbler::~Dribbler() {}
 
-	void Dribbler::speed(double s) {
+	void Dribbler::speed(real s) {
 		_speed = s;
 	}
 
-	double Dribbler::speed() {
+	real Dribbler::speed() {
 		return _speed;
 	}
 

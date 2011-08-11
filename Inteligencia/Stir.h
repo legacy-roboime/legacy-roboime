@@ -1,4 +1,5 @@
 #pragma once
+#include "Inteligencia.h"
 #include "Skill.h"
 #include "Move.h"
 
@@ -8,24 +9,24 @@ namespace Inteligencia {
 		class Stir : public Skill {
 
 		private:
-			double angle, speed_x, speed_y;//required
-			double ratio, omega, delta;//internal
+			real angle, speed_x, speed_y;//required
+			real ratio, omega, delta;//internal
 			Move* move;
 
 		public:
 			Stir(Robot*);
-			Stir(Robot*, double speed_x, double speed_y, double orientation);
-			Stir(Robot*, double speed_x, double speed_y, double dx, double dy);
+			Stir(Robot*, real speed_x, real speed_y, real orientation);
+			Stir(Robot*, real speed_x, real speed_y, real dx, real dy);
 			~Stir();
 
 			//methods:
 			void step();//the actual algorithm
 			void robot(Robot*);
-			void rate(double);
-			void set(double orientation);
-			void set(double speed_x, double speed_y);
-			void set(double speed_x, double speed_y, double orientation);
-			void set(double speed_x, double speed_y, double dx, double dy);
+			void rate(real);
+			void set(real orientation);
+			void set(real speed_x, real speed_y);
+			void set(real speed_x, real speed_y, real orientation);
+			void set(real speed_x, real speed_y, real dx, real dy);
 		};
 	}
 }

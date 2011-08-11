@@ -1,4 +1,5 @@
 #include "Command.h"
+
 namespace Inteligencia {
 
 	Command::Command(Command* command) {
@@ -9,7 +10,7 @@ namespace Inteligencia {
 		force_dribble(command->force_dribble());
 	}
 
-	Command::Command(int ii, double speed[4], double d, double k) {
+	Command::Command(int ii, real speed[4], real d, real k) {
 		reset();
 		i(ii);
 		wheel_speed(speed);
@@ -17,7 +18,7 @@ namespace Inteligencia {
 		kick_speed(k);
 	}
 
-	Command::Command(int ii, double w0, double w1, double w2, double w3, double d, double k) {
+	Command::Command(int ii, real w0, real w1, real w2, real w3, real d, real k) {
 		reset();
 		i(ii);
 		wheels(w0, w1, w2, w3);
@@ -51,15 +52,15 @@ namespace Inteligencia {
 		_i=ii;
 	}
 
-	void Command::kick_speed(double speed) {
+	void Command::kick_speed(real speed) {
 		_kick_speed = speed;
 	}
 
-	void Command::dribble_speed(double speed) {
+	void Command::dribble_speed(real speed) {
 		_dribble_speed = speed;
 	}
 
-	void Command::wheel_speed(double speed[4]) {
+	void Command::wheel_speed(real speed[4]) {
 		for(int i=0; i<4; i++) _wheel_speed[i] = speed[i];
 	}
 
@@ -75,16 +76,16 @@ namespace Inteligencia {
 	int Command::i() {
 		return _i;
 	}
-	double Command::kick_speed() {
+	real Command::kick_speed() {
 		return _kick_speed;
 	}
 
-	double Command::dribble_speed() {
+	real Command::dribble_speed() {
 		return _dribble_speed;
 	}
 
-	double* Command::wheel_speed() {
-		//double* speed = {_wheel_speed[0], _wheel_speed[1], _wheel_speed[2], _wheel_speed[3]};
+	real* Command::wheel_speed() {
+		//real* speed = {_wheel_speed[0], _wheel_speed[1], _wheel_speed[2], _wheel_speed[3]};
 		return _wheel_speed;
 	}
 
@@ -97,31 +98,31 @@ namespace Inteligencia {
 	}
 
 	//useful shorthands:
-	void Command::wheels(double w0, double w1, double w2, double w3) {
-		double speed[] = {w0, w1, w2, w3};
+	void Command::wheels(real w0, real w1, real w2, real w3) {
+		real speed[] = {w0, w1, w2, w3};
 		wheel_speed(speed);
 	}
 
-	void Command::wheels(double speed[4]) {
+	void Command::wheels(real* speed) {
 		wheel_speed(speed);
 	}
 
-	void Command::kick(double speed) {
+	void Command::kick(real speed) {
 		kick_speed(speed);
 		//if(speed==0) force_kick = false;
 	}
 
-	void Command::force_kick(double speed) {
+	void Command::force_kick(real speed) {
 		kick_speed(speed);
 		force_kick(true);
 	}
 
-	void Command::dribble(double speed) {
+	void Command::dribble(real speed) {
 		dribble_speed(speed);
 		//if(speed==0) force_dribble = false;
 	}
 	
-	void Command::force_dribble(double speed) {
+	void Command::force_dribble(real speed) {
 		dribble_speed(speed);
 		force_dribble(true);
 	}

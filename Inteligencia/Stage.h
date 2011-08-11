@@ -1,4 +1,5 @@
- #pragma once
+#pragma once
+#include "Inteligencia.h"
 #include "Team.h"
 #include "Ball.h"
 #include "Goal.h"
