@@ -1,7 +1,6 @@
 #include "UpdaterReferee.h"
 #include "Update.h"
-#include "UpdateBall.h"
-#include "UpdateRobot.h"
+#include "UpdateReferee.h"
 
 using namespace std;
 
@@ -72,7 +71,13 @@ namespace Inteligencia {
 		while(!_stop) {
 			if(receive2()) {
 				QMutexLocker locker(&mutex);
-				_queue.push_back(in_buffer);
+				unsigned char cmd_counter = (unsigned char)in_buffer[1];
+				static unsigned char cmd_counter_tmp = -1;
+				if ( cmd_counter != cmd_counter_tmp ) 
+				{ // se nao houver nenhum comando novo, fazer nada
+					cmd_counter_tmp = cmd_counter;
+					_queue.push_back(in_buffer);
+				}
 			}
 		}
 	}
@@ -83,17 +88,23 @@ namespace Inteligencia {
 			start();
 		}
 	}
-	
+
 
 	void UpdaterReferee::prepare() {
 		QMutexLocker locker(&mutex);
 		while(!_queue.empty()){
 			char* packet = _queue.front();
-			//packet[
+			char cmd_tmp = (char)packet[0];
+			unsigned char cmd_counter = (unsigned char)packet[1];
+			unsigned char goals_blue = (unsigned char)packet[2];
+			unsigned char goals_yellow = (unsigned char)packet[3];
+			int time_remaining = ((int)(packet[4]) << 8)  + (int)(packet[5]); //byte mais significativo
+
+			_update.push_back(new UpdateReferee(cmd_tmp, cmd_counter, goals_blue, goals_yellow, time_remaining));
 			_queue.pop_front();
 		}
 	}
-	
+
 	//void UpdaterReferee::stop() {
 	//}
 }
