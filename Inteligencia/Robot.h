@@ -27,8 +27,7 @@ namespace Inteligencia {
 		Wheel* _wheel[4];//0:front-left, 1:front-right, 2:back-left, 3:back-right wheels
 
 		//fields:
-		int _yellow_card, _red_card;//counts how many cards of each robot has received
-		int _i;//_index is the index, and _i is the internal index
+		int _id;//_index is the index, and _i is the internal index
 		int _cc;//color code//TODO: implement
 		real _x, _y, _speedx, _speedy, _angle;//position, speed, and orientation
 		Command* _command;//the one to dispatch its commands
@@ -39,12 +38,8 @@ namespace Inteligencia {
 		//modifiers:
 		void repair();//fixes all broken parts
 		void break_down();//raise an unknow break status
-		void i(int);
+		void id(int);
 		void cc(int);
-		void yellow_card(int);
-		void red_card(int);
-		void add_yellow_card();
-		void add_red_card();
 		void x(real);
 		void y(real);
 		void angle(real);
@@ -54,7 +49,7 @@ namespace Inteligencia {
 
 	public:
 		Robot();
-		Robot(int index);//constructor
+		Robot(int id, int cc);//constructor
 		~Robot();//destructor
 
 		//components:
@@ -82,9 +77,8 @@ namespace Inteligencia {
 		void dribble();//dribble with the standard speed
 		void dribble(real);//dribble with the given speed
 		//getters:
-		int i();
-		int yellow_card();
-		int red_card();
+		int id();
+		int cc();
 		real x();
 		real y();
 		real angle();

@@ -35,7 +35,7 @@ namespace Inteligencia {
 			real* w = c->wheel_speed();
 			real  k = c->kick_speed();
 			real  d = c->dribble_speed();
-			int     i = r->i();
+			int   i = r->id();
 			out <<"13 0 "<<i<<" "<<w[0]<<" "<<w[1]<<" "<<w[2]<<" "<<w[3]<<" "<<d<<" "<<k<<endl;
 			_queue.push_back(out.str());
 			out.clear();

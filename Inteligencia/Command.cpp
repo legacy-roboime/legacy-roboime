@@ -4,7 +4,7 @@ namespace Inteligencia {
 
 	Command::Command(Command* command) {
 		reset();
-		i(command->i());
+		id(command->id());
 		wheel_speed(command->wheel_speed());
 		force_kick(command->force_kick());
 		force_dribble(command->force_dribble());
@@ -12,7 +12,7 @@ namespace Inteligencia {
 
 	Command::Command(int ii, real speed[4], real d, real k) {
 		reset();
-		i(ii);
+		id(ii);
 		wheel_speed(speed);
 		dribble_speed(d);
 		kick_speed(k);
@@ -20,7 +20,7 @@ namespace Inteligencia {
 
 	Command::Command(int ii, real w0, real w1, real w2, real w3, real d, real k) {
 		reset();
-		i(ii);
+		id(ii);
 		wheels(w0, w1, w2, w3);
 		dribble_speed(d);
 		kick_speed(k);
@@ -36,7 +36,7 @@ namespace Inteligencia {
 		for(int i=0; i<4; i++) _wheel_speed[i] = 0.;
 		_kick_speed = 0.;
 		_dribble_speed = 0.;
-		_i = -1;
+		_id = -1;
 		_old = false;
 		_force_kick = false;
 		_force_dribble = false;
@@ -48,8 +48,8 @@ namespace Inteligencia {
 	
 	//methods:
 	//setters:
-	void Command::i(int ii) {
-		_i=ii;
+	void Command::id(int i) {
+		_id = i;
 	}
 
 	void Command::kick_speed(real speed) {
@@ -73,8 +73,8 @@ namespace Inteligencia {
 	}
 
 	//getters:
-	int Command::i() {
-		return _i;
+	int Command::id() {
+		return _id;
 	}
 	real Command::kick_speed() {
 		return _kick_speed;

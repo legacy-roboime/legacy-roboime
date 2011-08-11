@@ -11,7 +11,7 @@ namespace Inteligencia {
 
 	private:
 		//fields:
-		int _i, _timestamp;//TODO: implement timestamping
+		int _id, _timestamp;//TODO: implement timestamping
 		bool _force_kick, _force_dribble, _old;//TODO: implement these
 		real _wheel_speed[4], _kick_speed, _dribble_speed;//self explanatory
 		///methods:
@@ -25,14 +25,14 @@ namespace Inteligencia {
 		~Command();
 
 		//setters:
-		void i(int);
+		void id(int);
 		void kick_speed(real);
 		void dribble_speed(real);
 		void wheel_speed(real speed[4]);
 		void force_kick(bool);
 		void force_dribble(bool);
 		//getters:
-		int i();
+		int id();
 		real kick_speed();
 		real dribble_speed();
 		real* wheel_speed();

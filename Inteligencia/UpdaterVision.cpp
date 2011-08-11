@@ -58,16 +58,17 @@ namespace Inteligencia {
 					//if (ball.has_z()) ;
 					_update.push_back(new UpdateBall(ball.x(),ball.y(),ball.confidence(),t_sent,t_capture));
 				}
+				//NOTE: note de color code!!!
 				//blue robots:
 				for (int i = 0; i < detection.robots_blue_size(); i++) {
 					SSL_DetectionRobot robot = detection.robots_blue(i);
-					_update.push_back(new UpdateRobot(robot.robot_id()+1,(real)robot.x(),(real)robot.y(),
+					_update.push_back(new UpdateRobot(robot.robot_id(),(real)robot.x(),(real)robot.y(),
 						(real)robot.orientation(),robot.confidence(),t_sent,t_capture));
 				}
 				//yellow robots:
 				for (int i = 0; i < detection.robots_yellow_size(); i++) {
 					SSL_DetectionRobot robot = detection.robots_yellow(i);
-					_update.push_back(new UpdateRobot(robot.robot_id()+1,(real)robot.x(),(real)robot.y(),
+					_update.push_back(new UpdateRobot(robot.robot_id(),(real)robot.x(),(real)robot.y(),
 						(real)robot.orientation(),robot.confidence(),t_sent,t_capture));
 				}
 

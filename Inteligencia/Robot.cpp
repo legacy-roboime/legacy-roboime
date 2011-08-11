@@ -4,16 +4,14 @@
 namespace Inteligencia {
 
 	void Robot::_init(void) {
-		yellow_card(false);
-		red_card(false);
-		i(-1);
+		id(-1);
 		cc(-1);
 		x(0.0);
 		y(0.0);
 		speedx(0.0);
 		speedy(0.0);
 		angle(0.0);
-		_command = new Command(_i);
+		_command = new Command(_id);
 		_dribbler = new Dribbler();
 		_kicker = new Kicker();
 		_motor = new Motor();
@@ -28,9 +26,10 @@ namespace Inteligencia {
 		_init();
 	}
 
-	Robot::Robot(int index) {
+	Robot::Robot(int id_, int cc_) {
 		_init();
-		_i = index;
+		id(id_);
+		cc(cc_);
 	}
 
 	Robot::~Robot() {
@@ -68,28 +67,12 @@ namespace Inteligencia {
 	}
 	//setters:
 	//TODO: validation
-	void Robot::i(int i) {
-		_i = i;
+	void Robot::id(int i) {
+		_id = i;
 	}
 
 	void Robot::cc(int i) {
 		_cc = i;
-	}
-
-	void Robot::yellow_card(int i) {
-		_yellow_card = i;
-	}
-
-	void Robot::red_card(int i) {
-		_red_card = i;
-	}
-
-	void Robot::add_yellow_card() {
-		_yellow_card++;
-	}
-
-	void Robot::add_red_card() {
-		_red_card++;
 	}
 
 	void Robot::x(real d) {
@@ -179,16 +162,12 @@ namespace Inteligencia {
 		_command->dribble(speed);
 	}
 
-	int Robot::i() {
-		return _i;
+	int Robot::id() {
+		return _id;
 	}
 
-	int Robot::yellow_card() {
-		return _yellow_card;
-	}
-
-	int Robot::red_card() {
-		return _red_card;
+	int Robot::cc() {
+		return _cc;
 	}
 
 	real Robot::x() {
@@ -218,7 +197,7 @@ namespace Inteligencia {
 
 	void Robot::command(Command* c) {
 		_command = c;
-		c->i(i());
+		c->id(id());
 	}
 
 	void Robot::command(real* s) {
@@ -243,6 +222,6 @@ namespace Inteligencia {
 
 	void Robot::new_command() {
 		delete _command;
-		_command = new Command(i(),0.,0.,0.,0.,0.,0.);
+		_command = new Command(id(),0.,0.,0.,0.,0.,0.);
 	}
 }

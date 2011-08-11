@@ -24,7 +24,7 @@ namespace Inteligencia {
 	CommanderTX::~CommanderTX() {}
 
 	void CommanderTX::add(Robot* r) {
-		int i = r->i();
+		int i = r->id();
 		if(i<5) {
 			if(_robot[i]!=0) delete _robot[i];
 			_robot[i] = r;

@@ -90,8 +90,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="4"
 			CharacterSet="2"
 			ManagedExtensions="0"
@@ -115,7 +115,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Comunicacao;..\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
+				AdditionalIncludeDirectories="..\Comunicacao;..\Simulation;..\include;..\include\Qt\4.7.3;..\include\Qt\4.7.3\QtCore;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -221,8 +221,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="4"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -247,7 +247,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\Comunicacao;..\include;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
+				AdditionalIncludeDirectories="..\Comunicacao;..\Simulation;..\include;..\include\Qt\4.7.3;..\include\Qt\4.7.3\QtCore;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Cooking\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Foundation\include\win&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\Physics\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\SDKs\PhysXLoader\include&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Graphics\include\win32&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Tools\NxuStream2&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src&quot;;&quot;..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\win&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

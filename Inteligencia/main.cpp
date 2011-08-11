@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 	cout << "Modulo Inteligencia" << endl;
 
 	Stage* sta = new Stage();
-	Robot* rob = new Robot(4);
+	Robot* rob = new Robot(4, 3);
 	Commander* com = new CommanderTX();
 	Updater* upd = new UpdaterVision();
 	com->add(rob);

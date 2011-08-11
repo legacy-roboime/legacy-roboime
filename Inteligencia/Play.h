@@ -11,39 +11,25 @@ namespace Inteligencia {
 
 	class Play {
 
-	private:
-		//static fields:
-		static list<size_t> __i;//internal use for internal index
-
-		//fields:
-		size_t _i;
-
 	protected:
 		Play(void);//must always be called on the constructor
 
-		//static fields:
-		static Stage __stage;
-		static list<Play*> _play;
-
 		//fields:	
-		Stage _stage;
-		int _steps;
+		Stage* _stage;
+		Team* _team;
 		bool _active;
-		string _name;
 
 		//methods:
 		void _take_step();
 		void _init();
 
 	public:
-		Play(string name);
-		Play(Stage stage);
+		Play(Team*,Stage*);
 		~Play(void);
 
 		//methods:
-		void change_stage(Stage stage);
-		void set_global_stage(void);
-		void take_step(void);
+		void stage(Stage*);
+		void step(void);
 
 	};
 }
