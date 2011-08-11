@@ -15,6 +15,7 @@ void Simulation::buildModelBall(int indexScene){
 	ball.ball->setMaxAngularVelocity(0.0001);
 	//0.031
 	ball.ball->setMass(0.000001); //PLUGIN TAH COM PROBLEMA XML ERRADO 
+	ball.initialPose = ball.ball->getGlobalPose();
 	ball.indexScene = indexScene;
 	Simulation::allBalls.balls.push_back(ball);
 }
@@ -24,4 +25,8 @@ void NxBall::cloneBall(int indexNewScene){
 	ball.ball = Simulation::cloneActor(this->ball, indexNewScene);
 	ball.indexScene = indexNewScene;
 	Simulation::allBalls.balls.push_back(ball);
+}
+
+void NxBall::resetToInitialPose(){
+	this->ball->setGlobalPose(this->initialPose);
 }

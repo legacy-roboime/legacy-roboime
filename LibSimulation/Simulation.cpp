@@ -1396,7 +1396,7 @@ bool Simulation::initSimulation()
 		Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
 	}
 
-	//Simulation::cloneScene(Simulation::gBaseScene);
+	Simulation::cloneScene(Simulation::gBaseScene);
 
 	//Build Scene
 	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);
@@ -1416,6 +1416,14 @@ bool Simulation::initSimulation()
 	defaultMaterial2->setRestitution(0.5f);
 	defaultMaterial2->setStaticFriction(0.3f);
 	defaultMaterial2->setDynamicFriction(0.3f);
+
+	Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
+
+	Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->putToSleep();
+	NxArray<NxRobot*> robots = Simulation::allRobots.getRobotsByScene(Simulation::gBaseScene);
+	for(int i=0; i<robots.size(); i++){
+		robots[i]->putToSleep();
+	}
 
 	// Initialize physics scene and start the application main loop if scene was created
 	return init; 

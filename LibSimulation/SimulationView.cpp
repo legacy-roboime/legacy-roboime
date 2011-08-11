@@ -585,9 +585,9 @@ void SimulationView::RenderSimulationCallback()
 		{
 			//Render
 			//glPushMatrix();
-			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
+			/*const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
 			gDebugRenderer.renderData(*dbgRenderable);
-			glEnable(GL_LIGHTING);
+			glEnable(GL_LIGHTING);*/
 			//glPopMatrix();
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
@@ -596,7 +596,7 @@ void SimulationView::RenderSimulationCallback()
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
 				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
-				//DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
+				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
 			}
 		}
 
@@ -861,65 +861,9 @@ void SimulationView::mainLoop(int argc, char **argv)
 	glLightfv(GL_LIGHT0, GL_POSITION, Position);
 	glEnable(GL_LIGHT0);
 
-	bool init = Simulation::InitNx();
-	CSL_Scene();
 	glutFullScreen();
 
-	if(Simulation::gScenes[0] != NULL)
-	{
-		Simulation::buildModelRobot( 4, Simulation::gBaseScene, 1 );
-		Simulation::buildModelField( Simulation::gBaseScene );
-		Simulation::buildModelBall( Simulation::gBaseScene );
-	}
-
-	//Init speeds/torques to calc omni
-	for(int k=0; k<Simulation::nbExistScenes; k++){ 
-		std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
-		std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
-		std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
-		NxAllRobots* allRobots = &Simulation::allRobots;
-		for(int i=0; i<=allRobots->getBiggestIndexRobot(); i++)
-		{
-			NxRobot* nxRobot = allRobots->getRobotByIdScene(i, k);
-			NxReal* wheels;
-			if(nxRobot)
-			{
-				int nbWheels = nxRobot->getNbWheels();
-				wheels = new NxReal[nbWheels];
-				for(int j=0; j<nbWheels; j++)
-				{
-					wheels[j]=0;
-				}
-			}
-			lastWheelSpeedsArray.push_back(wheels);
-			lastDesiredWheelSpeedsArray.push_back(wheels);
-			lastWheelTorquesArray.push_back(wheels);
-		}
-		Simulation::lastWheelSpeeds.push_back(lastWheelSpeedsArray);
-		Simulation::lastDesiredWheelSpeeds.push_back(lastDesiredWheelSpeedsArray);
-		Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
-	}
-
-	//Simulation::cloneScene(Simulation::gBaseScene);
-
-	//Build Scene
-	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);
-	defaultMaterial0->setRestitution(0.5f);
-	defaultMaterial0->setStaticFriction(0.3f);
-	defaultMaterial0->setDynamicFriction(0.3f);
-
-	NxMaterial *defaultMaterial1 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(1);
-	//NxReal real2 = defaultMaterial1->getRestitution();
-	//NxReal real = defaultMaterial1->getStaticFriction();
-	//NxReal real1 = defaultMaterial1->getDynamicFriction();
-	defaultMaterial1->setRestitution(0.5f);
-	defaultMaterial1->setStaticFriction(0.3f);
-	defaultMaterial1->setDynamicFriction(0.3f);
-
-	NxMaterial *defaultMaterial2 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(2);
-	defaultMaterial2->setRestitution(0.5f);
-	defaultMaterial2->setStaticFriction(0.3f);
-	defaultMaterial2->setDynamicFriction(0.3f);
+	bool init = Simulation::initSimulation();
 
 	// Initialize physics scene and start the application main loop if scene was created
 	if (init)
@@ -984,65 +928,9 @@ void SimulationView::mainSimulationLoop(int argc, char **argv)
 	glLightfv(GL_LIGHT0, GL_POSITION, Position);
 	glEnable(GL_LIGHT0);
 
-	bool init = Simulation::InitNx();
-	CSL_Scene();
 	glutFullScreen();
 
-	if(Simulation::gScenes[0] != NULL)
-	{
-		Simulation::buildModelRobot( 4, Simulation::gBaseScene, 1 );
-		Simulation::buildModelField( Simulation::gBaseScene );
-		Simulation::buildModelBall( Simulation::gBaseScene );
-	}
-
-	//Init speeds/torques to calc omni
-	for(int k=0; k<Simulation::nbExistScenes; k++){ 
-		std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
-		std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
-		std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
-		NxAllRobots* allRobots = &Simulation::allRobots;
-		for(int i=0; i<=allRobots->getBiggestIndexRobot(); i++)
-		{
-			NxRobot* nxRobot = allRobots->getRobotByIdScene(i, k);
-			NxReal* wheels;
-			if(nxRobot)
-			{
-				int nbWheels = nxRobot->getNbWheels();
-				wheels = new NxReal[nbWheels];
-				for(int j=0; j<nbWheels; j++)
-				{
-					wheels[j]=0;
-				}
-			}
-			lastWheelSpeedsArray.push_back(wheels);
-			lastDesiredWheelSpeedsArray.push_back(wheels);
-			lastWheelTorquesArray.push_back(wheels);
-		}
-		Simulation::lastWheelSpeeds.push_back(lastWheelSpeedsArray);
-		Simulation::lastDesiredWheelSpeeds.push_back(lastDesiredWheelSpeedsArray);
-		Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
-	}
-
-	//Simulation::cloneScene(Simulation::gBaseScene);
-
-	//Build Scene
-	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);
-	defaultMaterial0->setRestitution(0.5f);
-	defaultMaterial0->setStaticFriction(0.3f);
-	defaultMaterial0->setDynamicFriction(0.3f);
-
-	NxMaterial *defaultMaterial1 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(1);
-	//NxReal real2 = defaultMaterial1->getRestitution();
-	//NxReal real = defaultMaterial1->getStaticFriction();
-	//NxReal real1 = defaultMaterial1->getDynamicFriction();
-	defaultMaterial1->setRestitution(0.5f);
-	defaultMaterial1->setStaticFriction(0.3f);
-	defaultMaterial1->setDynamicFriction(0.3f);
-
-	NxMaterial *defaultMaterial2 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(2);
-	defaultMaterial2->setRestitution(0.5f);
-	defaultMaterial2->setStaticFriction(0.3f);
-	defaultMaterial2->setDynamicFriction(0.3f);
+	bool init = Simulation::initSimulation();
 
 	//Real advance of time/simulate
 	TimePosix::gettimeofday(&Simulation::timeLastSimulate,NULL);
