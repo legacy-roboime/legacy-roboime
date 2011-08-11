@@ -22,14 +22,16 @@ int main(int argc, char* argv[]) {
 	Thread* udpServerThread = new UDPServerThread((UDPServer*)udpServerSimInt);
 	udpServerThread->start();
 
-	Thread* simpleThread = new SimpleThread(SimulationView::mainLoop, argc, argv);
+	/*Thread* simpleThread = new SimpleThread(SimulationView::mainLoop, argc, argv);
 	simpleThread->start();
 
 
 	while(true) {
 		Simulation::simulate(0);
 		Sleep(1000/60);
-	}
+	}*/
+
+	SimulationView::mainSimulationLoop(argc, argv);
 
 	return app.exec();
 }

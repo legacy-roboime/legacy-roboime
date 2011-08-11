@@ -88,6 +88,21 @@ private:
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
 	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
 
+	//setters
+	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);
+	static void setBallGlobalPos(NxVec3 pos, int indexScene);
+	static void setRobotLinearVelocity(NxVec3 linVel, int indexScene, int indexRobot);
+	static void setRobotAngularVelocity(NxVec3 angVel, int indexScene, int indexRobot);
+	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
+	static void setAngVelocityDribbler(NxReal velocityX, int indexRobot, int indexScene);
+
+	//getters
+	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
+	static NxVec3 getBallGlobalPos( int indexScene );
+	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
+	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
+	static NxVec3 getFieldExtents(int indexScene);
+
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
 	static NxActor* getActorByLabel(int indexScene, string label);
@@ -125,21 +140,6 @@ public:
 	static void simulate( int indexScene, float dt , int maxStepIter );
 	static void simVisionRun();
 	static bool initSimulation();
-
-	//setters
-	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);
-	static void setBallGlobalPos(NxVec3 pos, int indexScene);
-	static void setRobotLinearVelocity(NxVec3 linVel, int indexScene, int indexRobot);
-	static void setRobotAngularVelocity(NxVec3 angVel, int indexScene, int indexRobot);
-	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
-	static void setAngVelocityDribbler(NxReal velocityX, int indexRobot, int indexScene);
-
-	//getters
-	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
-	static NxVec3 getBallGlobalPos( int indexScene );
-	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
-	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
-	static NxVec3 getFieldExtents(int indexScene);
 
 	//controlers
 	static void controlDribbler( float dribblerSpeed, int indexRobot, int indexScene );

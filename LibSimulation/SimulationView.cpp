@@ -187,7 +187,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 		//case '-':	break;
 	case 'e':
 		{
-			Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(5000, 3000, 0, 0);
+			Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
 		} 
 		break;
 
@@ -227,8 +227,13 @@ void SimulationView::appKey(unsigned char key, bool down)
 
 	case 'h':
 		{
-			NxActor* actorDribbler = Simulation::getActorDribbler(0, 4);
-			actorDribbler->addLocalTorque(NxVec3(-10,0,0));
+			NxActor* actor = Simulation::getActorBall(0);
+			if(actor != NULL) 
+			{
+				actor->addForce(NxVec3(-0.01,0,0));
+				//actor->setLinearVelocity(NxVec3(1,0,0));
+				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
+			}
 		}
 		break;
 
@@ -239,21 +244,10 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//{
 			//	actor->setGlobalPosition(NxVec3(0, 0, 0));
 			//}
-			NxActor* actor = Simulation::getActorBall(0);
-			if(actor != NULL) 
-			{
-				actor->addForce(NxVec3(-0.016,0,0));
-				//actor->setLinearVelocity(NxVec3(1,0,0));
-				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
-			}
-			//udpServerThread->stop();
-		}
-		break;
 
-	case 'i':
-		{
-			NxActor* actor = Simulation::getActorBall(0);
-			if(actor != NULL) actor->addForce(NxVec3(0,0.016,0));
+			//udpServerThread->stop();
+			NxActor* actorDribbler = Simulation::getActorDribbler(0, 4);
+			actorDribbler->addLocalTorque(NxVec3(-10,0,0));
 		}
 		break;
 
@@ -261,18 +255,9 @@ void SimulationView::appKey(unsigned char key, bool down)
 		{
 			//NxActor* actorDribbler = getActorDribbler(0, 1);
 			//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
-			//Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->resetToInitialPose();
-			//Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->setGlobalPosition(NxVec3(0,0,20));
-			//Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->putToSleep();
-			NxActor* actor = Simulation::getActorBall(0);
-			if(actor != NULL) actor->addForce(NxVec3(0,-0.016,0));
-		}
-		break;
-
-	case 'l':
-		{
-			NxActor* actor = Simulation::getActorBall(0);
-			if(actor != NULL) actor->addForce(NxVec3(0.016,0,0));
+			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->setGlobalPosition(NxVec3(0,0,20));
+			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->putToSleep();
 		}
 		break;
 
@@ -611,7 +596,7 @@ void SimulationView::RenderSimulationCallback()
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
 				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
-				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
+				//DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
 			}
 		}
 
