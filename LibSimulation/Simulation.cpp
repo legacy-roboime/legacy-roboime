@@ -1396,7 +1396,7 @@ bool Simulation::initSimulation()
 		Simulation::lastWheelTorques.push_back(lastWheelTorquesArray);
 	}
 
-	Simulation::cloneScene(Simulation::gBaseScene);
+	//Simulation::cloneScene(Simulation::gBaseScene);
 
 	//Build Scene
 	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);
