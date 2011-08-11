@@ -139,8 +139,8 @@ void UDPServerSimInt::parsing()
 			Simulation::controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 		}
 
-		QMutexLocker locker(&Simulation::mutex);
-		Simulation::simulate();
+		//QMutexLocker locker(&Simulation::mutex);
+		//Simulation::simulate();
 
 		out << "ACK 4\n"; // confirmando pacote 4
 

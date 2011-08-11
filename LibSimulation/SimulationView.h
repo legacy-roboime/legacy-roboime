@@ -26,6 +26,7 @@ private:
 	static int gMainHandle;
 	static NxVec3 gEye;
 	static NxVec3 Dir;
+	static NxVec3 Up;
 	static NxVec3 N;
 	static GLdouble zNear;
 	static GLdouble zFar;

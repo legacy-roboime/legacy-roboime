@@ -1,16 +1,19 @@
 #pragma once
 #include "Inteligencia.h"
 #include <deque>
+#include <QThread>
+#include <QMutex>
 #include "Updater.h"
-#include "UDPMulticastReceiverThread.h"
 
 namespace Inteligencia {
 
-	class UpdaterReferee : public Updater {
+	class UpdaterReferee : public Updater, public QThread {
 	private:
-		static UDPMulticastReceiver* _udpMulticastReceiver;
-		static UDPMulticastReceiverThread* _udpMulticastReceiverThread;
 		deque<string> _queue;
+		QMutex _mutex;
+
+		//methods:
+		void run();
 
 	public:
 		UpdaterReferee();
@@ -21,6 +24,6 @@ namespace Inteligencia {
 		void start();
 		void stop();
 		void prepare();
-
+		void receive();
 	};
 }

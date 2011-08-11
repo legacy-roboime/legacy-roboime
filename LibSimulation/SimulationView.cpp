@@ -1,8 +1,9 @@
 #include "SimulationView.h"
 
-NxVec3 SimulationView::gEye = NxVec3(0, 0, 4100.0f);
-NxVec3 SimulationView::Dir = NxVec3(0, 0, -1); 
+NxVec3 SimulationView::gEye = NxVec3(0, -4000, 1700.0f);
+NxVec3 SimulationView::Dir = NxVec3(0, 1, -0.5); 
 NxVec3 SimulationView::N = NxVec3();
+NxVec3 SimulationView::Up = NxVec3();
 int SimulationView::mx = 0;
 int SimulationView::my = 0;
 int SimulationView::gMainHandle = 0;
@@ -234,6 +235,10 @@ void SimulationView::appKey(unsigned char key, bool down)
 				//actor->setLinearVelocity(NxVec3(1,0,0));
 				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
 			}
+
+			NxBall ball = Simulation::allBalls.getBallByScene(0);
+			NxVec3 teste = ball.ball->getLinearVelocity();
+			printf("%f\n", teste.magnitude());
 		}
 		break;
 
@@ -418,17 +423,16 @@ void SimulationView::MotionCallback(int x, int y)
 	int dy =  my - y;
 	
 	Dir.normalize();
-	N.cross(Dir,NxVec3(0,1,0));
+	N.cross(Dir,NxVec3(0,0,1));
 
-	NxQuat qx(NxPiF32 * dx * 20/ 180.0f, NxVec3(0,1,0));
+	NxQuat qx(NxPiF32 * dx * 20/ 180.0f, NxVec3(0,0,1));
 	qx.rotate(Dir);
-
-	//float teta = NxPiF32 * dx * 2/ 180.0f;
-	//NxMat33 rotMat = NxMat33(NxVec3(NxMath::cos(teta),-NxMath::sin(teta),0),NxVec3(NxMath::sin(teta),NxMath::cos(teta),0),NxVec3(0,0,1));
-	//Dir = rotMat*Dir;
+	//NxFindRotationMatrix
 
 	NxQuat qy(NxPiF32 * dy * 20/ 180.0f, N);
 	qy.rotate(Dir);
+
+	Up.cross(N, Dir);
 
 	mx = x;
 	my = y;
@@ -633,7 +637,7 @@ void SimulationView::setupCamera()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT), zNear, zFar);
-	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + Dir.x, gEye.y + Dir.y, gEye.z + Dir.z, 0.0f, 1.0f, 0.0f);
+	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + Dir.x, gEye.y + Dir.y, gEye.z + Dir.z, Up.x, Up.y, Up.z);
 
 	// Setup modelview matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -844,6 +848,7 @@ void SimulationView::mainLoop(int argc, char **argv)
 	glDepthFunc(GL_LEQUAL);
 	glClearDepth(zFar);
 	glDepthRange(zNear, zFar);
+
 	glEnable(GL_COLOR_MATERIAL);
 #if !defined(__PPCGEKKO__)
 	glEnable(GL_CULL_FACE);
