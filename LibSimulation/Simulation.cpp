@@ -291,6 +291,8 @@ void Simulation::simVisionRun(){
 
 void Simulation::simulate()
 {
+	QMutexLocker locker(&mutex);
+
 	for (NxU32 i = 0; i < nbExistScenes; ++i)
 	{
 		if (gScenes[i] && !gPause)
@@ -351,6 +353,8 @@ void Simulation::simulate(int indexScene)
 
 void Simulation::simulate(int indexScene, float dt)
 {
+	QMutexLocker locker(&mutex);
+
 	if (gScenes[indexScene] && !gPause)
 	{
 		NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexScene);
@@ -376,6 +380,8 @@ void Simulation::simulate(int indexScene, float dt)
 
 void Simulation::simulate(int indexScene, float dt, int maxStepIter )
 {
+	QMutexLocker locker(&mutex);
+
 	if (gScenes[indexScene] && !gPause)
 	{
 		NxArray<NxRobot*> robots = allRobots.getRobotsByScene(indexScene);
