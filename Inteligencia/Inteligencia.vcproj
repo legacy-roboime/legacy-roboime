@@ -380,6 +380,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\UpdateReferee.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\UpdateRobot.cpp"
 					>
 				</File>
@@ -691,6 +695,10 @@
 				</File>
 				<File
 					RelativePath=".\Updater.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UpdateReferee.h"
 					>
 				</File>
 				<File

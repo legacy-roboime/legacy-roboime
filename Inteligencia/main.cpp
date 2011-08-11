@@ -10,6 +10,7 @@
 #include "CommanderSIM.h"
 #include "CommanderTX.h"
 #include "UpdaterSIM.h"
+#include "UpdaterReferee.h"
 #include "UpdaterVision.h"
 
 using namespace Inteligencia;
@@ -24,6 +25,7 @@ int main(int argc, char *argv[]) {
 	Robot* rob = new Robot(4, 3);
 	Commander* com = new CommanderTX();
 	Updater* upd = new UpdaterVision();
+	Updater* updReferee = new UpdaterReferee();
 	com->add(rob);
 	upd->add(rob);
 
@@ -32,6 +34,7 @@ int main(int argc, char *argv[]) {
 	Tactic* test = new Controller(1, rob, sta, 10);
 	while(true) {
 		upd->step();
+		updReferee->step();
 		test->step();
 		com->step();
 		Sleep(1000/60);
