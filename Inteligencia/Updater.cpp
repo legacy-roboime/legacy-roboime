@@ -18,9 +18,12 @@ namespace Inteligencia {
 
 	void Updater::apply() {
 		while(!_update.empty()) {
+			//apply everythin approach:
 			_update.front()->apply(this);
-			//TODO: implement logging
 			_update.pop_front();
+			//apply latest approach:
+			//_update.back()->apply(this);
+			//_update.clear();
 		}
 	}
 

@@ -15,7 +15,7 @@ namespace Inteligencia {
 		_dribbler = new Dribbler();
 		_kicker = new Kicker();
 		_motor = new Motor();
-		_body = new Body(150, 90);
+		_body = new Body(150.0, 90.0);
 		_wheel[0] = new Wheel(-1.02260);
 		_wheel[1] = new Wheel( 0.96706);
 		_wheel[2] = new Wheel( 2.32842);

@@ -24,6 +24,8 @@ namespace Inteligencia {
 
 	void Commander::prepare() {}
 
+	void Commander::send() {}
+
 	void Commander::step() {
 		prepare();
 		send();

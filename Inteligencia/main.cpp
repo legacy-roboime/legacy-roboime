@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
 	//system("pause");
 	//Skill* test = new Loops::Circle(rob, -1200, 1500, 600, 16);
-	Tactic* test = new Controller(1, rob, sta, 10);
+	Tactic* test = new Controller(1, rob, sta, 20);
 	while(true) {
 		upd->step();
 		updReferee->step();

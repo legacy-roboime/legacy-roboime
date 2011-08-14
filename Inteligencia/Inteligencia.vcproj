@@ -352,18 +352,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commander.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CommanderSIM.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\CommanderTX.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\CXBOXController.cpp"
 					>
 				</File>
@@ -376,10 +364,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Updater.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\UpdateReferee.cpp"
 					>
 				</File>
@@ -387,22 +371,46 @@
 					RelativePath=".\UpdateRobot.cpp"
 					>
 				</File>
-				<File
-					RelativePath=".\UpdaterReferee.cpp"
+				<Filter
+					Name="Commanders"
 					>
-				</File>
-				<File
-					RelativePath=".\UpdaterSIM.cpp"
+					<File
+						RelativePath=".\Commander.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CommanderSIM.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\CommanderTX.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Updaters"
 					>
-				</File>
-				<File
-					RelativePath=".\UpdaterSIMi.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UpdaterVision.cpp"
-					>
-				</File>
+					<File
+						RelativePath=".\Updater.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UpdaterReferee.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UpdaterSIM.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UpdaterSIMi.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\UpdaterVision.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Base"
@@ -666,22 +674,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commander.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CommanderSIM.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CommanderSIMi.h"
-					>
-				</File>
-				<File
-					RelativePath=".\CommanderTX.h"
-					>
-				</File>
-				<File
 					RelativePath=".\CXBOXController.h"
 					>
 				</File>
@@ -694,10 +686,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Updater.h"
-					>
-				</File>
-				<File
 					RelativePath=".\UpdateReferee.h"
 					>
 				</File>
@@ -705,22 +693,50 @@
 					RelativePath=".\UpdateRobot.h"
 					>
 				</File>
-				<File
-					RelativePath=".\UpdaterReferee.h"
+				<Filter
+					Name="Commanders"
 					>
-				</File>
-				<File
-					RelativePath=".\UpdaterSIM.h"
+					<File
+						RelativePath=".\Commander.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CommanderSIM.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CommanderSIMi.h"
+						>
+					</File>
+					<File
+						RelativePath=".\CommanderTX.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Updaters"
 					>
-				</File>
-				<File
-					RelativePath=".\UpdaterSIMi.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UpdaterVision.h"
-					>
-				</File>
+					<File
+						RelativePath=".\Updater.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UpdaterReferee.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UpdaterSIM.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UpdaterSIMi.h"
+						>
+					</File>
+					<File
+						RelativePath=".\UpdaterVision.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<File

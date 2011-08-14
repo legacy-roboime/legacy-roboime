@@ -12,32 +12,29 @@ namespace Inteligencia {
 	class UpdaterReferee : public Updater, public QThread {
 	private:
 		//SSL CLIENT
-		static const int MaxDataGramSize = 6; //Each UDP packet contains 6 Bytes
-		char * in_buffer;
+		static const int MaxDataGramSize = 6;//Each UDP packet contains 6 Bytes
+		char* in_buffer;
 		Net::UDP mc; // multicast client
 		QMutex mutex;
 		int _port;
 		string _net_address;
 		string _net_interface;
-
 		//UpdaterReferee
-		deque<char *> _queue;
+		deque<char*> _queue;
 		bool _stop;
 		//methods:
+		bool open(bool blocking=false);
+		void close();
 		void run();
+		bool _receive();
+
 	public:
-		//UpdaterReferee
-		UpdaterReferee();
-		UpdaterReferee(string address, unsigned short port);
+		UpdaterReferee(string address="224.5.23.1", int port=10001);
 		~UpdaterReferee();
 		//methods:
 		void stop();
 		void prepare();
 		void receive();
-		
-		//SSL CLIENT
-		bool open(bool blocking=false);
-		void close();
-		bool receive2();
+
 	};
 }

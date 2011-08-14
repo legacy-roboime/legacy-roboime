@@ -6,8 +6,11 @@ namespace Inteligencia {
 		reset();
 		id(command->id());
 		wheel_speed(command->wheel_speed());
+		kick_speed(command->kick_speed());
+		dribble_speed(command->dribble_speed());
 		force_kick(command->force_kick());
 		force_dribble(command->force_dribble());
+		timestamp(command->timestamp());
 	}
 
 	Command::Command(int ii, real speed[4], real d, real k) {
@@ -72,6 +75,14 @@ namespace Inteligencia {
 		_force_dribble = b;
 	}
 
+	void Command::timestamp_now() {
+		//TODO: implement timestamping here
+	}
+
+	void Command::timestamp(double t) {
+		_timestamp = t;
+	}
+
 	//getters:
 	int Command::id() {
 		return _id;
@@ -95,6 +106,10 @@ namespace Inteligencia {
 
 	bool Command::force_dribble() {
 		return _force_dribble;
+	}
+
+	double Command::timestamp() {
+		return _timestamp;
 	}
 
 	//useful shorthands:

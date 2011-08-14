@@ -1,12 +1,12 @@
 #include "UpdaterVision.h"
 #include <QMutexLocker>
-
 #include "Update.h"
 #include "UpdateBall.h"
 #include "UpdateRobot.h"
 
 
 using namespace std;
+
 namespace Inteligencia {
 
 	UpdaterVision::UpdaterVision() : Updater() {
@@ -24,8 +24,10 @@ namespace Inteligencia {
 		SSL_WrapperPacket packet;
 		while(!_stop) {
 			if(_client.receive(packet)) {
-				QMutexLocker locker(&_mutex);
+				//QMutexLocker locker(&_mutex);
+				_mutex.lock();
 				_packet.push_back(packet);
+				_mutex.unlock();
 			}
 		}
 	}
@@ -38,9 +40,15 @@ namespace Inteligencia {
 	}
 
 	void UpdaterVision::prepare() {
-		QMutexLocker locker(&_mutex);
+		//QMutexLocker locker(&_mutex);
+		bool do_loop;
+		_mutex.lock();
+		do_loop = !_packet.empty(); 
+		_mutex.unlock();
 		while(!_packet.empty()){
+			_mutex.lock();
 			SSL_WrapperPacket packet = _packet.front();
+			_mutex.unlock();
 			if (packet.has_detection()) {
 				SSL_DetectionFrame detection = packet.detection();
 				//TODO: implement UpdateStage
@@ -74,6 +82,9 @@ namespace Inteligencia {
 
 			}
 			_packet.pop_front();
+			_mutex.lock();
+			do_loop = !_packet.empty(); 
+			_mutex.unlock();
 		}
 	}
 }

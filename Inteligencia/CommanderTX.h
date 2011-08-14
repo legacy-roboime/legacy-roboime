@@ -1,27 +1,37 @@
 #pragma once
 #include "Inteligencia.h"
 #include <deque>
+#include <QThread>
+#include <QMutex>
 #include "Commander.h"
-#include "UpdaterSIM.h"
-#include "UDPClientThread.h"
+#include "netraw.h"
 
 namespace Inteligencia {
 
-	class CommanderTX : public Commander {
-		friend class UpdaterSIM;
+	class CommanderTX : public Commander, public QThread {
 		
 	private:
-		static UDPClientThread* _udpclient;//Use the same server as UpdaterSIM when possible
+		Net::UDP mc; // multicast server
+		QMutex mutex;
+		int _port;
+		string _net_address;
+		string _net_interface;
 		deque<string> _queue;
+		bool _stop;
+		//methods:
+		void run();
+		bool open();
+		void close();
+		bool send(string buffer);
 
 	public:
-		CommanderTX();
-		CommanderTX(string address, unsigned short port);//this will change static udpclient
+		CommanderTX(string address="127.0.0.1", int port=9050);
 		~CommanderTX();
-
 		//methods:
 		void add(Robot*);
+		void stop();
 		void prepare();
+		void step();
 		void send();
 	};
 }

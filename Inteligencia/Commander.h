@@ -27,7 +27,7 @@ namespace Inteligencia {
 		virtual void add(Robot*);
 		virtual void del(Robot*);
 		virtual void prepare();
-		virtual void send() = 0;
+		virtual void send();
 		virtual void step();
 
 	};

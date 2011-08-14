@@ -20,6 +20,7 @@ namespace Inteligencia {
 		UpdateRobot(int cc, real x, real y, real angle, float confidence, double t_sent, double t_capture);
 		~UpdateRobot();
 		void apply(Updater*);//go through the updaters list and apply the update
+		string to_string();
 
 	};
 }

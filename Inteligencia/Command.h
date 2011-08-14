@@ -11,14 +11,15 @@ namespace Inteligencia {
 
 	private:
 		//fields:
-		int _id, _timestamp;//TODO: implement timestamping
+		int _id;
+		double _timestamp;//TODO: implement timestamping
 		bool _force_kick, _force_dribble, _old;//TODO: implement these
 		real _wheel_speed[4], _kick_speed, _dribble_speed;//self explanatory
 		///methods:
 		void _init();
 
 	public:
-		Command(Command* command);//FIXME: is this really useful?
+		Command(Command* command);//useful for threading the parser
 		Command(int, real*, real dribble=0.0, real kick=0.0);//index, 4wheels, dribbler, kicker
 		Command(int, real w0=0.0, real w1=0.0, real w2=0.0, real w3=0.0, real dribble=0.0, real kick=0.0);//index, wheel1, ..., wheel4, dribbler, kicker
 		Command();//index will be -1 if not set, and thus won't be dispatched
@@ -31,6 +32,8 @@ namespace Inteligencia {
 		void wheel_speed(real speed[4]);
 		void force_kick(bool);
 		void force_dribble(bool);
+		void timestamp_now();
+		void timestamp(double);
 		//getters:
 		int id();
 		real kick_speed();
@@ -38,6 +41,7 @@ namespace Inteligencia {
 		real* wheel_speed();
 		bool force_kick();
 		bool force_dribble();
+		double timestamp();
 		//useful shrothands:
 		void wheels(real speed[4]);//set the 4 wheels speed
 		void wheels(real, real, real, real);//set the 4 wheels speed

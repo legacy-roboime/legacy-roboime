@@ -3,7 +3,7 @@
 #include <deque>
 #include "Commander.h"
 #include "UpdaterSIM.h"
-#include "UDPClientThread.h"
+#include "UDPClientThread.h"//migrate to netraw
 
 namespace Inteligencia {
 
