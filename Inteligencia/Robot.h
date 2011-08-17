@@ -1,6 +1,7 @@
 #pragma once
 #include "Inteligencia.h"
 #include <string>
+#include <QMutex>
 #include "Body.h"
 #include "Component.h"
 #include "Dribbler.h"
@@ -19,6 +20,8 @@ namespace Inteligencia {
 		friend class UpdateRobot;
 
 	private:
+		QMutex _mutex;
+
 		//components:
 		Dribbler* _dribbler;//dribbler component
 		Kicker* _kicker;//kicker component

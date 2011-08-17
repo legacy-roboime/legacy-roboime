@@ -14,7 +14,7 @@ UpdateReferee::UpdateReferee(char cmd, unsigned char cmd_counter, unsigned char 
 UpdateReferee::~UpdateReferee(void) {}
 
 void UpdateReferee::apply(Updater* u) {
-	cout << to_string() << endl;
+	//cout << to_string() << endl;
 	//TODO: IMPLEMENT APPLY
 	/*for(size_t k=u->robots(); k>0; k--) {
 		if(u->robot(k-1)->cc()==_cc) {

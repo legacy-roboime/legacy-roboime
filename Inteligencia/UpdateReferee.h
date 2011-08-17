@@ -17,7 +17,7 @@ namespace Inteligencia {
 	public:
 		UpdateReferee(char cmd, unsigned char cmd_counter, unsigned char goals_blue, unsigned char goals_yellow, int time_remaining);
 		~UpdateReferee();
-		void apply(Updater*);			//go through the updaters list and apply the update
+		void apply(Updater*);			// go through the updaters list and apply the update
 		string to_string();
 	};
 }

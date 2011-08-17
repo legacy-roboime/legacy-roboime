@@ -40,15 +40,15 @@ namespace Inteligencia {
 	}
 
 	void UpdaterVision::prepare() {
-		//QMutexLocker locker(&_mutex);
+		QMutexLocker locker(&_mutex);
 		bool do_loop;
-		_mutex.lock();
+		//_mutex.lock();
 		do_loop = !_packet.empty(); 
-		_mutex.unlock();
-		while(!_packet.empty()){
-			_mutex.lock();
+		//_mutex.unlock();
+		while(do_loop){
+			//_mutex.lock();
 			SSL_WrapperPacket packet = _packet.front();
-			_mutex.unlock();
+			//_mutex.unlock();
 			if (packet.has_detection()) {
 				SSL_DetectionFrame detection = packet.detection();
 				//TODO: implement UpdateStage
@@ -82,9 +82,9 @@ namespace Inteligencia {
 
 			}
 			_packet.pop_front();
-			_mutex.lock();
+			//_mutex.lock();
 			do_loop = !_packet.empty(); 
-			_mutex.unlock();
+			//_mutex.unlock();
 		}
 	}
 }

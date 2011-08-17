@@ -147,18 +147,22 @@ namespace Inteligencia {
 	}
 	
 	void Robot::kick() {
+		QMutexLocker locker(&_mutex);
 		_command->kick(_kicker->speed());
 	}
 
 	void Robot::kick(real speed) {
+		QMutexLocker locker(&_mutex);
 		_command->kick(speed);
 	}
 
 	void Robot::dribble() {
+		QMutexLocker locker(&_mutex);
 		_command->dribble(_dribbler->speed());
 	}
 
 	void Robot::dribble(real speed) {
+		QMutexLocker locker(&_mutex);
 		_command->dribble(speed);
 	}
 
@@ -196,15 +200,18 @@ namespace Inteligencia {
 	//}
 
 	void Robot::command(Command* c) {
+		QMutexLocker locker(&_mutex);
 		_command = c;
 		c->id(id());
 	}
 
 	void Robot::command(real* s) {
+		QMutexLocker locker(&_mutex);
 		_command->wheels(s);
 	}
 
 	void Robot::command(real w0, real w1, real w2, real w3) {
+		QMutexLocker locker(&_mutex);
 		_command->wheels(w0, w1, w2, w3);
 	}
 	
@@ -217,10 +224,12 @@ namespace Inteligencia {
 	//}
 
 	Command* Robot::command() {
+		QMutexLocker locker(&_mutex);
 		return _command;
 	}
 
 	void Robot::new_command() {
+		QMutexLocker locker(&_mutex);
 		delete _command;
 		_command = new Command(id(),0.,0.,0.,0.,0.,0.);
 	}
