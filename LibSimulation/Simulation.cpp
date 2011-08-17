@@ -1331,6 +1331,8 @@ void Simulation::cloneScene(int indexSceneSource){
 		gScenes[indexSceneSource]->saveToDesc(sceneDesc);
 	gScenes[Simulation::nbExistScenes] = (NxScene1*)gPhysicsSDK->createScene(sceneDesc);
 
+	std::map<int, NxScene1*> teste;
+
 	std::vector<NxReal*> lastWheelSpeedsArray = std::vector<NxReal*>();
 	std::vector<NxReal*> lastDesiredWheelSpeedsArray = std::vector<NxReal*>();
 	std::vector<NxReal*> lastWheelTorquesArray = std::vector<NxReal*>();
@@ -1403,6 +1405,8 @@ bool Simulation::initSimulation()
 	}
 
 	//Simulation::cloneScene(Simulation::gBaseScene);
+	Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 6, NxVec3(1000, 1000, 25), 0);
+	Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->getActor()->setName("Robo6");
 
 	//Build Scene
 	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);

@@ -9,6 +9,7 @@
 #include <iostream>
 //#include <time.h>
 #include <vector>
+#include <deque>
 
 // Physics code
 #undef random
@@ -132,6 +133,7 @@ public:
 	static void buildModelBall(int indexScene);
 	static void buildModelRobot(int indexRobot, int indexScene, int indexTeam);
 	static void cloneScene(int indexSceneSource);
+	static void deleteScene(int indexScene);
 
 	//advance simulation
 	static void simulate();

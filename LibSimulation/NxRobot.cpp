@@ -333,7 +333,7 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 	NxActor* kickerActor = Simulation::cloneActor(nxRobotSource->kicker.kicker,indexNewScene);
 
 	//Criar robot, vehicle base
-	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(Simulation::gScenes[Simulation::nbExistScenes], &vehicleDesc);
+	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(Simulation::gScenes[indexNewScene], &vehicleDesc);
 	//NxRobot* robot = (NxRobot*)NxRobot::createVehicle(gScenes[indexSourceScene], &vehicleDesc);
 	robot->setId(indexNewRobot);
 	robot->setIdTeam(indexNewTeam);
