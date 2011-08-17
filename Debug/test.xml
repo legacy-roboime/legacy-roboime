@@ -627,7 +627,7 @@
         <workerThreadStackSize>0</workerThreadStackSize>
         <workerThreadPriority>NX_TP_NORMAL</workerThreadPriority>
         <backgroundThreadPriority>NX_TP_NORMAL</backgroundThreadPriority>
-        <upAxis>0</upAxis>
+        <upAxis>2</upAxis>
         <subdivisionLevel>5</subdivisionLevel>
         <staticStructure>NX_PRUNING_STATIC_AABB_TREE</staticStructure>
         <dynamicStructure>NX_PRUNING_NONE</dynamicStructure>
