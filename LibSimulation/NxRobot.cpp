@@ -377,6 +377,8 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 			Simulation::lastWheelTorques[indexNewScene].push_back(wheels);
 		}
 	}
+
+
 }
 
 NxJoint* NxRobot::cloneJointRobot(NxJoint* jointSource, int indexDestScene){

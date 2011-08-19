@@ -247,7 +247,7 @@ void UDPServerSimInt::parsing()
 
 			QMutexLocker locker(&Simulation::mutex);
 			Simulation::controlDribbler( dribblerSpeed, indexRobot, indexScene );
-			Simulation::executeKicker( kickerSpeed, indexRobot, indexScene );
+			Simulation::controlKicker( kickerSpeed, indexRobot, indexScene );
 		}
 
 		out << "ACK 8\n"; // confirmando pacote 8
@@ -368,7 +368,7 @@ void UDPServerSimInt::parsing()
 
 		QMutexLocker locker(&Simulation::mutex);
 		Simulation::controlDribbler( dribblerSpeed, indexRobot, indexScene );
-		Simulation::executeKicker( kickerSpeed, indexRobot, indexScene );
+		Simulation::controlKicker( kickerSpeed, indexRobot, indexScene );
 
 		out << "ACK 12\n"; // confirmando pacote 12
 

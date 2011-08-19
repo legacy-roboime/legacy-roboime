@@ -430,7 +430,7 @@ void Simulation::controlRobot(float speedX, float speedY, float speedAng, float 
 	if(robot)
 	{
 		//Execute kicker
-		executeKicker( kickerSpeed, indexRobot, indexScene );
+		controlKicker( kickerSpeed, indexRobot, indexScene );
 
 		//Control dribbler
 		controlDribbler( dribblerSpeed, indexRobot, indexScene );
@@ -443,8 +443,8 @@ void Simulation::controlRobot(float speedX, float speedY, float speedAng, float 
 
 void Simulation::controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene)
 {
-	//Execute kicker
-	executeKicker( kickerSpeed, indexRobot, indexScene );
+	//Control kicker
+	controlKicker( kickerSpeed, indexRobot, indexScene );
 
 	//Control dribbler
 	controlDribbler( dribblerSpeed, indexRobot, indexScene );
@@ -461,26 +461,41 @@ void Simulation::controlRobotByWheels(float speedWheel1, float speedWheel2, floa
 void Simulation::controlDribbler( float dribblerSpeed, int indexRobot, int indexScene )
 {
 	//TODO: implementar o controlador
-	setAngVelocityDribbler(dribblerSpeed, indexRobot, indexScene);
+	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
+	if(robot){
+		NxActor* actorDribbler = robot->dribbler.dribbler;
+		if(actorDribbler != NULL) {
+			actorDribbler->addLocalTorque(NxVec3(0,0,-dribblerSpeed));
+		}
+	}
 }
 
-void Simulation::executeKicker( float kickerSpeed, int indexRobot, int indexScene )
+void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScene )
 {
-	NxActor* kickerActor = getActorKicker(indexScene, 4);
-	//FIXME: nao fazer nada se der NULL
-	if(kickerActor != NULL) {
-		if(kickerSpeed>0){
-			kickerActor->addForce(NxVec3(kickerSpeed,0,0));//setLinearVelocity(NxVec3(kickerSpeed/1000000,0,0));
+	//TODO: implementar o controlador
+	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
+	if(robot){
+		NxActor* kickerActor = robot->kicker.kicker;
+		NxReal angle = getAngle2DFromRobot(indexRobot, indexScene);
+		if(kickerActor != NULL) {
+			if(kickerSpeed>0){
+				float seno = sin(angle);
+				printf("%f %f\n", seno, angle);
+				NxVec3 force = NxVec3(kickerSpeed*NxMath::cos(angle), kickerSpeed*seno, 0);
+				kickerActor->addForce(force);//setLinearVelocity(NxVec3(kickerSpeed/1000000,0,0));
+			}
 		}
 	}
 }
 
 void Simulation::setAngVelocityDribbler(NxReal velocityX, int indexRobot, int indexScene)
 {
-	NxActor* actorDribbler = getActorDribbler(indexScene, 4);
-	//FIXME: nao fazer nada se der NULL
-	if(actorDribbler != NULL) {
-		actorDribbler->setAngularVelocity(NxVec3(-velocityX,0,0));
+	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
+	if(robot){
+		NxActor* actorDribbler = robot->dribbler.dribbler;
+		if(actorDribbler != NULL) {
+			actorDribbler->setAngularVelocity(NxVec3(-velocityX,0,0));
+		}
 	}
 }
 
@@ -1072,7 +1087,7 @@ NxMat33 Simulation::getRobotGlobalOrientation( int indexRobot, int indexScene )
 	//FIXME:
 	//return getActorRobot( indexScene, indexRobot )->getGlobalOrientation();
 	//FIXED?:
-	NxActor* robot = getActorRobot(indexScene, indexRobot);
+	NxActor* robot = allRobots.getRobotByIdScene(indexRobot, indexScene)->getActor();
 	return robot==NULL? NxMat33() : robot->getGlobalOrientation();
 }
 
@@ -1405,8 +1420,8 @@ bool Simulation::initSimulation()
 	}
 
 	//Simulation::cloneScene(Simulation::gBaseScene);
-	Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 6, NxVec3(1000, 1000, 25), 0);
-	Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->getActor()->setName("Robo6");
+	//Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 3, NxVec3(1000, 1000, 25), 1);
+	//Simulation::allRobots.getRobotByIdScene(6, Simulation::gBaseScene)->getActor()->setName("Robo3");
 
 	//Build Scene
 	NxMaterial *defaultMaterial0 = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(0);

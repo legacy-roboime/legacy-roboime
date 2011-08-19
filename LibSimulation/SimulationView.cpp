@@ -180,7 +180,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 	{
 	case 27:	exit(0); break;
 	case 'p':	Simulation::gPause = !Simulation::gPause; break;
-	case 'f':	
+	case 'f':	Simulation::controlDribbler(0.1, 4, 0);
 		break;
 	case 'v':	//gDebugVisualization = !gDebugVisualization; break;
 
@@ -202,8 +202,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//vel*=30.0f;
 			//CreateCube(t, &vel);
 
-			NxActor* kickerActor = Simulation::getActorKicker(0, 4);
-			kickerActor->addForce(NxVec3(0.1,0,0));
+			Simulation::controlKicker(0.1, 4, 0);
 			//kickerActor->setLinearVelocity(NxVec3(0,10,0));
 		}
 		break;
@@ -222,7 +221,8 @@ void SimulationView::appKey(unsigned char key, bool down)
 
 	case 'u':
 		{
-			Simulation::simulate();
+			//Simulation::simulate();
+			gEye = NxVec3(0, -4000, 1700.0f);
 		}
 		break;
 
@@ -589,9 +589,9 @@ void SimulationView::RenderSimulationCallback()
 		{
 			//Render
 			//glPushMatrix();
-			/*const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
+			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
 			gDebugRenderer.renderData(*dbgRenderable);
-			glEnable(GL_LIGHTING);*/
+			//glEnable(GL_LIGHTING);
 			//glPopMatrix();
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
@@ -600,7 +600,7 @@ void SimulationView::RenderSimulationCallback()
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
 				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
-				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
+				//DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
 			}
 		}
 
@@ -894,7 +894,7 @@ void SimulationView::mainSimulationLoop(int argc, char **argv)
 #endif
 	// Initialize Glut
 	//glutInit(&argc, argv);
-	//glutInitWindowSize(512, 512);
+	//glutInitWindowSize(1920, 1080);
 
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	gMainHandle = glutCreateWindow("Simulação - RobotIME");

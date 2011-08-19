@@ -145,7 +145,7 @@ public:
 
 	//controlers
 	static void controlDribbler( float dribblerSpeed, int indexRobot, int indexScene );
-	static void executeKicker( float kickerSpeed, int indexRobot, int indexScene );
+	static void controlKicker( float kickerSpeed, int indexRobot, int indexScene );
 	static void controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot );
 	static void controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
 	static void controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);

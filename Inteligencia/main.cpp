@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
 
 	Stage* sta = new Stage();
 	Robot* rob = new Robot(4, 3);
+	//Robot* robb = new Robot(3, 2);
 	Commander* com = new CommanderTX();
 	Updater* upd = new UpdaterVision();
 	Updater* updReferee = new UpdaterReferee();
@@ -32,10 +33,12 @@ int main(int argc, char *argv[]) {
 	//system("pause");
 	//Skill* test = new Loops::Circle(rob, -1200, 1500, 600, 16);
 	Tactic* test = new Controller(1, rob, sta, 20);
+	//Tactic* testb = new Controller(2, robb, sta, 20);
 	while(true) {
 		upd->step();
 		updReferee->step();
 		test->step();
+		//testb->step();
 		com->step();
 		Sleep(1000/60);
 	}
