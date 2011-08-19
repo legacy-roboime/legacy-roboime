@@ -30,3 +30,9 @@ void NxBall::cloneBall(int indexNewScene){
 void NxBall::resetToInitialPose(){
 	this->ball->setGlobalPose(this->initialPose);
 }
+
+void NxBall::putToSleep(){
+	this->ball->putToSleep();
+	this->ball->setLinearVelocity(NxVec3(0,0,0));
+	this->ball->setAngularVelocity(NxVec3(0,0,0));
+}

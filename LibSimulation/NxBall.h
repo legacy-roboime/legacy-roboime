@@ -14,4 +14,5 @@ public:
 
 	void cloneBall(int indexNewScene);
 	void resetToInitialPose();
+	void putToSleep();
 };

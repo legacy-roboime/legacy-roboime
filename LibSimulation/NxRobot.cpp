@@ -165,8 +165,10 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 	//TODO: Incluir Driblador descricao.
 	NxActor* actorDribbler = Simulation::getActorDribbler(indexScene, indexRobot);
-	actorDribbler->setMaxAngularVelocity(0.0001);
-	actorDribbler->setMass(0.0000001); //PLUGIN TAH COM PROBLEMA XML ERRADO
+	if(actorDribbler){
+		actorDribbler->setMaxAngularVelocity(0.0001);
+		actorDribbler->setMass(0.0000001); //PLUGIN TAH COM PROBLEMA XML ERRADO
+	}
 
 	/*NxVehicleDesc vehicleDesc;
 	NxConvexShapeDesc robotShape[1];
@@ -187,8 +189,10 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 	//TODO: Incluir Chutador descricao.
 	NxActor* kickerActor = Simulation::getActorKicker(indexScene, indexRobot);
-	kickerActor->setMaxAngularVelocity(0.0001);
-	kickerActor->setMass(0.0000001); //PLUGIN TAH COM PROBLEMA XML ERRADO
+	if(kickerActor){
+		kickerActor->setMaxAngularVelocity(0.0001);
+		kickerActor->setMass(0.0000001); //PLUGIN TAH COM PROBLEMA XML ERRADO
+	}
 
 	/*NxVehicleDesc vehicleDesc;
 	NxConvexShapeDesc robotShape[1];
@@ -209,29 +213,33 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 	//Criar robot, vehicle base
 	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(Simulation::gScenes[indexScene], &vehicleDesc);
-	robot->setId(indexRobot);
-	robot->setIdTeam(indexTeam);
-	robot->indexScene = indexScene;
-	robot->bodyRadius = 90;
-	robot->dribbler.dribbler = actorDribbler;
-	robot->kicker.kicker = kickerActor;
+	if(robot){
+		robot->setId(indexRobot);
+		robot->setIdTeam(indexTeam);
+		robot->indexScene = indexScene;
+		robot->bodyRadius = 90;
+		robot->dribbler.dribbler = actorDribbler;
+		robot->kicker.kicker = kickerActor;
 
-	//Joints
-	robot->joints = Simulation::getJoints(indexScene, indexRobot);
+		//Joints
+		robot->joints = Simulation::getJoints(indexScene, indexRobot);
 
-	//Initial Pose
-	robot->setInitialBodyPose(robotActor->getGlobalPose());
-	robot->kicker.initialPose = kickerActor->getGlobalPose();
-	robot->dribbler.initialPose = actorDribbler->getGlobalPose();
+		//Initial Pose
+		robot->setInitialBodyPose(robotActor->getGlobalPose());
+		if(kickerActor)
+			robot->kicker.initialPose = kickerActor->getGlobalPose();
+		if(actorDribbler)
+			robot->dribbler.initialPose = actorDribbler->getGlobalPose();
 
-	//Mudar pose do robo
-	//NxQuat q;
-	//q.
-	//q.fromAngleAxis(180.0f, NxVec3(0.0f, 1.0f, 0.0f));
-	//robot->getActor()->setGlobalPose(pose);
+		//Mudar pose do robo
+		//NxQuat q;
+		//q.
+		//q.fromAngleAxis(180.0f, NxVec3(0.0f, 1.0f, 0.0f));
+		//robot->getActor()->setGlobalPose(pose);
 
-	//Release no actor importado do 3ds Max
-	//gScenes[0]->releaseActor(*robotActor);
+		//Release no actor importado do 3ds Max
+		//gScenes[0]->releaseActor(*robotActor);
+	}
 }
 
 void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPosition, int indexNewTeam)
@@ -440,8 +448,10 @@ void NxRobot::setGlobalPosition(NxVec3 position){
 	//NxVec3 dribblerPos = this->dribbler.dribbler->getGlobalPosition();
 	//NxVec3 kickerPos = this->kicker.kicker->getGlobalPosition();
 
-	this->dribbler.dribbler->setGlobalPosition(position+(-this->getInitialBodyPose().t + this->dribbler.initialPose.t));
-	this->kicker.kicker->setGlobalPosition(position+(-this->getInitialBodyPose().t + this->kicker.initialPose.t));
+	if(this->dribbler.dribbler)
+		this->dribbler.dribbler->setGlobalPosition(position+(-this->getInitialBodyPose().t + this->dribbler.initialPose.t));
+	if(this->kicker.kicker)
+		this->kicker.kicker->setGlobalPosition(position+(-this->getInitialBodyPose().t + this->kicker.initialPose.t));
 	this->getActor()->setGlobalPosition(position);
 }
 
@@ -452,15 +462,30 @@ void NxRobot::setGlobalOrientation(NxMat33 orientation){
 }
 
 void NxRobot::putToSleep(){
-	this->dribbler.dribbler->putToSleep();
-	this->kicker.kicker->putToSleep();
-	for(int i=0; i<this->getNbWheels(); i++)
+	if(this->dribbler.dribbler){
+		this->dribbler.dribbler->putToSleep();
+		this->dribbler.dribbler->setLinearVelocity(NxVec3(0,0,0));
+		this->dribbler.dribbler->setAngularVelocity(NxVec3(0,0,0));
+	}
+	if(this->kicker.kicker)	{
+		this->kicker.kicker->putToSleep();
+		this->kicker.kicker->setLinearVelocity(NxVec3(0,0,0));
+		this->kicker.kicker->setAngularVelocity(NxVec3(0,0,0));
+	}
+	for(int i=0; i<this->getNbWheels(); i++){
 		((NxWheel2*)(this->getWheel(i)))->getActor()->putToSleep();
+		((NxWheel2*)(this->getWheel(i)))->getActor()->setLinearVelocity(NxVec3(0,0,0));
+		((NxWheel2*)(this->getWheel(i)))->getActor()->setAngularVelocity(NxVec3(0,0,0));
+	}
 	this->getActor()->putToSleep();
+	this->getActor()->setLinearVelocity(NxVec3(0,0,0));
+	this->getActor()->setAngularVelocity(NxVec3(0,0,0));
 }
 
 void NxRobot::resetToInitialPose(){
-	this->dribbler.dribbler->setGlobalPose(this->dribbler.initialPose);
-	this->kicker.kicker->setGlobalPose(this->kicker.initialPose);
+	if(this->dribbler.dribbler)
+		this->dribbler.dribbler->setGlobalPose(this->dribbler.initialPose);
+	if(this->kicker.kicker)
+		this->kicker.kicker->setGlobalPose(this->kicker.initialPose);
 	this->getActor()->setGlobalPose(this->getInitialBodyPose());
 }
