@@ -982,8 +982,7 @@ void Simulation::infinitePath(int indexRobot, int indexScene)
 
 	NxVec3 posRobot = getRobotGlobalPos(indexRobot, indexScene);
 	NxReal distance = calcDistanceVec2D(pontos[i[indexRobot-1]].x, pontos[i[indexRobot-1]].y, posRobot.x, posRobot.y);
-	if( distance < 100 ) 
-	{
+	if( distance < 100 ){
 		flags[indexRobot-1][i[indexRobot-1]]=true;
 	}
 
@@ -993,8 +992,7 @@ void Simulation::infinitePath(int indexRobot, int indexScene)
 void Simulation::setBallGlobalPos(NxVec3 pos, int indexScene)
 {
 	NxActor* actorBall = getActorBall(indexScene);
-	if(actorBall != NULL) 
-	{
+	if(actorBall != NULL){
 		actorBall->setGlobalPosition(pos);
 	}
 }
@@ -1002,8 +1000,7 @@ void Simulation::setBallGlobalPos(NxVec3 pos, int indexScene)
 void Simulation::setBallLinearVelocity(NxVec3 linVel, int indexScene)
 {
 	NxActor* actorBall = getActorBall(indexScene);
-	if(actorBall != NULL) 
-	{
+	if(actorBall != NULL){
 		actorBall->setLinearVelocity(linVel);
 	}
 }

@@ -113,7 +113,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 		//wheelDesc[i].position.z = 0;
 		wheelDesc[i].id = i;
 		wheelDesc[i].wheelFlags |= NX_WF_BUILD_LOWER_HALF;
-		wheelDesc[i].wheelRadius = 20;
+		wheelDesc[i].wheelRadius = 27.6;
 		//wheelDesc[i].wheelWidth = 100;
 		wheelDesc[i].wheelSuspension = 0;
 		wheelDesc[i].springRestitution = 0;
