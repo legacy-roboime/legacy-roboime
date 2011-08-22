@@ -15,6 +15,8 @@ DebugRenderer SimulationView::gDebugRenderer = DebugRenderer();
 //PerfRenderer    gPerfRenderer = PerfRenderer();
 GLdouble SimulationView::zNear = 1.0f;
 GLdouble SimulationView::zFar = 10000.0f;//
+int SimulationView::indexRenderScene = 0;
+bool SimulationView::gDebugVisualization = true;
 
 /**
 * Método do PhysX adaptado
@@ -88,6 +90,7 @@ void DrawActorIME(NxActor* actor)
 {
 	if(actor != NULL)
 	{
+		//const char* teste = actor->getName();
 		NxShape*const* shapes = actor->getShapes();
 		NxU32 nShapes = actor->getNbShapes();
 		if (actor == NULL || actor->getName() == NULL) 
@@ -131,7 +134,7 @@ void DrawActorIME(NxActor* actor)
 			{
 				while (nShapes--)
 				{
-					const char* nameee = shapes[nShapes]->getName();
+					//const char* nameee = shapes[nShapes]->getName();
 					DrawShapeIME(shapes[nShapes], NxVec3(1,1,1)); //Branco
 				}
 			}
@@ -182,7 +185,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 	case 'p':	Simulation::gPause = !Simulation::gPause; break;
 	case 'f':	Simulation::controlDribbler(0.1, 4, 0);
 		break;
-	case 'v':	//gDebugVisualization = !gDebugVisualization; break;
+	case 'v':	gDebugVisualization = !gDebugVisualization; break;
 
 		//case '+':	break;
 		//case '-':	break;
@@ -209,13 +212,13 @@ void SimulationView::appKey(unsigned char key, bool down)
 
 	case 'c': 
 		{
-
-
-			NxVec3 t = gEye;
-			NxVec3 Vel = Dir;
-			Vel.normalize();
-			Vel *= 200.0f;
-			Simulation::CreateCube(t, 20, &Vel);
+			indexRenderScene++;
+			indexRenderScene%=Simulation::nbExistScenes;
+			//NxVec3 t = gEye;
+			//NxVec3 Vel = Dir;
+			//Vel.normalize();
+			//Vel *= 200.0f;
+			//Simulation::CreateCube(t, 20, &Vel);
 		}
 		break;
 
@@ -231,7 +234,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			NxActor* actor = Simulation::getActorBall(0);
 			if(actor != NULL) 
 			{
-				actor->addForce(NxVec3(-0.01,0,0));
+				actor->addForce(NxVec3(-10,0,0));
 				//actor->setLinearVelocity(NxVec3(1,0,0));
 				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
 			}
@@ -251,8 +254,8 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//}
 
 			//udpServerThread->stop();
-			NxActor* actorDribbler = Simulation::getActorDribbler(0, 4);
-			actorDribbler->addLocalTorque(NxVec3(-10,0,0));
+			//NxActor* actorDribbler = Simulation::allRobots.getRobotByIdScene(4, 0)->dribbler
+			//actorDribbler->addLocalTorque(NxVec3(-10,0,0));
 		}
 		break;
 
@@ -487,11 +490,11 @@ void SimulationView::RenderCallback()
 		if (Simulation::gScenes[i])
 		{
 			//Render
-			/*glPushMatrix();
+			//glPushMatrix();
 			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
 			gDebugRenderer.renderData(*dbgRenderable);
-			glEnable(GL_LIGHTING);
-			glPopMatrix();*/
+			//glEnable(GL_LIGHTING);
+			//glPopMatrix();
 
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			//glColor4f(0.6f,0.6f,0.6f,1.0f);
@@ -499,7 +502,7 @@ void SimulationView::RenderCallback()
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
 				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
-				DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
+				//DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
 			}
 		}
 
@@ -572,9 +575,8 @@ void SimulationView::RenderSimulationCallback()
 	timeval tv;
 	TimePosix::gettimeofday(&tv,NULL);
 	diff =  ((double)tv.tv_sec + tv.tv_usec*(1.0E-6)) - ((double)Simulation::timeLastSimulate.tv_sec + Simulation::timeLastSimulate.tv_usec*(1.0E-6));
-
 	if(diff>=Simulation::timeStep){
-		Simulation::simulate(Simulation::gBaseScene,diff/*Simulation::timeStep*//*ElapsedTime*/,8);
+		Simulation::simulate();//Simulation::gBaseScene,/*diff*/Simulation::timeStep/*ElapsedTime*/,8);
 		TimePosix::gettimeofday(&Simulation::timeLastSimulate,NULL);
 	}
 
@@ -583,24 +585,26 @@ void SimulationView::RenderSimulationCallback()
 
 	//Draw
 	glPushMatrix();
-	for (NxU32 i = 0; i < Simulation::nbExistScenes; ++i)
-	{
-		if (Simulation::gScenes[i])
+	//for (NxU32 i = 0; i < Simulation::nbExistScenes; ++i)
+	//{
+		if (Simulation::gScenes[indexRenderScene])
 		{
 			//Render
-			//glPushMatrix();
-			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
-			gDebugRenderer.renderData(*dbgRenderable);
-			//glEnable(GL_LIGHTING);
-			//glPopMatrix();
-
-			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
-			//glColor4f(0.6f,0.6f,0.6f,1.0f);
-			int nbActors = Simulation::gScenes[i]->getNbActors();
-			for(unsigned int j = 0 ; j < nbActors ; j++ )
-			{
-				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
-				//DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
+			if(gDebugVisualization){
+				//glPushMatrix();
+				const NxDebugRenderable *dbgRenderable=Simulation::gScenes[indexRenderScene]->getDebugRenderable();
+				gDebugRenderer.renderData(*dbgRenderable);
+				//glEnable(GL_LIGHTING);
+				//glPopMatrix();
+			}
+			else{
+				//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
+				//glColor4f(0.6f,0.6f,0.6f,1.0f);
+				int nbActors = Simulation::gScenes[indexRenderScene]->getNbActors();
+				for(unsigned int j = 0 ; j < nbActors ; j++ )
+				{
+					DrawActorIME(Simulation::gScenes[indexRenderScene]->getActors()[j]);
+				}
 			}
 		}
 
@@ -624,7 +628,7 @@ void SimulationView::RenderSimulationCallback()
 		//GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 		//GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
 		//GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
-	}
+	//}
 	glPopMatrix();
 
 	//glFlush();

@@ -19,9 +19,9 @@ class NxVehicle {
 private:
 	NxArray<NxWheel*>			_wheels;
 	NxArray<NxVehicle*>			_children;
-	NxActor*					_bodyActor;
+	NxActor*					_actor;
 	NxScene*					_nxScene;
-	NxMat34						initialBodyPose;
+	NxMat34						initialPose;
 
 	NxArray<NxVehicleMotor*>	_vehicleMotors;
 	//NxArray<NxVehicleGears*>	_vehicleGears;
@@ -69,8 +69,8 @@ private:
 	static NxVehicle*			_createVehicle(NxScene* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
 public:
 	//int							indexScene;
-	NxMat34						getInitialBodyPose();
-	void						setInitialBodyPose(NxMat34 initialBodyPose);
+	NxMat34						getInitialPose();
+	void						setInitialPose(NxMat34 initialBodyPose);
 	void*						userData;
 
 	NxReal*						_torqueAxleWheelControl;
@@ -80,8 +80,8 @@ public:
 	NxVehicle();
 	~NxVehicle();
 
-	void						handleContactPair(NxContactPair& pair, NxU32 carIndex);
-	void						updateVehicle(NxReal lastTimeStepSize);
+	//void						handleContactPair(NxContactPair& pair, NxU32 carIndex);
+	void						updateVehicle(NxReal lastTimeStepSize = 0); //Para rodas da classe Wheel2 o lastTimeStepSize nao eh util
 	void						control (NxReal* torqueWheels);//NxArray<NxReal> torqueWheels);//NxReal t1, NxReal t2, NxReal t3, NxReal t4);//
 	void						control1 ();
 	//void						gearUp();
@@ -97,7 +97,7 @@ public:
 	NxU32						getNbMotors() { return _vehicleMotors.size(); }
 	const NxVehicleMotor*		getMotor(NxU32 i) const { return _vehicleMotors[i]; }
 	//const NxVehicleGears*		getGear(NxU32 i) const { return _vehicleGears[i]; }
-	NxActor*					getActor() { return _bodyActor; }
+	NxActor*					getActor() { return _actor; }
 	NxVehicle*					getChild(NxU32 i);
 	void						addChild(NxVehicle* child);
 	NxU32						nbChildren() { return _children.size(); }
@@ -106,11 +106,11 @@ public:
 	const NxWheel*				getWheel(NxU32 i) { NX_ASSERT(i < _wheels.size()); return _wheels[i]; }
 	NxReal						getCameraDistance() { return _cameraDistance; }
 
-	NxMat34						getGlobalPose() { return _bodyActor->getGlobalPose(); }
+	NxMat34						getGlobalPose() { return _actor->getGlobalPose(); }
 
 	static NxVehicle*			createVehicle(NxScene* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
 
-	NxVec3						getBodyPos();
+	NxVec3						getPos();
 	NxReal						getAngle2DFromVehicle();
 };
 

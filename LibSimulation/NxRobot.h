@@ -17,8 +17,9 @@ public:
 public:
 	NxRobot();
 
+	void handleContactPair(NxContactPair& pair, NxU32 robotIndex);
+
 	void cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPosition, int indexNewTeam);
-	NxJoint* cloneJointRobot(NxJoint* jointSource, int indexDestScene);
 	void setGlobalPosition(NxVec3 position);
 	void setGlobalOrientation(NxMat33 orientation);
 	void putToSleep();

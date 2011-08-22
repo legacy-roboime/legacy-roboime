@@ -14,3 +14,10 @@ NxBall NxAllBalls::getBallByScene(int indexScene){
 			return balls[i];
 	}
 }
+
+/*bool NxAllBalls::isBall(NxBall ball){
+	NxArray::s
+	for(int i=0; i<balls.size(); i+){
+		balls[i]
+	}
+}*/

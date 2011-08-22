@@ -12,9 +12,13 @@ NxBall::~NxBall(void)
 void Simulation::buildModelBall(int indexScene){
 	NxBall ball;
 	ball.ball = Simulation::getActorBall(indexScene);
-	ball.ball->setMaxAngularVelocity(0.0001);
-	//0.031
-	ball.ball->setMass(0.000001); //PLUGIN TAH COM PROBLEMA XML ERRADO 
+	//velocidade maxima permitida segundo as rule 2010 (10m/s)
+	//A bola pode atingir velocidade maior pq tem o caso de esta sendo usada pelo driblador, mas a principio consideremos isso
+	ball.ball->setMaxAngularVelocity(10000./21.5);
+	//0.031 medido da bola do lab
+	//46g a bola da rules 2010
+	ball.ball->setMass(0.031); //PLUGIN TAH COM PROBLEMA XML ERRADO 
+	//ball.ball->get
 	ball.initialPose = ball.ball->getGlobalPose();
 	ball.indexScene = indexScene;
 	Simulation::allBalls.balls.push_back(ball);

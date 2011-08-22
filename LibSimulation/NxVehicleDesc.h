@@ -10,10 +10,10 @@
 class NxVehicleDesc
 {
 public:
-	//NxArray<NxShapeDesc*>	robotShapes;
+	NxArray<NxShapeDesc*>	robotShapes;
 	NxArray<NxWheelDesc*>	robotWheels;
 
-	NxActor*				bodyActor;
+	NxActor*				actor;
 
 	NxArray<NxVehicleDesc*> children;
 

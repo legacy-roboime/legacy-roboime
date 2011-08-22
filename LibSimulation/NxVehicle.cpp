@@ -35,8 +35,8 @@ NxVehicle::~NxVehicle()
 	if (_carMaterial)
 		_nxScene->releaseMaterial(*_carMaterial);
 
-	if (_bodyActor)
-		_nxScene->releaseActor(*_bodyActor);
+	if (_actor)
+		_nxScene->releaseActor(*_actor);
 	for(NxU32 i = 0; i < _wheels.size(); i++)
 	{
 		if(_wheels[i])
@@ -50,7 +50,7 @@ NxVehicle::~NxVehicle()
 NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 {
 	//printf("Create Vehicle\n");
-	
+
 	//Criando veiculo
 	if(vehicleDesc == NULL)
 		return NULL;
@@ -63,7 +63,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 		printf("Vehicle Desc not valid!!\n");
 		return NULL;
 	}
-	
+
 	vehicle->_nxScene = scene;
 
 	if(vehicle->_carMaterial == NULL)
@@ -76,19 +76,19 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 		vehicle->_carMaterial = scene->createMaterial(robotMaterialDesc);
 	}
 
-	vehicle->_bodyActor = vehicleDesc->bodyActor;//scene->createActor(actorDesc);
-	if(vehicle->_bodyActor == NULL)
+	vehicle->_actor = vehicleDesc->actor;//scene->createActor(actorDesc);
+	if(vehicle->_actor == NULL)
 	{
 		delete vehicle;
 		return NULL;
 	}
-	vehicle->_bodyActor->userData = vehicle;
+	vehicle->_actor->userData = vehicle;
 
 	//vehicle->_transmissionEfficiency	= vehicleDesc->transmissionEfficiency;
 	//vehicle->_differentialRatio			= vehicleDesc->differentialRatio;
 	//vehicle->_maxVelocity				= vehicleDesc->maxVelocity;
 	vehicle->_cameraDistance			= vehicleDesc->cameraDistance;
-	vehicle->_bodyActor->setCMassOffsetLocalPosition(vehicleDesc->centerOfMass);
+	vehicle->_actor->setCMassOffsetLocalPosition(vehicleDesc->centerOfMass);
 
 	//Criando motores
 	for(int i=0; i<vehicleDesc->motorsDesc.size(); i++)
@@ -117,7 +117,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	for(NxU32 i = 0; i < nbWheels; i++)
 	{
 		torquesZero[i] = 0;
-		NxWheel* wheel = NxWheel::createWheel2(vehicle->_bodyActor, vehicleDesc->robotWheels[i]);
+		NxWheel* wheel = NxWheel::createWheel2(vehicle->_actor, vehicleDesc->robotWheels[i]);
 
 		if(wheel)
 		{
@@ -131,7 +131,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	}
 
 	//don't go to sleep.
-	//vehicle->_bodyActor->wakeUp(1e10);
+	//vehicle->_actor->wakeUp(1e10);
 	vehicle->control(torquesZero);//0,0,0,0);//
 	delete torquesZero;
 	return vehicle;
@@ -151,22 +151,22 @@ NxVehicle* NxVehicle::createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	return vehicle;
 }
 
-void NxVehicle::handleContactPair(NxContactPair& pair, NxU32 carIndex)
+/*void NxVehicle::handleContactPair(NxContactPair& pair, NxU32 carIndex)
 {
 	NxContactStreamIterator i(pair.stream);
-	
+
 	while(i.goNextPair())
 	{
 		NxShape * s = i.getShape(carIndex);
-		
+
 		while(i.goNextPatch())
 		{
 			const NxVec3& contactNormal = i.getPatchNormal();
-			
+
 			while(i.goNextPoint())
 			{
 				//user can also call getPoint() and getSeparation() here
-	
+
 				const NxVec3& contactPoint = i.getPoint();
 
 				//add forces:
@@ -175,45 +175,45 @@ void NxVehicle::handleContactPair(NxContactPair& pair, NxU32 carIndex)
 				if (s->is(NX_SHAPE_CAPSULE) && s->userData != NULL) {
 					//assuming only the wheels of the car are capsules, otherwise we need more checks.
 					//this branch can't be pulled out of loops because we have to do a full iteration through the stream
-				
+
 					NxQuat local2global = s->getActor().getGlobalOrientationQuat();
 					NxWheel* w = (NxWheel*)s->userData;
 					if (!w->getWheelFlag(NX_WF_USE_WHEELSHAPE))
-						{
+					{
 						NxWheel1 * wheel = static_cast<NxWheel1*>(w);
 						wheel->contactInfo.otherActor = pair.actors[1-carIndex];
 						wheel->contactInfo.contactPosition = contactPoint;
-						
+
 						wheel->contactInfo.contactPositionLocal = contactPoint;
-						wheel->contactInfo.contactPositionLocal -= _bodyActor->getGlobalPosition();
+						wheel->contactInfo.contactPositionLocal -= _actor->getGlobalPosition();
 						local2global.inverseRotate(wheel->contactInfo.contactPositionLocal);
-						
+
 						wheel->contactInfo.contactNormal = contactNormal;
 						if (wheel->contactInfo.otherActor->isDynamic()) 
-							{
+						{
 							NxVec3 globalV = s->getActor().getLocalPointVelocity(wheel->getWheelPos());
 							globalV -= wheel->contactInfo.otherActor->getLinearVelocity();
 							local2global.inverseRotate(globalV);
 							wheel->contactInfo.relativeVelocity = globalV.x;
 							//printf("%2.3f (%2.3f %2.3f %2.3f)\n", wheel->contactInfo.relativeVelocity,
 							//	globalV.x, globalV.y, globalV.z);
-							} 
+						} 
 						else 
-							{
+						{
 							NxVec3 vel = s->getActor().getLocalPointVelocity(wheel->getWheelPos());
 							local2global.inverseRotate(vel);
 							wheel->contactInfo.relativeVelocity = vel.x;
 							wheel->contactInfo.relativeVelocitySide = vel.z;
-							}
+						}
 						NX_ASSERT(wheel->hasGroundContact());
 						//printf(" Wheel %x is touching\n", wheel);
-						}
+					}
 				}
 			}
 		}		
 	}
 	//printf("----\n");
-}
+}*/
 
 void NxVehicle::updateVehicle(NxReal lastTimeStepSize)
 {
@@ -262,11 +262,11 @@ void NxVehicle::_computeLocalVelocity()
 	NxVec3 relativeVelocity;
 	if (_mostTouchedActor == NULL || !_mostTouchedActor->isDynamic())
 	{
-		relativeVelocity = _bodyActor->getLinearVelocity();
+		relativeVelocity = _actor->getLinearVelocity();
 	} else {
-		relativeVelocity = _bodyActor->getLinearVelocity() - _mostTouchedActor->getLinearVelocity();
+		relativeVelocity = _actor->getLinearVelocity() - _mostTouchedActor->getLinearVelocity();
 	}
-	NxQuat rotation = _bodyActor->getGlobalOrientationQuat();
+	NxQuat rotation = _actor->getGlobalOrientationQuat();
 	NxQuat global2Local;
 	_localVelocity = relativeVelocity;
 	rotation.inverseRotate(_localVelocity);
@@ -275,7 +275,7 @@ void NxVehicle::_computeLocalVelocity()
 
 void NxVehicle::control(NxReal* torqueWheels)//NxArray<NxReal> torqueWheels)//NxReal t1, NxReal t2, NxReal t3, NxReal t4)//
 {
-	_bodyActor->wakeUp(0.05);
+	_actor->wakeUp(0.05);
 
 	_torqueAxleWheelControl = torqueWheels;
 }
@@ -285,7 +285,7 @@ void NxVehicle::draw(bool debug)
 	glPushMatrix();
 
 	float glmat[16];
-	_bodyActor->getGlobalPose().getColumnMajor44(glmat);
+	_actor->getGlobalPose().getColumnMajor44(glmat);
 	glMultMatrixf(glmat);
 
 	if(debug) glDisable(GL_LIGHTING);
@@ -347,18 +347,18 @@ NxF32 NxVehicle::_getGearRatio()
 void NxVehicle::applyRandomForce()
 {
 	NxVec3 pos(NxMath::rand(-4.f,4.f),NxMath::rand(-4.f,4.f),NxMath::rand(-4.f,4.f));
-	NxReal force = NxMath::rand(_bodyActor->getMass()*0.5f, _bodyActor->getMass() * 2.f);
-	_bodyActor->addForceAtLocalPos(NxVec3(0, force*100.f, 0), pos);
+	NxReal force = NxMath::rand(_actor->getMass()*0.5f, _actor->getMass() * 2.f);
+	_actor->addForceAtLocalPos(NxVec3(0, force*100.f, 0), pos);
 }
 
-NxVec3 NxVehicle::getBodyPos()
+NxVec3 NxVehicle::getPos()
 {
-	return _bodyActor->getGlobalPosition();
+	return _actor->getGlobalPosition();
 }
 
 NxReal NxVehicle::getAngle2DFromVehicle()
 {
-	NxMat33 rotMatrix = _bodyActor->getGlobalOrientation();
+	NxMat33 rotMatrix = _actor->getGlobalOrientation();
 	NxMat33 rotMatrixInv;
 	rotMatrix.getInverse(rotMatrixInv);
 	NxVec3 vecY = rotMatrixInv.getColumn(1);
@@ -384,10 +384,10 @@ NxReal NxVehicle::getAngle2DFromVehicle()
 	return teta;
 }
 
-NxMat34 NxVehicle::getInitialBodyPose(){
-	return this->initialBodyPose;
+NxMat34 NxVehicle::getInitialPose(){
+	return this->initialPose;
 }
 
-void NxVehicle::setInitialBodyPose(NxMat34 initialBodyPose){
-	this->initialBodyPose = initialBodyPose;
+void NxVehicle::setInitialPose(NxMat34 initialPose){
+	this->initialPose = initialPose;
 }

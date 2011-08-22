@@ -1,14 +1,12 @@
 #pragma once
 
-#include "NxActor.h"
+#include "NxShapeDesc.h"
 
 class NxKicker
 {
 private:
-	
 public:
-	NxActor* kicker;
-	NxMat34 initialPose;
+	NxShapeDesc* kickerShapeDesc;
 	NxKicker(void);
 	~NxKicker(void);
 };

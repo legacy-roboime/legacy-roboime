@@ -27,6 +27,7 @@
 
 #include "NxScene1.h"
 #include "MyUserNotify.h"
+#include "MyContactReport.h"
 #include "NxAllRobots.h"
 #include "NxAllBalls.h"
 #include "NxAllFields.h"
@@ -54,6 +55,7 @@ private:
 	static ErrorStream gErrorStream;
 	static MyUserNotify gUserNotify;
 	//extern NxUserContactReport * robotContactReport;
+	static NxArray<NxUserContactReport *> robotContactReport;
 	
 	//Velocidades para controle das rodas
 	static std::vector<std::vector<NxReal*>> lastWheelSpeeds;
@@ -84,6 +86,7 @@ private:
 	static void ReleaseNx();
 
 	static NxActor* cloneActor(NxActor* actorSource, int indexDestScene);
+	static NxShapeDesc* cloneShape(NxShape* shapeSource);
 
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
@@ -95,7 +98,6 @@ private:
 	static void setRobotLinearVelocity(NxVec3 linVel, int indexScene, int indexRobot);
 	static void setRobotAngularVelocity(NxVec3 angVel, int indexScene, int indexRobot);
 	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
-	static void setAngVelocityDribbler(NxReal velocityX, int indexRobot, int indexScene);
 
 	//getters
 	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
@@ -109,10 +111,6 @@ private:
 	static NxActor* getActorByLabel(int indexScene, string label);
 	static NxActor* getActorWheel(int indexScene, int indexRobot, int indexWheel);
 	static int getNumberWheels(int indexScene, int indexRobot);
-	static NxJoint* getJoint(int indexScene, int indexJoint, int indexRobot);
-	static NxArray<NxJoint*> getJoints(int indexScene, int indexRobot);
-	static NxActor* getActorDribbler(int indexScene, int indexRobot);
-	static NxActor* getActorKicker(int indexScene, int indexRobot);
 
 	Simulation(void);
 	~Simulation(void);
@@ -133,7 +131,7 @@ public:
 	static void buildModelBall(int indexScene);
 	static void buildModelRobot(int indexRobot, int indexScene, int indexTeam);
 	static void cloneScene(int indexSceneSource);
-	static void deleteScene(int indexScene);
+	static void deleteScene(int indexScene); //TODO: IMPLEMENT
 
 	//advance simulation
 	static void simulate();
@@ -149,8 +147,6 @@ public:
 	static void controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot );
 	static void controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
 	static void controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
-	static void addLocalTorqueDribbler(NxReal torqueX, int indexRobot, int indexScene);
-	static void addLocalForceKicker(NxReal forceX, int indexRobot, int indexScene);
 
 	//math
 	static NxReal getAngle2DFromMat33( NxMat33 matrixOrientation );

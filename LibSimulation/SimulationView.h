@@ -24,6 +24,7 @@ private:
 	static int count;
 	static bool keyDown[256];
 	static int gMainHandle;
+	static int indexRenderScene;
 	static NxVec3 gEye;
 	static NxVec3 Dir;
 	static NxVec3 Up;
@@ -33,6 +34,7 @@ private:
 	static int mx;
 	static int my;
 	static DebugRenderer gDebugRenderer;
+	static bool gDebugVisualization;
 	//static PerfRenderer    gPrefRenderer;
 private:
 	static void appKey(unsigned char key, bool down);

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "NxActor.h"
+#include "NxArray.h"
+#include "NxShape.h"
 
 class NxDribbler
 {
 private:
 	
 public:
-	NxActor* dribbler;
-	NxMat34 initialPose;
+	NxArray<NxShape*> dribblerShapes;
 	NxDribbler(void);
 	~NxDribbler(void);
 };

@@ -6,6 +6,7 @@
 
 class NxAllRobots {
 private:
+	//TODO: JAH DEIXAR SEPARADOS OS ROBOS POR CENA PARA NAO TER Q FICAR REALiZANDO BUSCA
 	std::set<NxRobot*> _allRobots;
 	NxArray<NxRobot*> _allRobotsSequential;
 	std::set<NxRobot*> _allChildRobots;

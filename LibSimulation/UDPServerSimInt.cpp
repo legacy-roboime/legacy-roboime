@@ -103,11 +103,11 @@ void UDPServerSimInt::parsing()
 	}
 	else if(temp.compare("2") == 0) //pacote 2 SET STATIC VALUES
 	{
-		
+
 	}
 	else if(temp.compare("3") == 0) //pacote 3 SET DYNAMIC VALUES
 	{
-		
+
 	}
 	else if(temp.compare("4") == 0) //pacote 4 CONTROL ALL ROBOTS
 	{
@@ -463,7 +463,7 @@ void UDPServerSimInt::parsing()
 
 		os >> temp;
 		int indexTeam = atoi(temp.c_str());
-		
+
 		//Lendo argumentos do robo e controlando
 		if(indexTeam==0){
 			for(int indexRobot=0; indexRobot<5; indexRobot++)
