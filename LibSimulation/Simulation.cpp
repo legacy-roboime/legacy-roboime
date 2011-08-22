@@ -454,18 +454,26 @@ void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScen
 	//TODO: implementar o controlador
 	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
 	if(robot){
-		//NxShapeDesc::
-		//robot->kicker.kickerShapeDesc.
-		//NxUtilLib::NxSweepBoxSphere(
-		//////////allBalls.getBallByScene(indexScene).ball->addForce(NxVec3(kickerSpeed*1000,0,0));
-		//NxActor* kickerActor = robot->kicker.kicker;
-		//NxReal angle = getAngle2DFromRobot(indexRobot, indexScene);
-		//if(kickerActor != NULL) {
-		//	if(kickerSpeed>0){
-		//		NxVec3 force = NxVec3(kickerSpeed*NxMath::cos(angle), kickerSpeed*sin(angle), 0);
-		//		kickerActor->addForce(force);
-		//	}
-		//}
+		NxBall ball = Simulation::allBalls.getBallByScene(indexScene);
+		NxShape* const* ballShapes = ball.ball->getShapes();
+
+		NxBoxShapeDesc* kickerShapeDesc = (NxBoxShapeDesc*)robot->kicker.kickerShapeDesc;
+		
+		NxBox box = NxBox(kickerShapeDesc->localPose.t + robot->getActor()->getGlobalPosition(), kickerShapeDesc->dimensions,  robot->getActor()->getGlobalOrientation() * kickerShapeDesc->localPose.M);
+		
+		NxSphere sphere = NxSphere(ball.ball->getGlobalPosition(), ballShapes[0]->isSphere()->getRadius());
+
+		NxReal angle = getAngle2DFromRobot(indexRobot, indexScene);
+		NxVec3 dir = NxVec3(-cos(angle), -sin(angle), 0);
+
+		float min_dist;
+
+		NxVec3 normal;
+
+		NxUtilLib* gUtilLib = NxGetUtilLib();
+		if(gUtilLib->NxSweepBoxSphere(box, sphere, dir, 50, min_dist, normal)){
+			ball.ball->addForce(NxVec3(kickerSpeed*cos(angle)*100., kickerSpeed*sin(angle)*100., 0), NX_IMPULSE);
+		}
 	}
 }
 
@@ -1114,11 +1122,12 @@ NxActor* Simulation::cloneActor(NxActor* actorSource, int indexDestScene)
 	return gScenes[indexDestScene]->createActor(actorDesc);
 }
 
-NxShapeDesc* Simulation::cloneShape(NxShape* shapeSource){
+NxShapeDesc* Simulation::copyShapeDesc(NxShape* shapeSource){
 	NxShapeType type = shapeSource->getType();
 	if(type==NxShapeType::NX_SHAPE_BOX){
 		NxBoxShapeDesc* boxDesc;
-		shapeSource->isBox()->saveToDesc(*boxDesc);
+		NxBoxShape* boxShape = shapeSource->isBox();
+		boxShape->saveToDesc(*boxDesc);
 		return boxDesc;
 	}
 	else if(type==NxShapeType::NX_SHAPE_CONVEX){

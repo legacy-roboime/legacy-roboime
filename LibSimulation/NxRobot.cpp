@@ -218,17 +218,17 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 				char* dribblerName = new char[10];//"Driblador\0"
 				dribblerName[9] = 0;
 				memcpy(dribblerName, shapeName, strlen(dribblerName));
-
+				
 				char* kickerName = new char[9];//"Chutador\0"
 				kickerName[8] = 0;
 				memcpy(kickerName, shapeName, strlen(kickerName));
-
+				
 				if(strcmp(dribblerName, "Driblador") == 0){
 					robot->dribbler.dribblerShapes.push_back(robotShapes[i]);
 				}
 				else if(strcmp(kickerName, "Chutador") == 0){
-					robot->kicker.kickerShapeDesc = Simulation::cloneShape(robotShapes[i]);
-					//robotActor->releaseShape(*(robotShapes[i]));
+					robot->kicker.kickerShapeDesc = Simulation::copyShapeDesc(robotShapes[i]);
+					robotActor->releaseShape(*(robotShapes[i]));
 				}
 			}
 		}
@@ -338,12 +338,12 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 			if(strcmp(dribblerName, "Driblador") == 0){
 				robot->dribbler.dribblerShapes.push_back(robotShapes[i]);
 			}
-			else if(strcmp(kickerName, "Chutador") == 0){
-				robot->kicker.kickerShapeDesc = Simulation::cloneShape(robotShapes[i]);
-				//robotActor->releaseShape(*(robotShapes[i]));
-			}
 		}
 	}
+	robot->kicker.kickerShapeDesc = new NxBoxShapeDesc();
+	NxShapeDesc* shapeDesc = nxRobotSource->kicker.kickerShapeDesc;
+	robot->kicker.kickerShapeDesc->localPose = shapeDesc->localPose;
+	((NxBoxShapeDesc*)(robot->kicker.kickerShapeDesc))->dimensions = ((NxBoxShapeDesc*)shapeDesc)->dimensions;
 
 	//Initial Pose
 	robot->setInitialPose(robotActor->getGlobalPose());

@@ -279,7 +279,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			orientation.rotZ(-3.1416/4);
 			actor->setGlobalOrientation(orientation);
 			}*/
-			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->setGlobalPosition(NxVec3(0,0,30));
+			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->setGlobalPosition(NxVec3(120,0,30));
 			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).putToSleep();
 		}
 		break;

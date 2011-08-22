@@ -86,7 +86,7 @@ private:
 	static void ReleaseNx();
 
 	static NxActor* cloneActor(NxActor* actorSource, int indexDestScene);
-	static NxShapeDesc* cloneShape(NxShape* shapeSource);
+	static NxShapeDesc* copyShapeDesc(NxShape* shapeSource);
 
 	//Math
 	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
