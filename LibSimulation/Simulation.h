@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QThread>
+///////////#include <QThread>
 #include <QMutex>
 #include <QMutexLocker>
 #include <stdio.h>

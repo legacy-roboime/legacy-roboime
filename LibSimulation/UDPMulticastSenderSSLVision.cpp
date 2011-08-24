@@ -11,6 +11,9 @@ UDPMulticastSenderSSLVision::~UDPMulticastSenderSSLVision(void)
 
 void UDPMulticastSenderSSLVision::buildSendMessage()
 {
+	//Simulation::mutex.lock();
+	QMutexLocker locker(&Simulation::mutex);
+
 	// Verify that the version of the library that we linked against is
 	// compatible with the version of the headers we compiled against.
 	GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -24,7 +27,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 
 	if(true)//withDetection)
 	{
-		QMutexLocker locker(&Simulation::mutex);
+		/////////////QMutexLocker locker(&Simulation::mutex);
 
 		NxScene1* baseScene = Simulation::gScenes[Simulation::gBaseScene];
 
@@ -73,7 +76,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 	}
 	if(false)//withGeometry)
 	{
-		QMutexLocker locker(&Simulation::mutex);
+		///////////////////QMutexLocker locker(&Simulation::mutex);
 
 		SSL_GeometryData geometryData = SSL_GeometryData();
 
@@ -124,4 +127,6 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 
 	// Optional:  Delete all global objects allocated by libprotobuf.
 	google::protobuf::ShutdownProtobufLibrary();
+
+	//Simulation::mutex.unlock();
 }

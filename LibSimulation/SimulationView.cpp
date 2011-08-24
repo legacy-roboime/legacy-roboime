@@ -535,6 +535,9 @@ void SimulationView::RenderCallback()
 
 void SimulationView::RenderSimulationCallback()
 {
+	QMutexLocker locker(&Simulation::mutex);
+	//Simulation::mutex.lock();
+
 	if(Simulation::gScenes[0] == NULL) return;
 
 	//compute elapsed time
@@ -633,6 +636,8 @@ void SimulationView::RenderSimulationCallback()
 
 	//glFlush();
 	glutSwapBuffers();
+
+	//Simulation::mutex.unlock();
 }
 
 void SimulationView::setupCamera()

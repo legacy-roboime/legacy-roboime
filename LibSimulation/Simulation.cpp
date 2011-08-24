@@ -230,16 +230,16 @@ bool Simulation::InitBlankScene()
 			printf("\nError: Unable to create a PhysX scene, exiting the sample.\n\n");
 			return false;
 		}
-
+		
 		//NxMaterial *defaultMaterial = gScenes[gBaseScene]->getMaterialFromIndex(0);
 		//defaultMaterial->setRestitution(0.0f);
 		//defaultMaterial->setStaticFriction(0.5f);
 		//defaultMaterial->setDynamicFriction(0.5f);
-
+		
 		//// Create ground plane
 		//NxPlaneShapeDesc planeDesc;
 		//planeDesc.setToDefault();
-
+		
 		//NxActorDesc ActorDesc;
 		//ActorDesc.shapes.pushBack(&planeDesc);
 		//gScenes[gBaseScene]->createActor(ActorDesc);
@@ -291,7 +291,7 @@ void Simulation::simVisionRun(){
 
 void Simulation::simulate()
 {
-	QMutexLocker locker(&mutex);
+	////////////////QMutexLocker locker(&mutex);
 
 	// Start simulation (non blocking)
 	// Physics code
@@ -318,7 +318,7 @@ void Simulation::simulate()
 
 void Simulation::simulate(int indexScene)
 {
-	QMutexLocker locker(&mutex);
+	/////////////QMutexLocker locker(&mutex);
 
 	// Start simulation (non blocking)
 	// Physics code
@@ -338,7 +338,7 @@ void Simulation::simulate(int indexScene)
 
 void Simulation::simulate(int indexScene, float dt)
 {
-	QMutexLocker locker(&mutex);
+	////////////////QMutexLocker locker(&mutex);
 
 	// Start simulation (non blocking)
 	// Physics code
@@ -358,7 +358,7 @@ void Simulation::simulate(int indexScene, float dt)
 
 void Simulation::simulate(int indexScene, float dt, int maxStepIter )
 {
-	QMutexLocker locker(&mutex);
+	//////////////QMutexLocker locker(&mutex);
 
 	// Start simulation (non blocking)
 	// Physics code

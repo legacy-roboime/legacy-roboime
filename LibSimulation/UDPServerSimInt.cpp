@@ -11,7 +11,8 @@ UDPServerSimInt::~UDPServerSimInt(void)
 
 void UDPServerSimInt::parsing()
 {
-	//QMutexLocker locker(&Simulation::mutex);
+	QMutexLocker locker(&Simulation::mutex);
+	//Simulation::mutex.lock();
 
 	string temp; 
 	std::stringstream os(this->receiveString);
@@ -28,7 +29,7 @@ void UDPServerSimInt::parsing()
 		//Definindo string para enviar
 		stringstream out;
 
-		QMutexLocker locker(&Simulation::mutex);
+		///////////QMutexLocker locker(&Simulation::mutex);
 		//Parametros de Simulacao
 		out << Simulation::timeStep;
 		out << " ";
@@ -74,7 +75,7 @@ void UDPServerSimInt::parsing()
 		stringstream out;
 
 		//Bola
-		QMutexLocker locker(&Simulation::mutex);
+		/////////////////QMutexLocker locker(&Simulation::mutex);
 		NxVec3 ballPos = Simulation::getBallGlobalPos(indexScene);
 		out << ballPos.x;
 		out << " ";
@@ -135,7 +136,7 @@ void UDPServerSimInt::parsing()
 			os >> temp;
 			float kickerSpeed = atof(temp.c_str());
 
-			QMutexLocker locker(&Simulation::mutex);
+			////////////////QMutexLocker locker(&Simulation::mutex);
 			Simulation::controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 		}
 
@@ -159,7 +160,7 @@ void UDPServerSimInt::parsing()
 		//Definindo string para enviar
 		stringstream out;
 
-		QMutexLocker locker(&Simulation::mutex);
+		//////////////////QMutexLocker locker(&Simulation::mutex);
 		Simulation::simulate(indexScene);
 
 		//Mutex
@@ -192,7 +193,7 @@ void UDPServerSimInt::parsing()
 			float y = atof(temp.c_str());
 			os >> temp;
 			float angle = atof(temp.c_str());
-			QMutexLocker locker(&Simulation::mutex);
+			/////////////QMutexLocker locker(&Simulation::mutex);
 			Simulation::goToThisPose(x, y, angle, indexRobot, indexScene);
 		}
 
@@ -216,7 +217,7 @@ void UDPServerSimInt::parsing()
 		//Lendo argumentos e executando InfinePath
 		for(int indexRobot=1; indexRobot<=10; indexRobot++)
 		{
-			QMutexLocker locker(&Simulation::mutex);
+			////////////////QMutexLocker locker(&Simulation::mutex);
 			Simulation::infinitePath(indexRobot, indexScene);
 		}
 
@@ -245,7 +246,7 @@ void UDPServerSimInt::parsing()
 			os >> temp;
 			float kickerSpeed = atof(temp.c_str());
 
-			QMutexLocker locker(&Simulation::mutex);
+			///////////////QMutexLocker locker(&Simulation::mutex);
 			Simulation::controlDribbler( dribblerSpeed, indexRobot, indexScene );
 			Simulation::controlKicker( kickerSpeed, indexRobot, indexScene );
 		}
@@ -277,7 +278,7 @@ void UDPServerSimInt::parsing()
 		os >> temp;
 		float angle = atof(temp.c_str());
 
-		QMutexLocker locker(&Simulation::mutex);
+		////////////////QMutexLocker locker(&Simulation::mutex);
 		Simulation::goToThisPose(x, y, angle, indexRobot, indexScene);
 
 		out << "ACK 9\n"; // confirmando pacote 9
@@ -299,7 +300,7 @@ void UDPServerSimInt::parsing()
 		//Definindo string para enviar
 		stringstream out;
 
-		QMutexLocker locker(&Simulation::mutex);
+		//////////////////QMutexLocker locker(&Simulation::mutex);
 		Simulation::simulate(indexScene, dt);
 
 		//Mutex
@@ -338,7 +339,7 @@ void UDPServerSimInt::parsing()
 		os >> temp;
 		float kickerSpeed = atof(temp.c_str());
 
-		QMutexLocker locker(&Simulation::mutex);
+		////////////////QMutexLocker locker(&Simulation::mutex);
 		Simulation::controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 
 		out << "ACK 11\n"; // confirmando pacote 11
@@ -366,7 +367,7 @@ void UDPServerSimInt::parsing()
 		os >> temp;
 		float kickerSpeed = atof(temp.c_str());
 
-		QMutexLocker locker(&Simulation::mutex);
+		///////////////QMutexLocker locker(&Simulation::mutex);
 		Simulation::controlDribbler( dribblerSpeed, indexRobot, indexScene );
 		Simulation::controlKicker( kickerSpeed, indexRobot, indexScene );
 
@@ -404,7 +405,7 @@ void UDPServerSimInt::parsing()
 		os >> temp;
 		float kickerSpeed = atof(temp.c_str());
 
-		QMutexLocker locker(&Simulation::mutex);
+		///////////////QMutexLocker locker(&Simulation::mutex);
 		Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 
 		out << "ACK 13\n"; // confirmando pacote 13
@@ -440,7 +441,7 @@ void UDPServerSimInt::parsing()
 			os >> temp;
 			float kickerSpeed = atof(temp.c_str());
 
-			QMutexLocker locker(&Simulation::mutex);
+			////////////////QMutexLocker locker(&Simulation::mutex);
 			Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 		}
 
@@ -481,7 +482,7 @@ void UDPServerSimInt::parsing()
 				os >> temp;
 				float kickerSpeed = atof(temp.c_str());
 
-				QMutexLocker locker(&Simulation::mutex);
+				//////////////////QMutexLocker locker(&Simulation::mutex);
 				Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 			}
 		}
@@ -502,7 +503,7 @@ void UDPServerSimInt::parsing()
 				os >> temp;
 				float kickerSpeed = atof(temp.c_str());
 
-				QMutexLocker locker(&Simulation::mutex);
+				////////////////////QMutexLocker locker(&Simulation::mutex);
 				Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 			}
 		}
@@ -516,4 +517,6 @@ void UDPServerSimInt::parsing()
 	{
 		this->sendString = "NACK";
 	}
+
+	//Simulation::mutex.unlock();
 }
