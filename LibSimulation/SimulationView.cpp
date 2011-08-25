@@ -13,10 +13,10 @@ bool SimulationView::gravar = false;
 int SimulationView::count = 0;
 DebugRenderer SimulationView::gDebugRenderer = DebugRenderer();
 //PerfRenderer    gPerfRenderer = PerfRenderer();
-GLdouble SimulationView::zNear = 1.0f;
+GLdouble SimulationView::zNear = 0.5f;
 GLdouble SimulationView::zFar = 10000.0f;//
 int SimulationView::indexRenderScene = 0;
-bool SimulationView::gDebugVisualization = true;
+bool SimulationView::gDebugVisualization = false;
 
 /**
 * Método do PhysX adaptado
@@ -120,14 +120,58 @@ void DrawActorIME(NxActor* actor)
 			{
 				while (nShapes--)
 				{
-					DrawShapeIME(shapes[nShapes], NxVec3(0,0,1)); //Azul
+					const char* shapeName = shapes[nShapes]->getName();
+					if(shapeName){
+						char* dribblerName = new char[10];//"Driblador\0"
+						dribblerName[9] = 0;
+						memcpy(dribblerName, shapeName, strlen(dribblerName));
+
+						char* kickerName = new char[9];//"Chutador\0"
+						kickerName[8] = 0;
+						memcpy(kickerName, shapeName, strlen(kickerName));
+
+						if(strcmp(dribblerName, "Driblador") == 0){
+							DrawShapeIME(shapes[nShapes], NxVec3(1,1,1)); 
+						}
+						else if(strcmp(kickerName, "Chutador") == 0){
+							DrawShapeIME(shapes[nShapes], NxVec3(1,1,1)); 
+						}
+						else{
+							DrawShapeIME(shapes[nShapes], NxVec3(0,0,1)); //Azul
+						}
+					}
+					else{
+						DrawShapeIME(shapes[nShapes], NxVec3(0,0,0)); 
+					}
 				}
 			}
 			else if(strcmp(actor->getName(), "Robo6") == 0 || strcmp(actor->getName(), "Robo7") == 0 || strcmp(actor->getName(), "Robo8") == 0 || strcmp(actor->getName(), "Robo9") == 0 || strcmp(actor->getName(), "Robo10") == 0)
 			{
 				while (nShapes--)
 				{
-					DrawShapeIME(shapes[nShapes], NxVec3(1,1,0)); //Amarelo
+					const char* shapeName = shapes[nShapes]->getName();
+					if(shapeName){
+						char* dribblerName = new char[10];//"Driblador\0"
+						dribblerName[9] = 0;
+						memcpy(dribblerName, shapeName, strlen(dribblerName));
+
+						char* kickerName = new char[9];//"Chutador\0"
+						kickerName[8] = 0;
+						memcpy(kickerName, shapeName, strlen(kickerName));
+
+						if(strcmp(dribblerName, "Driblador") == 0){
+							DrawShapeIME(shapes[nShapes], NxVec3(1,1,1)); 
+						}
+						else if(strcmp(kickerName, "Chutador") == 0){
+							DrawShapeIME(shapes[nShapes], NxVec3(1,1,1)); 
+						}
+						else{
+							DrawShapeIME(shapes[nShapes], NxVec3(1,1,0)); //Amarelo
+						}
+					}
+					else{
+						DrawShapeIME(shapes[nShapes], NxVec3(0,0,0)); 
+					}
 				}
 			}
 			else
@@ -183,7 +227,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 	{
 	case 27:	exit(0); break;
 	case 'p':	Simulation::gPause = !Simulation::gPause; break;
-	case 'f':	Simulation::controlDribbler(0.1, 4, 0);
+	case 'f':	Simulation::controlDribbler(0.1, 4, indexRenderScene);
 		break;
 	case 'v':	gDebugVisualization = !gDebugVisualization; break;
 
@@ -191,7 +235,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 		//case '-':	break;
 	case 'e':
 		{
-			Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
+			Simulation::allFields.fields[indexRenderScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
 		} 
 		break;
 
@@ -205,8 +249,50 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//vel*=30.0f;
 			//CreateCube(t, &vel);
 
-			Simulation::controlKicker(0.1, 4, 0);
+			//Simulation::controlKicker(0.1, 4, 0);
 			//kickerActor->setLinearVelocity(NxVec3(0,10,0));
+			Simulation::allRobots.getRobotByIdScene(4, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(4, indexRenderScene)->setGlobalPosition(NxVec3(-3000,0,30));
+			Simulation::allRobots.getRobotByIdScene(4, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(1, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(1, indexRenderScene)->setGlobalPosition(NxVec3(-1000, 1000, 30));
+			Simulation::allRobots.getRobotByIdScene(1, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(2, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(2, indexRenderScene)->setGlobalPosition(NxVec3(-2000, -1000, 30));
+			Simulation::allRobots.getRobotByIdScene(2, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(3, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(3, indexRenderScene)->setGlobalPosition(NxVec3(-2000, 1000, 30));
+			Simulation::allRobots.getRobotByIdScene(3, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(5, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(5, indexRenderScene)->setGlobalPosition(NxVec3(-1000, -1000, 30));
+			Simulation::allRobots.getRobotByIdScene(5, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(6, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(6, indexRenderScene)->setGlobalPosition(NxVec3(3000, 0, 30));
+			Simulation::allRobots.getRobotByIdScene(6, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(7, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(7, indexRenderScene)->setGlobalPosition(NxVec3(2000, -1000, 30));
+			Simulation::allRobots.getRobotByIdScene(7, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(8, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(8, indexRenderScene)->setGlobalPosition(NxVec3(2000, 1000, 30));
+			Simulation::allRobots.getRobotByIdScene(8, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(9, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(9, indexRenderScene)->setGlobalPosition(NxVec3(1000, -1000, 30));
+			Simulation::allRobots.getRobotByIdScene(9, indexRenderScene)->putToSleep();
+
+			Simulation::allRobots.getRobotByIdScene(10, indexRenderScene)->resetToInitialPose();
+			Simulation::allRobots.getRobotByIdScene(10, indexRenderScene)->setGlobalPosition(NxVec3(1000, 1000, 30));
+			Simulation::allRobots.getRobotByIdScene(10, indexRenderScene)->putToSleep();
+
+			Simulation::allBalls.getBallByScene(indexRenderScene).ball->setGlobalPosition(NxVec3(120,0,30));
+			Simulation::allBalls.getBallByScene(indexRenderScene).putToSleep();
 		}
 		break;
 
@@ -231,15 +317,14 @@ void SimulationView::appKey(unsigned char key, bool down)
 
 	case 'h':
 		{
-			NxActor* actor = Simulation::getActorBall(0);
+			NxBall ball = Simulation::allBalls.getBallByScene(indexRenderScene);
+			NxActor* actor = ball.ball;
 			if(actor != NULL) 
 			{
 				actor->addForce(NxVec3(-10,0,0));
 				//actor->setLinearVelocity(NxVec3(1,0,0));
 				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
 			}
-
-			NxBall ball = Simulation::allBalls.getBallByScene(0);
 			NxVec3 teste = ball.ball->getLinearVelocity();
 			printf("%f\n", teste.magnitude());
 		}
@@ -263,9 +348,6 @@ void SimulationView::appKey(unsigned char key, bool down)
 		{
 			//NxActor* actorDribbler = getActorDribbler(0, 1);
 			//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
-			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->setGlobalPosition(NxVec3(0,0,20));
-			Simulation::allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->putToSleep();
 		}
 		break;
 
@@ -279,8 +361,8 @@ void SimulationView::appKey(unsigned char key, bool down)
 			orientation.rotZ(-3.1416/4);
 			actor->setGlobalOrientation(orientation);
 			}*/
-			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->setGlobalPosition(NxVec3(120,0,30));
-			Simulation::allBalls.getBallByScene(Simulation::gBaseScene).putToSleep();
+			Simulation::allBalls.getBallByScene(indexRenderScene).ball->setGlobalPosition(NxVec3(120,0,30));
+			Simulation::allBalls.getBallByScene(indexRenderScene).putToSleep();
 		}
 		break;
 
@@ -395,12 +477,12 @@ void SimulationView::appKey(unsigned char key, bool down)
 	case '\t':
 		{
 			//Switch to the next scene
-			++Simulation::gBaseScene;
-			if (Simulation::gBaseScene == Simulation::nbExistScenes)
-			{
-				Simulation::gBaseScene = 0;
-			}
-			printf("Scene %d selected.\n", Simulation::gBaseScene);
+			//++Simulation::gBaseScene;
+			//if (Simulation::gBaseScene == Simulation::nbExistScenes)
+			//{
+			//	Simulation::gBaseScene = 0;
+			//}
+			//printf("Scene %d selected.\n", Simulation::gBaseScene);
 		}
 		break;
 	}
@@ -424,7 +506,7 @@ void SimulationView::MotionCallback(int x, int y)
 {
 	int dx =  mx - x;
 	int dy =  my - y;
-	
+
 	Dir.normalize();
 	N.cross(Dir,NxVec3(0,0,1));
 
@@ -444,6 +526,8 @@ void SimulationView::MotionCallback(int x, int y)
 //==================================================================================
 void SimulationView::RenderCallback()
 {
+	QMutexLocker locker(&Simulation::mutex);
+
 	if(Simulation::gScenes[0] == NULL) return;
 
 	//compute elapsed time
@@ -485,27 +569,28 @@ void SimulationView::RenderCallback()
 
 	//Draw
 	glPushMatrix();
-	for (NxU32 i = 0; i < Simulation::nbExistScenes; ++i)
+	//for (NxU32 i = 0; i < Simulation::nbExistScenes; ++i)
+	//{
+	if (Simulation::gScenes[indexRenderScene])
 	{
-		if (Simulation::gScenes[i])
-		{
-			//Render
+		//Render
+		if(gDebugVisualization){
 			//glPushMatrix();
-			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[i]->getDebugRenderable();
+			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[indexRenderScene]->getDebugRenderable();
 			gDebugRenderer.renderData(*dbgRenderable);
 			//glEnable(GL_LIGHTING);
 			//glPopMatrix();
-
+		}
+		else{
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			//glColor4f(0.6f,0.6f,0.6f,1.0f);
-			int nbActors = Simulation::gScenes[i]->getNbActors();
+			int nbActors = Simulation::gScenes[indexRenderScene]->getNbActors();
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
-				const char* nome = Simulation::gScenes[i]->getActors()[j]->getName();
-				//DrawActorIME(Simulation::gScenes[i]->getActors()[j]);
+				DrawActorIME(Simulation::gScenes[indexRenderScene]->getActors()[j]);
+				//Simulation::allRobots.drawRobots(gDebugVisualization);
 			}
 		}
-
 		//Show Render Performance
 		/*#ifdef __PPCGEKKO__	
 		char buf[256];
@@ -521,16 +606,19 @@ void SimulationView::RenderCallback()
 		gPerfRenderer.render(gScenes[i]->readProfileData(true), glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 		#endif*/
 
-		//char buf[256];
-		//sprintf(buf,"Iteracao Numero: %d\nTempo: %f s\nErro Angular: %f graus\nErro de Posicao X: %f mm\nErro de Posicao Y: %f mm", count, count * 1./60., 90 - ang/NxPi*180, 500 - pos.x, 500 - pos.y);
-		//GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-		//GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
-		//GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
+		char buf[256];
+		sprintf(buf,"CENA: %d", indexRenderScene);
+		GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
+		GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
 	}
+	//}
 	glPopMatrix();
 
 	//glFlush();
 	glutSwapBuffers();
+
+	//Simulation::mutex.unlock();
 }
 
 void SimulationView::RenderSimulationCallback()
@@ -590,24 +678,24 @@ void SimulationView::RenderSimulationCallback()
 	glPushMatrix();
 	//for (NxU32 i = 0; i < Simulation::nbExistScenes; ++i)
 	//{
-		if (Simulation::gScenes[indexRenderScene])
-		{
-			//Render
-			if(gDebugVisualization){
-				//glPushMatrix();
-				const NxDebugRenderable *dbgRenderable=Simulation::gScenes[indexRenderScene]->getDebugRenderable();
-				gDebugRenderer.renderData(*dbgRenderable);
-				//glEnable(GL_LIGHTING);
-				//glPopMatrix();
-			}
-			else{
-				//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
-				//glColor4f(0.6f,0.6f,0.6f,1.0f);
-				int nbActors = Simulation::gScenes[indexRenderScene]->getNbActors();
-				for(unsigned int j = 0 ; j < nbActors ; j++ )
-				{
-					DrawActorIME(Simulation::gScenes[indexRenderScene]->getActors()[j]);
-				}
+	if (Simulation::gScenes[indexRenderScene])
+	{
+		//Render
+		if(gDebugVisualization){
+			//glPushMatrix();
+			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[indexRenderScene]->getDebugRenderable();
+			gDebugRenderer.renderData(*dbgRenderable);
+			//glEnable(GL_LIGHTING);
+			//glPopMatrix();
+		}
+		else{
+			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
+			//glColor4f(0.6f,0.6f,0.6f,1.0f);
+			int nbActors = Simulation::gScenes[indexRenderScene]->getNbActors();
+			for(unsigned int j = 0 ; j < nbActors ; j++ )
+			{
+				DrawActorIME(Simulation::gScenes[indexRenderScene]->getActors()[j]);
+				//Simulation::allRobots.drawRobots(gDebugVisualization);
 			}
 		}
 
@@ -626,11 +714,12 @@ void SimulationView::RenderSimulationCallback()
 		gPerfRenderer.render(gScenes[i]->readProfileData(true), glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 		#endif*/
 
-		//char buf[256];
-		//sprintf(buf,"Iteracao Numero: %d\nTempo: %f s\nErro Angular: %f graus\nErro de Posicao X: %f mm\nErro de Posicao Y: %f mm", count, count * 1./60., 90 - ang/NxPi*180, 500 - pos.x, 500 - pos.y);
-		//GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-		//GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
-		//GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
+		char buf[256];
+		sprintf(buf,"CENA: %d", indexRenderScene);
+		GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
+		GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
+	}
 	//}
 	glPopMatrix();
 
@@ -835,10 +924,10 @@ void SimulationView::mainLoop(int argc, char **argv)
 #endif
 	// Initialize Glut
 	//glutInit(&argc, argv);
-	//glutInitWindowSize(512, 512);
+	glutInitWindowSize(1920, 1080);
 
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-	gMainHandle = glutCreateWindow("Simulação - RobotIME");
+	gMainHandle = glutCreateWindow("Simulação - RoboIME");
 	glutSetWindow(gMainHandle);
 	glutDisplayFunc(RenderCallback);
 	glutReshapeFunc(ReshapeCallback);
@@ -857,7 +946,6 @@ void SimulationView::mainLoop(int argc, char **argv)
 	glDepthFunc(GL_LEQUAL);
 	glClearDepth(zFar);
 	glDepthRange(zNear, zFar);
-
 	glEnable(GL_COLOR_MATERIAL);
 #if !defined(__PPCGEKKO__)
 	glEnable(GL_CULL_FACE);
@@ -875,7 +963,7 @@ void SimulationView::mainLoop(int argc, char **argv)
 	glLightfv(GL_LIGHT0, GL_POSITION, Position);
 	glEnable(GL_LIGHT0);
 
-	glutFullScreen();
+	//glutFullScreen();
 
 	bool init = Simulation::initSimulation();
 
@@ -903,10 +991,10 @@ void SimulationView::mainSimulationLoop(int argc, char **argv)
 #endif
 	// Initialize Glut
 	//glutInit(&argc, argv);
-	//glutInitWindowSize(1920, 1080);
+	glutInitWindowSize(1920, 1080);
 
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-	gMainHandle = glutCreateWindow("Simulação - RobotIME");
+	gMainHandle = glutCreateWindow("Simulação - RoboIME");
 	glutSetWindow(gMainHandle);
 	glutDisplayFunc(RenderSimulationCallback);
 	glutReshapeFunc(ReshapeCallback);
@@ -942,7 +1030,7 @@ void SimulationView::mainSimulationLoop(int argc, char **argv)
 	glLightfv(GL_LIGHT0, GL_POSITION, Position);
 	glEnable(GL_LIGHT0);
 
-	glutFullScreen();
+	//glutFullScreen();
 
 	bool init = Simulation::initSimulation();
 

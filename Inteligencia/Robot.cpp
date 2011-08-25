@@ -15,11 +15,11 @@ namespace Inteligencia {
 		_dribbler = new Dribbler();
 		_kicker = new Kicker();
 		_motor = new Motor();
-		_body = new Body(150.0, 90.0);
-		_wheel[0] = new Wheel(-1.02260);
-		_wheel[1] = new Wheel( 0.96706);
-		_wheel[2] = new Wheel( 2.32842);
-		_wheel[3] = new Wheel(-2.38397);
+		_body = new Body(137.8, 80.6);
+		_wheel[0] = new Wheel(-1.0258422);
+		_wheel[1] = new Wheel( 0.9638311);
+		_wheel[2] = new Wheel( 2.3251843);
+		_wheel[3] = new Wheel(-2.3872001);
 	}
 
 	Robot::Robot(void) {

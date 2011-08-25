@@ -14,6 +14,7 @@ public:
 	NxDribbler dribbler;
 	NxArray<NxJoint*> joints;
 	float bodyRadius;
+	float wheelsRadius;
 public:
 	NxRobot();
 

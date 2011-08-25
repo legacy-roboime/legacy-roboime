@@ -27,6 +27,7 @@ NxAllRobots Simulation::allRobots = NxAllRobots();
 NxAllBalls Simulation::allBalls =  NxAllBalls();
 NxAllFields Simulation::allFields =  NxAllFields();
 NxArray<NxUserContactReport *> Simulation::robotContactReport = NxArray<NxUserContactReport *>();
+NxArray<bool> Simulation::flagDribblerContact = NxArray<bool>();
 
 /**
 * Método do PhysX
@@ -88,7 +89,7 @@ void Simulation::releaseScene(NxScene &scene)
 //==================================================================================
 void Simulation::CreateCube(const NxVec3 &pos, int size, const NxVec3 *initial_velocity)
 {
-	if (gScenes[gBaseScene])
+	if (gScenes[SimulationView::indexRenderScene])
 	{
 		// Create body
 		NxBodyDesc BodyDesc;
@@ -107,7 +108,7 @@ void Simulation::CreateCube(const NxVec3 &pos, int size, const NxVec3 *initial_v
 		ActorDesc.body = &BodyDesc;
 		ActorDesc.density = 10.0f;
 		ActorDesc.globalPose.t = pos;
-		gScenes[gBaseScene]->createActor(ActorDesc)->userData = (void*)size;
+		gScenes[SimulationView::indexRenderScene]->createActor(ActorDesc)->userData = (void*)size;
 	}
 }
 
@@ -274,6 +275,8 @@ void Simulation::ReleaseNx()
 }
 //==================================================================================
 void Simulation::simVisionRun(){
+	QMutexLocker locker(&mutex);
+
 	TimePosix::gettimeofday(&timeLastSimulate,NULL);
 	while(true){
 		double diff;
@@ -441,11 +444,12 @@ void Simulation::controlDribbler( float dribblerSpeed, int indexRobot, int index
 	//TODO: implementar o controlador
 	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
 	if(robot){
-		///////////allBalls.getBallByScene(indexScene).ball->addTorque(NxVec3(0,dribblerSpeed*10000,0));
-		//NxActor* actorDribbler = robot->dribbler.dribbler;
-		//if(actorDribbler != NULL) {
-		//	actorDribbler->addLocalTorque(NxVec3(0,0,-dribblerSpeed));
-		//}
+		if(true){//flagDribblerContact[indexRobot]){
+			NxReal angle = getAngle2DFromRobot(indexRobot, indexScene);
+			angle += NxPi/2.;
+			allBalls.getBallByScene(indexScene).ball->addTorque(NxVec3(dribblerSpeed*cos(angle)*100., sin(angle)*dribblerSpeed*100., 0), NX_IMPULSE); //TODO: VERIFICAR A FORÇA OU IMPULSO
+			flagDribblerContact = false;
+		}
 	}
 }
 
@@ -472,7 +476,7 @@ void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScen
 
 		NxUtilLib* gUtilLib = NxGetUtilLib();
 		if(gUtilLib->NxSweepBoxSphere(box, sphere, dir, 50, min_dist, normal)){
-			ball.ball->addForce(NxVec3(kickerSpeed*cos(angle)*100., kickerSpeed*sin(angle)*100., 0), NX_IMPULSE);
+			ball.ball->addForce(NxVec3(kickerSpeed*cos(angle)*100., kickerSpeed*sin(angle)*100., 0), NX_IMPULSE); //TODO: VERIFICAR A FORÇA OU IMPULSO
 		}
 	}
 }
@@ -926,7 +930,8 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 		NxReal angPosWheel = ((NxWheel2*)nxRobot->getWheel(i))->angWheelRelRobot;
 		speeds[i] = -NxMath::sin(angPosWheel) * ( speedX * NxMath::cos( -angRobo ) + speedY * NxMath::sin( angRobo ) ) +
 			NxMath::cos(angPosWheel) * ( speedX * NxMath::sin( -angRobo ) + speedY * NxMath::cos( angRobo ) ) +
-			speedAng * nxRobot->bodyRadius;
+			speedAng * nxRobot->wheelsRadius;
+		speeds[i] /= nxRobot->wheelsRadius;
 	}
 
 	//NxMat33 omniMatrix1;
@@ -964,9 +969,9 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 
 	//LIMITANTE DE VELOCIDADE
 	NxReal biggestValue = getBiggestAbsoluteValue(speeds, nbWheels);
-	if(biggestValue > 0.0001)
+	if(biggestValue > 0.00001)
 	{
-		NxReal maxSpeed = 21;
+		NxReal maxSpeed = 42;//21;
 		for( int i = 0; i < nbWheels; i++ )
 		{
 			speeds[i] = speeds[i] / biggestValue * maxSpeed;
@@ -1277,17 +1282,7 @@ bool Simulation::initSimulation()
 		lastWheelTorques.push_back(lastWheelTorquesArray);
 	}
 
-	allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 3, NxVec3(1000, 1000, 25), 1);
-	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->getActor()->setName("Robo3");
-
-	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 2, NxVec3(-1000, -1000, 25), 1);
-	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->getActor()->setName("Robo2");
-
-	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 1, NxVec3(-1000, 1000, 25), 1);
-	allRobots.getRobotByIdScene(1, Simulation::gBaseScene)->getActor()->setName("Robo1");
-
-	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 5, NxVec3(1000, -1000, 25), 1);
-	allRobots.getRobotByIdScene(5, Simulation::gBaseScene)->getActor()->setName("Robo5");
+	allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->setGlobalPosition(NxVec3(-3000, 0, 30));
 
 	//Build Scene
 	//	Contact Report (List of Collisions)
@@ -1320,9 +1315,9 @@ bool Simulation::initSimulation()
 
 	for(int i=0; i<Simulation::gScenes[Simulation::gBaseScene]->getNbMaterials(); i++){
 		NxMaterial *defaultMaterial = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(i);
-		defaultMaterial->setRestitution(0.5f);
-		defaultMaterial->setStaticFriction(0.3f);
-		defaultMaterial->setDynamicFriction(0.3f);
+		defaultMaterial->setRestitution(0.4);//0.5f);     //TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setStaticFriction(0.2);///0.3f);  //TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setDynamicFriction(0.2);//0.3f); //TODO: LEVANTAR PARAMETROS
 	}
 
 	Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
@@ -1333,6 +1328,38 @@ bool Simulation::initSimulation()
 		robots[i]->putToSleep();
 	}
 
+	allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 3, NxVec3(-2000, 1000, 30), 1);
+	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->getActor()->setName("Robo3");
+
+	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 2, NxVec3(-2000, -1000, 30), 1);
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->getActor()->setName("Robo2");
+
+	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 1, NxVec3(-1000, 1000, 30), 1);
+	allRobots.getRobotByIdScene(1, Simulation::gBaseScene)->getActor()->setName("Robo1");
+
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 5, NxVec3(-1000, -1000, 30), 1);
+	allRobots.getRobotByIdScene(5, Simulation::gBaseScene)->getActor()->setName("Robo5");
+
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 6, NxVec3(3000, 0, 30), 0);
+	allRobots.getRobotByIdScene(6, Simulation::gBaseScene)->getActor()->setName("Robo6");
+
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 7, NxVec3(2000, -1000, 30), 0);
+	allRobots.getRobotByIdScene(7, Simulation::gBaseScene)->getActor()->setName("Robo7");
+
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 8, NxVec3(2000, 1000, 30), 0);
+	allRobots.getRobotByIdScene(8, Simulation::gBaseScene)->getActor()->setName("Robo8");
+
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 9, NxVec3(1000, -1000, 30), 0);
+	allRobots.getRobotByIdScene(9, Simulation::gBaseScene)->getActor()->setName("Robo9");
+
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 10, NxVec3(1000, 1000, 30), 0);
+	allRobots.getRobotByIdScene(10, Simulation::gBaseScene)->getActor()->setName("Robo10");
+
+	cloneScene(gBaseScene);
+	cloneScene(gBaseScene);
+	cloneScene(gBaseScene);
+	cloneScene(gBaseScene);
+	cloneScene(gBaseScene);
 	cloneScene(gBaseScene);
 
 	// Initialize physics scene and start the application main loop if scene was created

@@ -8,6 +8,7 @@ NxRobot::NxRobot():NxVehicle()
 {
 	idTeam = 1;
 	bodyRadius = 87.5;
+	wheelsRadius = 80.6;
 }
 
 void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
@@ -86,8 +87,9 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 						memcpy(ballName, name1, strlen(ballName));
 
 						if(strcmp(dribblerName, "Driblador")==0 && strcmp(ballName, "Bola")==0){
-							NxActor& ball = s1->getActor();
-							ball.addTorque(NxVec3(0,1000,0), NX_IMPULSE);
+							//NxActor& ball = s1->getActor();
+							//ball.addTorque(NxVec3(0,1000,0), NX_IMPULSE);
+							//Simulation::flagDribblerContact[
 						}
 						//else if(strcmp(kickerName, "Chutador")==0 && strcmp(ballName, "Bola")==0){
 						//	NxActor& ball = s1->getActor();
@@ -135,7 +137,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	NxVehicleDesc vehicleDesc;
 
 	vehicleDesc.position				= NxVec3(robotActor->getGlobalPosition());
-	vehicleDesc.mass					= 4;//robotActor->getMass(); //PLUGIN TAH COM PROBLEMA XML ERRADO
+	vehicleDesc.mass					= 5.;//robotActor->getMass(); //PLUGIN TAH COM PROBLEMA XML ERRADO
 	//vehicleDesc.motorForce				= 70000;
 	//vehicleDesc.maxVelocity				= 300.f;
 	//vehicleDesc.cameraDistance			= 8.0f;
@@ -187,9 +189,9 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 		wheelDesc[i].springDamping = 0;
 		wheelDesc[i].springBias = 0.0f;
 		wheelDesc[i].maxBrakeForce = 100;
-		wheelDesc[i].frictionToFront = 0.1f;//0.1f;
-		wheelDesc[i].frictionToSide = 0;//0.02f;//
-		wheelDesc[i].inverseWheelMass = 0.1; //TODO: CONFIGURAR PARÂMETRO
+		wheelDesc[i].frictionToFront = 0.1f;//0.1f;	//TODO: CONFIGURAR PARÂMETRO
+		wheelDesc[i].frictionToSide = 0;//0.02f;	//TODO: CONFIGURAR PARÂMETRO
+		wheelDesc[i].inverseWheelMass = 0.1;		//TODO: CONFIGURAR PARÂMETRO
 
 		//Angulo das Rodas (Omni)
 		NxVec3 wheelPosRel = actorWheel->getGlobalPosition() - robotActor->getGlobalPosition();
@@ -208,7 +210,6 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 		robot->setId(indexRobot);
 		robot->setIdTeam(indexTeam);
 		robot->indexScene = indexScene;
-		robot->bodyRadius = 87.5;	
 
 		//Dribbler and Kicker
 		for(int i=0; i<robotActor->getNbShapes(); i++){
