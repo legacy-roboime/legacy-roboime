@@ -467,7 +467,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos do robo e controlando
 		if(indexTeam==0){
-			for(int indexRobot=0; indexRobot<5; indexRobot++)
+			//for(int indexRobot=0; indexRobot<5; indexRobot++)
+			for(int indexRobot=1; indexRobot<6; indexRobot++)
 			{
 				os >> temp;
 				float speedWheel1 = atof(temp.c_str());
@@ -488,7 +489,8 @@ void UDPServerSimInt::parsing()
 		}
 		else
 		{
-			for(int indexRobot=5; indexRobot<10; indexRobot++)
+			//for(int indexRobot=5; indexRobot<10; indexRobot++)
+			for(int indexRobot=6; indexRobot<11; indexRobot++)
 			{
 				os >> temp;
 				float speedWheel1 = atof(temp.c_str());
