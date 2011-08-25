@@ -1,5 +1,5 @@
   <NXUSTREAM2>
-    <NxuPhysicsCollection id="C:\Users\Bill\Desktop\I.M.E\Robocup\RobotIME\trunk\Debug\test.xml" userProperties="" sdkVersion="283" nxuVersion="103">
+    <NxuPhysicsCollection id="C:\Users\Robotica3\Desktop\CBR 2011\RobotIME\trunk\Debug\test.xml" userProperties="" sdkVersion="283" nxuVersion="103">
       <NxPhysicsSDKDesc id="SDK">
         <hwPageSize>65536</hwPageSize>
         <hwPageMax>256</hwPageMax>
@@ -17,9 +17,9 @@
       <NxParameterDesc param="NX_VISUALIZATION_SCALE" value="1"/>
       <NxParameterDesc param="NX_VISUALIZE_WORLD_AXES" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_BODY_AXES" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_BODY_MASS_AXES" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_BODY_LIN_VELOCITY" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_BODY_ANG_VELOCITY" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_BODY_MASS_AXES" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_BODY_LIN_VELOCITY" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_BODY_ANG_VELOCITY" value="1"/>
       <NxParameterDesc param="NX_DUMMY15" value="0"/>
       <NxParameterDesc param="NX_DUMMY16" value="0"/>
       <NxParameterDesc param="NX_DUMMY17" value="0"/>
@@ -32,19 +32,19 @@
       <NxParameterDesc param="NX_DUMMY24" value="0"/>
       <NxParameterDesc param="NX_DUMMY25" value="0"/>
       <NxParameterDesc param="NX_DUMMY26" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_JOINT_LOCAL_AXES" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_JOINT_WORLD_AXES" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_JOINT_LIMITS" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_JOINT_LOCAL_AXES" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_JOINT_WORLD_AXES" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_JOINT_LIMITS" value="1"/>
       <NxParameterDesc param="NX_DUMMY30" value="0"/>
       <NxParameterDesc param="NX_DUMMY31" value="0"/>
       <NxParameterDesc param="NX_DUMMY32" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_CONTACT_POINT" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_CONTACT_NORMAL" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_CONTACT_ERROR" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_CONTACT_FORCE" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_CONTACT_POINT" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_CONTACT_NORMAL" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_CONTACT_ERROR" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_CONTACT_FORCE" value="1"/>
       <NxParameterDesc param="NX_VISUALIZE_ACTOR_AXES" value="1"/>
       <NxParameterDesc param="NX_VISUALIZE_COLLISION_AABBS" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_SHAPES" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_SHAPES" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_COLLISION_AXES" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_COLLISION_COMPOUNDS" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_COLLISION_VNORMALS" value="0"/>
@@ -1070,7 +1070,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_5" userProperties="" hasBody="true" name="Bola">
-          <globalPose>0.000361859 0.999985278 -0.005422247  -0.99999994 0.000361838 -0.000002136  -0.000000174 0.005422248 0.999985337  125.516464233 0 21.5</globalPose>
+          <globalPose>0.000362028 0.999985158 -0.005422243  -0.999999821 0.000362017 -0.000002138  -0.000000175 0.005422244 0.999985337  125.51599884 0 21.5</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>1 0 0  0 1 0  0 0 1  -0.000001987 0.000003769 0.000000301</massLocalPose>
             <massSpaceInertia>0.000001894 0.000001894 0.000001894</massSpaceInertia>
@@ -1116,7 +1116,7 @@
           <compartment></compartment>
           <NxSphereShapeDesc radius="21.500038147">
             <NxShapeDesc userProperties="" name="Bola">
-              <localPose>1 -0.000000135 0.00000007  0.000000135 1 -0.000000001  -0.00000007 0.000000001 1  0 0 0</localPose>
+              <localPose>1 -0.000000135 0.000000101  0.000000135 1 -0  -0.000000101 0 1  0 0 0</localPose>
               <NxShapeFlag id="shapeFlags">
                 <NX_TRIGGER_ON_ENTER>false</NX_TRIGGER_ON_ENTER>
                 <NX_TRIGGER_ON_LEAVE>false</NX_TRIGGER_ON_LEAVE>
@@ -1535,7 +1535,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_12" userProperties="" hasBody="true" name="Robo4">
-          <globalPose>1 0 0  0 1 0  0 0 1  -0.000251055 -0.000039101 0.799995422</globalPose>
+          <globalPose>1 0 0  0 1 0  0 0 1  -0.000251055 -0.000039101 0.799995005</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>0.871206343 0.00016852 0.490916938  0.004823482 0.99994874 -0.008903257  -0.490893275 0.010124503 0.871160865  31.829944611 2.81988883 100.628829956</massLocalPose>
             <massSpaceInertia>0.85895443 1.966277122 2.091758966</massSpaceInertia>
@@ -1772,9 +1772,9 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_13" userProperties="" hasBody="true" name="Roda-4-1">
-          <globalPose>-0.544639707 -0.000001233 -0.838670194  -0.838670194 0.000000757 0.544639647  -0.00000003 1 -0.00000146  45.994270325 66.23525238 27.600002289</globalPose>
+          <globalPose>-0.54463923 -0.000001347 -0.838670313  -0.838670254 0.000000894 0.544639349  -0.00000006 0.99999994 -0.000001491  45.994274139 66.235206604 27.600004196</globalPose>
           <NxBodyDesc id="body">
-            <massLocalPose>0.748621881 -0.662997067 -0.000377116  0.662997186 0.748621702 0.000497626  -0.000047607 -0.000622561 0.999999821  0.033801988 0.045943465 2.4943645</massLocalPose>
+            <massLocalPose>0.748621881 -0.662997067 -0.000377176  0.662997186 0.748621702 0.000497626  -0.000047562 -0.0006226 0.999999821  0.033801839 0.045943465 2.4943645</massLocalPose>
             <massSpaceInertia>0.000000543 0.000000554 0.000001085</massSpaceInertia>
             <mass>0.000000003</mass>
             <linearVelocity>0 0 0</linearVelocity>
@@ -1822,7 +1822,7 @@
               <NX_MESH_DOUBLE_SIDED>false</NX_MESH_DOUBLE_SIDED>
             </NxMeshShapeFlag>
             <NxShapeDesc userProperties="" name="Roda-4-1">
-              <localPose>1 -0 0.00000003  0 1 -0  -0.00000003 0 1  0 0 0</localPose>
+              <localPose>1 0 -0.00000003  -0 1 0  0.00000003 0 1  0 0 0</localPose>
               <NxShapeFlag id="shapeFlags">
                 <NX_TRIGGER_ON_ENTER>false</NX_TRIGGER_ON_ENTER>
                 <NX_TRIGGER_ON_LEAVE>false</NX_TRIGGER_ON_LEAVE>
@@ -1869,7 +1869,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_14" userProperties="" hasBody="true" name="Roda-4-0">
-          <globalPose>-0.544641197 0.000001233 0.838669121  0.838669062 0.000000787 0.544641197  0.00000003 0.99999994 -0.000001426  41.801235199 -68.958450317 27.600002289</globalPose>
+          <globalPose>-0.544641197 0.000001233 0.838669121  0.838669062 0.000000787 0.544641197  0.00000003 0.99999994 -0.000001426  41.80122757 -68.958404541 27.600004196</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>0.866014242 -0.500019252 0.000204786  0.500019312 0.866014183 -0.000354699  0.000000009 0.000409572 0.99999994  0.030164104 -0.052245125 2.494365215</massLocalPose>
             <massSpaceInertia>0.000000546 0.000000551 0.000001085</massSpaceInertia>
@@ -1966,7 +1966,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_15" userProperties="" hasBody="true" name="Roda-4-2">
-          <globalPose>0.707106233 -0.000002116 -0.707107306  -0.707107306 -0.000002094 -0.707106173  0 0.99999994 -0.000002973  -55.225032806 58.760574341 27.600006104</globalPose>
+          <globalPose>0.707106173 -0.000002123 -0.707107365  -0.707107425 -0.000002094 -0.707106233  0.00000006 1 -0.000003005  -55.225032806 58.760570526 27.600008011</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>0.742372215 0.669987559 -0.000459725  -0.669987559 0.742372334 0.000263989  0.000518156 0.000112032 0.999999881  0.046213638 0.080044217 2.494368315</massLocalPose>
             <massSpaceInertia>0.000000552 0.000000544 0.000001085</massSpaceInertia>
@@ -2016,7 +2016,7 @@
               <NX_MESH_DOUBLE_SIDED>false</NX_MESH_DOUBLE_SIDED>
             </NxMeshShapeFlag>
             <NxShapeDesc userProperties="" name="Roda-4-2">
-              <localPose>1 0 -0  -0 1 0  0 -0 1  0 0 0</localPose>
+              <localPose>1 0 0  -0 1 0  -0 -0 1  0 0 0</localPose>
               <NxShapeFlag id="shapeFlags">
                 <NX_TRIGGER_ON_ENTER>false</NX_TRIGGER_ON_ENTER>
                 <NX_TRIGGER_ON_LEAVE>false</NX_TRIGGER_ON_LEAVE>
@@ -2063,7 +2063,7 @@
           <forceFieldMaterial>0</forceFieldMaterial>
         </NxActorDesc>
         <NxActorDesc id="Actor_16" userProperties="" hasBody="true" name="Roda-4-3">
-          <globalPose>0.707107842 0.000000985 0.707105756  0.707105756 -0.000000519 -0.707107842  -0.000000328 1 -0.000001066  -58.760570526 -55.225036621 27.600000381</globalPose>
+          <globalPose>0.707107782 0.000000913 0.707105756  0.707105756 -0.000000393 -0.707107782  -0.000000328 0.99999994 -0.000000902  -58.760566711 -55.225032806 27.600002289</globalPose>
           <NxBodyDesc id="body">
             <massLocalPose>0.898312271 -0.439357072 0.000621018  0.439356983 0.898312509 0.000276738  -0.000679455 0.000024251 0.999999762  -0.02095172 -0.000000346 2.500000954</massLocalPose>
             <massSpaceInertia>0.000000543 0.000000554 0.000001085</massSpaceInertia>
@@ -2113,7 +2113,7 @@
               <NX_MESH_DOUBLE_SIDED>false</NX_MESH_DOUBLE_SIDED>
             </NxMeshShapeFlag>
             <NxShapeDesc userProperties="" name="Roda-4-3">
-              <localPose>1 0 0  -0 1 -0  -0 -0 1  0 0 0</localPose>
+              <localPose>1 0 -0  -0 1 -0  0 0 1  0 0 0</localPose>
               <NxShapeFlag id="shapeFlags">
                 <NX_TRIGGER_ON_ENTER>false</NX_TRIGGER_ON_ENTER>
                 <NX_TRIGGER_ON_LEAVE>false</NX_TRIGGER_ON_LEAVE>
