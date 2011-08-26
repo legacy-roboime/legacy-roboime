@@ -4,7 +4,7 @@
 #include "Stream.h"
 #include "cooking.h"
 
-NxRobot::NxRobot():NxVehicle()
+NxRobot::NxRobot() : NxVehicle()
 {
 	idTeam = 1;
 	bodyRadius = 87.5;
@@ -146,6 +146,9 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//vehicleDesc.transmissionEfficiency
 	vehicleDesc.actor = robotActor;
 	vehicleDesc.actor->setMaxAngularVelocity(6.2);
+	vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*10.);
+	vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
+	NxMat34 teste = vehicleDesc.actor->getCMassLocalPose();
 
 	//Motor descricao
 	//NxVehicleMotorDesc motorsDesc[4];

@@ -1320,6 +1320,7 @@ bool Simulation::initSimulation()
 		defaultMaterial->setRestitution(0.4);//0.5f);//     //TODO: LEVANTAR PARAMETROS
 		defaultMaterial->setStaticFriction(0.2);//0.3f);//  //TODO: LEVANTAR PARAMETROS
 		defaultMaterial->setDynamicFriction(0.2);//0.3f);//	//TODO: LEVANTAR PARAMETROS
+		//TODO: USAR NxCombineMode
 	}
 
 	Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
