@@ -805,9 +805,10 @@ void Simulation::setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot
 void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene )
 {
 	//Controle proporcional
-	//Velocidades Maximas
-	NxReal maxSpeedAng = 6;
-	NxReal maxLinearSpeed = 6000;
+	//Velocidades Maximas do nosso robô: 17,5 x  pi x 0,057m = 3,13 m/s (o da Skuba, atual campeã mundial: 3,5m/s)  
+	//Rotacao maxima: 6,180582777638119118568314880347
+	NxReal maxSpeedAng = 6.2;
+	NxReal maxLinearSpeed = 3130;
 
 	//Controle de angulo
 	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene ); //TODO: remover redundância de getAngle2DFromRobot tanto em goToThisPose quanto em calcWheelSpeedFromRobotSpeed
@@ -971,7 +972,8 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	NxReal biggestValue = getBiggestAbsoluteValue(speeds, nbWheels);
 	if(biggestValue > 0.00001)
 	{
-		NxReal maxSpeed = 42;//21;
+		//Valor maximo da nossa roda 109,95574287564276334619251841478 rad/s (17,5 rps)
+		NxReal maxSpeed = 110.;
 		for( int i = 0; i < nbWheels; i++ )
 		{
 			speeds[i] = speeds[i] / biggestValue * maxSpeed;
@@ -1315,9 +1317,9 @@ bool Simulation::initSimulation()
 
 	for(int i=0; i<Simulation::gScenes[Simulation::gBaseScene]->getNbMaterials(); i++){
 		NxMaterial *defaultMaterial = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(i);
-		defaultMaterial->setRestitution(0.4);//0.5f);     //TODO: LEVANTAR PARAMETROS
-		defaultMaterial->setStaticFriction(0.2);///0.3f);  //TODO: LEVANTAR PARAMETROS
-		defaultMaterial->setDynamicFriction(0.2);//0.3f); //TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setRestitution(0.4);//0.5f);//     //TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setStaticFriction(0.2);//0.3f);//  //TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setDynamicFriction(0.2);//0.3f);//	//TODO: LEVANTAR PARAMETROS
 	}
 
 	Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
@@ -1355,12 +1357,12 @@ bool Simulation::initSimulation()
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 10, NxVec3(1000, 1000, 30), 0);
 	allRobots.getRobotByIdScene(10, Simulation::gBaseScene)->getActor()->setName("Robo10");
 
-	cloneScene(gBaseScene);
-	cloneScene(gBaseScene);
-	cloneScene(gBaseScene);
-	cloneScene(gBaseScene);
-	cloneScene(gBaseScene);
-	cloneScene(gBaseScene);
+	//cloneScene(gBaseScene);
+	//cloneScene(gBaseScene);
+	//cloneScene(gBaseScene);
+	//cloneScene(gBaseScene);
+	//cloneScene(gBaseScene);
+	//cloneScene(gBaseScene);
 
 	// Initialize physics scene and start the application main loop if scene was created
 	return init; 

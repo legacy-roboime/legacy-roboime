@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 
 	//system("pause");
 	//Skill* test = new Loops::Circle(rob, -1200, 1500, 600, 16);
-	Tactic* test = new Controller(1, rob, sta, 20);
+	Tactic* test = new Controller(1, rob, sta, 50);
 	//Tactic* testb = new Controller(2, robb, sta, 20);
 	while(true) {
 		upd->step();

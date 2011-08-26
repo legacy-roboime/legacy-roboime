@@ -145,6 +145,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//vehicleDesc.differentialRatio = 3.42f;
 	//vehicleDesc.transmissionEfficiency
 	vehicleDesc.actor = robotActor;
+	vehicleDesc.actor->setMaxAngularVelocity(6.2);
 
 	//Motor descricao
 	//NxVehicleMotorDesc motorsDesc[4];
