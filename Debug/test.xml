@@ -1723,12 +1723,7 @@
               </NxShapeCompartmentType>
             </NxShapeDesc>
           </NxConvexShapeDesc>
-          <NxConvexShapeDesc meshData="ConvexMesh_3">
-            <NxMeshShapeFlag id="meshFlags">
-              <NX_MESH_SMOOTH_SPHERE_COLLISIONS>false</NX_MESH_SMOOTH_SPHERE_COLLISIONS>
-              <NX_MESH_DOUBLE_SIDED>false</NX_MESH_DOUBLE_SIDED>
-            </NxMeshShapeFlag>
-            <NxShapeDesc userProperties="" name="Chutador4">
+          <NxBoxShapeDesc dimensions="16.35 12.5 3.0">
               <localPose>1 -0.000000676 -0.000000087  0.000000676 1 -0.000000087  0.000000087 0.000000087 1  69.162017822 0.000000262 16.399009705</localPose>
               <NxShapeFlag id="shapeFlags">
                 <NX_TRIGGER_ON_ENTER>false</NX_TRIGGER_ON_ENTER>
@@ -1770,7 +1765,7 @@
                 <NX_COMPARTMENT_HW_SOFTBODY>false</NX_COMPARTMENT_HW_SOFTBODY>
               </NxShapeCompartmentType>
             </NxShapeDesc>
-          </NxConvexShapeDesc>
+          </NxBoxShapeDesc>
           <dominanceGroup>0</dominanceGroup>
           <contactReportFlags>0</contactReportFlags>
           <forceFieldMaterial>0</forceFieldMaterial>
