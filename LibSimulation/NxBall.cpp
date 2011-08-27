@@ -21,10 +21,10 @@ void Simulation::buildModelBall(int indexScene){
 
 	//TODO: LEVANTAR INERTIA TENSOR, CMASS, DAMPINGS
 	//float teste = ball.ball->getAngularDamping();
-	//ball.ball->setCMassOffsetGlobalPosition(NxVec3(0,0,0));
+	ball.ball->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
 	//ball.ball->setAngularDamping(0.5);
 	//ball.ball->setLinearDamping(0.5);
-	//ball.ball->setMassSpaceInertiaTensor(ball.ball->getMassSpaceInertiaTensor()*10.);
+	ball.ball->setMassSpaceInertiaTensor(ball.ball->getMassSpaceInertiaTensor()*10000.);
 
 	ball.initialPose = ball.ball->getGlobalPose();
 	ball.indexScene = indexScene;
