@@ -148,11 +148,16 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//vehicleDesc.transmissionEfficiency
 	vehicleDesc.actor = robotActor;
 	vehicleDesc.actor->setMaxAngularVelocity(6.2);
-	//vehicleDesc.actor->
-	//vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*10.);
-	//vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
-	//vehicleDesc.actor->setCMassOffsetLocalPosition(NxVec3(0,0,0));
-	//NxMat34 teste = vehicleDesc.actor->getCMassLocalPose();
+
+	//TODO: LEVANTAR DAMPING
+	float t = vehicleDesc.actor->getLinearDamping();
+	float b = vehicleDesc.actor->getAngularDamping();
+	//vehicleDesc.actor->setAngularDamping(100.);
+	//vehicleDesc.actor->setLinearDamping(0.05);
+
+	//TODO: LEVANTAR CMASS E INERTIA TENSOR
+	vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*10000.);
+	vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
 
 	//Motor descricao
 	//NxVehicleMotorDesc motorsDesc[4];

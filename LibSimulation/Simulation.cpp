@@ -455,7 +455,7 @@ void Simulation::controlDribbler( float dribblerSpeed, int indexRobot, int index
 
 void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScene )
 {
-	//TODO: implementar o controlador
+	/*//TODO: implementar o controlador
 	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
 	if(robot){
 		NxBall ball = Simulation::allBalls.getBallByScene(indexScene);
@@ -478,7 +478,7 @@ void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScen
 		if(gUtilLib->NxSweepBoxSphere(box, sphere, dir, 50, min_dist, normal)){
 			ball.ball->addForce(NxVec3(kickerSpeed*cos(angle)*100., kickerSpeed*sin(angle)*100., 0), NX_IMPULSE); //TODO: VERIFICAR A FORÇA OU IMPULSO
 		}
-	}
+	}*/
 }
 
 NxActor* Simulation::getActorBall(int indexScene)
@@ -1317,9 +1317,9 @@ bool Simulation::initSimulation()
 
 	for(int i=0; i<Simulation::gScenes[Simulation::gBaseScene]->getNbMaterials(); i++){
 		NxMaterial *defaultMaterial = Simulation::gScenes[Simulation::gBaseScene]->getMaterialFromIndex(i);
-		defaultMaterial->setRestitution(0);//0.5f);//     //TODO: LEVANTAR PARAMETROS
-		defaultMaterial->setStaticFriction(0.2);//0.3f);//  //TODO: LEVANTAR PARAMETROS
-		defaultMaterial->setDynamicFriction(0.2);//0.3f);//	//TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setRestitution(0.5);//0.5f);//     //TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setStaticFriction(0.3);//0.3f);//  //TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setDynamicFriction(0.3);//0.3f);//	//TODO: LEVANTAR PARAMETROS
 		//TODO: USAR NxCombineMode
 	}
 
@@ -1357,6 +1357,13 @@ bool Simulation::initSimulation()
 
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 10, NxVec3(1000, 1000, 30), 0);
 	allRobots.getRobotByIdScene(10, Simulation::gBaseScene)->getActor()->setName("Robo10");
+
+	NxVec3 teste;
+	Simulation::gScenes[0]->getGravity(teste);
+	//Simulation::gScenes[0]->setGravity(NxVec3(0,0,-9.81));
+	NxSceneDesc vaca;
+	Simulation::gScenes[0]->saveToDesc(vaca);
+
 
 	//cloneScene(gBaseScene);
 	//cloneScene(gBaseScene);

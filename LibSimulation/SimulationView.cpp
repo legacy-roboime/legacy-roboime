@@ -715,7 +715,16 @@ void SimulationView::RenderSimulationCallback()
 		#endif*/
 
 		char buf[256];
-		sprintf(buf,"CENA: %d", indexRenderScene);
+		//NxRobot* robot = Simulation::allRobots.getRobotByIdScene(4, 0);
+		//NxVec3 angMomentum = robot->getActor()->getAngularMomentum();
+		//NxVec3 angVelocity = robot->getActor()->getAngularVelocity();
+		//NxVec3 linMomentum = robot->getActor()->getLinearMomentum();
+		//NxVec3 linVelocity = robot->getActor()->getLinearVelocity();
+		sprintf(buf,"CENA: %d\n", indexRenderScene);
+		//printf("MOMENTO ANGULAR: %f %f %f\n", angMomentum.x, angMomentum.y, angMomentum.z);
+		//printf("VELOCIDADE ANGULAR: %f %f %f\n", angVelocity.x, angVelocity.y, angVelocity.z);
+		//printf("MOMENTO LINEAR: %f %f %f\n", linMomentum.x, linMomentum.y, linMomentum.z);
+		//printf("VELOCIDADE LINEAR: %f %f %f\n", linVelocity.x, linVelocity.y, linVelocity.z);
 		GLFontRenderer::setScreenResolution(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 		GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
 		GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
