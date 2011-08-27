@@ -87,8 +87,8 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 						memcpy(ballName, name1, strlen(ballName));
 
 						if(strcmp(dribblerName, "Driblador")==0 && strcmp(ballName, "Bola")==0){
-							//NxActor& ball = s1->getActor();
-							//ball.addTorque(NxVec3(0,1000,0), NX_IMPULSE);
+							NxActor& ball = s1->getActor();
+							ball.addTorque(NxVec3(0,1000,0), NX_IMPULSE);
 							//Simulation::flagDribblerContact[
 						}
 						//else if(strcmp(kickerName, "Chutador")==0 && strcmp(ballName, "Bola")==0){

@@ -22,7 +22,7 @@ timeval Simulation::timeLastSimulate;
 std::vector<std::vector<NxReal*>> Simulation::lastWheelSpeeds = std::vector<std::vector<NxReal*>>();
 std::vector<std::vector<NxReal*>> Simulation::lastDesiredWheelSpeeds = std::vector<std::vector<NxReal*>>();
 std::vector<std::vector<NxReal*>> Simulation::lastWheelTorques = std::vector<std::vector<NxReal*>>();
-float Simulation::timeStep = 1./60.;//15./1000.;//
+float Simulation::timeStep = 1./60.; //timestep de 1/60 e 4 intervalos (baseado na tese do stefan zickler
 NxAllRobots Simulation::allRobots = NxAllRobots();
 NxAllBalls Simulation::allBalls =  NxAllBalls();
 NxAllFields Simulation::allFields =  NxAllFields();
@@ -302,7 +302,8 @@ void Simulation::simulate()
 	{
 		if (gScenes[i] && !gPause)
 		{
-			gScenes[i]->setTiming(timeStep, 1, NX_TIMESTEP_FIXED);
+			//timestep de 1/60 e 4 intervalos (baseado na tese do stefan zickler
+			gScenes[i]->setTiming(timeStep, 4, NX_TIMESTEP_FIXED);
 			gScenes[i]->simulate(timeStep);
 			gScenes[i]->flushStream();
 		}
@@ -327,7 +328,8 @@ void Simulation::simulate(int indexScene)
 	// Physics code
 	if (gScenes[indexScene] && !gPause)
 	{
-		gScenes[indexScene]->setTiming(timeStep, 1, NX_TIMESTEP_FIXED);
+		//timestep de 1/60 e 4 intervalos (baseado na tese do stefan zickler
+		gScenes[indexScene]->setTiming(timeStep, 4, NX_TIMESTEP_FIXED);
 		gScenes[indexScene]->simulate(timeStep);
 	}
 
@@ -347,7 +349,8 @@ void Simulation::simulate(int indexScene, float dt)
 	// Physics code
 	if (gScenes[indexScene] && !gPause)
 	{
-		gScenes[indexScene]->setTiming(dt, 1, NX_TIMESTEP_FIXED);
+		//timestep de 1/60 e 4 intervalos (baseado na tese do stefan zickler
+		gScenes[indexScene]->setTiming(dt, 4, NX_TIMESTEP_FIXED);
 		gScenes[indexScene]->simulate(dt);
 	}
 
@@ -455,7 +458,7 @@ void Simulation::controlDribbler( float dribblerSpeed, int indexRobot, int index
 
 void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScene )
 {
-	/*//TODO: implementar o controlador
+	//TODO: implementar o controlador
 	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
 	if(robot){
 		NxBall ball = Simulation::allBalls.getBallByScene(indexScene);
@@ -476,9 +479,9 @@ void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScen
 
 		NxUtilLib* gUtilLib = NxGetUtilLib();
 		if(gUtilLib->NxSweepBoxSphere(box, sphere, dir, 50, min_dist, normal)){
-			ball.ball->addForce(NxVec3(kickerSpeed*cos(angle)*100., kickerSpeed*sin(angle)*100., 0), NX_IMPULSE); //TODO: VERIFICAR A FORÇA OU IMPULSO
+			ball.ball->addForce(NxVec3(kickerSpeed*cos(angle)*300., kickerSpeed*sin(angle)*300., 0), NX_IMPULSE); //TODO: VERIFICAR A FORÇA OU IMPULSO
 		}
-	}*/
+	}
 }
 
 NxActor* Simulation::getActorBall(int indexScene)
