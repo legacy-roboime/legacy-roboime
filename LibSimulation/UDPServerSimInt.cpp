@@ -483,6 +483,13 @@ void UDPServerSimInt::parsing()
 				os >> temp;
 				float kickerSpeed = atof(temp.c_str());
 
+				/*if(indexRobot==1){
+					printf("ROBO1 DOIDO: %f %f %f %f\n", speedWheel1, speedWheel2, speedWheel3, speedWheel4);
+				}
+				if(indexRobot==2){
+					printf("ROBO2 NORMAL: %f %f %f %f\n", speedWheel1, speedWheel2, speedWheel3, speedWheel4);
+				}*/
+
 				//////////////////QMutexLocker locker(&Simulation::mutex);
 				Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
 			}

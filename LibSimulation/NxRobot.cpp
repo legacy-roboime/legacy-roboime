@@ -156,7 +156,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//vehicleDesc.actor->setLinearDamping(0.05);
 
 	//TODO: LEVANTAR CMASS E INERTIA TENSOR
-	vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*10000.);
+	vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*1000.);
 	vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
 
 	//Motor descricao

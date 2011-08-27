@@ -715,7 +715,7 @@ void SimulationView::RenderSimulationCallback()
 		#endif*/
 
 		char buf[256];
-		//NxRobot* robot = Simulation::allRobots.getRobotByIdScene(4, 0);
+		NxRobot* robot = Simulation::allRobots.getRobotByIdScene(4, 0);
 		//NxVec3 angMomentum = robot->getActor()->getAngularMomentum();
 		//NxVec3 angVelocity = robot->getActor()->getAngularVelocity();
 		//NxVec3 linMomentum = robot->getActor()->getLinearMomentum();

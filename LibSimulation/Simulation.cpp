@@ -980,6 +980,9 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 		for( int i = 0; i < nbWheels; i++ )
 		{
 			speeds[i] = speeds[i] / biggestValue * maxSpeed;
+			//if(speeds[i]>110.){
+			//	printf("teste: %f\n", speeds[i]);
+			//}
 		}
 	}
 	else
@@ -1340,7 +1343,7 @@ bool Simulation::initSimulation()
 	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 2, NxVec3(-2000, -1000, 30), 1);
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->getActor()->setName("Robo2");
 
-	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 1, NxVec3(-1000, 1000, 30), 1);
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 1, NxVec3(-1000, 1000, 30), 1);
 	allRobots.getRobotByIdScene(1, Simulation::gBaseScene)->getActor()->setName("Robo1");
 
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 5, NxVec3(-1000, -1000, 30), 1);
