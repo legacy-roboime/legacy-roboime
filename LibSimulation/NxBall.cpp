@@ -18,11 +18,11 @@ void Simulation::buildModelBall(int indexScene){
 	//0.031 medido da bola do lab
 	//46g a bola da rules 2010
 	ball.ball->setMass(0.031); //PLUGIN TAH COM PROBLEMA XML ERRADO 
-	float teste = ball.ball->getAngularDamping();
-	ball.ball->setAngularDamping(0.5);
+	//float teste = ball.ball->getAngularDamping();
+	//ball.ball->setAngularDamping(0.5);
 	//ball.ball->setCMassOffsetGlobalPosition(NxVec3(0,0,0));
-	ball.ball->setLinearDamping(0.5);
-	ball.ball->setMassSpaceInertiaTensor(ball.ball->getMassSpaceInertiaTensor()*10.);
+	//ball.ball->setLinearDamping(0.5);
+	//ball.ball->setMassSpaceInertiaTensor(ball.ball->getMassSpaceInertiaTensor()*10.);
 	//ball.ball->get
 	ball.initialPose = ball.ball->getGlobalPose();
 	ball.indexScene = indexScene;

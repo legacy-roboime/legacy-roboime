@@ -137,7 +137,9 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	NxVehicleDesc vehicleDesc;
 
 	vehicleDesc.position				= NxVec3(robotActor->getGlobalPosition());
-	vehicleDesc.mass					= 5.;//robotActor->getMass(); //PLUGIN TAH COM PROBLEMA XML ERRADO
+	float mass = 5.;
+	robotActor->setMass(mass);
+	vehicleDesc.mass					= mass;//robotActor->getMass(); //PLUGIN TAH COM PROBLEMA XML ERRADO
 	//vehicleDesc.motorForce				= 70000;
 	//vehicleDesc.maxVelocity				= 300.f;
 	//vehicleDesc.cameraDistance			= 8.0f;
@@ -146,9 +148,11 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//vehicleDesc.transmissionEfficiency
 	vehicleDesc.actor = robotActor;
 	vehicleDesc.actor->setMaxAngularVelocity(6.2);
-	vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*10.);
-	vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
-	NxMat34 teste = vehicleDesc.actor->getCMassLocalPose();
+	//vehicleDesc.actor->
+	//vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*10.);
+	//vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
+	//vehicleDesc.actor->setCMassOffsetLocalPosition(NxVec3(0,0,0));
+	//NxMat34 teste = vehicleDesc.actor->getCMassLocalPose();
 
 	//Motor descricao
 	//NxVehicleMotorDesc motorsDesc[4];

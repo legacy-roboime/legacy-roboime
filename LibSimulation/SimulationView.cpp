@@ -321,7 +321,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			NxActor* actor = ball.ball;
 			if(actor != NULL) 
 			{
-				actor->addForce(NxVec3(-10,0,0));
+				actor->addForce(NxVec3(1000,0,0));
 				//actor->setLinearVelocity(NxVec3(1,0,0));
 				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
 			}

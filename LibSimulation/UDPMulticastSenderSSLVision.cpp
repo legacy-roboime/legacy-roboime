@@ -52,7 +52,6 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 		for(int i=0; i<allRobots.size(); i++)
 		{
 			NxRobot* robot = allRobots[i];
-			NxReal angulo = Simulation::getAngle2DFromRobot(4, 0);
 			NxVec3 robotPos = robot->getPos();
 			SSL_DetectionRobot* detectionRobot;
 			
