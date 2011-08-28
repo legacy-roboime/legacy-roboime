@@ -1,5 +1,5 @@
   <NXUSTREAM2>
-    <NxuPhysicsCollection id="C:\Users\Robotica3\Desktop\CBR 2011\RobotIME\trunk\Debug\test.xml" userProperties="" sdkVersion="283" nxuVersion="103">
+    <NxuPhysicsCollection id="C:\Users\Bill\Desktop\I.M.E\Robocup\RobotIME\trunk\Debug\test.xml" userProperties="" sdkVersion="283" nxuVersion="103">
       <NxPhysicsSDKDesc id="SDK">
         <hwPageSize>65536</hwPageSize>
         <hwPageMax>256</hwPageMax>
@@ -43,20 +43,20 @@
       <NxParameterDesc param="NX_VISUALIZE_CONTACT_ERROR" value="1"/>
       <NxParameterDesc param="NX_VISUALIZE_CONTACT_FORCE" value="1"/>
       <NxParameterDesc param="NX_VISUALIZE_ACTOR_AXES" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_AABBS" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_SHAPES" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_AXES" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_COMPOUNDS" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_VNORMALS" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_FNORMALS" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_EDGES" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_SPHERES" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_AABBS" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_SHAPES" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_AXES" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_COMPOUNDS" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_VNORMALS" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_FNORMALS" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_EDGES" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_SPHERES" value="0"/>
       <NxParameterDesc param="NX_DUMMY46" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_STATIC" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_STATIC" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_COLLISION_DYNAMIC" value="0"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_FREE" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_CCD" value="1"/>
-      <NxParameterDesc param="NX_VISUALIZE_COLLISION_SKELETONS" value="1"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_FREE" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_CCD" value="0"/>
+      <NxParameterDesc param="NX_VISUALIZE_COLLISION_SKELETONS" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_FLUID_EMITTERS" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_FLUID_POSITION" value="0"/>
       <NxParameterDesc param="NX_VISUALIZE_FLUID_VELOCITY" value="0"/>
@@ -1143,7 +1143,7 @@
               <materialIndex>1</materialIndex>
               <CCDSkeleton></CCDSkeleton>
               <shapeDensity>0.0000005</shapeDensity>
-              <shapeMass>0.020482872</shapeMass>
+              <shapeMass>0.020482868</shapeMass>
               <skinWidth>0.100000001</skinWidth>
               <NxGroupsMask id="groupsMask" bits0="0" bits1="0" bits2="0" bits3="0"/>
               <NxShapeCompartmentType id="nonInteractingCompartmentTypes">
