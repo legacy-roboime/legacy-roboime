@@ -34,7 +34,7 @@ namespace Inteligencia {
 
 	string UpdateRobot::to_string() {
 		stringstream out;
-		out << "UpdateRobot: [" << _cc << _x << _y << _angle << "]";
+		//out << "UpdateRobot: [" << _cc << _x << _y << _angle << "]";
 		return out.str();
 	}
 

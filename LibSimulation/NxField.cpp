@@ -3,8 +3,13 @@
 
 NxField::NxField(void)
 {
-	widthBorderField = 6050;
-	heightBorderField = 4050;
+	linesLength = 6050;
+	linesWidth = 4050;
+	fieldLength = 7400;
+	fieldWidth = 5400;
+	goalLength = 200.;
+	goalWidth = 700.;
+	goalHeigth = 160.;
 }
 
 NxField::~NxField(void)
@@ -26,6 +31,7 @@ void Simulation::buildModelField(int indexScene)
 	field.actorGolNegativoParedePositivo = Simulation::getActorByLabel(Simulation::gBaseScene, "Gol-Parede+");
 	field.actorGolNegativoParedeNegativo = Simulation::getActorByLabel(Simulation::gBaseScene, "Gol-Parede-");
 	field.indexScene = indexScene;
+	field.setDimensions(field.fieldLength, field.fieldWidth, field.linesLength, field.linesWidth, field.goalLength, field.goalWidth, field.goalHeigth);
 	Simulation::allFields.fields.push_back(field);
 }
 
@@ -47,6 +53,14 @@ void NxField::cloneField(int indexNewScene){
 }
 
 void NxField::setDimensions(float fieldLength, float fieldWidth, float linesLength, float linesWidth, float goalLength, float goalWidth, float goalHeigth){
+	this->linesLength = linesLength;
+	this->linesWidth = linesWidth;
+	this->fieldLength = fieldLength;
+	this->fieldWidth = fieldWidth;
+	this->goalLength = goalLength;
+	this->goalWidth = goalWidth;
+	this->goalHeigth = goalHeigth;
+	
 	//Medidas do 3ds max width (.x), length (.y), heigth (.z)
 	//Obs getDimensions retorna metade das dimensoes totais
 	NxShape* const * shapesCampo = this->actorCampo->getShapes();

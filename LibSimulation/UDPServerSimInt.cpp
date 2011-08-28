@@ -38,13 +38,14 @@ void UDPServerSimInt::parsing()
 		//out << Simulation::timeStep; //quantidade de cenas existentes
 		//out << " ";
 		//Campo
-		out << Simulation::getFieldExtents(indexScene).x; //largura
+		NxField field = Simulation::allFields.getFieldByScene(indexScene);
+		out << field.fieldLength;
 		out << " ";
-		out << Simulation::getFieldExtents(indexScene).y; //altura
+		out << field.fieldWidth; 
 		out << " ";
-		out << Simulation::allFields.getFieldByScene(indexScene).widthBorderField; //largura do campo interno (delimitado pelas linhas brancas)
+		out << field.linesLength; //campo interno (delimitado pelas linhas brancas)
 		out << " ";
-		out << Simulation::allFields.getFieldByScene(indexScene).heightBorderField; //altura do campo interno (delimitado pelas linhas brancas)
+		out << field.linesWidth; //campo interno (delimitado pelas linhas brancas)
 		//Robo
 		//out << " ";
 		//out << Simulation::getFieldExtents(indexScene).y; //quantidade de robos teammates
@@ -76,15 +77,16 @@ void UDPServerSimInt::parsing()
 
 		//Bola
 		/////////////////QMutexLocker locker(&Simulation::mutex);
-		NxVec3 ballPos = Simulation::getBallGlobalPos(indexScene);
+		NxVec3 ballPos = Simulation::allBalls.getBallByScene(indexScene).ball->getGlobalPosition();
 		out << ballPos.x;
 		out << " ";
 		out << ballPos.y;
 		//Robo
 		for(int indexRobot=1; indexRobot<=10; indexRobot++)
 		{
-			NxVec3 robotPos = Simulation::getRobotGlobalPos(indexRobot, indexScene);
-			NxReal robotAngle = Simulation::getAngle2DFromRobot(indexRobot, indexScene);
+			NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
+			NxVec3 robotPos = robot->getPos();
+			NxReal robotAngle = robot->getAngle2DFromVehicle();
 			out << " ";
 			out << robotPos.x;
 			out << " ";

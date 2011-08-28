@@ -78,26 +78,19 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 						dribblerName[9] = 0;
 						memcpy(dribblerName, name, strlen(dribblerName));
 
-						//char* kickerName = new char[9]; //"Chutador\0"
-						//kickerName[8] = 0;
-						//memcpy(kickerName, name, strlen(kickerName));
-
 						char* ballName = new char[5]; //"Bola\0"
 						ballName[4] = 0;
 						memcpy(ballName, name1, strlen(ballName));
 
 						if(strcmp(dribblerName, "Driblador")==0 && strcmp(ballName, "Bola")==0){
+							float angle = this->getAngle2DFromVehicle();
+							angle -= NxPi;
 							NxActor& ball = s1->getActor();
-							ball.addTorque(NxVec3(0,1000,0), NX_IMPULSE);
-							//Simulation::flagDribblerContact[
+							ball.addTorque(NxVec3(sin(angle)*1000000.,cos(angle)*1000000.,0), NX_IMPULSE);
+							this->kicker.speedToExecute = 0;
 						}
-						//else if(strcmp(kickerName, "Chutador")==0 && strcmp(ballName, "Bola")==0){
-						//	NxActor& ball = s1->getActor();
-						//	ball.addForce(NxVec3(100,0,0), NX_IMPULSE);
-						//}
 
 						delete dribblerName;
-						//delete kickerName;
 						delete ballName;
 					}
 				}
@@ -250,6 +243,8 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 		//Initial Pose
 		robot->setInitialPose(robotActor->getGlobalPose());
 
+		robotActor->putToSleep();
+
 		//Mudar pose do robo
 		//NxQuat q;
 		//q.
@@ -362,6 +357,8 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 	//Initial Pose
 	robot->setInitialPose(robotActor->getGlobalPose());
 
+	robotActor->putToSleep();
+
 	//Transladando o robo
 	robot->getActor()->setGlobalPosition(newPosition);
 
@@ -393,6 +390,18 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 		Simulation::lastDesiredWheelSpeeds[indexNewScene][robot->getId()] = wheels;
 		Simulation::lastWheelTorques[indexNewScene][robot->getId()] = wheels;
 	}
+
+	string label;
+	string plabel = "Robo";
+	stringstream out;
+	out << indexNewRobot;
+	label.append(plabel);
+	label.append(out.str());
+	char* arrayLabel = new char[label.size()+1];
+	arrayLabel[label.size()]=0;
+	memcpy(arrayLabel, label.c_str(), label.size());
+	robotActor->setName(arrayLabel);
+	//delete arrayLabel;
 }
 
 void NxRobot::setGlobalPosition(NxVec3 position){

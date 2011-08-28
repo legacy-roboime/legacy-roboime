@@ -6,8 +6,13 @@ class NxField
 {
 public:
 	int indexScene;
-	float widthBorderField;
-	float heightBorderField;
+	float linesLength;
+	float linesWidth;
+	float fieldLength;
+	float fieldWidth;
+	float goalLength;
+	float goalWidth;
+	float goalHeigth;
 	NxActor* actorParedeLateralPositivo;
 	NxActor* actorParedeLateralNegativo;
 	NxActor* actorParedeFundoNegativo;

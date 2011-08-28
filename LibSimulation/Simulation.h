@@ -61,8 +61,6 @@ private:
 	static std::vector<std::vector<NxReal*>> lastWheelSpeeds;
 	static std::vector<std::vector<NxReal*>> lastDesiredWheelSpeeds;
 	static std::vector<std::vector<NxReal*>> lastWheelTorques; 
-
-	static NxArray<bool> flagDribblerContact;
 	
 	static timeval timeLastSimulate;
 	
@@ -105,8 +103,6 @@ private:
 	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
 	static NxVec3 getBallGlobalPos( int indexScene );
 	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
-	static NxReal getAngle2DFromRobot( int indexRobot, int indexScene );
-	static NxVec3 getFieldExtents(int indexScene);
 
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);

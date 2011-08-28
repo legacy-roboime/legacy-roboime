@@ -24,10 +24,12 @@ void Simulation::buildModelBall(int indexScene){
 	ball.ball->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
 	//ball.ball->setAngularDamping(0.5);
 	//ball.ball->setLinearDamping(0.5);
-	ball.ball->setMassSpaceInertiaTensor(ball.ball->getMassSpaceInertiaTensor()*100.);
+	ball.ball->setMassSpaceInertiaTensor(ball.ball->getMassSpaceInertiaTensor()*100000.);
 
 	ball.initialPose = ball.ball->getGlobalPose();
 	ball.indexScene = indexScene;
+
+	ball.ball->putToSleep();
 	Simulation::allBalls.balls.push_back(ball);
 }
 
@@ -35,6 +37,7 @@ void NxBall::cloneBall(int indexNewScene){
 	NxBall ball;
 	ball.ball = Simulation::cloneActor(this->ball, indexNewScene);
 	ball.indexScene = indexNewScene;
+	ball.ball->putToSleep();
 	Simulation::allBalls.balls.push_back(ball);
 }
 

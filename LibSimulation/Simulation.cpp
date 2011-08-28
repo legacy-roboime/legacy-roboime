@@ -27,7 +27,6 @@ NxAllRobots Simulation::allRobots = NxAllRobots();
 NxAllBalls Simulation::allBalls =  NxAllBalls();
 NxAllFields Simulation::allFields =  NxAllFields();
 NxArray<NxUserContactReport *> Simulation::robotContactReport = NxArray<NxUserContactReport *>();
-NxArray<bool> Simulation::flagDribblerContact = NxArray<bool>();
 
 /**
 * Método do PhysX
@@ -444,15 +443,9 @@ void Simulation::controlRobotByWheels(float speedWheel1, float speedWheel2, floa
 
 void Simulation::controlDribbler( float dribblerSpeed, int indexRobot, int indexScene )
 {
-	//TODO: implementar o controlador
 	NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
 	if(robot){
-		if(true){//flagDribblerContact[indexRobot]){
-			NxReal angle = getAngle2DFromRobot(indexRobot, indexScene);
-			angle += NxPi/2.;
-			allBalls.getBallByScene(indexScene).ball->addTorque(NxVec3(dribblerSpeed*cos(angle)*100., sin(angle)*dribblerSpeed*100., 0), NX_IMPULSE); //TODO: VERIFICAR A FORÇA OU IMPULSO
-			flagDribblerContact = false;
-		}
+		robot->kicker.speedToExecute = dribblerSpeed;
 	}
 }
 
@@ -469,9 +462,9 @@ void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScen
 		NxBox box = NxBox(kickerShapeDesc->localPose.t + robot->getActor()->getGlobalPosition(), kickerShapeDesc->dimensions,  robot->getActor()->getGlobalOrientation() * kickerShapeDesc->localPose.M);
 		
 		NxSphere sphere = NxSphere(ball.ball->getGlobalPosition(), ballShapes[0]->isSphere()->getRadius());
-
-		NxReal angle = getAngle2DFromRobot(indexRobot, indexScene);
-		NxVec3 dir = NxVec3(-cos(angle), -sin(angle), 0);
+		
+		NxReal angle = robot->getAngle2DFromVehicle();
+		NxVec3 dir = NxVec3(cos(angle), sin(angle), 0);
 
 		float min_dist;
 
@@ -479,7 +472,7 @@ void Simulation::controlKicker( float kickerSpeed, int indexRobot, int indexScen
 
 		NxUtilLib* gUtilLib = NxGetUtilLib();
 		if(gUtilLib->NxSweepBoxSphere(box, sphere, dir, 50, min_dist, normal)){
-			ball.ball->addForce(NxVec3(kickerSpeed*cos(angle)*300., kickerSpeed*sin(angle)*300., 0), NX_IMPULSE); //TODO: VERIFICAR A FORÇA OU IMPULSO
+			ball.ball->addForce(NxVec3(kickerSpeed*sin(angle)*300., kickerSpeed*cos(angle)*300., 0), NX_IMPULSE); //TODO: VERIFICAR A FORÇA OU IMPULSO
 		}
 	}
 }
@@ -677,52 +670,6 @@ int Simulation::getNumberWheels(int indexScene, int indexRobot)
 	return numberOfWheels;
 }
 
-NxVec3 Simulation::getFieldExtents(int indexScene)
-{
-	NxActor* actor = NULL;
-	const char* actorName = NULL;
-	if(gScenes[indexScene]!=NULL)
-	{
-		for(unsigned int j=0;j<gScenes[indexScene]->getNbActors();j++)
-		{
-			actor = gScenes[indexScene]->getActors()[j];
-			if(actor != NULL)
-			{
-				actorName = actor->getName();
-				if(actorName != NULL)
-				{
-					string label;
-					string plabel = "Campo";
-					label.append(plabel);
-					char* arrayLabel = new char[label.size()+1];
-					arrayLabel[label.size()]=0;
-					memcpy(arrayLabel, label.c_str(), label.size());
-
-					if(strcmp(actorName,arrayLabel)==0) 
-					{
-						delete arrayLabel;
-						break;
-					}
-					else 
-					{
-						actor = NULL;
-						delete arrayLabel;
-					}
-				}
-			}
-			else continue;
-		}
-	}
-	if (actor == NULL)
-		return NULL;
-	else
-	{
-		NxShape*const* shapes = actor->getShapes();
-		NxBox* box = ((NxBox*) shapes[0]);
-		return box->GetExtents();
-	}
-}
-
 void Simulation::infinitePath(int indexRobot, int indexScene)
 {
 	static int i[10] = {0};//=0;
@@ -814,13 +761,14 @@ void Simulation::goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot,
 	NxReal maxLinearSpeed = 3130;
 
 	//Controle de angulo
-	NxReal distanceAngle = angle - getAngle2DFromRobot( indexRobot, indexScene ); //TODO: remover redundância de getAngle2DFromRobot tanto em goToThisPose quanto em calcWheelSpeedFromRobotSpeed
+	NxRobot* robot = allRobots.getRobotByIdScene(indexRobot, indexScene);
+	NxReal distanceAngle = angle - robot->getAngle2DFromVehicle(); //TODO: remover redundância de getAngle2DFromRobot tanto em goToThisPose quanto em calcWheelSpeedFromRobotSpeed
 	NxReal speedAng;
 	if(NxMath::abs(distanceAngle) > NxPi / 72.) speedAng = distanceAngle / NxPi * maxSpeedAng;
 	else speedAng = 0;
 
 	//Controle de posicao
-	NxVec3 position = getRobotGlobalPos( indexRobot, indexScene );
+	NxVec3 position = robot->getPos();
 	NxReal distanceX = x - position.x;
 	NxReal distanceY = y - position.y;
 	NxReal distance = calcDistanceVec2D( position.x, position.y, x, y);
@@ -881,37 +829,6 @@ NxMat33 Simulation::getRobotGlobalOrientation( int indexRobot, int indexScene )
 }
 
 /**
-* Retorna o angulo em radianos no plano x-y de um determinado robo. Anti-horario positivo. Zero no eixo x+. Angulo entre 0 e 2*PI.
-*/
-NxReal Simulation::getAngle2DFromRobot( int indexRobot, int indexScene )
-{
-	NxMat33 rotMatrix = getRobotGlobalOrientation( indexRobot, indexScene );
-	NxMat33 rotMatrixInv;
-	rotMatrix.getInverse(rotMatrixInv);
-	NxVec3 vecY = rotMatrixInv.getColumn(1);
-	NxReal value = vecY.dot(NxVec3(0,1,0));
-	value /= vecY.magnitude();
-
-	NxReal teta = NxMath::acos(value);
-	if( teta < NxPi*0.5 )
-	{
-		if( vecY.x * vecY.y > 0 )
-		{
-			teta = NxPi*2 - teta;
-		}
-	}
-	else
-	{
-		if( vecY.x * vecY.y < 0 )
-		{
-			teta = NxPi*2 - teta;
-		}
-	}
-	teta = NxPi*2 - teta;
-	return teta;
-}
-
-/**
 * Calcula a velocidade das 4 rodas de um determinado robo tendo como entrada as velocidades angular e linear desejadas para o robo.
 */
 NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene )
@@ -923,8 +840,8 @@ NxReal* Simulation::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX
 	//0.7071   -0.7071    1.0000
 	//0.7071    0.7071    1.0000
 
-	NxReal angRobo = getAngle2DFromRobot( indexRobot, indexScene );
 	NxRobot* nxRobot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
+	NxReal angRobo = nxRobot->getAngle2DFromVehicle();
 	int nbWheels = nxRobot->getNbWheels();
 	NxReal* speeds = new NxReal[nbWheels];
 
@@ -1329,47 +1246,25 @@ bool Simulation::initSimulation()
 		//TODO: USAR NxCombineMode
 	}
 
-	Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
+	//Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
 
-	Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->putToSleep();
-	NxArray<NxRobot*> robots = Simulation::allRobots.getRobotsByScene(Simulation::gBaseScene);
-	for(int i=0; i<robots.size(); i++){
-		robots[i]->putToSleep();
-	}
-
-	allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 3, NxVec3(-2000, 1000, 30), 1);
-	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->getActor()->setName("Robo3");
+	/*allRobots.getRobotByIdScene(4, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 3, NxVec3(-2000, 1000, 30), 1);
 
 	allRobots.getRobotByIdScene(3, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 2, NxVec3(-2000, -1000, 30), 1);
-	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->getActor()->setName("Robo2");
 
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 1, NxVec3(-1000, 1000, 30), 1);
-	allRobots.getRobotByIdScene(1, Simulation::gBaseScene)->getActor()->setName("Robo1");
 
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 5, NxVec3(-1000, -1000, 30), 1);
-	allRobots.getRobotByIdScene(5, Simulation::gBaseScene)->getActor()->setName("Robo5");
 
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 6, NxVec3(3000, 0, 30), 0);
-	allRobots.getRobotByIdScene(6, Simulation::gBaseScene)->getActor()->setName("Robo6");
 
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 7, NxVec3(2000, -1000, 30), 0);
-	allRobots.getRobotByIdScene(7, Simulation::gBaseScene)->getActor()->setName("Robo7");
 
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 8, NxVec3(2000, 1000, 30), 0);
-	allRobots.getRobotByIdScene(8, Simulation::gBaseScene)->getActor()->setName("Robo8");
 
 	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 9, NxVec3(1000, -1000, 30), 0);
-	allRobots.getRobotByIdScene(9, Simulation::gBaseScene)->getActor()->setName("Robo9");
 
-	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 10, NxVec3(1000, 1000, 30), 0);
-	allRobots.getRobotByIdScene(10, Simulation::gBaseScene)->getActor()->setName("Robo10");
-
-	NxVec3 teste;
-	Simulation::gScenes[0]->getGravity(teste);
-	//Simulation::gScenes[0]->setGravity(NxVec3(0,0,-9.81));
-	NxSceneDesc vaca;
-	Simulation::gScenes[0]->saveToDesc(vaca);
-
+	allRobots.getRobotByIdScene(2, Simulation::gBaseScene)->cloneRobot(Simulation::gBaseScene, 10, NxVec3(1000, 1000, 30), 0);*/
 
 	//cloneScene(gBaseScene);
 	//cloneScene(gBaseScene);

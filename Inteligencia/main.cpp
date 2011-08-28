@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 	cout << "Modulo Inteligencia" << endl;
 
 	Stage* sta = new Stage();
-	Robot* rob = new Robot(0, 3);
+	Robot* rob = new Robot(4, 3);
 	//Robot* robb = new Robot(3, 2);
 	Commander* com = new CommanderTX();
 	Updater* upd = new UpdaterVision();
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 
 	//system("pause");
 	//Skill* test = new Loops::Circle(rob, -1200, 1500, 600, 16);
-	Tactic* test = new Controller(1, rob, sta, 40);
+	Tactic* test = new Controller(1, rob, sta, 20);
 	//Tactic* testb = new Controller(2, robb, sta, 20);
 	while(true) {
 		upd->step();
