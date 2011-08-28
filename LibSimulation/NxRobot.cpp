@@ -258,7 +258,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPosition, int indexNewTeam)
 {
-	NxRobot* nxRobotSource = Simulation::allRobots.getRobotByIdScene(this->getId(), this->indexScene);
+	NxRobot* nxRobotSource = Simulation::allRobots.getRobotByIdSceneTeam(this->id, this->indexScene, this->idTeam);
 
 	NxActor* robotActor = Simulation::cloneActor(nxRobotSource->getActor(),indexNewScene);
 	//NxBounds3 bodyBounds;
