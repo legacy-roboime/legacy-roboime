@@ -639,11 +639,9 @@ void NxRobot::controlWheels( NxReal* wheelsSpeeds )
 		//torqueWheels.push_back(calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed, indexScene, indexRobot, indexWheel));
 		torqueWheels[indexWheel] = wheel->calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed);
 	}
-	printf("SPEED %f %f %f %f\n",wheelsSpeeds[0],wheelsSpeeds[1],wheelsSpeeds[2],wheelsSpeeds[3]);
 
 	delete wheelsSpeeds;
 
-	printf("TORQUE %f %f %f %f\n",torqueWheels[0],torqueWheels[1],torqueWheels[2],torqueWheels[3]);
 	this->control( torqueWheels );//torqueWheels[0], torqueWheels[1], torqueWheels[2], torqueWheels[3] );
 
 	this->updateVehicle();
