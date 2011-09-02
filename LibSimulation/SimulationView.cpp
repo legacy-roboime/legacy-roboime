@@ -227,7 +227,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 	{
 	case 27:	exit(0); break;
 	case 'p':	Simulation::gPause = !Simulation::gPause; break;
-	case 'f':	Simulation::controlDribbler(0.1, 4, indexRenderScene);
+	case 'f':	//Simulation::controlDribbler(0.1, 4, indexRenderScene);
 		break;
 	case 'v':	gDebugVisualization = !gDebugVisualization; break;
 
@@ -235,7 +235,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 		//case '-':	break;
 	case 'e':
 		{
-			Simulation::allFields.fields[indexRenderScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
+			Simulation::gScenes[indexRenderScene]->field->setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
 		} 
 		break;
 
@@ -251,48 +251,50 @@ void SimulationView::appKey(unsigned char key, bool down)
 
 			//Simulation::controlKicker(0.1, 4, 0);
 			//kickerActor->setLinearVelocity(NxVec3(0,10,0));
-			Simulation::allRobots.getRobotByIdScene(4, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(4, indexRenderScene)->setGlobalPosition(NxVec3(-3000,0,30));
-			Simulation::allRobots.getRobotByIdScene(4, indexRenderScene)->putToSleep();
+			NxAllRobots* robots = Simulation::gScenes[indexRenderScene]->allRobots;
+			robots->getRobotByIdByTeam(4, 1)->resetToInitialPose();
+			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(-3000,0,30));
+			robots->getRobotByIdByTeam(4, 1)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(1, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(1, indexRenderScene)->setGlobalPosition(NxVec3(-1000, 1000, 30));
-			Simulation::allRobots.getRobotByIdScene(1, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(1, 1)->resetToInitialPose();
+			robots->getRobotByIdByTeam(1, 1)->setGlobalPosition(NxVec3(-1000, 1000, 30));
+			robots->getRobotByIdByTeam(1, 1)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(2, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(2, indexRenderScene)->setGlobalPosition(NxVec3(-2000, -1000, 30));
-			Simulation::allRobots.getRobotByIdScene(2, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(2, 1)->resetToInitialPose();
+			robots->getRobotByIdByTeam(2, 1)->setGlobalPosition(NxVec3(-2000, -1000, 30));
+			robots->getRobotByIdByTeam(2, 1)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(3, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(3, indexRenderScene)->setGlobalPosition(NxVec3(-2000, 1000, 30));
-			Simulation::allRobots.getRobotByIdScene(3, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(3, 1)->resetToInitialPose();
+			robots->getRobotByIdByTeam(3, 1)->setGlobalPosition(NxVec3(-2000, 1000, 30));
+			robots->getRobotByIdByTeam(3, 1)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(5, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(5, indexRenderScene)->setGlobalPosition(NxVec3(-1000, -1000, 30));
-			Simulation::allRobots.getRobotByIdScene(5, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(5, 1)->resetToInitialPose();
+			robots->getRobotByIdByTeam(5, 1)->setGlobalPosition(NxVec3(-1000, -1000, 30));
+			robots->getRobotByIdByTeam(5, 1)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(6, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(6, indexRenderScene)->setGlobalPosition(NxVec3(3000, 0, 30));
-			Simulation::allRobots.getRobotByIdScene(6, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(6, 0)->resetToInitialPose();
+			robots->getRobotByIdByTeam(6, 0)->setGlobalPosition(NxVec3(3000, 0, 30));
+			robots->getRobotByIdByTeam(6, 0)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(7, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(7, indexRenderScene)->setGlobalPosition(NxVec3(2000, -1000, 30));
-			Simulation::allRobots.getRobotByIdScene(7, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(7, 0)->resetToInitialPose();
+			robots->getRobotByIdByTeam(7, 0)->setGlobalPosition(NxVec3(2000, -1000, 30));
+			robots->getRobotByIdByTeam(7, 0)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(8, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(8, indexRenderScene)->setGlobalPosition(NxVec3(2000, 1000, 30));
-			Simulation::allRobots.getRobotByIdScene(8, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(8, 0)->resetToInitialPose();
+			robots->getRobotByIdByTeam(8, 0)->setGlobalPosition(NxVec3(2000, 1000, 30));
+			robots->getRobotByIdByTeam(8, 0)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(9, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(9, indexRenderScene)->setGlobalPosition(NxVec3(1000, -1000, 30));
-			Simulation::allRobots.getRobotByIdScene(9, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(9, 0)->resetToInitialPose();
+			robots->getRobotByIdByTeam(9, 0)->setGlobalPosition(NxVec3(1000, -1000, 30));
+			robots->getRobotByIdByTeam(9, 0)->putToSleep();
 
-			Simulation::allRobots.getRobotByIdScene(10, indexRenderScene)->resetToInitialPose();
-			Simulation::allRobots.getRobotByIdScene(10, indexRenderScene)->setGlobalPosition(NxVec3(1000, 1000, 30));
-			Simulation::allRobots.getRobotByIdScene(10, indexRenderScene)->putToSleep();
+			robots->getRobotByIdByTeam(10, 0)->resetToInitialPose();
+			robots->getRobotByIdByTeam(10, 0)->setGlobalPosition(NxVec3(1000, 1000, 30));
+			robots->getRobotByIdByTeam(10, 0)->putToSleep();
 
-			Simulation::allBalls.getBallByScene(indexRenderScene).ball->setGlobalPosition(NxVec3(120,0,30));
-			Simulation::allBalls.getBallByScene(indexRenderScene).putToSleep();
+			NxBall* ball = Simulation::gScenes[indexRenderScene]->ball;
+			ball->ball->setGlobalPosition(NxVec3(120,0,30));
+			ball->ball->putToSleep();
 		}
 		break;
 
@@ -317,15 +319,15 @@ void SimulationView::appKey(unsigned char key, bool down)
 
 	case 'h':
 		{
-			NxBall ball = Simulation::allBalls.getBallByScene(indexRenderScene);
-			NxActor* actor = ball.ball;
+			NxBall* ball = Simulation::gScenes[indexRenderScene]->ball;
+			NxActor* actor = ball->ball;
 			if(actor != NULL) 
 			{
-				actor->addForce(NxVec3(1000,0,0));
+				actor->addForce(NxVec3(-1000,0,0));
 				//actor->setLinearVelocity(NxVec3(1,0,0));
 				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
 			}
-			NxVec3 teste = ball.ball->getLinearVelocity();
+			NxVec3 teste = ball->ball->getLinearVelocity();
 			printf("%f\n", teste.magnitude());
 		}
 		break;
@@ -361,8 +363,8 @@ void SimulationView::appKey(unsigned char key, bool down)
 			orientation.rotZ(-3.1416/4);
 			actor->setGlobalOrientation(orientation);
 			}*/
-			Simulation::allBalls.getBallByScene(indexRenderScene).ball->setGlobalPosition(NxVec3(120,0,30));
-			Simulation::allBalls.getBallByScene(indexRenderScene).putToSleep();
+			Simulation::gScenes[indexRenderScene]->ball->ball->setGlobalPosition(NxVec3(120,0,30));
+			Simulation::gScenes[indexRenderScene]->ball->putToSleep();
 		}
 		break;
 
@@ -528,7 +530,7 @@ void SimulationView::RenderCallback()
 {
 	QMutexLocker locker(&Simulation::mutex);
 
-	if(Simulation::gScenes[0] == NULL) return;
+	if(Simulation::gScenes[0]->scene == NULL) return;
 
 	//compute elapsed time
 	static unsigned int PreviousTime = 0;
@@ -571,12 +573,12 @@ void SimulationView::RenderCallback()
 	glPushMatrix();
 	//for (NxU32 i = 0; i < Simulation::nbExistScenes; ++i)
 	//{
-	if (Simulation::gScenes[indexRenderScene])
+	if (Simulation::gScenes[indexRenderScene]->scene)
 	{
 		//Render
 		if(gDebugVisualization){
 			//glPushMatrix();
-			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[indexRenderScene]->getDebugRenderable();
+			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[indexRenderScene]->scene->getDebugRenderable();
 			gDebugRenderer.renderData(*dbgRenderable);
 			//glEnable(GL_LIGHTING);
 			//glPopMatrix();
@@ -584,10 +586,10 @@ void SimulationView::RenderCallback()
 		else{
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			//glColor4f(0.6f,0.6f,0.6f,1.0f);
-			int nbActors = Simulation::gScenes[indexRenderScene]->getNbActors();
+			int nbActors = Simulation::gScenes[indexRenderScene]->scene->getNbActors();
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
-				DrawActorIME(Simulation::gScenes[indexRenderScene]->getActors()[j]);
+				DrawActorIME(Simulation::gScenes[indexRenderScene]->scene->getActors()[j]);
 				//Simulation::allRobots.drawRobots(gDebugVisualization);
 			}
 		}
@@ -626,7 +628,7 @@ void SimulationView::RenderSimulationCallback()
 	QMutexLocker locker(&Simulation::mutex);
 	//Simulation::mutex.lock();
 
-	if(Simulation::gScenes[0] == NULL) return;
+	if(Simulation::gScenes[0]->scene == NULL) return;
 
 	//compute elapsed time
 	static unsigned int PreviousTime = 0;
@@ -678,12 +680,12 @@ void SimulationView::RenderSimulationCallback()
 	glPushMatrix();
 	//for (NxU32 i = 0; i < Simulation::nbExistScenes; ++i)
 	//{
-	if (Simulation::gScenes[indexRenderScene])
+	if (Simulation::gScenes[indexRenderScene]->scene)
 	{
 		//Render
 		if(gDebugVisualization){
 			//glPushMatrix();
-			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[indexRenderScene]->getDebugRenderable();
+			const NxDebugRenderable *dbgRenderable=Simulation::gScenes[indexRenderScene]->scene->getDebugRenderable();
 			gDebugRenderer.renderData(*dbgRenderable);
 			//glEnable(GL_LIGHTING);
 			//glPopMatrix();
@@ -691,10 +693,10 @@ void SimulationView::RenderSimulationCallback()
 		else{
 			//glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
 			//glColor4f(0.6f,0.6f,0.6f,1.0f);
-			int nbActors = Simulation::gScenes[indexRenderScene]->getNbActors();
+			int nbActors = Simulation::gScenes[indexRenderScene]->scene->getNbActors();
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
-				DrawActorIME(Simulation::gScenes[indexRenderScene]->getActors()[j]);
+				DrawActorIME(Simulation::gScenes[indexRenderScene]->scene->getActors()[j]);
 				//Simulation::allRobots.drawRobots(gDebugVisualization);
 			}
 		}
@@ -715,7 +717,7 @@ void SimulationView::RenderSimulationCallback()
 		#endif*/
 
 		char buf[256];
-		NxRobot* robot = Simulation::allRobots.getRobotByIdScene(4, 0);
+		//NxRobot* robot = Simulation::allRobots.getRobotByIdScene(4, 0);
 		//NxVec3 angMomentum = robot->getActor()->getAngularMomentum();
 		//NxVec3 angVelocity = robot->getActor()->getAngularVelocity();
 		//NxVec3 linMomentum = robot->getActor()->getLinearMomentum();
@@ -784,11 +786,11 @@ NX_BOOL SimulationView::LoadScene(const char *pFilename,NXU::NXU_FileType type)
 
 		if ( c )
 		{
-			if(Simulation::gScenes[Simulation::gBaseScene]){
-				if (Simulation::gScenes[Simulation::gBaseScene]!=NULL){
+			if(Simulation::gScenes[Simulation::gBaseScene]->scene){
+				if (Simulation::gScenes[Simulation::gBaseScene]->scene!=NULL){
 					// Release old scene
-					Simulation::releaseScene(*Simulation::gScenes[Simulation::gBaseScene]);
-					Simulation::gScenes[Simulation::gBaseScene] = 0;
+					Simulation::releaseScene(*(Simulation::gScenes[Simulation::gBaseScene]->scene));
+					Simulation::gScenes[Simulation::gBaseScene]->scene = 0;
 				}
 			}
 
@@ -822,7 +824,7 @@ void SimulationView::SaveScene(const char *pFilename)
 	NXU::setUseClothActiveState(true);
 	NXU::setUseSoftBodyActiveState(true);
 
-	NXU::NxuPhysicsCollection *c = NXU::extractCollectionScene(Simulation::gScenes[Simulation::gBaseScene]);
+	NXU::NxuPhysicsCollection *c = NXU::extractCollectionScene(Simulation::gScenes[Simulation::gBaseScene]->scene);
 
 	if (c)
 	{
@@ -867,9 +869,9 @@ void SimulationView::CSL_Scene()
 	//Check if a request was made to clear, save or load a scene
 	if (Simulation::gClear)
 	{
-		if (Simulation::gScenes[Simulation::gBaseScene])
+		if (Simulation::gScenes[Simulation::gBaseScene]->scene)
 		{
-			Simulation::gPhysicsSDK->releaseScene(*Simulation::gScenes[Simulation::gBaseScene]);
+			Simulation::gPhysicsSDK->releaseScene(*(Simulation::gScenes[Simulation::gBaseScene]->scene));
 		}
 		//InitBlankScene();
 		Simulation::gClear = false;

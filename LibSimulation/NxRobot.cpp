@@ -9,6 +9,14 @@ NxRobot::NxRobot() : NxVehicle()
 	idTeam = 1;
 	bodyRadius = 87.5;
 	wheelsRadius = 80.6;
+	kicker = new NxKicker();
+	dribbler = new NxDribbler();
+}
+
+NxRobot::~NxRobot()
+{
+	delete kicker;
+	delete dribbler;
 }
 
 void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
@@ -87,7 +95,7 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 							angle -= NxPi;
 							NxActor& ball = s1->getActor();
 							ball.addTorque(NxVec3(sin(angle)*1000000.,cos(angle)*1000000.,0), NX_IMPULSE);
-							this->kicker.speedToExecute = 0;
+							this->dribbler->speedToExecute = 0;
 						}
 
 						delete dribblerName;
@@ -204,11 +212,13 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 		wheelDesc[i].angWheelRelRobot = NxMath::atan2( wheelPosRel.y, wheelPosRel.x );
 
 		vehicleDesc.robotWheels.pushBack(&wheelDesc[i]);
-		Simulation::gScenes[indexScene]->releaseActor(*actorWheel);
+		Simulation::gScenes[indexScene]->scene->releaseActor(*actorWheel);
 
 		//NxU32 flags = NX_WF_BUILD_LOWER_HALF;
 		wheelDesc[i].wheelFlags = NX_WF_ACCELERATED | NX_WF_AFFECTED_BY_HANDBRAKE | NX_WF_USE_WHEELSHAPE | NX_WF_BUILD_LOWER_HALF;// |/*NX_WF_STEERABLE_INPUT |*/ flags;
 	}
+
+	//NxBall* teste = Simulation::gScenes[indexScene]->ball;
 
 	//Criar robot, vehicle base
 	NxRobot* robot = (NxRobot*)NxRobot::createVehicle(Simulation::gScenes[indexScene], &vehicleDesc);
@@ -231,12 +241,14 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 				memcpy(kickerName, shapeName, strlen(kickerName));
 				
 				if(strcmp(dribblerName, "Driblador") == 0){
-					robot->dribbler.dribblerShapes.push_back(robotShapes[i]);
+					robot->dribbler->dribblerShapes.push_back(robotShapes[i]);
 				}
 				else if(strcmp(kickerName, "Chutador") == 0){
-					robot->kicker.kickerShapeDesc = Simulation::copyShapeDesc(robotShapes[i]);
+					robot->kicker->kickerShapeDesc = Simulation::copyShapeDesc(robotShapes[i]);
 					robotActor->releaseShape(*(robotShapes[i]));
 				}
+				delete dribblerName;
+				delete kickerName;
 			}
 		}
 
@@ -258,7 +270,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPosition, int indexNewTeam)
 {
-	NxRobot* nxRobotSource = Simulation::allRobots.getRobotByIdSceneTeam(this->id, this->indexScene, this->idTeam);
+	NxRobot* nxRobotSource = Simulation::gScenes[this->indexScene]->allRobots->getRobotByIdByTeam(this->id, this->idTeam);
 
 	NxActor* robotActor = Simulation::cloneActor(nxRobotSource->getActor(),indexNewScene);
 	//NxBounds3 bodyBounds;
@@ -340,19 +352,16 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 			dribblerName[9] = 0;
 			memcpy(dribblerName, shapeName, strlen(dribblerName));
 
-			char* kickerName = new char[9];//"Chutador\0"
-			kickerName[8] = 0;
-			memcpy(kickerName, shapeName, strlen(kickerName));
-
 			if(strcmp(dribblerName, "Driblador") == 0){
-				robot->dribbler.dribblerShapes.push_back(robotShapes[i]);
+				robot->dribbler->dribblerShapes.push_back(robotShapes[i]);
 			}
+			delete dribblerName;
 		}
 	}
-	robot->kicker.kickerShapeDesc = new NxBoxShapeDesc();
-	NxShapeDesc* shapeDesc = nxRobotSource->kicker.kickerShapeDesc;
-	robot->kicker.kickerShapeDesc->localPose = shapeDesc->localPose;
-	((NxBoxShapeDesc*)(robot->kicker.kickerShapeDesc))->dimensions = ((NxBoxShapeDesc*)shapeDesc)->dimensions;
+	robot->kicker->kickerShapeDesc = new NxBoxShapeDesc();
+	NxShapeDesc* shapeDesc = nxRobotSource->kicker->kickerShapeDesc;
+	robot->kicker->kickerShapeDesc->localPose = shapeDesc->localPose;
+	((NxBoxShapeDesc*)(robot->kicker->kickerShapeDesc))->dimensions = ((NxBoxShapeDesc*)shapeDesc)->dimensions;
 
 	//Initial Pose
 	robot->setInitialPose(robotActor->getGlobalPose());
@@ -361,35 +370,6 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 
 	//Transladando o robo
 	robot->getActor()->setGlobalPosition(newPosition);
-
-	//Criando e Zerando matrizes para controle
-	int diff = robot->getId() - Simulation::lastWheelSpeeds[indexNewScene].size();
-	if(diff>=0){
-		for(int i=0; i<diff+1; i++){
-			NxReal* wheels;
-			int nbWheels = robot->getNbWheels();
-			wheels = new NxReal[nbWheels];
-			for(int j=0; j<nbWheels; j++)
-			{
-				wheels[j]=0;
-			}
-			Simulation::lastWheelSpeeds[indexNewScene].push_back(wheels);
-			Simulation::lastDesiredWheelSpeeds[indexNewScene].push_back(wheels);
-			Simulation::lastWheelTorques[indexNewScene].push_back(wheels);
-		}
-	}
-	else{
-		NxReal* wheels;
-		int nbWheels = robot->getNbWheels();
-		wheels = new NxReal[nbWheels];
-		for(int j=0; j<nbWheels; j++)
-		{
-			wheels[j]=0;
-		}
-		Simulation::lastWheelSpeeds[indexNewScene][robot->getId()] = wheels;
-		Simulation::lastDesiredWheelSpeeds[indexNewScene][robot->getId()] = wheels;
-		Simulation::lastWheelTorques[indexNewScene][robot->getId()] = wheels;
-	}
 
 	string label;
 	string plabel = "Robo";
@@ -428,4 +408,243 @@ void NxRobot::putToSleep(){
 
 void NxRobot::resetToInitialPose(){
 	this->getActor()->setGlobalPose(this->getInitialPose());
+}
+
+void NxRobot::goToThisPose( NxReal x, NxReal y, NxReal angle )
+{
+	//Controle proporcional
+	//Velocidades Maximas do nosso robô: 17,5 x  pi x 0,057m = 3,13 m/s (o da Skuba, atual campeã mundial: 3,5m/s)  
+	//Rotacao maxima: 6,180582777638119118568314880347
+	NxReal maxSpeedAng = 6.2;
+	NxReal maxLinearSpeed = 3130;
+
+	//Controle de angulo
+	NxReal distanceAngle = angle - this->getAngle2DFromVehicle(); //TODO: remover redundância de getAngle2DFromRobot tanto em goToThisPose quanto em calcWheelSpeedFromRobotSpeed
+	NxReal speedAng;
+	if(NxMath::abs(distanceAngle) > NxPi / 72.) speedAng = distanceAngle / NxPi * maxSpeedAng;
+	else speedAng = 0;
+
+	//Controle de posicao
+	NxVec3 position = this->getPos();
+	NxReal distanceX = x - position.x;
+	NxReal distanceY = y - position.y;
+	NxReal distance = NxMath1::calcDistanceVec2D( position.x, position.y, x, y);
+	NxReal distanceThreshold = 2000.;
+	NxReal speedX;
+	NxReal speedY;
+	NxReal speed;
+	if(NxMath::abs(distance) > 10.)
+	{
+		if( distance > distanceThreshold ) 
+			if( distance > 0 ) speed = maxLinearSpeed;
+			else speed = - maxLinearSpeed;
+		else 
+			speed = distance / distanceThreshold * maxLinearSpeed;
+
+		speedX = speed * NxMath::cos( NxMath::atan2( distanceY, distanceX ) );
+		speedY = speed * NxMath::sin( NxMath::atan2( distanceY, distanceX ) );
+	}
+	else
+	{
+		speedX = 0;
+		speedY = 0;
+	}
+
+	controlRobot(speedX, speedY, speedAng, 0, 0);
+}
+
+/**
+* Calcula a velocidade das 4 rodas de um determinado robo tendo como entrada as velocidades angular e linear desejadas para o robo.
+*/
+NxReal* NxRobot::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY)
+{
+	//Matriz de omnidirecionalidade
+	//Leva em consideracao os angulos das rodas
+	//-0.5446    0.8387    1.0000
+	//-0.5446   -0.8387    1.0000
+	//0.7071   -0.7071    1.0000
+	//0.7071    0.7071    1.0000
+
+	NxReal angRobo = this->getAngle2DFromVehicle();
+	int nbWheels = this->getNbWheels();
+	NxReal* speeds = new NxReal[nbWheels];
+
+	for(int i=0; i<nbWheels; i++)
+	{
+		//NxVec3 wheelPosRel = this->getWheel(i)->getWheelPos() - this->getBodyPos();
+		NxReal angPosWheel = ((NxWheel2*)this->getWheel(i))->angWheelRelRobot;
+		speeds[i] = -NxMath::sin(angPosWheel) * ( speedX * NxMath::cos( -angRobo ) + speedY * NxMath::sin( angRobo ) ) +
+			NxMath::cos(angPosWheel) * ( speedX * NxMath::sin( -angRobo ) + speedY * NxMath::cos( angRobo ) ) +
+			speedAng * this->wheelsRadius;
+		speeds[i] /= this->wheelsRadius;
+	}
+
+	//NxMat33 omniMatrix1;
+	//NxMat33 omniMatrix2;
+
+	//omniMatrix1.setRow(0, NxVec3(-0.5446,	0.8387,		1.0000));
+	//omniMatrix1.setRow(1, NxVec3(-0.5446,	-0.8387,	1.0000));
+	//omniMatrix1.setRow(2, NxVec3(0.7071,	-0.7071,	1.0000));
+
+	//omniMatrix2.setRow(0, NxVec3(0.7071,	0.7071,		1.0000));
+
+	////omniMatrix1.setRow(0, NxVec3(-0.5446,	0.8387,		1.0000));
+	////omniMatrix1.setRow(1, NxVec3(-0.5446,	-0.8387,	1.0000));
+	////omniMatrix1.setRow(2, NxVec3(0.7071,	-0.7071,	1.0000));
+
+	////omniMatrix2.setRow(0, NxVec3(0.7071,	0.7071,		1.0000));
+
+	//NxMat33 controlRobot;
+	//controlRobot.zero();
+
+	//controlRobot.setColumn( 0, NxVec3( speedX * NxMath::cos( -angRobo ) + speedY * NxMath::sin( angRobo ), 
+	//	speedX * NxMath::sin( -angRobo ) + speedY * NxMath::cos( angRobo ),
+	//	speedAng * 90/*NxRobot::robotRadius*/ ) );
+
+	//omniMatrix1 *= controlRobot;
+	//omniMatrix2 *= controlRobot;
+
+	//NxVec3 speedAxleWheel1 = omniMatrix1.getColumn(0);
+	//NxVec3 speedAxleWheel2 = omniMatrix2.getColumn(0);
+
+	//speeds[0] = speedAxleWheel1.x;
+	//speeds[1] = speedAxleWheel1.y;
+	//speeds[2] = speedAxleWheel1.z;
+	//speeds[3] = speedAxleWheel2.x;
+
+	//LIMITANTE DE VELOCIDADE
+	NxReal biggestValue = NxMath1::getBiggestAbsoluteValue(speeds, nbWheels);
+	if(biggestValue > 0.00001)
+	{
+		//Valor maximo da nossa roda 109,95574287564276334619251841478 rad/s (17,5 rps)
+		NxReal maxSpeed = 110.;
+		for( int i = 0; i < nbWheels; i++ )
+		{
+			speeds[i] = speeds[i] / biggestValue * maxSpeed;
+			//if(speeds[i]>110.){
+			//	printf("teste: %f\n", speeds[i]);
+			//}
+		}
+	}
+	else
+	{
+		for( int i = 0; i < nbWheels; i++ )
+		{
+			speeds[i] = 0;
+		}
+	}
+
+	return speeds;
+}
+
+void NxRobot::infinitePath()
+{
+	static int i[10] = {0};//=0;
+	//if( i>7 ) i=0;
+	static bool flags[10][8] = { false };
+
+	if(flags[id-1][7]==true) 
+	{
+		for(int j=0; j<8; j++)
+		{
+			flags[id-1][j] = false;
+		}
+	}
+
+	for(int j=0; j<8; j++)
+	{
+		if(flags[id-1][j]==false)
+		{
+			i[id-1]=j;
+			break;
+		}
+	}
+
+	NxVec3 pontos[8];
+	pontos[0].x = 1000;
+	pontos[0].y = 1000;
+
+	pontos[1].x = 2000;
+	pontos[1].y = 1000;
+
+	pontos[2].x = 2000;
+	pontos[2].y = -1000;
+
+	pontos[3].x = 1000;
+	pontos[3].y = -1000;
+
+	pontos[4].x = -1000;
+	pontos[4].y = 1000;
+
+	pontos[5].x = -2000;
+	pontos[5].y = 1000;
+
+	pontos[6].x = -2000;
+	pontos[6].y = -1000;
+
+	pontos[7].x = -1000;
+	pontos[7].y = -1000;
+
+	NxVec3 posRobot = this->getPos();
+	NxReal distance = NxMath1::calcDistanceVec2D(pontos[i[id-1]].x, pontos[i[id-1]].y, posRobot.x, posRobot.y);
+	if( distance < 100 ){
+		flags[id-1][i[id-1]]=true;
+	}
+
+	goToThisPose( pontos[i[id-1]].x, pontos[i[id-1]].y, 3* NxPi / 2.);
+}
+
+void NxRobot::controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed)
+{
+	if(this){
+		//Control kicker
+		this->kicker->controlKicker( kickerSpeed, this );
+
+		//Control dribbler
+		this->dribbler->controlDribbler( dribblerSpeed );
+
+		//Control wheels
+		NxReal* wheelsSpeeds = new NxReal[4];
+		wheelsSpeeds[0] = speedWheel1;
+		wheelsSpeeds[1] = speedWheel2;
+		wheelsSpeeds[2] = speedWheel3;
+		wheelsSpeeds[3] = speedWheel4;
+		controlWheels( wheelsSpeeds ); 
+	}
+}
+
+void NxRobot::controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed)
+{
+	if(this){
+		//Execute kicker
+		this->kicker->controlKicker( kickerSpeed, this );
+
+		//Control dribbler
+		this->dribbler->controlDribbler( dribblerSpeed );
+
+		//Control wheels
+		NxReal* wheelsSpeeds = calcWheelSpeedFromRobotSpeed(speedAng, speedX, speedY ); //omnidirecionalidade
+		controlWheels( wheelsSpeeds ); 
+	}
+}
+
+void NxRobot::controlWheels( NxReal* wheelsSpeeds )
+{
+	int nbWheels = this->getNbWheels();
+	NxReal* torqueWheels = new NxReal[nbWheels];
+	for(int indexWheel=0; indexWheel<nbWheels; indexWheel++)
+	{
+		NxWheel2* wheel = ((NxWheel2*) this->getWheel(indexWheel));
+		NxReal currentWheelSpeed = wheel->getAxleSpeed();
+		//torqueWheels.push_back(calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed, indexScene, indexRobot, indexWheel));
+		torqueWheels[indexWheel] = wheel->calcTorqueFromWheelSpeed(wheelsSpeeds[indexWheel], currentWheelSpeed);
+	}
+	printf("SPEED %f %f %f %f\n",wheelsSpeeds[0],wheelsSpeeds[1],wheelsSpeeds[2],wheelsSpeeds[3]);
+
+	delete wheelsSpeeds;
+
+	printf("TORQUE %f %f %f %f\n",torqueWheels[0],torqueWheels[1],torqueWheels[2],torqueWheels[3]);
+	this->control( torqueWheels );//torqueWheels[0], torqueWheels[1], torqueWheels[2], torqueWheels[3] );
+
+	this->updateVehicle();
 }

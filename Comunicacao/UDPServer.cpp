@@ -1,5 +1,6 @@
 
 #include "UDPServer.h"
+#include <windows.h>          // For ::Sleep()
 
 UDPServer::UDPServer(void)
 {
@@ -36,6 +37,7 @@ UDPServer::~UDPServer(void)
 void UDPServer::func1()
 {
   try {
+	Sleep(7000); //Wait the Simulation Start
     UDPSocket sock(echoServPort);                
     for (;;) {  // Run forever
       // Block until receive message from a client

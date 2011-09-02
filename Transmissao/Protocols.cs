@@ -85,7 +85,7 @@ namespace ControleRobo
             #region simulation
             else
             {
-                string appendString = "15 0 0 ";
+                string appendString = "15 0 1 ";
                 intelData = string.Concat(appendString, intelData);
                 translated = Encoding.ASCII.GetBytes(intelData);
             }

@@ -5,25 +5,24 @@
 //#include <sstream>
 //#include <iostream>
 //#include "NxPhysics.h"
-//#include "NxAllRobots.h"
-//#include "NxField.h"
-//#include "NxBall.h"
+#include "NxAllRobots.h"
+#include "NxField.h"
+#include "NxBall.h"
 //#include <NxArray.h>
 
 //using namespace std;
 
-class NxScene1 : public NxScene
+class NxScene1
 {
 public:
-	//int indexScene;
-	//NxAllRobots allRobots;
-	//NxField field;
-	//NxArray<NxBall> balls;
+	int indexScene;
+	NxScene* scene;
+	NxAllRobots* allRobots;
+	NxField* field;
+	NxBall* ball;
 public:
 	friend class NxScene;
 
 	NxScene1(void);
 	~NxScene1(void);
-	//void initNxScene1();
-	//NxActor* getActorWheel(int robotNumber, int wheelNumber);
 };

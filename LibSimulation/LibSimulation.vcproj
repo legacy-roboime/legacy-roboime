@@ -329,6 +329,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\NxMath1.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\NxScene1.cpp"
 						>
 					</File>
@@ -544,6 +548,10 @@
 					</File>
 					<File
 						RelativePath=".\NxField.h"
+						>
+					</File>
+					<File
+						RelativePath=".\NxMath1.h"
 						>
 					</File>
 					<File

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef NX_VEHICLE
 #define NX_VEHICLE
 
@@ -7,20 +8,20 @@
 //#include "NxVehicleGears.h"
 //class NxVehicleGears;
 
-#include <NxScene.h>
+//#include <NxScene.h>
 #include <NxArray.h>
 #include <NxUserContactReport.h>
 
 #define NUM_TRAIL_POINTS 1600
 
-//class NxScene;
+class NxScene1;
 
 class NxVehicle {
 private:
 	NxArray<NxWheel*>			_wheels;
 	NxArray<NxVehicle*>			_children;
 	NxActor*					_actor;
-	NxScene*					_nxScene;
+	NxScene1*					_nxScene;
 	NxMat34						initialPose;
 
 	NxArray<NxVehicleMotor*>	_vehicleMotors;
@@ -66,7 +67,7 @@ private:
 
 	//void						_controlSteering(NxReal steering, bool analogSteering);
 	void						_controlAcceleration(NxReal acceleration, bool analogAcceleration);
-	static NxVehicle*			_createVehicle(NxScene* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
+	static NxVehicle*			_createVehicle(NxScene1* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
 public:
 	//int							indexScene;
 	NxMat34						getInitialPose();
@@ -108,7 +109,7 @@ public:
 
 	NxMat34						getGlobalPose() { return _actor->getGlobalPose(); }
 
-	static NxVehicle*			createVehicle(NxScene* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
+	static NxVehicle*			createVehicle(NxScene1* scene/*int indexScene*/, NxVehicleDesc* vehicleDesc);
 
 	NxVec3						getPos();
 	NxReal						getAngle2DFromVehicle();

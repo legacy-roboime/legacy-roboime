@@ -82,39 +82,29 @@ void NxAllRobots::handlePair(NxContactPair& pair, NxU32 events) {
 	}
 }
 
-NxArray<NxRobot*> NxAllRobots::getRobotsByScene(int indexScene)
-{
-	NxArray<NxRobot*> robots;
+NxRobot* NxAllRobots::getRobotByIdByTeam(int indexRobot, int idTeam){
 	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
 		if(_allRobotsSequential[i]!=NULL){
-			if(_allRobotsSequential[i]->indexScene==indexScene)
-				robots.push_back(_allRobotsSequential[i]);
-		}
-	}
-	return robots;
-}
-
-NxRobot* NxAllRobots::getRobotByIdScene(int indexRobot, int indexScene){
-	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
-		if(_allRobotsSequential[i]!=NULL){
-			if(_allRobotsSequential[i]->getId()==indexRobot && _allRobotsSequential[i]->indexScene==indexScene)
+			if(_allRobotsSequential[i]->getId()==indexRobot && _allRobotsSequential[i]->getIdTeam()==idTeam)
 				return _allRobotsSequential[i];
 		}
 	}
 	return NULL;
 }
 
-NxRobot* NxAllRobots::getRobotByIdSceneTeam(int indexRobot, int indexScene, int idTeam){
+NxArray<NxRobot*> NxAllRobots::getRobotsByTeam(int idTeam){
+	NxArray<NxRobot*> robots;
 	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
 		if(_allRobotsSequential[i]!=NULL){
-			if(_allRobotsSequential[i]->getId()==indexRobot && _allRobotsSequential[i]->getIdTeam()==idTeam && _allRobotsSequential[i]->indexScene==indexScene)
-				return _allRobotsSequential[i];
-			else
-				return NULL;
+			if(_allRobotsSequential[i]->getIdTeam()==idTeam)
+				robots.push_back(_allRobotsSequential[i]);
 		}
-		else 
-			return NULL;
 	}
+	return robots;
+}
+
+NxArray<NxRobot*> NxAllRobots::getRobots(){
+	return _allRobotsSequential;
 }
 
 int NxAllRobots::getBiggestIndexRobot()
@@ -133,7 +123,8 @@ NxAllRobots::NxAllRobots(){
 
 NxAllRobots::~NxAllRobots()
 {
-	delete _activeRobotP;
+	if(_activeRobotP!=NULL)
+		delete _activeRobotP;
 	for (NxU32 i = 0; i < _allRobotsSequential.size(); i++) {
 		delete _allRobotsSequential[i];
 	}

@@ -347,7 +347,9 @@ NxWheel* NxWheel::createWheel2(NxActor* actor, NxWheelDesc* wheelDesc)
 
 NxWheel1::NxWheel1(NxScene * s/*int indexScene*/)  : scene(s)
 { 
-
+	lastWheelSpeed = 0;
+	lastDesiredWheelSpeed = 0;
+	lastWheelTorque = 0;
 }
 
 NxWheel1::~NxWheel1() 
@@ -649,6 +651,10 @@ void NxWheel1::setAngle(NxReal angle)
 
 NxWheel2::NxWheel2(NxActor* a, NxWheelDesc* wheelDesc) : actor(a)
 {
+	lastWheelSpeed = 0;
+	lastDesiredWheelSpeed = 0;
+	lastWheelTorque = 0;
+
 	NxScene * scene = &actor->getScene();
 
 	//create a shared car wheel material to be used by all wheels
@@ -769,4 +775,21 @@ void NxWheel2::drawWheel(NxReal approx, bool debug) const
 NxReal NxWheel2::getRpm() const
 {
 	return NxMath::abs(wheelShape->getAxleSpeed())/NxTwoPi * 60.0f;
+}
+
+/*
+* Calcula o torque que deve ser empregado em uma determinada roda para que ela alcance um determinado valor de velocidade.
+*/
+NxReal NxWheel::calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed)
+{
+	NxReal currentWheelTorque;
+	NxReal inertiaMoment = 12.57673; //TODO: REVER UNIDADE DESSE PARAMETRO
+	currentWheelTorque = this->lastWheelTorque + inertiaMoment * 20. * (currentDesiredWheelSpeed - currentWheelSpeed) - inertiaMoment * 19.35 * (this->lastDesiredWheelSpeed - this->lastWheelSpeed);
+
+	//Avançando iteração
+	this->lastDesiredWheelSpeed = currentDesiredWheelSpeed;
+	this->lastWheelTorque = currentWheelTorque;
+	this->lastWheelSpeed = currentWheelSpeed;
+
+	return currentWheelTorque;
 }

@@ -23,7 +23,7 @@ void	MyUserNotify::NXU_errorMessage(bool isError, const char *str)
 
 void	MyUserNotify::NXU_notifyScene(NxU32 sno,	NxScene	*scene,	const	char *userProperties)
 {
-		Simulation::gScenes[Simulation::gBaseScene] = (NxScene1*)scene;
+		Simulation::gScenes[Simulation::gBaseScene]->scene = scene;
 		Simulation::gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1.0f);
 		Simulation::gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, 1.0f);
 		Simulation::gPhysicsSDK->setParameter(NX_VISUALIZE_CLOTH_MESH, 1.0f );
@@ -49,11 +49,11 @@ void 	MyUserNotify::NXU_notifyHeightField(NxHeightField *t,const char *userPrope
 
 NxScene *MyUserNotify::NXU_preNotifyScene(unsigned	int	sno, NxSceneDesc &scene, const char	*userProperties)
 {
-		assert( Simulation::gScenes[Simulation::gBaseScene] == 0 );
-		if ( Simulation::gScenes[Simulation::gBaseScene] )
+		assert( Simulation::gScenes[Simulation::gBaseScene]->scene == 0 );
+		if ( Simulation::gScenes[Simulation::gBaseScene]->scene )
 		{
-			Simulation::releaseScene(*Simulation::gScenes[Simulation::gBaseScene]);
-			Simulation::gScenes[Simulation::gBaseScene] = 0;
+			Simulation::releaseScene(*(Simulation::gScenes[Simulation::gBaseScene]->scene));
+			Simulation::gScenes[Simulation::gBaseScene]->scene = 0;
 		}
 		return 0;
 }

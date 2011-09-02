@@ -29,7 +29,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 	{
 		/////////////QMutexLocker locker(&Simulation::mutex);
 
-		NxScene1* baseScene = Simulation::gScenes[Simulation::gBaseScene];
+		NxScene1* scene1 = Simulation::gScenes[Simulation::gBaseScene];
 
 		SSL_DetectionFrame detectionFrame = SSL_DetectionFrame();
 
@@ -38,7 +38,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 		detectionFrame.set_t_capture(time);
 		detectionFrame.set_t_sent(time);
 
-		NxVec3 ballGlobalPos = Simulation::allBalls.getBallByScene(Simulation::gBaseScene).ball->getGlobalPosition();
+		NxVec3 ballGlobalPos = scene1->ball->ball->getGlobalPosition();
 		SSL_DetectionBall* detectionBall = detectionFrame.add_balls();
 		detectionBall->set_area(1);
 		detectionBall->set_confidence(1);
@@ -48,7 +48,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 		detectionBall->set_y(ballGlobalPos.y);
 		detectionBall->set_z(1);
 
-		NxArray<NxRobot*> allRobots = Simulation::allRobots.getRobotsByScene(Simulation::gBaseScene);
+		NxArray<NxRobot*> allRobots = scene1->allRobots->getRobots();
 		for(int i=0; i<allRobots.size(); i++)
 		{
 			NxRobot* robot = allRobots[i];
@@ -65,7 +65,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 			detectionRobot->set_orientation(robot->getAngle2DFromVehicle());
 			detectionRobot->set_pixel_x(0);
 			detectionRobot->set_pixel_y(0);
-			detectionRobot->set_robot_id(robot->getId()/*-1*/); //FOI SUBTRAIDO 1 PQ NO TEAMBOTS OS INDICES DOS ROBOS VAI DE 0 A 4
+			detectionRobot->set_robot_id(robot->getId()-1); //FOI SUBTRAIDO 1 PQ NO TEAMBOTS OS INDICES DOS ROBOS VAI DE 0 A 4
 			detectionRobot->set_x(robotPos.x);
 			detectionRobot->set_y(robotPos.y);
 		}

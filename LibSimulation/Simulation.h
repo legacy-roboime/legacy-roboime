@@ -26,6 +26,7 @@
 //#include "SamplesVRDSettings.h"
 
 #include "NxScene1.h"
+#include "NxMath1.h"
 #include "MyUserNotify.h"
 #include "MyContactReport.h"
 #include "NxAllRobots.h"
@@ -47,7 +48,7 @@ private:
 	
 	static NxPhysicsSDK *gPhysicsSDK;
 	static const NxU32 gMaxScenes = 100;
-	static /*NxArray<NxScene1*>*/NxScene1* gScenes[gMaxScenes];
+	static NxArray<NxScene1*> gScenes;
 	static int nbExistScenes;
 	static NxU32 gBaseScene;
 	static NxVec3 gDefaultGravity;
@@ -56,11 +57,6 @@ private:
 	static MyUserNotify gUserNotify;
 	//extern NxUserContactReport * robotContactReport;
 	static NxArray<NxUserContactReport *> robotContactReport;
-	
-	//Velocidades para controle das rodas
-	static std::vector<std::vector<NxReal*>> lastWheelSpeeds;
-	static std::vector<std::vector<NxReal*>> lastDesiredWheelSpeeds;
-	static std::vector<std::vector<NxReal*>> lastWheelTorques; 
 	
 	static timeval timeLastSimulate;
 	
@@ -76,6 +72,9 @@ private:
 	friend class NxVehicle;
 	friend class NxField;
 	friend class NxBall;
+	friend class NxKicker;
+	friend class NxDribbler;
+	friend class MyContactReport;
 private:
 	static void releaseScene(NxScene &scene);
 	static void CreateCube(const NxVec3 &pos, int size, const NxVec3 *initial_velocity = NULL);
@@ -87,22 +86,6 @@ private:
 
 	static NxActor* cloneActor(NxActor* actorSource, int indexDestScene);
 	static NxShapeDesc* copyShapeDesc(NxShape* shapeSource);
-
-	//Math
-	static NxF32 calcDistanceVec2D( NxF32 x1, NxF32 y1, NxF32 x2, NxF32 y2 );
-	static NxReal getBiggestAbsoluteValue(NxReal* values, int size);
-
-	//setters
-	static void setRobotGlobalPose(NxMat34 pose, int indexScene, int indexRobot);
-	static void setBallGlobalPos(NxVec3 pos, int indexScene);
-	static void setRobotLinearVelocity(NxVec3 linVel, int indexScene, int indexRobot);
-	static void setRobotAngularVelocity(NxVec3 angVel, int indexScene, int indexRobot);
-	static void setBallLinearVelocity(NxVec3 linVel, int indexScene);
-
-	//getters
-	static NxVec3 getRobotGlobalPos( int indexRobot, int indexScene );
-	static NxVec3 getBallGlobalPos( int indexScene );
-	static NxMat33 getRobotGlobalOrientation( int indexRobot, int indexScene );
 
 	static NxActor* getActorBall(int indexScene);
 	static NxActor* getActorRobot(int indexScene, int indexRobot);
@@ -116,9 +99,6 @@ public:
 	/**
 	* Atributos para inteligência
 	*/
-	static NxAllRobots allRobots;
-	static NxAllBalls allBalls;
-	static NxAllFields allFields;
 	static float timeStep;
 
 	/**
@@ -138,20 +118,4 @@ public:
 	static void simulate( int indexScene, float dt , int maxStepIter );
 	static void simVisionRun();
 	static bool initSimulation();
-
-	//controlers
-	static void controlDribbler( float dribblerSpeed, int indexRobot, int indexScene );
-	static void controlKicker( float kickerSpeed, int indexRobot, int indexScene );
-	static void controlWheels( NxReal* wheelsSpeeds, int indexScene, NxI32 indexRobot );
-	static void controlRobot(float speedX, float speedY, float speedAng, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
-	static void controlRobotByWheels(float speedWheel1, float speedWheel2, float speedWheel3, float speedWheel4, float dribblerSpeed, float kickerSpeed, int indexRobot, int indexScene);
-
-	//math
-	static NxReal getAngle2DFromMat33( NxMat33 matrixOrientation );
-
-	//Metodos da inteligencia
-	static NxReal calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed, int indexScene, int indexRobot, int indexWheel);
-	static NxReal* calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, NxReal speedY, int indexRobot, int indexScene );
-	static void goToThisPose( NxReal x, NxReal y, NxReal angle, int indexRobot, int indexScene );
-	static void infinitePath( int indexRobot , int indexScene );
 };

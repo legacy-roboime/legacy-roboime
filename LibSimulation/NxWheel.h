@@ -1,3 +1,4 @@
+#pragma once
 #ifndef NX_WHEEL
 #define NX_WHEEL
 
@@ -5,9 +6,10 @@
 
 #include "NxWheelDesc.h"
 #include <NxPhysics.h>
-#include "NxScene1.h"
+//#include "NxScene.h"
 
 class NxVehicle;
+class NxScene1;
 
 struct ContactInfo 
 	{
@@ -26,8 +28,12 @@ struct ContactInfo
 class NxWheel 
 	{
 	public:
-	static NxWheel* createWheel(NxActor* actor, NxWheelDesc* wheelDesc);
-	static NxWheel* createWheel2(NxActor* actor, NxWheelDesc* wheelDesc);
+	float lastWheelSpeed;
+	float lastDesiredWheelSpeed;
+	float lastWheelTorque;
+	NxReal calcTorqueFromWheelSpeed(NxReal currentDesiredWheelSpeed, NxReal currentWheelSpeed);
+	static	NxWheel*			createWheel(NxActor* actor, NxWheelDesc* wheelDesc);
+	static	NxWheel*			createWheel2(NxActor* actor, NxWheelDesc* wheelDesc);
 
 
 	virtual					~NxWheel() {}

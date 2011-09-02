@@ -31,9 +31,10 @@ public:
 	NxI32 getActiveRobotNumber() { return _activeRobot; }
 	void selectNext();
 	
-	NxArray<NxRobot*> getRobotsByScene(int indexScene);
-	NxRobot* getRobotByIdScene(int indexRobot, int indexScene);
-	NxRobot* getRobotByIdSceneTeam(int indexRobot, int indexScene, int idTeam);
+	NxArray<NxRobot*> getRobotsByTeam(int idTeam);
+	NxRobot* getRobotByIdByTeam(int indexRobot, int idTeam);
+	NxRobot* getRobotById(int indexRobot);
+	NxArray<NxRobot*> getRobots();
 	int getBiggestIndexRobot();
 	NxAllRobots();
 	~NxAllRobots();

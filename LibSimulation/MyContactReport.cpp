@@ -13,5 +13,8 @@ MyContactReport::~MyContactReport(void)
 void  MyContactReport::onContactNotify(NxContactPair& pair, NxU32 events)
 {
 	NxI32 robotIndex = -1;
-	Simulation::allRobots.handlePair(pair, events);	
+	//TODO: Executar apenas para cena que contem o pair
+	for(int i=0; i<Simulation::gScenes.size(); i++){
+		Simulation::gScenes[i]->allRobots->handlePair(pair, events);	
+	}
 }

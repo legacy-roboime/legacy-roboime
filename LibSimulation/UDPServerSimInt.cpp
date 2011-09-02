@@ -38,14 +38,14 @@ void UDPServerSimInt::parsing()
 		//out << Simulation::timeStep; //quantidade de cenas existentes
 		//out << " ";
 		//Campo
-		NxField field = Simulation::allFields.getFieldByScene(indexScene);
-		out << field.fieldLength;
+		NxField* field = Simulation::gScenes[indexScene]->field;
+		out << field->fieldLength;
 		out << " ";
-		out << field.fieldWidth; 
+		out << field->fieldWidth; 
 		out << " ";
-		out << field.linesLength; //campo interno (delimitado pelas linhas brancas)
+		out << field->linesLength; //campo interno (delimitado pelas linhas brancas)
 		out << " ";
-		out << field.linesWidth; //campo interno (delimitado pelas linhas brancas)
+		out << field->linesWidth; //campo interno (delimitado pelas linhas brancas)
 		//Robo
 		//out << " ";
 		//out << Simulation::getFieldExtents(indexScene).y; //quantidade de robos teammates
@@ -69,6 +69,9 @@ void UDPServerSimInt::parsing()
 		os >> temp;
 		int indexScene = atoi(temp.c_str());
 
+		os >> temp;
+		int indexTeam = atoi(temp.c_str());
+
 		//Limpando string para enviar
 		this->sendString = "";
 
@@ -77,14 +80,15 @@ void UDPServerSimInt::parsing()
 
 		//Bola
 		/////////////////QMutexLocker locker(&Simulation::mutex);
-		NxVec3 ballPos = Simulation::allBalls.getBallByScene(indexScene).ball->getGlobalPosition();
+		NxVec3 ballPos = Simulation::gScenes[indexScene]->ball->ball->getGlobalPosition();
 		out << ballPos.x;
 		out << " ";
 		out << ballPos.y;
 		//Robo
-		for(int indexRobot=1; indexRobot<=10; indexRobot++)
+		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
+		for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
-			NxRobot* robot = Simulation::allRobots.getRobotByIdScene(indexRobot, indexScene);
+			NxRobot* robot = robots->getRobotByIdByTeam(indexRobot, indexTeam);
 			NxVec3 robotPos = robot->getPos();
 			NxReal robotAngle = robot->getAngle2DFromVehicle();
 			out << " ";
@@ -117,6 +121,8 @@ void UDPServerSimInt::parsing()
 		//Lendo argumentos
 		os >> temp;
 		int indexScene = atoi(temp.c_str());
+		os >> temp;
+		int indexTeam = atoi(temp.c_str());
 
 		//Limpando string para enviar
 		this->sendString = "";
@@ -125,6 +131,7 @@ void UDPServerSimInt::parsing()
 		stringstream out;
 
 		//Lendo argumentos do robo e controlando
+		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
 		for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
@@ -139,7 +146,8 @@ void UDPServerSimInt::parsing()
 			float kickerSpeed = atof(temp.c_str());
 
 			////////////////QMutexLocker locker(&Simulation::mutex);
-			Simulation::controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+			NxRobot* robot = robots->getRobotByIdByTeam(indexRobot, indexTeam);
+			robot->controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed);
 		}
 
 		//QMutexLocker locker(&Simulation::mutex);
@@ -179,6 +187,8 @@ void UDPServerSimInt::parsing()
 		//Lendo argumentos
 		os >> temp;
 		int indexScene = atoi(temp.c_str());
+		os >> temp;
+		int indexTeam = atoi(temp.c_str());
 
 		//Limpando string para enviar
 		this->sendString = "";
@@ -187,7 +197,8 @@ void UDPServerSimInt::parsing()
 		stringstream out;
 
 		//Lendo argumentos e executando goToThisPose
-		for(int indexRobot=1; indexRobot<=10; indexRobot++)
+		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
+		for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float x = atof(temp.c_str());
@@ -196,7 +207,7 @@ void UDPServerSimInt::parsing()
 			os >> temp;
 			float angle = atof(temp.c_str());
 			/////////////QMutexLocker locker(&Simulation::mutex);
-			Simulation::goToThisPose(x, y, angle, indexRobot, indexScene);
+			robots->getRobotByIdByTeam(indexRobot, indexTeam)->goToThisPose(x, y, angle);
 		}
 
 		out << "ACK 6\n"; // confirmando pacote 6
@@ -209,6 +220,8 @@ void UDPServerSimInt::parsing()
 		//Lendo argumentos
 		os >> temp;
 		int indexScene = atoi(temp.c_str());
+		os >> temp;
+		int indexTeam = atoi(temp.c_str());
 
 		//Limpando string para enviar
 		this->sendString = "";
@@ -217,10 +230,11 @@ void UDPServerSimInt::parsing()
 		stringstream out;
 
 		//Lendo argumentos e executando InfinePath
-		for(int indexRobot=1; indexRobot<=10; indexRobot++)
+		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
+		for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			////////////////QMutexLocker locker(&Simulation::mutex);
-			Simulation::infinitePath(indexRobot, indexScene);
+			robots->getRobotByIdByTeam(indexRobot, indexTeam)->infinitePath();
 		}
 
 		out << "ACK 7\n"; // confirmando pacote 7
@@ -233,6 +247,8 @@ void UDPServerSimInt::parsing()
 		//Lendo argumentos
 		os >> temp;
 		int indexScene = atoi(temp.c_str());
+		os >> temp;
+		int indexTeam = atoi(temp.c_str());
 
 		//Limpando string para enviar
 		this->sendString = "";
@@ -241,7 +257,8 @@ void UDPServerSimInt::parsing()
 		stringstream out;
 
 		//Lendo argumentos do robo e controlando
-		for(int indexRobot=1; indexRobot<=10; indexRobot++)
+		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
+		for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float dribblerSpeed = atof(temp.c_str());
@@ -249,8 +266,9 @@ void UDPServerSimInt::parsing()
 			float kickerSpeed = atof(temp.c_str());
 
 			///////////////QMutexLocker locker(&Simulation::mutex);
-			Simulation::controlDribbler( dribblerSpeed, indexRobot, indexScene );
-			Simulation::controlKicker( kickerSpeed, indexRobot, indexScene );
+			NxRobot* robot = robots->getRobotByIdByTeam(indexRobot, indexTeam);
+			robot->dribbler->controlDribbler( dribblerSpeed );
+			robot->kicker->controlKicker( kickerSpeed, robot );
 		}
 
 		out << "ACK 8\n"; // confirmando pacote 8
@@ -263,6 +281,8 @@ void UDPServerSimInt::parsing()
 		//Lendo argumentos
 		os >> temp;
 		int indexScene = atoi(temp.c_str());
+		os >> temp;
+		int indexTeam = atoi(temp.c_str());
 		os >> temp;
 		int indexRobot = atoi(temp.c_str());
 
@@ -281,7 +301,7 @@ void UDPServerSimInt::parsing()
 		float angle = atof(temp.c_str());
 
 		////////////////QMutexLocker locker(&Simulation::mutex);
-		Simulation::goToThisPose(x, y, angle, indexRobot, indexScene);
+		Simulation::gScenes[indexScene]->allRobots->getRobotByIdByTeam(indexRobot, indexTeam)->goToThisPose(x, y, angle);
 
 		out << "ACK 9\n"; // confirmando pacote 9
 
@@ -328,6 +348,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos do robo e controlando
 		os >> temp;
+		int indexTeam = atoi(temp.c_str());
+		os >> temp;
 		int indexRobot = atoi(temp.c_str());
 
 		os >> temp;
@@ -342,7 +364,7 @@ void UDPServerSimInt::parsing()
 		float kickerSpeed = atof(temp.c_str());
 
 		////////////////QMutexLocker locker(&Simulation::mutex);
-		Simulation::controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+		Simulation::gScenes[indexScene]->allRobots->getRobotByIdByTeam(indexRobot, indexTeam)->controlRobot(speedX, speedY, speedAng, dribblerSpeed, kickerSpeed);
 
 		out << "ACK 11\n"; // confirmando pacote 11
 
@@ -363,6 +385,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos do robo e controlando
 		os >> temp;
+		int indexTeam = atoi(temp.c_str());
+		os >> temp;
 		int indexRobot = atoi(temp.c_str());
 		os >> temp;
 		float dribblerSpeed = atof(temp.c_str());
@@ -370,8 +394,9 @@ void UDPServerSimInt::parsing()
 		float kickerSpeed = atof(temp.c_str());
 
 		///////////////QMutexLocker locker(&Simulation::mutex);
-		Simulation::controlDribbler( dribblerSpeed, indexRobot, indexScene );
-		Simulation::controlKicker( kickerSpeed, indexRobot, indexScene );
+		NxRobot* robot = Simulation::gScenes[indexScene]->allRobots->getRobotByIdByTeam(indexRobot, indexTeam);
+		robot->dribbler->controlDribbler( dribblerSpeed);
+		robot->kicker->controlKicker( kickerSpeed, robot );
 
 		out << "ACK 12\n"; // confirmando pacote 12
 
@@ -392,6 +417,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos do robo e controlando
 		os >> temp;
+		int indexTeam = atoi(temp.c_str());
+		os >> temp;
 		int indexRobot = atoi(temp.c_str());
 
 		os >> temp;
@@ -408,7 +435,7 @@ void UDPServerSimInt::parsing()
 		float kickerSpeed = atof(temp.c_str());
 
 		///////////////QMutexLocker locker(&Simulation::mutex);
-		Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+		Simulation::gScenes[indexScene]->allRobots->getRobotByIdByTeam(indexRobot, indexTeam)->controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed);
 
 		out << "ACK 13\n"; // confirmando pacote 13
 
@@ -420,6 +447,8 @@ void UDPServerSimInt::parsing()
 		//Lendo argumentos
 		os >> temp;
 		int indexScene = atoi(temp.c_str());
+		os >> temp;
+		int indexTeam = atoi(temp.c_str());
 
 		//Limpando string para enviar
 		this->sendString = "";
@@ -428,7 +457,8 @@ void UDPServerSimInt::parsing()
 		stringstream out;
 
 		//Lendo argumentos do robo e controlando
-		for(int indexRobot=0; indexRobot<10; indexRobot++)
+		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
+		for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float speedWheel1 = atof(temp.c_str());
@@ -444,7 +474,7 @@ void UDPServerSimInt::parsing()
 			float kickerSpeed = atof(temp.c_str());
 
 			////////////////QMutexLocker locker(&Simulation::mutex);
-			Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+			robots->getRobotByIdByTeam(indexRobot, indexTeam)->controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed);
 		}
 
 		out << "ACK 14\n"; // confirmando pacote 14
@@ -468,55 +498,31 @@ void UDPServerSimInt::parsing()
 		int indexTeam = atoi(temp.c_str());
 
 		//Lendo argumentos do robo e controlando
-		if(indexTeam==0){
-			//for(int indexRobot=0; indexRobot<5; indexRobot++)
-			for(int indexRobot=1; indexRobot<6; indexRobot++)
-			{
-				os >> temp;
-				float speedWheel1 = atof(temp.c_str());
-				os >> temp;
-				float speedWheel2 = atof(temp.c_str());
-				os >> temp;
-				float speedWheel3 = atof(temp.c_str());
-				os >> temp;
-				float speedWheel4 = atof(temp.c_str());
-				os >> temp;
-				float dribblerSpeed = atof(temp.c_str());
-				os >> temp;
-				float kickerSpeed = atof(temp.c_str());
-
-				/*if(indexRobot==1){
-					printf("ROBO1 DOIDO: %f %f %f %f\n", speedWheel1, speedWheel2, speedWheel3, speedWheel4);
-				}
-				if(indexRobot==2){
-					printf("ROBO2 NORMAL: %f %f %f %f\n", speedWheel1, speedWheel2, speedWheel3, speedWheel4);
-				}*/
-
-				//////////////////QMutexLocker locker(&Simulation::mutex);
-				Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
-			}
-		}
-		else
+		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
+		for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
-			//for(int indexRobot=5; indexRobot<10; indexRobot++)
-			for(int indexRobot=6; indexRobot<11; indexRobot++)
-			{
-				os >> temp;
-				float speedWheel1 = atof(temp.c_str());
-				os >> temp;
-				float speedWheel2 = atof(temp.c_str());
-				os >> temp;
-				float speedWheel3 = atof(temp.c_str());
-				os >> temp;
-				float speedWheel4 = atof(temp.c_str());
-				os >> temp;
-				float dribblerSpeed = atof(temp.c_str());
-				os >> temp;
-				float kickerSpeed = atof(temp.c_str());
+			os >> temp;
+			float speedWheel1 = atof(temp.c_str());
+			os >> temp;
+			float speedWheel2 = atof(temp.c_str());
+			os >> temp;
+			float speedWheel3 = atof(temp.c_str());
+			os >> temp;
+			float speedWheel4 = atof(temp.c_str());
+			os >> temp;
+			float dribblerSpeed = atof(temp.c_str());
+			os >> temp;
+			float kickerSpeed = atof(temp.c_str());
 
-				////////////////////QMutexLocker locker(&Simulation::mutex);
-				Simulation::controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed, indexRobot, indexScene);
+			/*if(indexRobot==1){
+			printf("ROBO1 DOIDO: %f %f %f %f\n", speedWheel1, speedWheel2, speedWheel3, speedWheel4);
 			}
+			if(indexRobot==2){
+			printf("ROBO2 NORMAL: %f %f %f %f\n", speedWheel1, speedWheel2, speedWheel3, speedWheel4);
+			}*/
+
+			//////////////////QMutexLocker locker(&Simulation::mutex);
+			robots->getRobotByIdByTeam(indexRobot, indexTeam)->controlRobotByWheels(speedWheel1, speedWheel2, speedWheel3, speedWheel4, dribblerSpeed, kickerSpeed);
 		}
 
 		out << "ACK 15\n"; // confirmando pacote 15

@@ -33,10 +33,10 @@ NxVehicle::NxVehicle() : /*_steeringWheelState(0),*/ _nxScene(NULL), _carMateria
 NxVehicle::~NxVehicle()
 {
 	if (_carMaterial)
-		_nxScene->releaseMaterial(*_carMaterial);
+		_nxScene->scene->releaseMaterial(*_carMaterial);
 
 	if (_actor)
-		_nxScene->releaseActor(*_actor);
+		_nxScene->scene->releaseActor(*_actor);
 	for(NxU32 i = 0; i < _wheels.size(); i++)
 	{
 		if(_wheels[i])
@@ -47,7 +47,7 @@ NxVehicle::~NxVehicle()
 	}
 }
 
-NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
+NxVehicle* NxVehicle::_createVehicle(NxScene1* scene, NxVehicleDesc* vehicleDesc)
 {
 	//printf("Create Vehicle\n");
 
@@ -73,7 +73,7 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 		robotMaterialDesc.staticFriction = 0.4f;
 		robotMaterialDesc.restitution = 0;
 		robotMaterialDesc.frictionCombineMode = NX_CM_MULTIPLY;
-		vehicle->_carMaterial = scene->createMaterial(robotMaterialDesc);
+		vehicle->_carMaterial = scene->scene->createMaterial(robotMaterialDesc);
 	}
 
 	vehicle->_actor = vehicleDesc->actor;//scene->createActor(actorDesc);
@@ -137,13 +137,13 @@ NxVehicle* NxVehicle::_createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
 	return vehicle;
 }
 
-NxVehicle* NxVehicle::createVehicle(NxScene* scene, NxVehicleDesc* vehicleDesc)
+NxVehicle* NxVehicle::createVehicle(NxScene1* scene, NxVehicleDesc* vehicleDesc)
 {
 	if (vehicleDesc == NULL)
 		return NULL;
 	NxVehicle* vehicle = NxVehicle::_createVehicle(scene, vehicleDesc);
 	//NxAllRobots allRobots = Simulation::allRobots;
-	Simulation::allRobots.AddRobot((NxRobot*)vehicle);
+	Simulation::gScenes[scene->indexScene]->allRobots->AddRobot((NxRobot*)vehicle);
 	//int nbRobots = allRobots.getNumberOfRobots();
 	//if (allRobots.getActiveRobotNumber() != -1 || nbRobots == 1)
 	//	allRobots.setActiveRobot(nbRobots-1);
