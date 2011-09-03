@@ -32,13 +32,13 @@ int main(int argc, char *argv[]) {
 
 	//system("pause");
 	//Skill* test = new Loops::Circle(rob, -1200, 1500, 600, 16);
-	Tactic* test = new Controller(1, rob, sta, 20);
+	Tactic* test = new Controller(1, rob, sta, 40);
 	//Tactic* testb = new Controller(2, robb, sta, 20);
 	while(true) {
 		upd->step();
 		updReferee->step();
 		test->step();
-		//printf("%f %f %f\n",rob->x(), rob->y(), rob->angle());
+		printf("%f %f %f\n",rob->x(), rob->y(), rob->angle());
 		//testb->step();
 		com->step();
 		Sleep(1000/60);

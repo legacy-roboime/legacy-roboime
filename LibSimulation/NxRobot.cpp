@@ -94,7 +94,7 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 							float angle = this->getAngle2DFromVehicle();
 							angle -= NxPi;
 							NxActor& ball = s1->getActor();
-							ball.addTorque(NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0), NX_IMPULSE);
+							ball.addTorque(NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)/*this->dribbler->speedToExecute*1000000.*contactNormal*/, NX_IMPULSE);
 							this->dribbler->speedToExecute = 0;
 						}
 
@@ -245,7 +245,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 				}
 				else if(strcmp(kickerName, "Chutador") == 0){
 					robot->kicker->kickerShapeDesc = Simulation::copyShapeDesc(robotShapes[i]);
-					//robotActor->releaseShape(*(robotShapes[i]));
+					robotActor->releaseShape(*(robotShapes[i]));
 				}
 				delete dribblerName;
 				delete kickerName;
