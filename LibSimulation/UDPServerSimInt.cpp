@@ -86,7 +86,8 @@ void UDPServerSimInt::parsing()
 		out << ballPos.y;
 		//Robo
 		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
-		for(int indexRobot=1; indexRobot<=5; indexRobot++)
+		for(int indexRobot=0; indexRobot<5; indexRobot++)
+		//for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			NxRobot* robot = robots->getRobotByIdByTeam(indexRobot, indexTeam);
 			NxVec3 robotPos = robot->getPos();
@@ -132,7 +133,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos do robo e controlando
 		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
-		for(int indexRobot=1; indexRobot<=5; indexRobot++)
+		for(int indexRobot=0; indexRobot<5; indexRobot++)
+		//for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float speedX = atof(temp.c_str());
@@ -198,7 +200,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos e executando goToThisPose
 		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
-		for(int indexRobot=1; indexRobot<=5; indexRobot++)
+		for(int indexRobot=0; indexRobot<5; indexRobot++)
+		//for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float x = atof(temp.c_str());
@@ -231,7 +234,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos e executando InfinePath
 		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
-		for(int indexRobot=1; indexRobot<=5; indexRobot++)
+		for(int indexRobot=0; indexRobot<5; indexRobot++)
+		//for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			////////////////QMutexLocker locker(&Simulation::mutex);
 			robots->getRobotByIdByTeam(indexRobot, indexTeam)->infinitePath();
@@ -258,7 +262,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos do robo e controlando
 		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
-		for(int indexRobot=1; indexRobot<=5; indexRobot++)
+		for(int indexRobot=0; indexRobot<5; indexRobot++)
+		//for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float dribblerSpeed = atof(temp.c_str());
@@ -458,7 +463,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos do robo e controlando
 		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
-		for(int indexRobot=1; indexRobot<=5; indexRobot++)
+		for(int indexRobot=0; indexRobot<5; indexRobot++)
+		//for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float speedWheel1 = atof(temp.c_str());
@@ -499,7 +505,8 @@ void UDPServerSimInt::parsing()
 
 		//Lendo argumentos do robo e controlando
 		NxAllRobots* robots = Simulation::gScenes[indexScene]->allRobots;
-		for(int indexRobot=1; indexRobot<=5; indexRobot++)
+		for(int indexRobot=0; indexRobot<5; indexRobot++)
+		//for(int indexRobot=1; indexRobot<=5; indexRobot++)
 		{
 			os >> temp;
 			float speedWheel1 = atof(temp.c_str());

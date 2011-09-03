@@ -9,6 +9,7 @@ namespace Inteligencia {
 
 	private:
 		//fields:
+		static float _radius; 
 		real _speed;//current speed
 		const real _angle;//wheel angle, it's not supposed to change on runtime
 
@@ -21,6 +22,7 @@ namespace Inteligencia {
 		void speed(real);
 		real speed();
 		real angle();
+		static float radius();
 
 	};
 }

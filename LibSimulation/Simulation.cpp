@@ -814,17 +814,17 @@ bool Simulation::initSimulation()
 
 	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 1, NxVec3(-1000, 1000, 30), 1);
 
-	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 5, NxVec3(-1000, -1000, 30), 1);
+	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 0, NxVec3(-1000, -1000, 30), 1);
 
-	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 6, NxVec3(3000, 0, 30), 0);
+	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 0, NxVec3(3000, 0, 30), 0);
 
-	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 7, NxVec3(2000, -1000, 30), 0);
+	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 1, NxVec3(2000, -1000, 30), 0);
 
-	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 8, NxVec3(2000, 1000, 30), 0);
+	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 2, NxVec3(2000, 1000, 30), 0);
 
-	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 9, NxVec3(1000, -1000, 30), 0);
+	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 3, NxVec3(1000, -1000, 30), 0);
 
-	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 10, NxVec3(1000, 1000, 30), 0);
+	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 4, NxVec3(1000, 1000, 30), 0);
 
 	//cloneScene(gBaseScene);
 	//cloneScene(gBaseScene);

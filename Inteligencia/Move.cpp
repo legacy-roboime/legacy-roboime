@@ -22,7 +22,7 @@ namespace Inteligencia {
 				speed[i] = cos(alpha) * (speed_y * cos(theta) - speed_x * sin(theta))
 						 - sin(alpha) * (speed_x * cos(theta) + speed_y * sin(theta))
 						 + speed_ang * _robot->body()->radius();
-				//speed[i] /= _robot->body()->radius();
+				//speed[i] /= Wheel::radius(); //TODO: o correto eh com essa linha descomentada, pois a velocidade que o simulador trabalha eh red/s
 			}
 			//TODO: implement speed limit to smoothen movement
 			//HINT:

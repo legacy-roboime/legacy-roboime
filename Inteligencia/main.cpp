@@ -22,8 +22,8 @@ int main(int argc, char *argv[]) {
 	cout << "Modulo Inteligencia" << endl;
 
 	Stage* sta = new Stage();
-	Robot* rob = new Robot(4, 3);
-	//Robot* robb = new Robot(3, 2);
+	Robot* rob = new Robot(4, 4);
+	//Robot* robb = new Robot(3, 3);
 	Commander* com = new CommanderTX();
 	Updater* upd = new UpdaterVision();
 	Updater* updReferee = new UpdaterReferee();
@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
 		upd->step();
 		updReferee->step();
 		test->step();
+		//printf("%f %f %f\n",rob->x(), rob->y(), rob->angle());
 		//testb->step();
 		com->step();
 		Sleep(1000/60);
