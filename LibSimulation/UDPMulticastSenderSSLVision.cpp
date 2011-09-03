@@ -65,7 +65,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 			detectionRobot->set_orientation(robot->getAngle2DFromVehicle());
 			detectionRobot->set_pixel_x(0);
 			detectionRobot->set_pixel_y(0);
-			detectionRobot->set_robot_id(robot->getId()-1); //FOI SUBTRAIDO 1 PQ NO TEAMBOTS OS INDICES DOS ROBOS VAI DE 0 A 4
+			detectionRobot->set_robot_id(robot->getId()/*-1*/); //FOI SUBTRAIDO 1 PQ NO TEAMBOTS OS INDICES DOS ROBOS VAI DE 0 A 4
 			detectionRobot->set_x(robotPos.x);
 			detectionRobot->set_y(robotPos.y);
 		}
