@@ -253,7 +253,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//kickerActor->setLinearVelocity(NxVec3(0,10,0));
 			NxAllRobots* robots = Simulation::gScenes[indexRenderScene]->allRobots;
 			robots->getRobotByIdByTeam(4, 1)->resetToInitialPose();
-			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(0,0,30));
+			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(10,0,30));
 			robots->getRobotByIdByTeam(4, 1)->putToSleep();
 
 			robots->getRobotByIdByTeam(1, 1)->resetToInitialPose();
@@ -647,7 +647,7 @@ void SimulationView::RenderSimulationCallback()
 	//	fprintf(outputfile,"%d	%f	%f\n", count, ang/NxPi*180, velAng.z/NxPi*180); //giro
 
 	//goToThisPose( 1000/*110*/, 1000, 3* NxPi / 2., 4, 0);
-	//controlRobotByWheels(10,10,10,10,0,0,4,0);
+	//Simulation::gScenes[Simulation::gBaseScene]->allRobots->getRobotByIdByTeam(4,1)->controlRobotByWheels(10,10,10,10,0,0);
 
 	//float teta = NxPi/180.;
 	//Dir.normalize();

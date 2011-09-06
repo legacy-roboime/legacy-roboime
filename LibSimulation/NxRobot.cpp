@@ -92,9 +92,14 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 
 						if(strcmp(dribblerName, "Driblador")==0 && strcmp(ballName, "Bola")==0){
 							float angle = this->getAngle2DFromVehicle();
-							angle -= NxPi;
+							angle += NxPi/2.;
 							NxActor& ball = s1->getActor();
-							ball.addTorque(NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)/*this->dribbler->speedToExecute*1000000.*contactNormal*/, NX_IMPULSE);
+							NxVec3 dribblerGlobalPosition = this->dribbler->getLocalPosition() + this->getPos();
+							NxVec3 r = contactPoint - dribblerGlobalPosition;
+							NxVec3 w = NxVec3(cos(angle), sin(angle), 0); 
+							NxVec3 force = w.cross(r);
+							force.setMagnitude(1);
+							ball.addForceAtPos(/*NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)*/this->dribbler->speedToExecute*10.*force, contactPoint, NX_IMPULSE);
 							this->dribbler->speedToExecute = 0;
 						}
 
