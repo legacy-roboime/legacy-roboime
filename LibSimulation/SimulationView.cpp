@@ -31,6 +31,17 @@ NxActor* gSelectedActor = NULL;
 NxScene* gScene = NULL;
 NxPhysicsSDK* gPhysicsSDK = NULL;
 
+void DrawForce(NxActor* actor, NxVec3& forceVec, const NxVec3& color)
+{
+	// draw only if the force is large enough
+	NxReal force = forceVec.magnitude();
+	if (force < 0.1f)  return;
+
+	forceVec = 3*forceVec/force;
+
+	NxVec3 pos = actor->getCMassGlobalPosition();
+	DrawArrow(pos, pos + forceVec, color);
+}
 /**
 * Método do PhysX adaptado
 */

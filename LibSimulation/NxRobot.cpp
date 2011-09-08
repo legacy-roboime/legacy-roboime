@@ -3,6 +3,7 @@
 #include "NxAllRobots.h"
 #include "Stream.h"
 #include "cooking.h"
+#include "SimulationView.h"
 
 NxRobot::NxRobot() : NxVehicle()
 {
@@ -101,7 +102,10 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 							force.setMagnitude(1);
 							NxReal coefKinect = 0.5;
 							NxReal normalMagnitude = contactNormal.magnitude();
-							ball.addForceAtPos(/*NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)*/this->dribbler->speedToExecute*200.*coefKinect*normalMagnitude*force, contactPoint, NX_IMPULSE); //driblador binario on/off
+							NxVec3 resultForce = this->dribbler->speedToExecute*10.*coefKinect*normalMagnitude*force;
+							//NxReal teste =  resultForce.magnitude();
+							//SimulationView::DrawForce(&ball, resultForce, NxVec3(1,1,1));
+							ball.addForceAtPos(/*NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)*/resultForce, contactPoint, NX_IMPULSE); 
 							this->dribbler->speedToExecute = 0;
 						}
 
@@ -165,6 +169,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 	//TODO: LEVANTAR CMASS E INERTIA TENSOR
 	
+	//vehicleDesc.actor->setCMassOffsetGlobalPosition(NxVec3(0, 0, 0));
 	NxMat33 inertiaTensor = NxMat33(NxVec3(1294.4362, 3.14502, -66.954), NxVec3(3.14502, 1094.42351, -0.24279), NxVec3(-66.954, -0.24279, 1754.80511));
 	vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( inertiaTensor, NxVec3(0,0,0) ) );
 	//TODO: Diagonalizar inertiaTensor e passar para setMassSpaceInertiaTensor

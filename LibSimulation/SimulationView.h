@@ -57,7 +57,9 @@ private:
 	static void SaveScene(const char *pFilename);
 	static bool FileExistTestSimple(const char *fname);
 	static void CSL_Scene();
+	static void DrawForce(NxActor* actor, NxVec3& forceVec, const NxVec3& color);
 
+	friend class NxRobot;
 	friend class Simulation;
 public:
 	SimulationView(void);
