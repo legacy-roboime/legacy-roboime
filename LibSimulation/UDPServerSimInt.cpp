@@ -38,7 +38,10 @@ void UDPServerSimInt::parsing()
 		//out << Simulation::timeStep; //quantidade de cenas existentes
 		//out << " ";
 		//Campo
-		NxField* field = Simulation::gScenes[indexScene]->field;
+		/*NxField* field = Simulation::gScenes[indexScene]->field;
+		NxVec3 leftGoalPos = field->getLeftGoalPos();
+		NxVec3 rightGoalPos = field->getRightGoalPos();
+		NxVec3 centerGoalPos = field->getCenterPos();
 		out << field->fieldLength;
 		out << " ";
 		out << field->fieldWidth; 
@@ -46,7 +49,22 @@ void UDPServerSimInt::parsing()
 		out << field->linesLength; //campo interno (delimitado pelas linhas brancas)
 		out << " ";
 		out << field->linesWidth; //campo interno (delimitado pelas linhas brancas)
+		out << " ";
+		out << leftGoalPos.x;
+		out << " ";
+		out << leftGoalPos.y;
+		out << " ";
+		out << rightGoalPos.x;
+		out << " ";
+		out << rightGoalPos.y;
+		out << " ";
+		out << centerGoalPos.x;
+		out << " ";
+		out << centerGoalPos.y;*/
+
 		//Robo
+		//Simulation::gScenes[indexScene]
+		//out << 
 		//out << " ";
 		//out << Simulation::getFieldExtents(indexScene).y; //quantidade de robos teammates
 		//out << " ";

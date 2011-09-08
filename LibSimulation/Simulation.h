@@ -45,10 +45,7 @@ private:
 	static bool gClear;
 
 	static QMutex mutex;
-	
-	static NxPhysicsSDK *gPhysicsSDK;
 	static const NxU32 gMaxScenes = 100;
-	static NxArray<NxScene1*> gScenes;
 	static int nbExistScenes;
 	static NxU32 gBaseScene;
 	static NxVec3 gDefaultGravity;
@@ -96,6 +93,9 @@ private:
 	Simulation(void);
 	~Simulation(void);
 public:
+	static NxArray<NxScene1*> gScenes;
+	static NxPhysicsSDK *gPhysicsSDK;
+
 	/**
 	* Atributos para inteligência
 	*/

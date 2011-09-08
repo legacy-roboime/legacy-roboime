@@ -8,6 +8,7 @@
 #endif
 #include "Simulation.h"
 #include "DrawObjects.h"
+#include "ActorPicking.h"
 #ifdef __PPCGEKKO__
 #include "GLFontRenderer.h"
 printf("__PPCGEKKO__");
@@ -24,7 +25,6 @@ private:
 	static int count;
 	static bool keyDown[256];
 	static int gMainHandle;
-	static int indexRenderScene;
 	static NxVec3 gEye;
 	static NxVec3 Dir;
 	static NxVec3 Up;
@@ -35,6 +35,11 @@ private:
 	static int my;
 	static DebugRenderer gDebugRenderer;
 	static bool gDebugVisualization;
+	//static bool bLeftMouseButtonPressed;
+	//static NxReal gMouseDepth;
+	//static NxDistanceJoint *gMouseJoint;
+	//static NxActor* gMouseSphere;
+	//static NxActor *gSelectedActor;
 	//static PerfRenderer    gPrefRenderer;
 private:
 	static void appKey(unsigned char key, bool down);
@@ -57,6 +62,8 @@ private:
 public:
 	SimulationView(void);
 	~SimulationView(void);
+
+	static int indexRenderScene;
 
 	//main loop simulation
 	static void mainLoop(int argc, char **argv);

@@ -73,7 +73,7 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 		SSL_DetectionFrame * nframe = wrapperPacket.mutable_detection();
 		nframe->CopyFrom(detectionFrame);
 	}
-	if(false)//withGeometry)
+	if(true)//withGeometry)
 	{
 		///////////////////QMutexLocker locker(&Simulation::mutex);
 

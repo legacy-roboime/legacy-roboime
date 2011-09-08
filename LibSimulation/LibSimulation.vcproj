@@ -376,6 +376,14 @@
 						Name="Common Source Files"
 						>
 						<File
+							RelativePath="..\..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\ActorPicking.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\Actors.cpp"
+							>
+						</File>
+						<File
 							RelativePath="..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\cooking.cpp"
 							>
 						</File>
@@ -389,6 +397,10 @@
 						</File>
 						<File
 							RelativePath="..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\GLFontRenderer.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\Joints.cpp"
 							>
 						</File>
 						<File
@@ -622,6 +634,14 @@
 						Name="Common Header Files"
 						>
 						<File
+							RelativePath="..\..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\ActorPicking.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\Actors.h"
+							>
+						</File>
+						<File
 							RelativePath="..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\cooking.h"
 							>
 						</File>
@@ -635,6 +655,10 @@
 						</File>
 						<File
 							RelativePath="..\include\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\GLFontRenderer.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\..\..\..\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.4_win\Samples\SampleCommonCode\src\Joints.h"
 							>
 						</File>
 						<File

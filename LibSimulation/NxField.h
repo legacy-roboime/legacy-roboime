@@ -30,4 +30,7 @@ public:
 
 	void cloneField(int indexNewScene);
 	void setDimensions(float fieldLength, float fieldWidth, float linesLength, float linesWidth, float goalLength = 200., float goalWidth = 700., float goalHeigth = 160.);
+	NxVec3 getLeftGoalPos();
+	NxVec3 getRightGoalPos();
+	NxVec3 getCenterPos();
 };

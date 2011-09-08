@@ -17,6 +17,19 @@ GLdouble SimulationView::zNear = 0.5f;
 GLdouble SimulationView::zFar = 10000.0f;//
 int SimulationView::indexRenderScene = 0;
 bool SimulationView::gDebugVisualization = false;
+//bool SimulationView::bLeftMouseButtonPressed = false;
+//NxReal SimulationView::gMouseDepth = 0.0f;
+//NxDistanceJoint* SimulationView::gMouseJoint = NULL;
+//NxActor* SimulationView::gMouseSphere = NULL;
+//NxActor* SimulationView::gSelectedActor = NULL;
+
+bool bLeftMouseButtonPressed = false;
+NxReal gMouseDepth = 0.0f;
+NxDistanceJoint* gMouseJoint = NULL;
+NxActor* gMouseSphere = NULL;
+NxActor* gSelectedActor = NULL;
+NxScene* gScene = NULL;
+NxPhysicsSDK* gPhysicsSDK = NULL;
 
 /**
 * Método do PhysX adaptado
@@ -253,7 +266,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//kickerActor->setLinearVelocity(NxVec3(0,10,0));
 			NxAllRobots* robots = Simulation::gScenes[indexRenderScene]->allRobots;
 			robots->getRobotByIdByTeam(4, 1)->resetToInitialPose();
-			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(0,0,30));
+			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(7400/2.,0,30));
 			robots->getRobotByIdByTeam(4, 1)->putToSleep();
 
 			robots->getRobotByIdByTeam(1, 1)->resetToInitialPose();
@@ -363,7 +376,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			orientation.rotZ(-3.1416/4);
 			actor->setGlobalOrientation(orientation);
 			}*/
-			Simulation::gScenes[indexRenderScene]->ball->ball->setGlobalPosition(NxVec3(0,0,30));
+			Simulation::gScenes[indexRenderScene]->ball->ball->setGlobalPosition(NxVec3(7400/2.,0,21.5));
 			Simulation::gScenes[indexRenderScene]->ball->putToSleep();
 		}
 		break;
@@ -501,6 +514,32 @@ void SimulationView::MouseCallback(int button, int state, int x, int y)
 {
 	mx = x;
 	my = y;
+
+	gScene = Simulation::gScenes[SimulationView::indexRenderScene]->scene;
+	gPhysicsSDK = Simulation::gPhysicsSDK;
+
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+	{
+#if !defined(_XBOX) && !defined (__CELLOS_LV2__) // no picking on consoles
+		//if (!PickActor(x,y))
+		//{
+
+		// this prevents from only grabbing it when the mouse moves
+		//	MotionCallback(x,y);
+		//}
+
+		PickActor(x,y);
+#endif
+	}
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		bLeftMouseButtonPressed = true;
+	}
+	else if (state == GLUT_UP)
+	{
+		LetGoActor();
+		bLeftMouseButtonPressed = false;
+	}
 }
 
 //==================================================================================

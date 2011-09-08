@@ -146,8 +146,6 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 	vehicleDesc.position				= NxVec3(robotActor->getGlobalPosition());
 	float mass = 5.;
-	robotActor->setMass(mass);
-	robotActor->setCMassOffsetGlobalPosition(NxVec3(0,0,0));
 	vehicleDesc.mass					= mass;//robotActor->getMass(); //PLUGIN TAH COM PROBLEMA XML ERRADO
 	//vehicleDesc.motorForce				= 70000;
 	//vehicleDesc.maxVelocity				= 300.f;
@@ -157,6 +155,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//vehicleDesc.transmissionEfficiency
 	vehicleDesc.actor = robotActor;
 	vehicleDesc.actor->setMaxAngularVelocity(6.2);
+	vehicleDesc.actor->setMass(mass);
 
 	//TODO: LEVANTAR DAMPING
 	float t = vehicleDesc.actor->getLinearDamping();
@@ -165,8 +164,11 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//vehicleDesc.actor->setLinearDamping(0.05);
 
 	//TODO: LEVANTAR CMASS E INERTIA TENSOR
+	
+	NxMat33 inertiaTensor = NxMat33(NxVec3(1094.42351,-0.24279,3.14502),NxVec3(-0.24279,1754.80511,-66.954),NxVec3(3.14502,-66.954,1294.4362));
+	vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( inertiaTensor, NxVec3(0,0,0) ) );
+	//TODO: Diagonalizar inertiaTensor e passar para setMassSpaceInertiaTensor
 	vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*1000.);
-	vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)), NxVec3(0,0,0) ) );
 
 	//Motor descricao
 	//NxVehicleMotorDesc motorsDesc[4];
@@ -504,7 +506,7 @@ NxReal* NxRobot::calcWheelSpeedFromRobotSpeed( NxReal speedAng, NxReal speedX, N
 		speeds[i] = -NxMath::sin(angPosWheel) * ( speedX * NxMath::cos( -angRobo ) + speedY * NxMath::sin( angRobo ) ) +
 			NxMath::cos(angPosWheel) * ( speedX * NxMath::sin( -angRobo ) + speedY * NxMath::cos( angRobo ) ) +
 			speedAng * this->wheelsRadius;
-		speeds[i] /= this->wheelsRadius;
+		speeds[i] /= ((NxWheel2*)this->getWheel(i))->getRadius();
 	}
 
 	//NxMat33 omniMatrix1;

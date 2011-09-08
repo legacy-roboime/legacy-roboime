@@ -153,3 +153,18 @@ void NxField::setDimensions(float fieldLength, float fieldWidth, float linesLeng
 	boxGolNegativoParedeNegativo->setGlobalPosition(NxVec3( -linesLength/2. - dimensionsGolNegativoParedeNegativo.x, -dimensionsGolNegativoParedeFundo.x, posGolNegativoParedeNegativo.z ));
 	boxGolNegativoParedePositivo->setGlobalPosition(NxVec3( -linesLength/2. - dimensionsGolNegativoParedeNegativo.x, +dimensionsGolNegativoParedeFundo.x, posGolNegativoParedePositivo.z ));
 }
+
+NxVec3 NxField::getLeftGoalPos(){
+	NxVec3 centerLeftGoalPos = NxVec3(-linesLength/2., 0, 0);
+	return centerLeftGoalPos;
+}
+
+NxVec3 NxField::getRightGoalPos(){
+	NxVec3 centerRightGoalPos = NxVec3(linesLength/2., 0, 0);
+	return centerRightGoalPos;
+}
+
+NxVec3 NxField::getCenterPos(){
+	NxVec3 centerPos = NxVec3(0, 0, 0);
+	return centerPos;
+}

@@ -39,9 +39,9 @@ namespace ControleRobo
             if (server.receivedData != null)
             {
                 this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
-                //Console.WriteLine(intelData);
+                Console.WriteLine(intelData);
                 this.intelTranslatedData = Protocols.TranslateProtocol(intelData, false);
-                //Console.WriteLine(Encoding.ASCII.GetString(intelTranslatedData));
+                Console.WriteLine(Encoding.ASCII.GetString(intelTranslatedData));
             }
             if (intelTranslatedData != null)
             {
