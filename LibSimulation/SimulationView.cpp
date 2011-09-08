@@ -266,7 +266,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//kickerActor->setLinearVelocity(NxVec3(0,10,0));
 			NxAllRobots* robots = Simulation::gScenes[indexRenderScene]->allRobots;
 			robots->getRobotByIdByTeam(4, 1)->resetToInitialPose();
-			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(7400/2.,0,30));
+			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(-3000.,0,30));
 			robots->getRobotByIdByTeam(4, 1)->putToSleep();
 
 			robots->getRobotByIdByTeam(1, 1)->resetToInitialPose();
@@ -376,7 +376,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			orientation.rotZ(-3.1416/4);
 			actor->setGlobalOrientation(orientation);
 			}*/
-			Simulation::gScenes[indexRenderScene]->ball->ball->setGlobalPosition(NxVec3(7400/2.,0,21.5));
+			Simulation::gScenes[indexRenderScene]->ball->ball->setGlobalPosition(NxVec3(0,0,21.5));
 			Simulation::gScenes[indexRenderScene]->ball->putToSleep();
 		}
 		break;

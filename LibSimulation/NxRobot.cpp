@@ -101,7 +101,7 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 							force.setMagnitude(1);
 							NxReal coefKinect = 0.5;
 							NxReal normalMagnitude = contactNormal.magnitude();
-							ball.addForceAtPos(/*NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)*/this->dribbler->speedToExecute*100.*coefKinect*normalMagnitude*force, contactPoint, NX_IMPULSE); //driblador binario on/off
+							ball.addForceAtPos(/*NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)*/this->dribbler->speedToExecute*200.*coefKinect*normalMagnitude*force, contactPoint, NX_IMPULSE); //driblador binario on/off
 							this->dribbler->speedToExecute = 0;
 						}
 
@@ -165,10 +165,10 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 	//TODO: LEVANTAR CMASS E INERTIA TENSOR
 	
-	NxMat33 inertiaTensor = NxMat33(NxVec3(1094.42351,-0.24279,3.14502),NxVec3(-0.24279,1754.80511,-66.954),NxVec3(3.14502,-66.954,1294.4362));
+	NxMat33 inertiaTensor = NxMat33(NxVec3(1294.4362, 3.14502, -66.954), NxVec3(3.14502, 1094.42351, -0.24279), NxVec3(-66.954, -0.24279, 1754.80511));
 	vehicleDesc.actor->setCMassOffsetLocalPose( NxMat34( inertiaTensor, NxVec3(0,0,0) ) );
 	//TODO: Diagonalizar inertiaTensor e passar para setMassSpaceInertiaTensor
-	vehicleDesc.actor->setMassSpaceInertiaTensor(vehicleDesc.actor->getMassSpaceInertiaTensor()*1000.);
+	vehicleDesc.actor->setMassSpaceInertiaTensor(/*vehicleDesc.actor->getMassSpaceInertiaTensor()*1000.*/NxVec3(1764.3, 1284.9, 1094.4) );
 
 	//Motor descricao
 	//NxVehicleMotorDesc motorsDesc[4];
