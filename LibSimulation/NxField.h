@@ -6,13 +6,26 @@ class NxField
 {
 public:
 	int indexScene;
-	float linesLength;
-	float linesWidth;
+	
 	float fieldLength;
 	float fieldWidth;
-	float goalLength;
-	float goalWidth;
 	float goalHeigth;
+
+	int line_width;
+	float linesLength;//int field_length;
+	float linesWidth;//int field_width;
+	int boundary_width;
+	int referee_width;
+	float goalWidth;//int goal_width;
+	float goalLength;//int goal_depth;
+	int goal_wall_width;
+	int center_circle_radius;
+	int defense_radius;
+	int defense_stretch;
+	int free_kick_from_defense_dist;
+	int penalty_spot_from_field_line_dist;
+	int penalty_line_from_spot_dist;
+
 	NxActor* actorParedeLateralPositivo;
 	NxActor* actorParedeLateralNegativo;
 	NxActor* actorParedeFundoNegativo;

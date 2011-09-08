@@ -76,24 +76,25 @@ void UDPMulticastSenderSSLVision::buildSendMessage()
 	if(true)//withGeometry)
 	{
 		///////////////////QMutexLocker locker(&Simulation::mutex);
+		NxField* field = Simulation::gScenes[Simulation::gBaseScene]->field;
 
 		SSL_GeometryData geometryData = SSL_GeometryData();
 
 		SSL_GeometryFieldSize* geometryFieldSize = geometryData.mutable_field();
-		geometryFieldSize->set_boundary_width(0);
-		geometryFieldSize->set_center_circle_radius(0);
-		geometryFieldSize->set_defense_radius(0);
-		geometryFieldSize->set_defense_stretch(0);
-		geometryFieldSize->set_field_length(0);
-		geometryFieldSize->set_field_width(0);
-		geometryFieldSize->set_free_kick_from_defense_dist(0);
-		geometryFieldSize->set_goal_depth(0);
-		geometryFieldSize->set_goal_wall_width(0);
-		geometryFieldSize->set_goal_width(0);
-		geometryFieldSize->set_line_width(0);
-		geometryFieldSize->set_penalty_line_from_spot_dist(0);
-		geometryFieldSize->set_penalty_spot_from_field_line_dist(0);
-		geometryFieldSize->set_referee_width(0);
+		geometryFieldSize->set_boundary_width(field->boundary_width);
+		geometryFieldSize->set_center_circle_radius(field->center_circle_radius);
+		geometryFieldSize->set_defense_radius(field->defense_radius);
+		geometryFieldSize->set_defense_stretch(field->defense_stretch);
+		geometryFieldSize->set_field_length(field->linesLength);
+		geometryFieldSize->set_field_width(field->linesWidth);
+		geometryFieldSize->set_free_kick_from_defense_dist(field->free_kick_from_defense_dist);
+		geometryFieldSize->set_goal_depth(field->goalLength);
+		geometryFieldSize->set_goal_wall_width(field->goal_wall_width);
+		geometryFieldSize->set_goal_width(field->goalWidth);
+		geometryFieldSize->set_line_width(field->line_width);
+		geometryFieldSize->set_penalty_line_from_spot_dist(field->penalty_line_from_spot_dist);
+		geometryFieldSize->set_penalty_spot_from_field_line_dist(field->penalty_spot_from_field_line_dist);
+		geometryFieldSize->set_referee_width(field->referee_width);
 
 		SSL_GeometryCameraCalibration* geometryCameraCalibration = geometryData.add_calib();
 		geometryCameraCalibration->set_camera_id(0);
