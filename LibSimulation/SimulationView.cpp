@@ -116,7 +116,7 @@ void DrawActorIME(NxActor* actor)
 					DrawShapeIME(shapes[nShapes], NxVec3(5,0.5,0)); //Laranja //1,0.5,0
 				}
 			}
-			else if(strcmp(actor->getName(), "Robo1") == 0 || strcmp(actor->getName(), "Robo2") == 0 || strcmp(actor->getName(), "Robo3") == 0 || strcmp(actor->getName(), "Robo4") == 0 || strcmp(actor->getName(), "Robo5") == 0)
+			else if(strcmp(actor->getName(), "Robo0-1") == 0 || strcmp(actor->getName(), "Robo1-1") == 0 || strcmp(actor->getName(), "Robo2-1") == 0 || strcmp(actor->getName(), "Robo3-1") == 0 || strcmp(actor->getName(), "Robo4-1") == 0 || strcmp(actor->getName(), "Robo5-1") == 0 || strcmp(actor->getName(), "Robo6-1") == 0 || strcmp(actor->getName(), "Robo7-1") == 0  || strcmp(actor->getName(), "Robo8-1") == 0 || strcmp(actor->getName(), "Robo9-1") == 0 || strcmp(actor->getName(), "Robo10-1") == 0)
 			{
 				while (nShapes--)
 				{
@@ -145,7 +145,7 @@ void DrawActorIME(NxActor* actor)
 					}
 				}
 			}
-			else if(strcmp(actor->getName(), "Robo6") == 0 || strcmp(actor->getName(), "Robo7") == 0 || strcmp(actor->getName(), "Robo8") == 0 || strcmp(actor->getName(), "Robo9") == 0 || strcmp(actor->getName(), "Robo10") == 0)
+			else if(strcmp(actor->getName(), "Robo0-0") == 0 || strcmp(actor->getName(), "Robo1-0") == 0 || strcmp(actor->getName(), "Robo2-0") == 0 || strcmp(actor->getName(), "Robo3-0") == 0 || strcmp(actor->getName(), "Robo4-0") == 0 || strcmp(actor->getName(), "Robo5-0") == 0 || strcmp(actor->getName(), "Robo6-0") == 0 || strcmp(actor->getName(), "Robo7-0") == 0  || strcmp(actor->getName(), "Robo8-0") == 0 || strcmp(actor->getName(), "Robo9-0") == 0 || strcmp(actor->getName(), "Robo10-0") == 0)
 			{
 				while (nShapes--)
 				{
@@ -253,7 +253,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			//kickerActor->setLinearVelocity(NxVec3(0,10,0));
 			NxAllRobots* robots = Simulation::gScenes[indexRenderScene]->allRobots;
 			robots->getRobotByIdByTeam(4, 1)->resetToInitialPose();
-			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(10,0,30));
+			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(0,0,30));
 			robots->getRobotByIdByTeam(4, 1)->putToSleep();
 
 			robots->getRobotByIdByTeam(1, 1)->resetToInitialPose();
@@ -323,7 +323,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			NxActor* actor = ball->ball;
 			if(actor != NULL) 
 			{
-				actor->addForce(NxVec3(0,0,-1000));
+				actor->addForce(NxVec3(-1000,0,0));
 				//actor->setLinearVelocity(NxVec3(1,0,0));
 				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
 			}
@@ -363,7 +363,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			orientation.rotZ(-3.1416/4);
 			actor->setGlobalOrientation(orientation);
 			}*/
-			Simulation::gScenes[indexRenderScene]->ball->ball->setGlobalPosition(NxVec3(120,0,30));
+			Simulation::gScenes[indexRenderScene]->ball->ball->setGlobalPosition(NxVec3(0,0,30));
 			Simulation::gScenes[indexRenderScene]->ball->putToSleep();
 		}
 		break;
@@ -697,6 +697,8 @@ void SimulationView::RenderSimulationCallback()
 			for(unsigned int j = 0 ; j < nbActors ; j++ )
 			{
 				DrawActorIME(Simulation::gScenes[indexRenderScene]->scene->getActors()[j]);
+				//DrawActor(Simulation::gScenes[indexRenderScene]->scene->getActors()[j]);
+				//DrawActorShadow(Simulation::gScenes[indexRenderScene]->scene->getActors()[j]);
 				//Simulation::allRobots.drawRobots(gDebugVisualization);
 			}
 		}

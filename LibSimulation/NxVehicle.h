@@ -113,6 +113,7 @@ public:
 
 	NxVec3						getPos();
 	NxReal						getAngle2DFromVehicle();
+	NxVec3						getAngle3DFromVehicle();
 };
 
 NX_INLINE NxVehicle* NxVehicle::getChild(NxU32 i) {

@@ -384,6 +384,34 @@ NxReal NxVehicle::getAngle2DFromVehicle()
 	return teta;
 }
 
+NxVec3 NxVehicle::getAngle3DFromVehicle()
+{
+	NxMat33 rotMatrix = _actor->getGlobalOrientation();
+	NxMat33 rotMatrixInv;
+	rotMatrix.getInverse(rotMatrixInv);
+	NxVec3 vecY = rotMatrixInv.getColumn(1);
+	NxReal value = vecY.dot(NxVec3(0,1,0));
+	value /= vecY.magnitude();
+
+	NxReal teta = NxMath::acos(value);
+	if( teta < NxPi*0.5 )
+	{
+		if( vecY.x * vecY.y > 0 )
+		{
+			teta = NxPi*2 - teta;
+		}
+	}
+	else
+	{
+		if( vecY.x * vecY.y < 0 )
+		{
+			teta = NxPi*2 - teta;
+		}
+	}
+	teta = NxPi*2 - teta;
+	return vecY;
+}
+
 NxMat34 NxVehicle::getInitialPose(){
 	return this->initialPose;
 }

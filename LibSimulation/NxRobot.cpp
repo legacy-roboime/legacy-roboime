@@ -99,7 +99,9 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 							NxVec3 w = NxVec3(cos(angle), sin(angle), 0); 
 							NxVec3 force = w.cross(r);
 							force.setMagnitude(1);
-							ball.addForceAtPos(/*NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)*/this->dribbler->speedToExecute*10.*force, contactPoint, NX_IMPULSE);
+							NxReal coefKinect = 0.5;
+							NxReal normalMagnitude = contactNormal.magnitude();
+							ball.addForceAtPos(/*NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)*/this->dribbler->speedToExecute*100.*coefKinect*normalMagnitude*force, contactPoint, NX_IMPULSE); //driblador binario on/off
 							this->dribbler->speedToExecute = 0;
 						}
 
@@ -145,6 +147,7 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	vehicleDesc.position				= NxVec3(robotActor->getGlobalPosition());
 	float mass = 5.;
 	robotActor->setMass(mass);
+	robotActor->setCMassOffsetGlobalPosition(NxVec3(0,0,0));
 	vehicleDesc.mass					= mass;//robotActor->getMass(); //PLUGIN TAH COM PROBLEMA XML ERRADO
 	//vehicleDesc.motorForce				= 70000;
 	//vehicleDesc.maxVelocity				= 300.f;
@@ -270,6 +273,22 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 
 		//Release no actor importado do 3ds Max
 		//gScenes[0]->releaseActor(*robotActor);
+
+		string label;
+		string plabel = "Robo";
+		stringstream out;
+		out << indexRobot;
+		out << "-";
+		out << indexTeam;
+		//out << "-";
+		//out << indexScene;
+		label.append(plabel);
+		label.append(out.str());
+		char* arrayLabel = new char[label.size()+1];
+		arrayLabel[label.size()]=0;
+		memcpy(arrayLabel, label.c_str(), label.size());
+		robotActor->setName(arrayLabel);
+		//delete arrayLabel;
 	}
 }
 
@@ -380,6 +399,10 @@ void NxRobot::cloneRobot(int indexNewScene, int indexNewRobot, NxVec3 newPositio
 	string plabel = "Robo";
 	stringstream out;
 	out << indexNewRobot;
+	out << "-";
+	out << indexNewTeam;
+	//out << "-";
+	//out << indexNewScene;
 	label.append(plabel);
 	label.append(out.str());
 	char* arrayLabel = new char[label.size()+1];
