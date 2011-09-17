@@ -60,7 +60,7 @@ namespace LR
             }
             else
             {
-//                throw new Exception("Dispositivo não inicializado.");
+                throw new Exception("Dispositivo não inicializado.");
                 return false;
             }
         }

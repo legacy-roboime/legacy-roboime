@@ -35,7 +35,7 @@ namespace ControleRobo
 
         public void UDPSend(object sender, ElapsedEventArgs e)
         {
-            this.server.sendData = Encoding.ASCII.GetBytes("MOTHAFUCKA");
+            this.server.sendData = Encoding.ASCII.GetBytes(" ");
             if (server.receivedData != null)
             {
                 this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
@@ -52,16 +52,23 @@ namespace ControleRobo
         }
         public void TxSendReceive(object sender, ElapsedEventArgs e)
         {
-            if (server.receivedData != null)
-            {
+            //if (server.receivedData != null)
+            //{
                 this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
+                Console.WriteLine(intelData);
                 this.intelTranslatedData = Protocols.TranslateProtocol(intelData, true);
-            }
+            //}
             if (intelTranslatedData != null)
             {
                 transmitter.Transmitir(intelTranslatedData);
+                foreach (byte b in intelTranslatedData)
+                {
+                    Console.Write(b);
+                    Console.Write(' ');
+                }
+                Console.WriteLine();
             }
-
+            /*
             string robotBuffer="";
             int[] receivedRobots = new int[numRobots];
             bool stopTrying = false;
@@ -75,7 +82,7 @@ namespace ControleRobo
                 if (DateTime.Now.Subtract(time).Milliseconds > 50)
                     stopTrying = true;  
             }
-            this.server.sendData = Encoding.ASCII.GetBytes(robotBuffer);
+            this.server.sendData = Encoding.ASCII.GetBytes(robotBuffer);*/
         }
         public void StartCommunication(bool realTransmitter)
         {
@@ -91,6 +98,7 @@ namespace ControleRobo
                 transmitter = new LR.TransmissorRFM12USB();
                 transmitter.Inicializar("VIVATxRx", "IME");
                 sendTimer = new System.Timers.Timer(70);
+
                 sendTimer.Elapsed += new ElapsedEventHandler(TxSendReceive);
                 sendTimer.Enabled = true;
 
@@ -128,7 +136,7 @@ namespace ControleRobo
             
             Controller[] controllers = {controller};
             */
-            comm.StartCommunication(false);
+            comm.StartCommunication(true);
             
 
             /*
