@@ -130,14 +130,14 @@ void DrawActorIME(NxActor* actor)
 			{
 				while (nShapes--)
 				{
-					DrawShapeIME(shapes[nShapes], NxVec3(0,1,0)); //Verde
+					DrawShapeIME(shapes[nShapes], NxVec3(0.3,1,0.3)); //Verde
 				}
 			}
 			else if(strcmp(actor->getName(), "Bola") == 0)
 			{
 				while (nShapes--)
 				{
-					DrawShapeIME(shapes[nShapes], NxVec3(5,0.5,0)); //Laranja //1,0.5,0
+					DrawShapeIME(shapes[nShapes], NxVec3(5,0.5,0.3)); //Laranja //1,0.5,0
 				}
 			}
 			else if(strcmp(actor->getName(), "Robo0-1") == 0 || strcmp(actor->getName(), "Robo1-1") == 0 || strcmp(actor->getName(), "Robo2-1") == 0 || strcmp(actor->getName(), "Robo3-1") == 0 || strcmp(actor->getName(), "Robo4-1") == 0 || strcmp(actor->getName(), "Robo5-1") == 0 || strcmp(actor->getName(), "Robo6-1") == 0 || strcmp(actor->getName(), "Robo7-1") == 0  || strcmp(actor->getName(), "Robo8-1") == 0 || strcmp(actor->getName(), "Robo9-1") == 0 || strcmp(actor->getName(), "Robo10-1") == 0)
@@ -161,7 +161,7 @@ void DrawActorIME(NxActor* actor)
 							DrawShapeIME(shapes[nShapes], NxVec3(1,1,1)); 
 						}
 						else{
-							DrawShapeIME(shapes[nShapes], NxVec3(0,0,1)); //Azul
+							DrawShapeIME(shapes[nShapes], NxVec3(0.3,0.3,1.)); //Azul
 						}
 					}
 					else{
@@ -190,7 +190,7 @@ void DrawActorIME(NxActor* actor)
 							DrawShapeIME(shapes[nShapes], NxVec3(1,1,1)); 
 						}
 						else{
-							DrawShapeIME(shapes[nShapes], NxVec3(1,1,0)); //Amarelo
+							DrawShapeIME(shapes[nShapes], NxVec3(1,1,0.3)); //Amarelo
 						}
 					}
 					else{
@@ -347,7 +347,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 			NxActor* actor = ball->ball;
 			if(actor != NULL) 
 			{
-				actor->addForce(NxVec3(-1000,0,0));
+				actor->addForce(NxVec3(0,-1000,0));
 				//actor->setLinearVelocity(NxVec3(1,0,0));
 				//actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
 			}
@@ -697,7 +697,8 @@ void SimulationView::RenderSimulationCallback()
 	//	fprintf(outputfile,"%d	%f	%f\n", count, ang/NxPi*180, velAng.z/NxPi*180); //giro
 
 	//goToThisPose( 1000/*110*/, 1000, 3* NxPi / 2., 4, 0);
-	//Simulation::gScenes[Simulation::gBaseScene]->allRobots->getRobotByIdByTeam(4,1)->controlRobotByWheels(10,10,10,10,0,0);
+	//NxRobot* robot = Simulation::gScenes[Simulation::gBaseScene]->allRobots->getRobotByIdByTeam(4,1);
+	//robot->goToThisPose(-3000, 0, NxPi);
 
 	//float teta = NxPi/180.;
 	//Dir.normalize();
@@ -713,6 +714,10 @@ void SimulationView::RenderSimulationCallback()
 
 	//	if(count == 1000) exit(0);
 	//}
+	NxBall* ball = Simulation::gScenes[indexRenderScene]->ball;
+	NxActor* actor = ball->ball;
+	NxVec3 teste = ball->ball->getLinearVelocity();
+	//printf("velocidade linear bola: %f\n", teste.magnitude());
 
 	double diff;
 	timeval tv;
