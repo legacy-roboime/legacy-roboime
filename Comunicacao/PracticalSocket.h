@@ -333,7 +333,6 @@ public:
    */
   void leaveGroup(const string &multicastGroup) throw(SocketException);
 
-private:
   void setBroadcast();
 };
 

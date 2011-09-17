@@ -60,11 +60,19 @@ namespace ControleRobo
             //}
             if (intelTranslatedData != null)
             {
+               /* for (int i = 0; i < 35; i++)
+                    intelTranslatedData[i + 3] = 1;
+                intelTranslatedData[3] = 1;
+                intelTranslatedData[10] = 2;
+                intelTranslatedData[17] = 3;
+                intelTranslatedData[24] = 4;
+                intelTranslatedData[31] = 5;*/
+                
                 transmitter.Transmitir(intelTranslatedData);
                 foreach (byte b in intelTranslatedData)
                 {
                     Console.Write(b);
-                    Console.Write(' ');
+                    Console.Write("\t");
                 }
                 Console.WriteLine();
             }
@@ -97,7 +105,7 @@ namespace ControleRobo
             {
                 transmitter = new LR.TransmissorRFM12USB();
                 transmitter.Inicializar("VIVATxRx", "IME");
-                sendTimer = new System.Timers.Timer(70);
+                sendTimer = new System.Timers.Timer(100);
 
                 sendTimer.Elapsed += new ElapsedEventHandler(TxSendReceive);
                 sendTimer.Enabled = true;

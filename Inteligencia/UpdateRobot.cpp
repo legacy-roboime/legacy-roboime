@@ -22,7 +22,7 @@ namespace Inteligencia {
 	UpdateRobot::~UpdateRobot() {}
 
 	void UpdateRobot::apply(Updater* u) {
-		cout << to_string() << endl;//test
+		//cout << to_string() << endl;//test
 		for(size_t k=u->robots(); k>0; k--) {
 			if(u->robot(k-1)->cc()==_cc) {
 				u->robot(k-1)->x(_x);
@@ -34,7 +34,7 @@ namespace Inteligencia {
 
 	string UpdateRobot::to_string() {
 		stringstream out;
-		//out << "UpdateRobot: [" << _cc << _x << _y << _angle << "]";
+		out << "UpdateRobot: [" << _cc << _x << _y << _angle << "]";
 		return out.str();
 	}
 

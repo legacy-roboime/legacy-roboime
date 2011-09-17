@@ -3,9 +3,10 @@
 UDPMulticastSender::UDPMulticastSender(void)
 {
 	multicastTTL = 1;
-	servAddress = "224.5.23.2";
+	//servAddress = "224.5.23.2";
+	servAddress = "192.168.1.255";
 	//servAddress = "127.0.0.1";
-	port = 10002;
+	port = 10003;
 	bufLen=ECHOMAX;
 }
 
@@ -18,7 +19,8 @@ void UDPMulticastSender::send()
 	try {
 		UDPSocket sock;
 
-		sock.setMulticastTTL(multicastTTL);
+		//sock.setMulticastTTL(multicastTTL);
+		sock.setBroadcast();
 
 		Sleep(7000); //Wait the Simulation Start
 

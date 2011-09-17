@@ -7,9 +7,9 @@ namespace ControleRobo
 {
     class Protocols
     {
-        private static float kickerVelocity = 30;
-        private static float dribblerVelocity = 30;
-        private static float wheelVelocity = 30;
+        private static float kickerVelocity = 2;
+        private static float dribblerVelocity = 100;
+        private static float wheelVelocity = 100;
 
         public static byte ScaleVelocity(float realVelocity, float minVelocity, float maxVelocity)
         {
@@ -24,13 +24,15 @@ namespace ControleRobo
             else
             {
                 realVelocity = Math.Abs(realVelocity);
-                scaledspeed = 255 - (realVelocity - minVelocity) * 127 / (maxVelocity - minVelocity);
+                scaledspeed = 255 - ((realVelocity - minVelocity) * 127 / (maxVelocity - minVelocity));
             }
-            int scaledint = (int)scaledspeed;
+            int scaledint = (int) scaledspeed;
             //if (scaledint < -127) scaledint = -126;
-            if (scaledint > 255) scaledint = 255;
-            byte scaled = Byte.Parse(scaledint.ToString());
-            return scaled;
+            //if (scaledint > 255) scaledint = 255;
+            //scaledint = scaledint < 0 ? 0 : scaledint;
+            byte b = (byte)scaledint;
+            //byte scaled = Byte.scaledint;
+            return b;
         }
         public static float ReverseScaleVelocity(byte scaled, float minVelocity, float maxVelocity)
         {
@@ -122,6 +124,7 @@ namespace ControleRobo
             translated[j] = k; j++;
             k++;
             //Console.WriteLine(k);
+            intelData = intelData.Replace('.', ',');
             string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
             /*
             foreach (string s in splitData)
@@ -137,14 +140,18 @@ namespace ControleRobo
                 // Kicker
                 else if ((j-2) % 7 == 6)
                 {
-                    
-                    translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, kickerVelocity);
+                    float f = float.Parse(splitData[i]);
+                    translated[j] = ScaleVelocity(f, 0, dribblerVelocity);
+                    //translated[j] = (byte)((int)float.Parse(splitData[i]));
                     j++;
                 }
                 else if ((j-2) % 7 == (7) % 7)
                 {
                     // Dribbler
-                    translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, dribblerVelocity);
+                    float f = float.Parse(splitData[i]);
+                    translated[j] = (byte)(254 * f);
+                    //translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, dribblerVelocity);
+                    //translated[j] = (byte)((int)float.Parse(splitData[i]));
                     j++;
                     if (k != 6)
                     {
@@ -161,7 +168,9 @@ namespace ControleRobo
                 else
                 {
                     // Wheels
-                    translated[j] = ScaleVelocity(float.Parse(splitData[i]), 0, wheelVelocity);
+                    float f = float.Parse(splitData[i]);
+                    translated[j] = ScaleVelocity(f, 0, wheelVelocity);
+                    //translated[j] = (byte)( (int) float.Parse(splitData[i]));
                     j++;
                 }
                 //Console.WriteLine(splitData[i] + " "+i.ToString());

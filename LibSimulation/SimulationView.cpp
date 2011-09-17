@@ -280,17 +280,17 @@ void SimulationView::appKey(unsigned char key, bool down)
 			robots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(-3000.,0,30));
 			robots->getRobotByIdByTeam(4, 1)->putToSleep();
 
-			robots->getRobotByIdByTeam(1, 1)->resetToInitialPose();
-			robots->getRobotByIdByTeam(1, 1)->setGlobalPosition(NxVec3(-1000, 1000, 30));
-			robots->getRobotByIdByTeam(1, 1)->putToSleep();
+			robots->getRobotByIdByTeam(3, 1)->resetToInitialPose();
+			robots->getRobotByIdByTeam(3, 1)->setGlobalPosition(NxVec3(-2000, 1000, 30));
+			robots->getRobotByIdByTeam(3, 1)->putToSleep();
 
 			robots->getRobotByIdByTeam(2, 1)->resetToInitialPose();
 			robots->getRobotByIdByTeam(2, 1)->setGlobalPosition(NxVec3(-2000, -1000, 30));
 			robots->getRobotByIdByTeam(2, 1)->putToSleep();
 
-			robots->getRobotByIdByTeam(3, 1)->resetToInitialPose();
-			robots->getRobotByIdByTeam(3, 1)->setGlobalPosition(NxVec3(-2000, 1000, 30));
-			robots->getRobotByIdByTeam(3, 1)->putToSleep();
+			robots->getRobotByIdByTeam(1, 1)->resetToInitialPose();
+			robots->getRobotByIdByTeam(1, 1)->setGlobalPosition(NxVec3(-1000, 1000, 30));
+			robots->getRobotByIdByTeam(1, 1)->putToSleep();
 
 			robots->getRobotByIdByTeam(0, 1)->resetToInitialPose();
 			robots->getRobotByIdByTeam(0, 1)->setGlobalPosition(NxVec3(-1000, -1000, 30));
