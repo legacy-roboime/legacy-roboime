@@ -23,7 +23,8 @@ namespace ControleRobo
 
         private string intelData;
         private byte[] intelTranslatedData;
-        
+        private byte[] intelTranslatedDataToBiWheel;
+      
         private byte[] robotData;
         private string robotTranslatedBuffer;
 
@@ -57,6 +58,7 @@ namespace ControleRobo
                 this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
                 Console.WriteLine(intelData);
                 this.intelTranslatedData = Protocols.TranslateProtocol(intelData, true);
+                this.intelTranslatedDataToBiWheel = Protocols.TranslateProtocolToBiWheel(intelData, true);
             }
             if (intelTranslatedData != null)
             {
@@ -70,6 +72,14 @@ namespace ControleRobo
                 
                 transmitter.Transmitir(intelTranslatedData);
                 foreach (byte b in intelTranslatedData)
+                {
+                    Console.Write(b);
+                    Console.Write("\t");
+                }
+                Console.WriteLine();
+
+                transmitter.Transmitir(intelTranslatedDataToBiWheel);
+                foreach (byte b in intelTranslatedDataToBiWheel)
                 {
                     Console.Write(b);
                     Console.Write("\t");

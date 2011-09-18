@@ -82,6 +82,64 @@ namespace ControleRobo
                 return null;
             }
         }
+        public static byte[] TranslateProtocolToBiWheel(string intelData, bool realTransmitter)
+        {
+            //byte[] translated;
+            // Protocolo para o robô
+            #region realTransmitter
+            if (realTransmitter)
+            {
+                try
+                {
+                    byte[] translated = new byte[17];
+                    intelData = intelData.Replace('.', ',');
+                    string[] splitData = intelData.Split(new Char[] { ' ' });                    
+                    int j = 0;
+                    translated[j] = 0xfe; j++;
+                    translated[j] = 0; j++;
+                    translated[j] = 0x22; j++;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        
+                        translated[j] = (byte)(i+1); j++;
+                        /*translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 1]), 0, wheelVelocity); j++;
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 2]), 0, wheelVelocity); j++;
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 3]), 0, wheelVelocity); j++;
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i]), 0, wheelVelocity); j++;                        
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 4]), 0, dribblerVelocity); j++;
+                        translated[j] = (byte)(254 * float.Parse(splitData[6 * i + 5])); j++; //kicker
+         
+                         */
+                        /*
+                        translated[j] = (byte)float.Parse(splitData[6 * i + 1]); j++;
+                        translated[j] = (byte)float.Parse(splitData[6 * i + 2]); j++;
+                        translated[j] = (byte)float.Parse(splitData[6 * i + 3]); j++;
+                        translated[j] = (byte)float.Parse(splitData[6 * i]); j++;
+                        translated[j] = (byte)float.Parse(splitData[6 * i + 4]); j++;
+                        translated[j] = (byte)float.Parse(splitData[6 * i + 5]); j++; //kick
+                        */
+                        float  f = float.Parse(splitData[6 * i]);
+                        if (f > 12.7) f = (float)12.7; if (f < -12.7) f = (float)-12.7;
+                        translated[j] = (byte)(10 * f); j++;
+                        f = float.Parse(splitData[6 * i + 1]);
+                        if (f > 12.7) f = (float)12.7; if (f < -12.7) f =(float) -12.7;
+                        translated[j] = (byte)(10*f); j++;
+                        
+                    }
+                    translated[j] = 55;
+                    return translated;   
+                }
+                catch (IndexOutOfRangeException) 
+                { 
+                    return null;
+                }
+              //  foreach (byte b in translated)
+              //     Console.Write(b.ToString() + " ");
+              //  Console.WriteLine();
+              //  Console.WriteLine(intelData);
+                 
+            }
+        }
         public static byte[] TranslateProtocol(string intelData, bool realTransmitter)
         {
             //byte[] translated;
