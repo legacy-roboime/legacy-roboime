@@ -112,12 +112,34 @@ namespace ControleRobo
                         translated[j] = (byte)(254 * float.Parse(splitData[6 * i + 5])); j++; //kicker
          
                          */
+                        /*
                         translated[j] = (byte)float.Parse(splitData[6 * i + 1]); j++;
                         translated[j] = (byte)float.Parse(splitData[6 * i + 2]); j++;
                         translated[j] = (byte)float.Parse(splitData[6 * i + 3]); j++;
                         translated[j] = (byte)float.Parse(splitData[6 * i]); j++;
                         translated[j] = (byte)float.Parse(splitData[6 * i + 4]); j++;
                         translated[j] = (byte)float.Parse(splitData[6 * i + 5]); j++; //kick
+                        */
+                        float f = float.Parse(splitData[6 * i + 1]);
+                        if (f > 12.7) f = (float)12.7; if (f < -12.7) f =(float) -12.7;
+                        translated[j] = (byte)(10*f);
+                        j++;
+                        f = float.Parse(splitData[6 * i + 2]);
+                        if (f > 12.7) f = (float)12.7; if (f < -12.7) f = (float)-12.7;
+                        translated[j] = (byte)(10 * f);
+                        j++; f = float.Parse(splitData[6 * i + 3]);
+                        if (f > 12.7) f = (float)12.7; if (f < -12.7) f = (float)-12.7;
+                        translated[j] = (byte)(10 * f);
+                        j++; f = float.Parse(splitData[6 * i]);
+                        if (f > 12.7) f = (float)12.7; if (f < -12.7) f = (float)-12.7;
+                        translated[j] = (byte)(10 * f);
+                        j++;  f = float.Parse(splitData[6 * i + 4]);
+                        if (f > 12.7) f = (float)12.7; if (f < -12.7) f = (float)-12.7;
+                        translated[j] = (byte)(10 * f);
+                        j++;  f = float.Parse(splitData[6 * i + 5]);
+                        if (f > 12.7) f = (float)12.7; if (f < -12.7) f = (float)-12.7;
+                        translated[j] = (byte)(10 * f);
+                        j++;
                     }
                     translated[j] = 55;
                     return translated;   
