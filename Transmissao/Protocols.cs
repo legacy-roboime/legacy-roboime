@@ -92,7 +92,7 @@ namespace ControleRobo
                 try
                 {
                     byte[] translated = new byte[39];
-                    //intelData = intelData.Replace('.', ',');
+                    intelData = intelData.Replace('.', ',');
                     string[] splitData = intelData.Split(new Char[] { ' ' });
                     //splitData.
                     //translated = new byte[38];
