@@ -102,9 +102,9 @@ namespace ControleRobo
                     translated[j] = 44; j++;
                     for (int i = 0; i < 5; i++)
                     {
-                        /*
+                        
                         translated[j] = (byte)(i+1); j++;
-                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 1]), 0, wheelVelocity); j++;
+                        /*translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 1]), 0, wheelVelocity); j++;
                         translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 2]), 0, wheelVelocity); j++;
                         translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 3]), 0, wheelVelocity); j++;
                         translated[j] = ScaleVelocity(float.Parse(splitData[6 * i]), 0, wheelVelocity); j++;                        
