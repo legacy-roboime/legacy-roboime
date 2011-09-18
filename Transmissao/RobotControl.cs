@@ -52,12 +52,12 @@ namespace ControleRobo
         }
         public void TxSendReceive(object sender, ElapsedEventArgs e)
         {
-            //if (server.receivedData != null)
-            //{
+            if (server.receivedData != null)
+            {
                 this.intelData = Encoding.ASCII.GetString(server.receivedData, 0, server.recv);
                 Console.WriteLine(intelData);
                 this.intelTranslatedData = Protocols.TranslateProtocol(intelData, true);
-            //}
+            }
             if (intelTranslatedData != null)
             {
                /* for (int i = 0; i < 35; i++)

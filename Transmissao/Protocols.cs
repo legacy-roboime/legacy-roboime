@@ -84,32 +84,60 @@ namespace ControleRobo
         }
         public static byte[] TranslateProtocol(string intelData, bool realTransmitter)
         {
-            byte[] translated;
+            //byte[] translated;
             // Protocolo para o robô
             #region realTransmitter
             if (realTransmitter)
             {
-                translated = PreliminaryTranslation(intelData); 
-                
+                try
+                {
+                    byte[] translated = new byte[39];
+                    //intelData = intelData.Replace('.', ',');
+                    string[] splitData = intelData.Split(new Char[] { ' ' });
+                    //splitData.
+                    //translated = new byte[38];
+                    int j = 0;
+                    translated[j] = 0xfe; j++;
+                    translated[j] = 0; j++;
+                    translated[j] = 44; j++;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        translated[j] = (byte)(i+1); j++;
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 1]), 0, wheelVelocity); j++;
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 2]), 0, wheelVelocity); j++;
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 3]), 0, wheelVelocity); j++;
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i]), 0, wheelVelocity); j++;                        
+                        translated[j] = ScaleVelocity(float.Parse(splitData[6 * i + 4]), 0, dribblerVelocity); j++;
+                        translated[j] = (byte)(254 * float.Parse(splitData[6 * i + 5])); j++; //kicker
+                    }
+                    translated[j] = 55;
+                    return translated;   
+                }
+                catch (IndexOutOfRangeException) 
+                { 
+                    return null;
+                }
               //  foreach (byte b in translated)
               //     Console.Write(b.ToString() + " ");
               //  Console.WriteLine();
               //  Console.WriteLine(intelData);
-                
+                 
             }
             #endregion
             //Protocolo para o simulador
             #region simulation
             else
             {
+                byte[] translated;
                 string appendString = "15 0 1 ";
                 intelData = string.Concat(appendString, intelData);
                 translated = Encoding.ASCII.GetBytes(intelData);
+                return translated;   
             }
             #endregion
-            return translated;
+            
         }
-
+/*        
         private static byte[] PreliminaryTranslation(string intelData)
         {
             byte[] translated;
@@ -126,12 +154,6 @@ namespace ControleRobo
             //Console.WriteLine(k);
             intelData = intelData.Replace('.', ',');
             string[] splitData = intelData.Split(new Char[] { ' ', '\n' });
-            /*
-            foreach (string s in splitData)
-            {
-                Console.WriteLine(s);
-            }
-             */
             for (int i = 0; (i < splitData.Length) && j < 38; i++)
             {
                 if (splitData[i] == "")
@@ -180,6 +202,6 @@ namespace ControleRobo
 
 
             return translated;
-        }
+        }*/
     }
 }
