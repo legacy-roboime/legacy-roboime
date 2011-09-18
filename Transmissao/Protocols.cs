@@ -84,15 +84,11 @@ namespace ControleRobo
         }
         public static byte[] TranslateProtocolToBiWheel(string intelData, bool realTransmitter)
         {
-            //byte[] translated;
-            // Protocolo para o robô
-            #region realTransmitter
-            if (realTransmitter)
-            {
                 try
                 {
                     byte[] translated = new byte[17];
                     intelData = intelData.Replace('.', ',');
+                    if(intelData.Equals("",StringComparison.InvariantCulture)) return null;
                     string[] splitData = intelData.Split(new Char[] { ' ' });                    
                     int j = 0;
                     translated[j] = 0xfe; j++;
@@ -138,7 +134,7 @@ namespace ControleRobo
               //  Console.WriteLine();
               //  Console.WriteLine(intelData);
                  
-            }
+            
         }
         public static byte[] TranslateProtocol(string intelData, bool realTransmitter)
         {
@@ -151,6 +147,7 @@ namespace ControleRobo
                 {
                     byte[] translated = new byte[39];
                     intelData = intelData.Replace('.', ',');
+                    if (intelData.Equals("", StringComparison.InvariantCulture)) return null;
                     string[] splitData = intelData.Split(new Char[] { ' ' });
                     //splitData.
                     //translated = new byte[38];
