@@ -3,8 +3,14 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
+struct usefulInfo
+{
+
+}
+
 public class UDPServer
 {
+    public DateTime timeReceived;
     public int recv;
     public byte[] receivedData;
     public byte[] sendData;
@@ -33,6 +39,7 @@ public class UDPServer
         while (true)
         {
             recv = newsock.ReceiveFrom(receivedData, ref tmpRemote);
+            if (0 < recv) timeReceived = DateTime.Now;
             newsock.SendTo(sendData, sendData.Length, SocketFlags.None, tmpRemote);
         }
     }
