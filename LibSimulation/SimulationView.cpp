@@ -1,7 +1,7 @@
 #include "SimulationView.h"
 
-NxVec3 SimulationView::gEye = NxVec3(0, -4000, 1700.0f);
-NxVec3 SimulationView::Dir = NxVec3(0, 1, -0.5); 
+NxVec3 SimulationView::gEye = NxVec3(0, -4000, 3700.0f);
+NxVec3 SimulationView::Dir = NxVec3(0, 1, -0.9); 
 NxVec3 SimulationView::N = NxVec3();
 NxVec3 SimulationView::Up = NxVec3();
 int SimulationView::mx = 0;
