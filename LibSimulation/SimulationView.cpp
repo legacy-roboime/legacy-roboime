@@ -222,11 +222,6 @@ SimulationView::~SimulationView(void)
 //==================================================================================
 void SimulationView::callback_key(unsigned char c, int x, int y)
 {
-	gMouseDepth -= 0.02f * (1.0f - gMouseDepth);  
-	if (gMouseDepth < 0.0f) 
-		gMouseDepth = 0.0f;
-	MoveActor(mx,my);
-
 	if(c >= 'A' && c <= 'Z') 
 	{
 		c = c - 'A' + 'a';
@@ -573,20 +568,19 @@ void SimulationView::MotionCallback(int x, int y)
 	{
 		MoveActor(x,y);
 	}
-	else if (bLeftMouseButtonPressed)
-	{
-		Dir.normalize();
-		N.cross(Dir,NxVec3(0,0,1));
 
-		NxQuat qx(NxPiF32 * dx * 20/ 180.0f, NxVec3(0,0,1));
-		qx.rotate(Dir);
-		//NxFindRotationMatrix
+	Dir.normalize();
+	N.cross(Dir,NxVec3(0,0,1));
 
-		NxQuat qy(NxPiF32 * dy * 20/ 180.0f, N);
-		qy.rotate(Dir);
+	NxQuat qx(NxPiF32 * dx * 20/ 180.0f, NxVec3(0,0,1));
+	qx.rotate(Dir);
+	//NxFindRotationMatrix
 
-		Up.cross(N, Dir);
-	}
+	NxQuat qy(NxPiF32 * dy * 20/ 180.0f, N);
+	qy.rotate(Dir);
+
+	Up.cross(N, Dir);
+
 
 	mx = x;
 	my = y;
