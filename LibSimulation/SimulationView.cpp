@@ -568,18 +568,19 @@ void SimulationView::MotionCallback(int x, int y)
 	{
 		MoveActor(x,y);
 	}
+	else if(bLeftMouseButtonPressed || mx == 0){
+		Dir.normalize();
+		N.cross(Dir,NxVec3(0,0,1));
 
-	Dir.normalize();
-	N.cross(Dir,NxVec3(0,0,1));
+		NxQuat qx(NxPiF32 * dx * 20/ 180.0f, NxVec3(0,0,1));
+		qx.rotate(Dir);
+		//NxFindRotationMatrix
 
-	NxQuat qx(NxPiF32 * dx * 20/ 180.0f, NxVec3(0,0,1));
-	qx.rotate(Dir);
-	//NxFindRotationMatrix
+		NxQuat qy(NxPiF32 * dy * 20/ 180.0f, N);
+		qy.rotate(Dir);
 
-	NxQuat qy(NxPiF32 * dy * 20/ 180.0f, N);
-	qy.rotate(Dir);
-
-	Up.cross(N, Dir);
+		Up.cross(N, Dir);
+	}
 
 
 	mx = x;
