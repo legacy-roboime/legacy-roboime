@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ws2_32.lib QtGuid4.lib QtCored4.lib"
+				AdditionalDependencies="glut32.lib ws2_32.lib QtGuid4.lib QtCored4.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\lib"
 				GenerateDebugInformation="true"
@@ -139,9 +139,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ws2_32.lib QtGuid4.lib QtCored4.lib glut32.lib"
+				UseLibraryDependencyInputs="false"
+				AdditionalDependencies="glut32.lib ws2_32.lib QtGuid4.lib QtCored4.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\lib\x64"
+				IgnoreAllDefaultLibraries="false"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="17"

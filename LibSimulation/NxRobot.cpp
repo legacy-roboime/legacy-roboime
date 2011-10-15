@@ -164,8 +164,8 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//TODO: LEVANTAR DAMPING
 	float t = vehicleDesc.actor->getLinearDamping();
 	float b = vehicleDesc.actor->getAngularDamping();
-	//vehicleDesc.actor->setAngularDamping(100.);
-	//vehicleDesc.actor->setLinearDamping(0.05);
+	vehicleDesc.actor->setAngularDamping(0.5);
+	vehicleDesc.actor->setLinearDamping(0.5);
 
 	//TODO: LEVANTAR CMASS E INERTIA TENSOR
 	

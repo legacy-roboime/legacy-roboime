@@ -24,8 +24,8 @@ void Simulation::buildModelBall(int indexScene){
 	//float teste = ball->ball->getAngularDamping();
 	//ball->ball->setCMassOffsetGlobalPosition(NxVec3(0, 0, 0));
 	ball->ball->setCMassOffsetLocalPose( NxMat34( NxMat33(NxVec3(8.37673, 0, 0), NxVec3(0, 8.37673, 0), NxVec3(0, 0, 8.37673)), NxVec3(0, 0, 0) ) );
-	//ball->ball->setAngularDamping(0.5);
-	//ball->ball->setLinearDamping(0.5);
+	ball->ball->setAngularDamping(0.5);
+	ball->ball->setLinearDamping(0.5);
 	ball->ball->setMassSpaceInertiaTensor(/*ball->ball->getMassSpaceInertiaTensor()*100000.*/ NxVec3(8.37673, 8.37673, 8.37673) );
 
 	ball->initialPose = ball->ball->getGlobalPose();

@@ -340,10 +340,6 @@
 						RelativePath=".\Simulation.cpp"
 						>
 					</File>
-					<File
-						RelativePath=".\SimulationView.cpp"
-						>
-					</File>
 					<Filter
 						Name="Robot"
 						>
@@ -526,6 +522,14 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="View"
+				>
+				<File
+					RelativePath=".\SimulationView.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -572,10 +576,6 @@
 					</File>
 					<File
 						RelativePath=".\Simulation.h"
-						>
-					</File>
-					<File
-						RelativePath=".\SimulationView.h"
 						>
 					</File>
 					<Filter
@@ -783,6 +783,14 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="View"
+				>
+				<File
+					RelativePath=".\SimulationView.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

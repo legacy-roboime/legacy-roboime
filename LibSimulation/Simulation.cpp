@@ -796,7 +796,7 @@ bool Simulation::initSimulation()
 
 	for(int i=0; i<Simulation::gScenes[Simulation::gBaseScene]->scene->getNbMaterials(); i++){
 		NxMaterial *defaultMaterial = Simulation::gScenes[Simulation::gBaseScene]->scene->getMaterialFromIndex(i);
-		defaultMaterial->setRestitution(0.0);//0.5f);//     //TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setRestitution(0.5);//0.5f);//     //TODO: LEVANTAR PARAMETROS
 		defaultMaterial->setStaticFriction(0.5);//0.3f);//  //TODO: LEVANTAR PARAMETROS
 		defaultMaterial->setDynamicFriction(0.5);//0.3f);//	//TODO: LEVANTAR PARAMETROS
 		//TODO: USAR NxCombineMode

@@ -211,12 +211,36 @@ void DrawActorIME(NxActor* actor)
 }
 
 
-SimulationView::SimulationView(void)
-{
-}
+//SimulationView::SimulationView(void)
+//{
+//	AviGen.SetRate(20);	// set 20fps
+//
+//	AviGen.SetBitmapHeader(GetActiveView());	// get bitmap info out of the view
+//
+//	hr=AviGen.InitEngine()	// start engine
+//
+//	if (FAILED(hr))
+//	{
+//		AfxMessageBox(avi.GetLastErrorMessage());
+//		goto Cleaning;
+//	}
+//
+//	lpbih=AviGen.GetBitmapInfo(); // getting bitmap info
+//
+//
+//	// allocating memory for bmBits
+//
+//	bmBits=new BYTE[3 /* BRG*/ * lpbih->biWidth* lpbih->biHeight];	
+//}
 
 SimulationView::~SimulationView(void)
 {
+	// cleaning memory	
+
+	//Cleaning:
+	//AviGen.ReleaseEngine(); // releasing ressources
+
+	//delete[] bmBits;	// release ressources
 }
 
 //==================================================================================
@@ -655,6 +679,24 @@ void SimulationView::RenderCallback()
 				//Simulation::allRobots.drawRobots(gDebugVisualization);
 			}
 		}
+		//draw field lines
+		NxVec3 fposition = Simulation::gScenes[indexRenderScene]->field->actorCampo->getGlobalPosition();
+		NxReal FIELD_LENGTH = Simulation::gScenes[indexRenderScene]->field->fieldLength;
+		NxReal FIELD_WIDTH = Simulation::gScenes[indexRenderScene]->field->fieldWidth;
+		glColor4f(1.0f,1.0f,1.0f, 1.0f);//white
+		glLineWidth(6);
+		glBegin(GL_LINES);
+		glVertex3f(fposition.x, fposition.y - FIELD_WIDTH/2, fposition.z);
+		glVertex3f(fposition.x, fposition.y + FIELD_WIDTH/2, fposition.z);
+		glEnd();
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(fposition.x - FIELD_LENGTH/2., fposition.y - FIELD_WIDTH/2., fposition.z);
+		glVertex3f(fposition.x + FIELD_LENGTH/2., fposition.y - FIELD_WIDTH/2., fposition.z);
+		glVertex3f(fposition.x + FIELD_LENGTH/2., fposition.y + FIELD_WIDTH/2., fposition.z);
+		glVertex3f(fposition.x - FIELD_LENGTH/2., fposition.y + FIELD_WIDTH/2., fposition.z);
+		glEnd();
+		glLineWidth(1);
+
 		//Show Render Performance
 		/*#ifdef __PPCGEKKO__	
 		char buf[256];
@@ -676,6 +718,21 @@ void SimulationView::RenderCallback()
 		GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
 		GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
 	}
+
+	///* Draw code where bmBits is filled. 
+	//For example, to read OpenGL buffer, put 
+	//glReadPixels(0,0,lpbih->biWidth,lpbih->biHeight, 
+	//GL_BGR_EXT,GL_UNSIGNED_BYTE,bmBits); */ 
+
+	//// adding frame and continue if OK
+
+	//hr=AviGen.AddFrame(bmBits);
+	//if (FAILED(hr))
+	//{
+	//	AfxMessageBox(avi.GetLastErrorMessage());
+	//	goto Cleaning;
+	//}
+
 	//}
 	glPopMatrix();
 
@@ -769,6 +826,23 @@ void SimulationView::RenderSimulationCallback()
 				//Simulation::allRobots.drawRobots(gDebugVisualization);
 			}
 		}
+		//draw field lines
+		NxVec3 fposition = Simulation::gScenes[indexRenderScene]->field->actorCampo->getGlobalPosition();
+		NxReal FIELD_LENGTH = Simulation::gScenes[indexRenderScene]->field->linesLength;
+		NxReal FIELD_WIDTH = Simulation::gScenes[indexRenderScene]->field->linesWidth;
+		glColor4f(1.0f,1.0f,1.0f, 1.0f);//white
+		glLineWidth(6);
+		glBegin(GL_LINES);
+		glVertex3f(fposition.x, fposition.y - FIELD_WIDTH/2, 0);//fposition.z
+		glVertex3f(fposition.x, fposition.y + FIELD_WIDTH/2, 0);//fposition.z
+		glEnd();
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(fposition.x - FIELD_LENGTH/2., fposition.y - FIELD_WIDTH/2., 0);//fposition.z
+		glVertex3f(fposition.x + FIELD_LENGTH/2., fposition.y - FIELD_WIDTH/2., 0);//fposition.z
+		glVertex3f(fposition.x + FIELD_LENGTH/2., fposition.y + FIELD_WIDTH/2., 0);//fposition.z
+		glVertex3f(fposition.x - FIELD_LENGTH/2., fposition.y + FIELD_WIDTH/2., 0);//fposition.z
+		glEnd();
+		glLineWidth(1);
 
 		//Show Render Performance
 		/*#ifdef __PPCGEKKO__	
@@ -800,6 +874,21 @@ void SimulationView::RenderSimulationCallback()
 		GLFontRenderer::setColor(0.9f, 1.0f, 0.0f, 1.0f);
 		GLFontRenderer::print(0.01, 0.9, 0.030, buf, false, 11, true); 
 	}
+
+	///* Draw code where bmBits is filled. 
+	//For example, to read OpenGL buffer, put 
+	//glReadPixels(0,0,lpbih->biWidth,lpbih->biHeight, 
+	//GL_BGR_EXT,GL_UNSIGNED_BYTE,bmBits); */ 
+
+	//// adding frame and continue if OK
+
+	//hr=AviGen.AddFrame(bmBits);
+	//if (FAILED(hr))
+	//{
+	//	AfxMessageBox(avi.GetLastErrorMessage());
+	//	goto Cleaning;
+	//}
+
 	//}
 	glPopMatrix();
 

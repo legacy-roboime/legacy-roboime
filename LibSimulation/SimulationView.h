@@ -16,6 +16,7 @@ printf("__PPCGEKKO__");
 #include "GLFontRenderer.h"
 #include "DebugRenderer.h"
 //#include "PerfRenderer.h"
+//#include "AVIGenerator.h"
 
 class SimulationView
 {
@@ -41,6 +42,12 @@ private:
 	//static NxActor* gMouseSphere;
 	//static NxActor *gSelectedActor;
 	//static PerfRenderer    gPrefRenderer;
+
+	//AVI GENERATOR OPENGL
+	//CAVIGenerator AviGen;	// generator
+	//BYTE* bmBits;	// image buffer
+	//HRESULT hr;
+	//LPBITMAPINFOHEADER lpbih; // getting bitmap info
 private:
 	static void appKey(unsigned char key, bool down);
 	static void callback_keyUp(unsigned char c, int x, int y);
