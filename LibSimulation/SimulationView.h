@@ -58,6 +58,7 @@ private:
 	static void RenderCallback();
 	static void RenderSimulationCallback();
 	static void setupCamera();
+	static void changeCamera();
 	static void ReshapeCallback(int width, int height);
 	static void IdleCallback();
 	static NX_BOOL LoadScene(const char *pFilename,NXU::NXU_FileType type);

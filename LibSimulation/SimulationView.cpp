@@ -13,7 +13,7 @@ bool SimulationView::gravar = false;
 int SimulationView::count = 0;
 DebugRenderer SimulationView::gDebugRenderer = DebugRenderer();
 //PerfRenderer    gPerfRenderer = PerfRenderer();
-GLdouble SimulationView::zNear = 0.5f;
+GLdouble SimulationView::zNear = 0.9f;
 GLdouble SimulationView::zFar = 10000.0f;//
 int SimulationView::indexRenderScene = 0;
 bool SimulationView::gDebugVisualization = false;
@@ -403,6 +403,7 @@ void SimulationView::appKey(unsigned char key, bool down)
 		{
 			//NxActor* actorDribbler = getActorDribbler(0, 1);
 			//actorDribbler->setAngularVelocity(NxVec3(-100,0,0));
+			changeCamera();
 		}
 		break;
 
@@ -909,6 +910,89 @@ void SimulationView::setupCamera()
 	// Setup modelview matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void SimulationView::changeCamera(){
+	static int camera = -1;
+	camera++;
+	camera %= 7;
+	if(camera == 0){
+		gEye.x = 2827.0056;
+		gEye.y = -2172.7402;
+		gEye.z = 981.85626;
+		Dir.x = -0.53674126;
+		Dir.y = 0.74350190;
+		Dir.z = -0.39889067;
+		Up.x = -0.21769887;
+		Up.y = 0.29394531;
+		Up.z = 0.84082383;
+	}
+	else if(camera == 1){
+		gEye.x = 3406.7239;
+		gEye.y = 2069.7632;
+		gEye.z = 1310.4371;
+		Dir.x = -0.65821588;
+		Dir.y = -0.57920420;
+		Dir.z = -0.48090997;
+		Up.x = -0.31406099;
+		Up.y = -0.27636138;
+		Up.z = 0.77382886;
+	}
+	else if(camera == 2){
+		gEye.x = -2970.4805;
+		gEye.y = 2074.9619;
+		gEye.z = 1450.4000;
+		Dir.x = 0.62727863;
+		Dir.y = -0.57703120;
+		Dir.z = -0.52302629;
+		Up.x = 0.32808322;
+		Up.y = -0.30180249;
+		Up.z = 0.72643000;
+	}
+	else if(camera == 3){
+		gEye.x = -2993.4980;
+		gEye.y = -1929.0206;
+		gEye.z = 1344.3374;
+		Dir.x = 0.63465542;
+		Dir.y = 0.59198189;
+		Dir.z = -0.49675944;
+		Up.x = 0.34388098;
+		Up.y = 0.31686303;
+		Up.z = 0.68487775;
+	}
+	else if(camera == 4){
+		gEye.x = -808.44647;
+		gEye.y = -821.56024;
+		gEye.z = 593.52759;
+		Dir.x = 0.74464518;
+		Dir.y = 0.57962108;
+		Dir.z = -0.33097294;
+		Up.x = 0.25994429;
+		Up.y = 0.18272002;
+		Up.z = 0.88852131;
+	}
+	else if(camera == 5){
+		gEye.x = 880.29547;
+		gEye.y = 23.450352;
+		gEye.z = 711.28223;
+		Dir.x = -0.88668561;
+		Dir.y = 0.025686376;
+		Dir.z = -0.46165887;
+		Up.x = -0.40949470;
+		Up.y = 0.0043751383;
+		Up.z = 0.78685659;
+	}
+	else if(camera == 6){
+		gEye.x = -3970.3904;
+		gEye.y = 77.764908;
+		gEye.z = 996.00800;
+		Dir.x = 0.90976840;
+		Dir.y = -0.011801026;
+		Dir.z = -0.41494837;
+		Up.x = 0.37753335;
+		Up.y = 0.0020033286;
+		Up.z = 0.82780254;
+	}
 }
 
 //==================================================================================

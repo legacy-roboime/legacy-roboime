@@ -102,7 +102,7 @@ void NxRobot::handleContactPair(NxContactPair& pair, NxU32 robotIndex)
 							force.setMagnitude(1);
 							NxReal coefKinect = 0.5;
 							NxReal normalMagnitude = contactNormal.magnitude();
-							NxVec3 resultForce = this->dribbler->speedToExecute*20.*coefKinect*normalMagnitude*force;
+							NxVec3 resultForce = this->dribbler->speedToExecute * 20. * coefKinect * normalMagnitude * force;
 							//NxReal teste =  resultForce.magnitude();
 							//SimulationView::DrawForce(&ball, resultForce, NxVec3(1,1,1));
 							ball.addForceAtPos(/*NxVec3(sin(angle)*this->dribbler->speedToExecute*1000000.,cos(angle)*this->dribbler->speedToExecute*1000000.,0)*/resultForce, contactPoint, NX_IMPULSE); 
@@ -164,8 +164,8 @@ void Simulation::buildModelRobot(int indexRobot, int indexScene, int indexTeam)
 	//TODO: LEVANTAR DAMPING
 	float t = vehicleDesc.actor->getLinearDamping();
 	float b = vehicleDesc.actor->getAngularDamping();
-	vehicleDesc.actor->setAngularDamping(0.5);
-	vehicleDesc.actor->setLinearDamping(0.5);
+	//vehicleDesc.actor->setAngularDamping(0.5);
+	//vehicleDesc.actor->setLinearDamping(0.5);
 
 	//TODO: LEVANTAR CMASS E INERTIA TENSOR
 	

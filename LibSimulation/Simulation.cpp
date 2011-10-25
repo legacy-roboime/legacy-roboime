@@ -793,19 +793,19 @@ bool Simulation::initSimulation()
 	defaultMaterial2->setRestitution(0.5f);
 	defaultMaterial2->setStaticFriction(0.3f);
 	defaultMaterial2->setDynamicFriction(0.3f);*/
-
+	
 	for(int i=0; i<Simulation::gScenes[Simulation::gBaseScene]->scene->getNbMaterials(); i++){
 		NxMaterial *defaultMaterial = Simulation::gScenes[Simulation::gBaseScene]->scene->getMaterialFromIndex(i);
 		defaultMaterial->setRestitution(0.5);//0.5f);//     //TODO: LEVANTAR PARAMETROS
 		defaultMaterial->setStaticFriction(0.5);//0.3f);//  //TODO: LEVANTAR PARAMETROS
-		defaultMaterial->setDynamicFriction(0.5);//0.3f);//	//TODO: LEVANTAR PARAMETROS
+		defaultMaterial->setDynamicFriction(0.4);//0.3f);//	//TODO: LEVANTAR PARAMETROS
 		//TODO: USAR NxCombineMode
 	}
-
+	
 	//Simulation::allFields.fields[Simulation::gBaseScene].setDimensions(7400, 5400, 6000, 0, 200., 700., 160.);
-
+	
 	NxAllRobots* allRobots = Simulation::gScenes[Simulation::gBaseScene]->allRobots;
-
+	
 	allRobots->getRobotByIdByTeam(4, 1)->setGlobalPosition(NxVec3(-3000, 0, 30));
 	
 	allRobots->getRobotByIdByTeam(4, 1)->cloneRobot(Simulation::gBaseScene, 3, NxVec3(-2000, 1000, 30), 1);
