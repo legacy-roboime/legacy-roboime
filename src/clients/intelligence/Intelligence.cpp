@@ -414,6 +414,8 @@ void Intelligence::update()
 #ifdef DEBUG_TIME
 	cout << "TEMPO: " << t.elapsed() << "ms" << endl;
 #endif
+
+	//_CrtDumpMemoryLeaks();
 }
 
 Intelligence::~Intelligence()

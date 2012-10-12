@@ -3,6 +3,14 @@
 #include "Intelligence.h"
 #include "config.h"
 
+#if defined(WIN32) && defined(_DEBUG)
+     #define _CRTDBG_MAP_ALLOC
+     #include <stdlib.h>
+     #include <crtdbg.h>
+     #define DEBUG_NEW new( _NORMAL_BLOCK, __FILE__, __LINE__ )
+     #define new DEBUG_NEW
+#endif
+
 using namespace std;
 
 static Intelligence* intel;
@@ -35,6 +43,10 @@ void idleFunc(void)
 
 int main(int argc, char *argv[])
 {
+#if defined(_MSC_VER) && defined(_DEBUG)
+	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
+
 	app = new QCoreApplication(argc, argv);
 
 	cout << "Modulo Inteligencia" << endl;
