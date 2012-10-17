@@ -17,13 +17,12 @@ set(GINTC_SRC
     itemfield.cpp
     itemrobot.cpp
     stageview.cpp
-    alterstatevars.cpp
+    confwidget.cpp
     # add new sources here
 )
 
 qt4_wrap_ui(GINTC_UIS_H
     GraphicalIntelligence.ui
-    alterstatevars.ui
 )
 
 qt4_add_resources(GINTC_RC
@@ -80,6 +79,7 @@ target_link_libraries(graphicalintelligence-client
     intelligence
     ${GLUT_LIBRARIES}
     ${QT_LIBRARIES}
+    ${VARTYPES_LIBRARIES}
 )
 
 set_property(TARGET graphicalintelligence-client PROPERTY FOLDER apps)

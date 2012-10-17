@@ -1,5 +1,4 @@
 #include "GraphicalIntelligence.h"
-#include "alterstatevars.h"
 
 #include <QtCore>
 #include <QThread>
@@ -34,7 +33,6 @@ GraphicalIntelligence::GraphicalIntelligence(QWidget *parent, Qt::WFlags flags)
 	: QMainWindow(parent, flags),
 	useSimulation(true),
     mode(PLAY),
-    alterStateVarsWindow(new AlterStateVars(this)),
     current_play_us(NULL),
     current_play_them(NULL),
     current_tactic_us(NULL),
@@ -216,7 +214,6 @@ GraphicalIntelligence::GraphicalIntelligence(QWidget *parent, Qt::WFlags flags)
 
     //Connect signals to slots
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    connect(ui.actionEditar_vari_veis_de_estado, SIGNAL(triggered()), alterStateVarsWindow, SLOT(show()));
     connect(ui.cmbSelectOutput, SIGNAL(currentIndexChanged(int)),this, SLOT(changeIntelligenceOutput()));
     connect(ui.cmbSelectPlayOurs, SIGNAL(currentIndexChanged(int)),this, SLOT(changePlayUs()));
     connect(ui.cmbSelectTacticOurs, SIGNAL(currentIndexChanged(int)),this, SLOT(changeTacticUs()));

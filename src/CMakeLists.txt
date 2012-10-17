@@ -61,6 +61,10 @@ endif()
 find_package(GLUT REQUIRED)
 include_directories(${GLUT_INCLUDE_DIR})
 
+# VarTypes stuff
+find_package(VarTypes REQUIRED)
+include_directories(${VARTYPES_INCLUDE_DIRS})
+
 add_subdirectory(communication)
 if(PHYSX_FOUND)
     add_subdirectory(3rdparty/samplescommoncode)

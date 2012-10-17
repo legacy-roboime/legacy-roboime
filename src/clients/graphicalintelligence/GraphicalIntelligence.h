@@ -3,7 +3,6 @@
 
 #include <QtGui/QMainWindow>
 #include "ui_GraphicalIntelligence.h"
-#include "alterstatevars.h"
 
 #include <QSettings>
 #include <QObject>
@@ -58,7 +57,6 @@ private slots:
 
 private:	
 	Ui::GraphicalIntelligenceClass ui;
-    AlterStateVars* alterStateVarsWindow;
 	QHash<char,QString> refereeFull;
 	int goalsBlue, goalsYellow;
 
